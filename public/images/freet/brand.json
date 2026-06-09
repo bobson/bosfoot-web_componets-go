@@ -1,0 +1,36 @@
+{
+  "name": "Freet",
+  "slug": "freet",
+  "countryOfOrigin": "GB",
+  "yearFounded": 2010,
+  "websiteUrl": "https://freetbarefoot.com",
+  "sizingGuideUrl": "https://freetbarefoot.com/pages/size-guide",
+  "featured": true,
+  "order": 1,
+  "description": {
+    "mk": "Британски бренд за босоноги патики основан во 2010 година во Северен Јоркшир од Ендру и Сара. Дизајниран за надворешна употреба — планинарење, трчање на патеки, тренинг и секојдневен живот — со широк простор за прстите, флексибилни ѓонови и нула надолен пад. Користи рециклирани материјали (BottleYarn, CoffeeYarn) и трае.",
+    "sq": "Markë britanike e këpucëve barefoot, e themeluar në vitin 2010 në Yorkshire-in e Veriut nga Andrew dhe Sarah. E dizajnuar për përdorim në natyrë — alpinizëm, vrapim në shtigje, trajnim dhe jetë të përditshme — me hapësirë të gjerë për gishtërinjtë, shollë fleksibël dhe zero drop. Përdor materiale të ricikluara (BottleYarn, CoffeeYarn) dhe ndërtohet për të zgjatur.",
+    "en": "UK barefoot shoe brand founded in 2010 in North Yorkshire by Andrew and Sarah. Designed for outdoor use — hiking, trail running, training, and everyday life — with wide toe boxes, flexible soles, and zero drop. Uses recycled materials (BottleYarn, CoffeeYarn) and is built to last."
+  },
+  "sizeChart": {
+    "measurementType": "footLengthMM",
+    "rows": [
+      { "sizeEU": 36, "lengthMM": 230 },
+      { "sizeEU": 37, "lengthMM": 237 },
+      { "sizeEU": 38, "lengthMM": 244 },
+      { "sizeEU": 39, "lengthMM": 251 },
+      { "sizeEU": 40, "lengthMM": 258 },
+      { "sizeEU": 41, "lengthMM": 265 },
+      { "sizeEU": 42, "lengthMM": 272 },
+      { "sizeEU": 43, "lengthMM": 279 },
+      { "sizeEU": 44, "lengthMM": 286 },
+      { "sizeEU": 45, "lengthMM": 293 },
+      { "sizeEU": 46, "lengthMM": 300 }
+    ],
+    "notes": {
+      "mk": "Должините се за стапалото. Freet препорачува комотно одговарање — повеќето клиенти ја носат својата вообичаена големина.",
+      "sq": "Gjatësitë janë për këmbën. Freet rekomandon përshtatje komode — shumica e klientëve mbajnë madhësinë e tyre të zakonshme.",
+      "en": "Lengths refer to your foot. Freet recommends a comfortable fit — most customers wear their usual size."
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{{define "nav"}}
+<nav class="nav">
+  <a class="nav__logo" href="/{{.Locale}}/">Bosfoot</a>
+
+  <ul class="nav__links">
+    <li><a href="/{{.Locale}}/products">{{t .Locale "nav.products"}}</a></li>
+    <li><a href="/{{.Locale}}/brands">{{t .Locale "nav.brands"}}</a></li>
+    <li><a href="/{{.Locale}}/size-guide">{{t .Locale "nav.sizeGuide"}}</a></li>
+    <li><a href="/{{.Locale}}/new-to-barefoot">{{t .Locale "nav.newToBarefoot"}}</a></li>
+    <li><a href="/{{.Locale}}/about">{{t .Locale "nav.about"}}</a></li>
+  </ul>
+
+  <div class="nav__actions">
+    <button class="nav__cart" id="cart-btn" aria-label="{{t .Locale "cart.title"}}">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+    </button>
+    <div class="nav__lang">
+      <a href="/mk{{.CurrentPath}}"{{if eq .Locale "mk"}} class="nav__lang--active"{{end}}>МК</a>
+      <a href="/sq{{.CurrentPath}}"{{if eq .Locale "sq"}} class="nav__lang--active"{{end}}>SQ</a>
+      <a href="/en{{.CurrentPath}}"{{if eq .Locale "en"}} class="nav__lang--active"{{end}}>EN</a>
+    </div>
+  </div>
+</nav>
+{{end}}

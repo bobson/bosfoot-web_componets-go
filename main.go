@@ -1,0 +1,93 @@
+package main
+
+import (
+	"log"
+	"net/http"
+	"os"
+
+	"bosfoot/handlers"
+	"bosfoot/internal/database"
+	"bosfoot/internal/locale"
+	"bosfoot/internal/tmpl"
+	"bosfoot/logger"
+)
+
+func initializeLogger() *logger.Logger {
+	logInstance, err := logger.NewLogger("bosfoot.log")
+	if err != nil {
+		log.Fatalf("Failed to initialize logger: %v", err)
+	}
+	// Close() is owned by main, which keeps the logger alive for the
+	// lifetime of the process. (Previously deferred here, which closed the
+	// log file before the server ever started.)
+	return logInstance
+}
+
+func main() {
+
+	// Initialize the logger
+	logInstance := initializeLogger()
+	defer logInstance.Close()
+
+	// Connect to the database
+	db, err := database.Connect()
+	if err != nil {
+		logInstance.Error("Failed to connect to database", err)
+		log.Fatalf("Failed to connect to database: %v", err)
+	}
+	defer db.Close()
+	logInstance.Info("Connected to database")
+
+	// Load locale strings and templates.
+	ui, err := locale.LoadUI("public/locales")
+	if err != nil {
+		logInstance.Error("Failed to load locale strings", err)
+		log.Fatalf("Failed to load locale strings: %v", err)
+	}
+	renderer, err := tmpl.NewRenderer("templates", ui)
+	if err != nil {
+		logInstance.Error("Failed to parse templates", err)
+		log.Fatalf("Failed to parse templates: %v", err)
+	}
+
+	// API handlers (JSON, CSR)
+	productHandler := &handlers.ProductHandler{
+		DB:     db,
+		Logger: logInstance,
+	}
+	http.HandleFunc("/api/products", productHandler.GetProducts)
+	http.HandleFunc("/api/products/{id}", productHandler.GetProductByID)
+
+	siteURL := os.Getenv("SITE_URL")
+	if siteURL == "" {
+		siteURL = "http://localhost:8080"
+	}
+
+	// Page handlers (HTML, SSR)
+	pageHandler := &handlers.PageHandler{
+		DB:       db,
+		Logger:   logInstance,
+		Renderer: renderer,
+		SiteURL:  siteURL,
+	}
+	http.HandleFunc("/{locale}/products", pageHandler.ProductListing)
+	http.HandleFunc("/sitemap.xml", pageHandler.Sitemap)
+
+	// Catch-all: redirect / to the default locale, serve everything else
+	// from public/ (images, CSS, JS, locales, manifest).
+	// The more specific routes above take precedence over this handler.
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path == "/" {
+			http.Redirect(w, r, "/mk/products", http.StatusFound)
+			return
+		}
+		http.FileServer(http.Dir("public")).ServeHTTP(w, r)
+	})
+
+	const addr = ":8080"
+	logInstance.Info("Server listening on " + addr)
+	if err := http.ListenAndServe(addr, nil); err != nil {
+		logInstance.Error("Server failed", err)
+		log.Fatalf("Server failed: %v", err)
+	}
+}

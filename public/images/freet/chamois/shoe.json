@@ -1,0 +1,46 @@
+{
+  "name": { "mk": "Chamois", "sq": "Chamois", "en": "Chamois" },
+  "price": 12900,
+  "status": "active",
+  "gender": "unisex",
+  "activities": ["hiking"],
+  "highlights": [
+    { "mk": "Водоотпорно", "sq": "I papërshkueshëm nga uji", "en": "WATERPROOF" },
+    { "mk": "Силен грип", "sq": "Grip i fortë", "en": "GRIPPY" },
+    { "mk": "Лесно", "sq": "I lehtë", "en": "LIGHTWEIGHT" },
+    { "mk": "Издржливо", "sq": "I qëndrueshëm", "en": "TOUGH" }
+  ],
+  "colors": [
+    { "name": { "mk": "Кафеаво-црно", "sq": "Kafe-zezë", "en": "Brown Black" }, "hex": "#4a2c1a" }
+  ],
+  "stock": {
+    "36": 0, "37": 0, "38": 0, "39": 0,
+    "40": 3, "41": 5, "42": 5, "43": 4, "44": 3,
+    "45": 0, "46": 0
+  },
+  "shortDescription": {
+    "mk": "Премиум кожен барефоот чизми дизајниран за најтешките планински предизвици, при тоа прекрасно удобни и исклучително лесни.",
+    "sq": "Çizme barefoot prej lëkure premium, e dizajnuar për sfidat më të vështira malore, e komode dhe jashtëzakonisht e lehtë në të njëjtën kohë.",
+    "en": "Premium leather, barefoot boot designed to take on the toughest mountain challenges, whilst being wonderfully comfortable and extremely lightweight."
+  },
+  "aboutShoe": {
+    "mk": "Комбинира удобност, леснотија и издржливост.\n\n6мм MountainGrip ножеви обезбедуваат одличен грип на стрмни кални патеки.\n\nПремиум, мазен кожен горен дел и целосна водоотпорна, дишлива обвивка ја заокружуваат највисоката заштита.",
+    "sq": "Kombinon komoditetin, lehtësinë dhe qëndrueshmërinë.\n\nThumbat MountainGrip 6mm sigurojnë grip të shkëlqyer në shtigje të pjerrëta dhe me baltë.\n\nLëkurë premium, e lëmuar në pjesën e sipërme dhe veshje plotësisht e papërshkueshme nga uji dhe e ajrosur e plotësojnë nivelin më të lartë të mbrojtjes.",
+    "en": "Combines comfort, lightness and toughness.\n\n6mm MountainGrip lugs provide superb grip for steep muddy trails.\n\nPremium, smooth leather upper and full waterproof, breathable lining completes the highest level of protection."
+  },
+  "sizeAndFit": {
+    "mk": "Купувачите велат дека одговара точно по големината — можете да ја носите вашата вообичаена големина.",
+    "sq": "Klientët thonë se përshtatet sipas madhësisë — mund të mbani madhësinë tuaj të zakonshme.",
+    "en": "Customers say it fits true to size — you may stay at your usual size."
+  },
+  "productInfo": {
+    "mk": "Горен дел\nКожа: премиум, целозрнеста кожа.\nКонвенционални врвки — кафеави.\n\nОбвивка\nЦелосна водоотпорна, дишлива обвивка.\n\nВлошка\nFlexile Nano: полесна, потенка верзија на нашата 3мм Flexile влошка, која дава малку повеќе осет за подлогата и дишливост.\n\nСредна потпетица\nFirmFlex: флексибилност со одредена заштита на потешки, карпести терени.\n\nГон\nMountainGrip: 6,0 мм газен профил за потешки, повлажни патеки и теренот без патека.\n\nВодоотпорност\nВодоотпорна обвивка и водоотпорен горен дел даваат добро ниво на водоотпорност.\n\nТежина\n860 грама на пар во големина 42.\n\nВисина на ѓонот\n12,5 мм со влошка; 10 мм без влошка.\n\nНега\nИзбришете со влажна крпа. Сушете на воздух. Третирајте со кондиционер/водоодбивач погоден за премиум кожа како Nikwax восок за водоотпорност за кожа.\n\nНе препорачуваме ставање на вашите Freet патики во машина за перење или сушара.",
+    "sq": "Pjesa e sipërme\nLëkurë: premium, lëkurë e plotë.\nLidhëse konvencionale — kafe.\n\nVeshja\nVeshje e plotë e papërshkueshme nga uji, e ajrosur.\n\nSole e brendshme\nFlexile Nano: një version më i lehtë, më i hollë i solës sonë Flexile prej 3mm, që jep pak më shumë ndjesi të tokës dhe ajrosje.\n\nMidsole\nFirmFlex: fleksibilitet me njëfarë mbrojtjeje në terrene më të vështira, me gurë.\n\nSolla e jashtme\nMountainGrip: 6,0 mm gjurmë për shtigje më të vështira, më të lagështa dhe jashtë rrugës.\n\nPapërshkueshmëria nga uji\nVeshja e papërshkueshme nga uji dhe pjesa e sipërme rezistente ndaj ujit japin një nivel të mirë papërshkueshmërie.\n\nPesha\n860 gramë çift në madhësinë 42.\n\nLartësia e solës\n12,5 mm me sole të brendshme; 10 mm pa sole të brendshme.\n\nKujdesi\nFshijeni me një copë të lagësht. Thajeni në ajër. Trajtojeni me një kondicioner/papërshkueshmërues të përshtatshëm për lëkurë premium si dylli i papërshkueshmërisë Nikwax për lëkurë.\n\nNuk rekomandojmë vendosjen e Freet-eve tuaj në lavatriçe ose tharëse.",
+    "en": "Upper\nLeather: premium, full grain leather.\nConventional lace — brown.\n\nLining\nFull waterproof, breathable bootee lining.\n\nInsole\nFlexile Nano: a lighter, thinner version of our 3mm Flexile insole, which gives a little more ground feel and breathability.\n\nMidsole\nFirmFlex: flexibility with some protection on more arduous, rocky terrain.\n\nOutsole\nMountainGrip: 6.0 mm tread for tougher, wetter trails and off track.\n\nWaterproofness\nWaterproof lining and water resistant upper give a good level of waterproofness.\n\nWeight\n860 grams per pair size 42.\n\nStack Height\n12.5 mm with insole; 10 mm without insole.\n\nCare\nWipe with a damp cloth. Air dry. Treat with a conditioner/waterproofer suitable for premium leather such as Nikwax waterproofing wax for leather.\n\nWe do not recommend putting your Freets in the washing machine or dryer."
+  },
+  "sustainability": {
+    "mk": "Горен дел: премиум целозрнеста кожа со Gold сертификат од Leather Working Group\nВрвки: 70% рециклирано (BottleYarn)\nСредна потпетица: 70% рециклирано (BottleYarn)\nВлошка: 60% рециклирано\nГон: 60% природен каучук\nПакување: кутија/обвивка од рециклирани и рециклабилни картон и хартија\nНадворешно пакување: рециклирани и рециклабилни пластика или картон/хартиен пакет",
+    "sq": "Pjesa e sipërme: lëkurë premium me certifikim Gold nga Leather Working Group\nLidhëset: 70% të ricikluara (BottleYarn)\nMidsole: 70% e ricikluar (BottleYarn)\nSolla e brendshme: 60% e ricikluar\nSolla e jashtme: 60% gomë natyrale\nPaketimi: kuti/mbështjellje nga karton dhe letër të ricikluara dhe të riciklueshme\nPaketimi i jashtëm: paketim plastik ose karton/letër i ricikluar dhe i riciklueshëm",
+    "en": "Upper: Premium full grain leather Gold Certificated by the Leather Working Group\nLaces: 70% recycled (BottleYarn)\nMidsole: 70% recycled (BottleYarn)\nInsole: 60% recycled\nOutsole: 60% natural rubber\nPackaging: box/wrapping recycled and recyclable card & paper\nOuter packaging: recycled and recyclable plastic or card/paper packet"
+  }
+}

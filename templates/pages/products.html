@@ -1,0 +1,33 @@
+{{define "products"}}
+<!DOCTYPE html>
+<html lang="{{.Locale}}">
+<head>
+  {{template "head" .}}
+  <title>{{t .Locale "listing.title"}} — Bosfoot</title>
+</head>
+<body>
+  {{template "nav" .}}
+
+  <main class="listing">
+    <div class="listing__header">
+      <h1 class="listing__title">{{t .Locale "listing.title"}}</h1>
+      <p class="listing__count">{{.Count}} {{t .Locale "listing.count"}}</p>
+    </div>
+
+    {{if .Products}}
+    <div class="listing__grid">
+      {{range .Products}}
+      {{template "product_card" (dict "Product" . "Locale" $.Locale)}}
+      {{end}}
+    </div>
+    {{else}}
+    <p class="listing__empty">{{t .Locale "listing.empty"}}</p>
+    {{end}}
+  </main>
+
+  {{template "footer" .}}
+
+  <script src="/app.js" defer></script>
+</body>
+</html>
+{{end}}

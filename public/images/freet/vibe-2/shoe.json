@@ -1,0 +1,47 @@
+{
+  "name": { "mk": "Vibe 2", "sq": "Vibe 2", "en": "Vibe 2" },
+  "price": 6200,
+  "status": "active",
+  "gender": "unisex",
+  "activities": ["training", "casual", "running"],
+  "highlights": [
+    { "mk": "Одржливо", "sq": "I qëndrueshëm", "en": "SUSTAINABLE" },
+    { "mk": "Лесно", "sq": "I lehtë", "en": "LIGHTWEIGHT" },
+    { "mk": "Дишливо", "sq": "I ajrosur", "en": "BREATHABLE" },
+    { "mk": "Издржливо", "sq": "I qëndrueshëm", "en": "DURABLE" }
+  ],
+  "colors": [
+    { "name": { "mk": "Бело", "sq": "E bardhë", "en": "White" }, "hex": "#f0f0eb" },
+    { "name": { "mk": "Црно", "sq": "E zezë", "en": "Black" }, "hex": "#1a1a1a" }
+  ],
+  "stock": {
+    "36": 0, "37": 0, "38": 0, "39": 0,
+    "40": 3, "41": 5, "42": 5, "43": 4, "44": 3,
+    "45": 0, "46": 0
+  },
+  "shortDescription": {
+    "mk": "Дизајнирано за заморни активности, но целосно опуштено за секојдневно носење.",
+    "sq": "E dizajnuar për aktivitete kërkuese, por plotësisht e qetë për përdorim të përditshëm.",
+    "en": "Designed for demanding activity but completely at ease with wearing casually everyday."
+  },
+  "aboutShoe": {
+    "mk": "Flyknit горен дел со удобна обвивка за целодневна удобност со или без чорапи.\n\nВлошка ReBound со енергетски одѕив плус UrbanGrip ѓон даваат одличен осет за подлогата со амортизација.\n\nВисоко дишливо за моменти кога темпото се забрзува.",
+    "sq": "Pjesa e sipërme Flyknit me veshje komode për komfort gjatë gjithë ditës me ose pa çorape.\n\nSolla e brendshme ReBound me kthim energjie plus solla e jashtme UrbanGrip japin ndjesi të shkëlqyer të tokës me amortizim.\n\nShumë e ajrosur për kur ritmi shpejtohet.",
+    "en": "Flyknit upper with comfy lining for all day comfort with or without socks.\n\nReBound energy return insole plus UrbanGrip outsole gives excellent ground feel with shock absorption.\n\nHighly breathable for when the tempo speeds up."
+  },
+  "sizeAndFit": {
+    "mk": "Купувачите велат дека одговара точно по големината — можете да ја носите вашата вообичаена големина.",
+    "sq": "Klientët thonë se përshtatet sipas madhësisë — mund të mbani madhësinë tuaj të zakonshme.",
+    "en": "Customers say it fits true to size — you may stay at your usual size."
+  },
+  "productInfo": {
+    "mk": "Горен дел\nBottleYarn: дишлива, издржлива, мрежа што ја носи влагата, направена од рециклирани пластични шишиња.\nКонвенционални врвки — црни.\n\nОбвивка\nБез обвивка за целосна дишливост.\n\nВлошка\nReBound 4 мм: енергетски одѕив со осет за подлогата за целосно природно движење. Идеално за подобри перформанси на потврди подлоги и подолги растојанија.\n\nСредна потпетица\nSoftFlex: целосно флексибилна за максимално движење на стапалото.\n\nГон\nUrbanGrip: 3,0 мм газен профил со широка површина за оптимален грип и издржливост на урбани површини.\n\nВодоотпорност\nНе е водоотпорно, високо дишливо. Користете водоотпорни чорапи за студени/влажни услови.\n\nТежина\n585 грама на пар во големина 42.\n\nВисина на ѓонот\n10,5 мм со влошка; 6,5 мм без влошка. Нула надолен пад.\n\nНега\nРачно перете со млака вода и благ детергент. Сушете на воздух.\n\nНе препорачуваме ставање на вашите Freet патики во машина за перење или сушара.",
+    "sq": "Pjesa e sipërme\nBottleYarn: rrjetë e ajrosur, e qëndrueshme, që largon lagështinë, prej shisheve plastike të ricikluara.\nLidhëse konvencionale — të zeza.\n\nVeshja\nPa veshje për ajrosje të plotë.\n\nSole e brendshme\nReBound 4 mm: kthim energjie me ndjesi të tokës për lëvizje natyrale. Ideale për performancë në sipërfaqe më të forta dhe distanca më të gjata.\n\nMidsole\nSoftFlex: plotësisht fleksibël për lëvizje maksimale të këmbës.\n\nSolla e jashtme\nUrbanGrip: 3,0 mm gjurmë me sipërfaqe të gjerë për grip dhe qëndrueshmëri optimale në sipërfaqe urbane.\n\nPapërshkueshmëria nga uji\nNuk është i papërshkueshëm nga uji, shumë i ajrosur. Përdor çorape të papërshkueshme për kushte të ftohta / të lagështa.\n\nPesha\n585 gramë çift në madhësinë 42.\n\nLartësia e solës\n10,5 mm me sole; 6,5 mm pa sole. Zero drop.\n\nKujdesi\nLani me dorë me ujë të vakët dhe detergjent të butë. Thajeni në ajër.\n\nNuk rekomandojmë vendosjen e Freet-eve tuaj në lavatriçe ose tharëse.",
+    "en": "Upper\nBottleYarn: breathable, durable, moisture moving mesh, made from recycled plastic bottles.\nConventional lace — black.\n\nLining\nUnlined for complete breathability.\n\nInsole\nReBound 4 mm: energy return with ground connectivity to allow full natural movement. Ideal for performance on harder surfaces and longer distances.\n\nMidsole\nSoftFlex: fully flexible for maximum foot movement.\n\nOutsole\nUrbanGrip: 3.0 mm wide-area tread for optimum grip and durability on urban surfaces.\n\nWaterproofness\nNot waterproof, highly breathable. Use a waterproof sock for cold / wet conditions.\n\nWeight\n585 grams per pair size 42.\n\nStack Height\n10.5 mm with insole; 6.5 mm without insole, zero drop.\n\nCare\nHand wash with luke warm water and mild detergent. Air dry.\n\nWe do not recommend putting your Freets in the washing machine or dryer."
+  },
+  "sustainability": {
+    "mk": "Горен дел: 30% рециклирано (BottleYarn)\nГон: 60% природен каучук\nОбвивка: 65% рециклирано (BottleYarn)\nВрвки: 70% рециклирано (BottleYarn)\nВлошка: 60% рециклирано\nПакување: кутија/обвивка од рециклирани и рециклабилни картон и хартија\nНадворешно пакување: рециклирана и рециклабилна пластика или картон/хартиен пакет",
+    "sq": "Pjesa e sipërme: 30% e ricikluar (BottleYarn)\nSolla e jashtme: 60% gomë natyrale\nVeshja: 65% e ricikluar (BottleYarn)\nLidhëset: 70% të ricikluara (BottleYarn)\nSolla e brendshme: 60% e ricikluar\nPaketimi: kuti/mbështjellje nga karton dhe letër të ricikluara dhe të riciklueshme\nPaketimi i jashtëm: plastikë ose karton/letër i ricikluar dhe i riciklueshëm",
+    "en": "Upper: 30% recycled (BottleYarn)\nOutsole: 60% natural rubber\nLining: 65% recycled (BottleYarn)\nLace: 70% recycled (BottleYarn)\nInsole: 60% recycled\nPackaging: box/wrapping recycled and recyclable card & paper\nOuter packaging: recycled and recyclable plastic or card/paper packet"
+  }
+}

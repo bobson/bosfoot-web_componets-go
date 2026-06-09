@@ -1,0 +1,21 @@
+root = "."
+tmp_dir = "tmp"
+
+[build]
+  cmd = "go build -o ./tmp/main ./main.go"
+  bin = "./tmp/main"
+  include_ext = ["go", "html", "json"]  # Reload on Go, template, or locale changes
+  exclude_dir = ["tmp", "vendor", "node_modules"]
+  delay = 1000  # ms
+
+[log]
+  time = true
+
+[color]
+  main = "magenta"
+  watcher = "cyan"
+  build = "yellow"
+  runner = "green"
+
+[misc]
+  clean_on_exit = true

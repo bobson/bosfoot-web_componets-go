@@ -1,0 +1,15 @@
+{{define "footer"}}
+<footer class="footer">
+  <div class="footer__inner">
+    <p class="footer__tagline">{{t .Locale "footer.tagline"}}</p>
+    <nav class="footer__links">
+      <a href="/{{.Locale}}/about">{{t .Locale "nav.about"}}</a>
+      <a href="/{{.Locale}}/size-guide">{{t .Locale "nav.sizeGuide"}}</a>
+      <a href="/{{.Locale}}/shipping">Shipping</a>
+      <a href="/{{.Locale}}/returns">Returns</a>
+      <a href="/{{.Locale}}/privacy">Privacy</a>
+    </nav>
+    <p class="footer__copyright">{{t .Locale "footer.copyright"}}</p>
+  </div>
+</footer>
+{{end}}

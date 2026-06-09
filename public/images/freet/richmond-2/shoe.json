@@ -1,0 +1,46 @@
+{
+  "name": { "mk": "Richmond 2", "sq": "Richmond 2", "en": "Richmond 2" },
+  "price": 8600,
+  "status": "active",
+  "gender": "unisex",
+  "activities": ["casual", "office"],
+  "highlights": [
+    { "mk": "Урбано", "sq": "Urban", "en": "URBAN" },
+    { "mk": "Опуштена удобност", "sq": "Komfort i qetë", "en": "RELAXED COMFORT" },
+    { "mk": "Отпорно на вода", "sq": "Rezistent ndaj ujit", "en": "WATER RESISTANT" },
+    { "mk": "Издржливо", "sq": "I qëndrueshëm", "en": "DURABLE" }
+  ],
+  "colors": [
+    { "name": { "mk": "Кафеаво-црно", "sq": "Kafe-zezë", "en": "Brown Black" }, "hex": "#5a3825" }
+  ],
+  "stock": {
+    "36": 0, "37": 0, "38": 0, "39": 0,
+    "40": 3, "41": 5, "42": 5, "43": 4, "44": 3,
+    "45": 0, "46": 0
+  },
+  "shortDescription": {
+    "mk": "Класична desert чизма за поделовни денови во канцеларија или за опуштено дружење со пријатели.",
+    "sq": "Çizme klasike desert për ditë më të zyrtarizuara në zyrë ose për relaksim me miqtë.",
+    "en": "A classic desert boot for smarter days at the office or casual relaxing with friends."
+  },
+  "aboutShoe": {
+    "mk": "Сите придобивки на барефоот, секој ден. Сега ажурирана за поголема удобност и издржливост.\n\nНашата премиум кожа е мека, дишлива, отпорна на вода — обезбедувајќи целодневна удобност.\n\nБезвременски убав изглед во чевел погоден за град и природа.",
+    "sq": "Të gjitha përfitimet e barefoot çdo ditë. Tani e përditësuar për më shumë komfort dhe qëndrueshmëri.\n\nLëkura jonë premium është e butë, e ajrosur, rezistente ndaj ujit, duke dhënë komfort gjatë gjithë ditës.\n\nPamje e bukur pa kohë në një këpucë të përshtatshme për qytet dhe fshat.",
+    "en": "All the benefits of barefoot everyday. Now updated for more comfort and durability.\n\nOur premium leather is soft, breathable, water resistant, giving all day comfort.\n\nTimeless good looks in a shoe suitable for town and country."
+  },
+  "sizeAndFit": {
+    "mk": "Купувачите велат дека одговара точно по големината — можете да ја носите вашата вообичаена големина.",
+    "sq": "Klientët thonë se përshtatet sipas madhësisë — mund të mbani madhësinë tuaj të zakonshme.",
+    "en": "Customers say it fits true to size — you may stay at your usual size."
+  },
+  "productInfo": {
+    "mk": "Горен дел\nКожа: премиум, целозрнеста кожа.\nКонвенционални врвки — кафеави.\n\nОбвивка\nДишлива обвивка што ја носи влагата.\n\nВлошка\nFlexile: 3,0 мм со одредена амортизација и одличен осет за подлогата за целосно природно движење.\n\nСредна потпетица\nSoftFlex: целосно флексибилна за максимално движење на стапалото.\n\nГон\nUrbanGrip: 3,0 мм газен профил со широка површина за оптимален грип и издржливост на урбани површини.\n\nВодоотпорност\nОтпорен на вода горен дел кога редовно се третира со следење на упатствата за нега.\n\nТежина\n640 грама на пар во големина 42.\n\nВисина на ѓонот\n9,5 мм со Flexile влошка; 6,5 мм без влошка. Нула надолен пад.\n\nНега\nИзбришете со влажна крпа. Сушете на воздух. Третирајте со кондиционер/водоодбивач погоден за премиум кожа како Nikwax восок за водоотпорност за кожа.\n\nНе препорачуваме ставање на вашите Freet патики во машина за перење или сушара.",
+    "sq": "Pjesa e sipërme\nLëkurë: premium, lëkurë e plotë.\nLidhëse konvencionale — kafe.\n\nVeshja\nVeshje e ajrosur që largon lagështinë.\n\nSole e brendshme\nFlexile: 3,0 mm me njëfarë amortizimi dhe ndjesi të shkëlqyer të tokës për lëvizje plotësisht natyrale.\n\nMidsole\nSoftFlex: plotësisht fleksibël për lëvizje maksimale të këmbës.\n\nSolla e jashtme\nUrbanGrip: 3,0 mm gjurmë me sipërfaqe të gjerë për grip dhe qëndrueshmëri optimale në sipërfaqe urbane.\n\nPapërshkueshmëria nga uji\nPjesa e sipërme rezistente ndaj ujit kur trajtohet rregullisht sipas udhëzimeve të kujdesit.\n\nPesha\n640 gramë çift në madhësinë 42.\n\nLartësia e solës\n9,5 mm me sole Flexile; 6,5 mm pa sole. Zero drop.\n\nKujdesi\nFshijeni me një copë të lagësht. Thajeni në ajër. Trajtojeni me një kondicioner/papërshkueshmërues të përshtatshëm për lëkurë premium si dylli i papërshkueshmërisë Nikwax për lëkurë.\n\nNuk rekomandojmë vendosjen e Freet-eve tuaj në lavatriçe ose tharëse.",
+    "en": "Upper\nLeather: premium, full grain leather.\nConventional lace — brown.\n\nLining\nBreathable, moisture moving lining.\n\nInsole\nFlexile: 3.0 mm some shock absorption with excellent ground connectivity to allow full natural movement.\n\nMidsole\nSoftFlex: fully flexible for maximum foot movement.\n\nOutsole\nUrbanGrip: 3.0 mm wide-area tread for optimum grip and durability on urban surfaces.\n\nWaterproofness\nWater resistant upper when treated regularly, by following the care instructions.\n\nWeight\n640 grams per pair size 42.\n\nStack Height\n9.5 mm with Flexile insole; 6.5 mm without insole, zero drop.\n\nCare\nWipe with a damp cloth. Air dry. Treat with a conditioner/waterproofer suitable for premium leather such as Nikwax waterproofing wax for leather.\n\nWe do not recommend putting your Freets in the washing machine or dryer."
+  },
+  "sustainability": {
+    "mk": "Врвки: 70% BottleYarn\nЗадник/микро обвивка: 70% BottleYarn\nВлошка: 60% BottleYarn\nГон: 60% природен каучук од одржливо шумарство\nПакување: кутија/обвивка од рециклирани и рециклабилни картон и хартија\nНадворешно пакување: рециклирана и рециклабилна пластика или картон/хартиен пакет\nDWR: издржлив третман со водоодбивност. Без употреба на PFC",
+    "sq": "Lidhëset: 70% BottleYarn\nMbështetje/mikro-veshje: 70% BottleYarn\nSolla e brendshme: 60% BottleYarn\nSolla e jashtme: 60% gomë natyrale e marrë nga pylltari e qëndrueshme\nPaketimi: kuti/mbështjellje nga karton dhe letër të ricikluara dhe të riciklueshme\nPaketimi i jashtëm: plastikë ose karton/letër i ricikluar dhe i riciklueshëm\nDWR: trajtim i qëndrueshëm i papërshkueshmërisë nga uji. Pa përdorim PFC-sh",
+    "en": "Laces: 70% BottleYarn\nBacker/micro lining: 70% BottleYarn\nInsole: 60% BottleYarn\nOutsole: 60% natural rubber tapped from sustainable forestry\nPackaging: box/wrapping recycled and recyclable card & paper\nOuter packaging: recycled and recyclable plastic or card/paper packet\nDWR: Durable water repellency treatment. No use of PFCs"
+  }
+}

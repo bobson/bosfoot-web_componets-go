@@ -1,0 +1,36 @@
+{{define "product_card"}}
+{{$p := .Product}}
+{{$locale := .Locale}}
+<article class="product-card">
+  {{if $p.IsNew}}<span class="product-card__badge product-card__badge--new">{{t $locale "product.new"}}</span>{{end}}
+  {{if $p.IsOnSale}}<span class="product-card__badge product-card__badge--sale">{{t $locale "product.sale"}}</span>{{end}}
+
+  <a class="product-card__link" href="/{{$locale}}/products/{{$p.BrandSlug}}/{{$p.Slug}}">
+    {{if $p.ImageURL}}
+    <img class="product-card__image" src="{{deref $p.ImageURL}}" alt="{{$p.Name}}" loading="lazy" width="400" height="400">
+    {{end}}
+
+    <div class="product-card__body">
+      <p class="product-card__brand">{{$p.BrandName}}</p>
+      <h2 class="product-card__name">{{$p.Name}}</h2>
+
+      {{if $p.Colors}}
+      <div class="product-card__colors">
+        {{range $p.Colors}}
+        <span class="product-card__swatch"
+          {{if .Hex}}style="background:{{deref .Hex}}"{{end}}
+          title="{{.Color}}"></span>
+        {{end}}
+      </div>
+      {{end}}
+
+      <div class="product-card__price">
+        <span class="product-card__price-mkd">{{mkd $p.PriceMKD}} {{t $locale "currency.MKD"}}</span>
+        {{if showEUR $locale}}
+        <span class="product-card__price-eur">{{eur $p.PriceMKD}} €</span>
+        {{end}}
+      </div>
+    </div>
+  </a>
+</article>
+{{end}}
