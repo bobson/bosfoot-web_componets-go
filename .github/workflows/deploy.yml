@@ -1,0 +1,27 @@
+name: Deploy
+
+# Push to main → SSH into the droplet, pull the new code, rebuild the binary,
+# and restart the service. The DB stays on Aiven and is never touched here.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: {} # allow manual runs from the Actions tab
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to droplet
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.DROPLET_HOST }}
+          username: ${{ secrets.DROPLET_USER }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          script: |
+            set -e
+            cd /srv/bosfoot
+            git fetch origin main
+            git reset --hard origin/main
+            /usr/local/go/bin/go build -o bosfoot-app .
+            sudo /usr/bin/systemctl restart bosfoot
+            echo "Deployed $(git rev-parse --short HEAD)"
