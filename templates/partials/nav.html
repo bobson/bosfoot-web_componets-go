@@ -1,24 +1,139 @@
 {{define "nav"}}
-<nav class="nav">
-  <a class="nav__logo" href="/{{.Locale}}/">Bosfoot</a>
+<header class="nav">
 
-  <ul class="nav__links">
-    <li><a href="/{{.Locale}}/products">{{t .Locale "nav.products"}}</a></li>
-    <li><a href="/{{.Locale}}/brands">{{t .Locale "nav.brands"}}</a></li>
-    <li><a href="/{{.Locale}}/size-guide">{{t .Locale "nav.sizeGuide"}}</a></li>
-    <li><a href="/{{.Locale}}/new-to-barefoot">{{t .Locale "nav.newToBarefoot"}}</a></li>
-    <li><a href="/{{.Locale}}/about">{{t .Locale "nav.about"}}</a></li>
-  </ul>
+  {{/* Mobile only: hamburger on the left */}}
+  <button class="nav__hamburger" id="nav-open"
+      aria-label="Open menu"
+      aria-expanded="false"
+      aria-controls="nav-drawer"
+      aria-haspopup="dialog">
+    <span aria-hidden="true"></span>
+    <span aria-hidden="true"></span>
+    <span aria-hidden="true"></span>
+  </button>
 
-  <div class="nav__actions">
-    <button class="nav__cart" id="cart-btn" aria-label="{{t .Locale "cart.title"}}">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
-    </button>
-    <div class="nav__lang">
-      <a href="/mk{{.CurrentPath}}"{{if eq .Locale "mk"}} class="nav__lang--active"{{end}}>МК</a>
-      <a href="/sq{{.CurrentPath}}"{{if eq .Locale "sq"}} class="nav__lang--active"{{end}}>SQ</a>
-      <a href="/en{{.CurrentPath}}"{{if eq .Locale "en"}} class="nav__lang--active"{{end}}>EN</a>
+  <a class="nav__logo" href="/{{.Locale}}">Bosfoot</a>
+
+  {{/* Desktop only: main nav links */}}
+  <nav class="nav__desktop-links" aria-label="Main navigation">
+    <ul>
+      <li><a href="/{{.Locale}}/products" {{if eq .CurrentPath "/products"}}class="nav__link--active" aria-current="page"{{end}}>{{t .Locale "nav.products"}}</a></li>
+      <li><a href="/{{.Locale}}/brands"   {{if eq .CurrentPath "/brands"}}class="nav__link--active" aria-current="page"{{end}}>{{t .Locale "nav.brands"}}</a></li>
+      <li><a href="/{{.Locale}}/size-guide" {{if eq .CurrentPath "/size-guide"}}class="nav__link--active" aria-current="page"{{end}}>{{t .Locale "nav.sizeGuide"}}</a></li>
+      <li><a href="/{{.Locale}}/new-to-barefoot" {{if eq .CurrentPath "/new-to-barefoot"}}class="nav__link--active" aria-current="page"{{end}}>{{t .Locale "nav.newToBarefoot"}}</a></li>
+      <li><a href="/{{.Locale}}/about" {{if eq .CurrentPath "/about"}}class="nav__link--active" aria-current="page"{{end}}>{{t .Locale "nav.about"}}</a></li>
+    </ul>
+  </nav>
+
+  {{/* Desktop right group: lang switcher + actions */}}
+  <div class="nav__right">
+    <div class="nav__lang" role="navigation" aria-label="Language switcher">
+      <a href="/mk{{.CurrentPath}}" {{if eq .Locale "mk"}}class="nav__lang--active" aria-current="true"{{end}} lang="mk" aria-label="Македонски">
+        <span class="nav__lang-flag" aria-hidden="true">🇲🇰</span>
+        <span class="nav__lang-code">МК</span>
+      </a>
+      <a href="/sq{{.CurrentPath}}" {{if eq .Locale "sq"}}class="nav__lang--active" aria-current="true"{{end}} lang="sq" aria-label="Shqip">
+        <span class="nav__lang-flag" aria-hidden="true">🇦🇱</span>
+        <span class="nav__lang-code">SQ</span>
+      </a>
+      <a href="/en{{.CurrentPath}}" {{if eq .Locale "en"}}class="nav__lang--active" aria-current="true"{{end}} lang="en" aria-label="English">
+        <span class="nav__lang-flag" aria-hidden="true">🇬🇧</span>
+        <span class="nav__lang-code">EN</span>
+      </a>
+    </div>
+
+    <div class="nav__actions">
+      <button class="nav__btn" id="search-btn"
+          aria-label="{{t .Locale "nav.search"}}"
+          aria-expanded="false"
+          aria-controls="search-dropdown">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+      </button>
+      <button class="nav__btn" id="cart-btn" aria-label="{{t .Locale "cart.title"}}">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false">
+          <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/>
+        </svg>
+      </button>
     </div>
   </div>
-</nav>
+
+</header>
+
+{{/* Search dropdown — fixed below nav, full width */}}
+<div class="search-dropdown" id="search-dropdown" role="search" aria-hidden="true" aria-label="{{t .Locale "nav.search"}}">
+  <div class="search-dropdown__inner">
+    <div class="search-dropdown__bar">
+      <svg class="search-dropdown__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true" focusable="false">
+        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+      <label class="sr-only" for="search-input">{{t .Locale "search.placeholder"}}</label>
+      <input class="search-dropdown__input" type="search" id="search-input"
+             placeholder="{{t .Locale "search.placeholder"}}"
+             autocomplete="off" autocorrect="off" spellcheck="false">
+      <button class="search-dropdown__close" id="search-close" aria-label="Close search">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false">
+          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+{{/* Drawer overlay */}}
+<div class="nav__overlay" id="nav-overlay" aria-hidden="true"></div>
+
+
+{{/* Mobile drawer — slides from left */}}
+<div class="nav__drawer" id="nav-drawer"
+     role="dialog" aria-modal="true"
+     aria-label="Navigation menu"
+     aria-hidden="true">
+
+  <button class="nav__close" id="nav-close" aria-label="Close menu">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false">
+      <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+    </svg>
+  </button>
+
+  <nav aria-label="Main navigation">
+    <ul class="nav__links">
+      <li><a href="/{{.Locale}}/products">{{t .Locale "nav.products"}}</a></li>
+      <li><a href="/{{.Locale}}/brands">{{t .Locale "nav.brands"}}</a></li>
+      <li><a href="/{{.Locale}}/size-guide">{{t .Locale "nav.sizeGuide"}}</a></li>
+      <li><a href="/{{.Locale}}/new-to-barefoot">{{t .Locale "nav.newToBarefoot"}}</a></li>
+      <li><a href="/{{.Locale}}/about">{{t .Locale "nav.about"}}</a></li>
+    </ul>
+  </nav>
+
+  {{/* Language inline in drawer */}}
+  <div class="nav__drawer-lang" role="navigation" aria-label="Language switcher">
+    <a href="/mk{{.CurrentPath}}" {{if eq .Locale "mk"}}class="nav__lang--active" aria-current="true"{{end}} lang="mk" aria-label="Македонски">
+      <span class="nav__lang-flag" aria-hidden="true">🇲🇰</span>
+      <span class="nav__lang-code">МК</span>
+    </a>
+    <a href="/sq{{.CurrentPath}}" {{if eq .Locale "sq"}}class="nav__lang--active" aria-current="true"{{end}} lang="sq" aria-label="Shqip">
+      <span class="nav__lang-flag" aria-hidden="true">🇦🇱</span>
+      <span class="nav__lang-code">SQ</span>
+    </a>
+    <a href="/en{{.CurrentPath}}" {{if eq .Locale "en"}}class="nav__lang--active" aria-current="true"{{end}} lang="en" aria-label="English">
+      <span class="nav__lang-flag" aria-hidden="true">🇬🇧</span>
+      <span class="nav__lang-code">EN</span>
+    </a>
+  </div>
+
+  {{/* User/login — bottom of drawer, hidden on desktop */}}
+  <a class="nav__user" href="/{{.Locale}}/account">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false">
+      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+    </svg>
+    <span>{{t .Locale "nav.login"}}</span>
+  </a>
+
+</div>
+
+<script src="/components/nav-drawer.js" type="module"></script>
+<script src="/components/nav-locale.js" type="module"></script>
+<script src="/components/nav-search.js" type="module"></script>
 {{end}}

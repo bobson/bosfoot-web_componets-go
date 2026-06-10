@@ -6,13 +6,15 @@
   {{if $p.IsOnSale}}<span class="product-card__badge product-card__badge--sale">{{t $locale "product.sale"}}</span>{{end}}
 
   <a class="product-card__link" href="/{{$locale}}/products/{{$p.BrandSlug}}/{{$p.Slug}}">
-    {{if $p.ImageURL}}
-    <img class="product-card__image" src="{{deref $p.ImageURL}}" alt="{{$p.Name}}" loading="lazy" width="400" height="400">
-    {{end}}
+    <div class="product-card__image-wrap">
+      {{if $p.ImageURL}}
+      <img class="product-card__image" src="{{deref $p.ImageURL}}" alt="{{$p.Name}}" loading="lazy">
+      {{end}}
+    </div>
 
-    <div class="product-card__body">
-      <p class="product-card__brand">{{$p.BrandName}}</p>
-      <h2 class="product-card__name">{{$p.Name}}</h2>
+    <div class="product-card__body text-center">
+      <p class="product-card__brand text-xs font-semibold text-muted">{{$p.BrandName}}</p>
+      <h2 class="product-card__name font-medium">{{$p.Name}}</h2>
 
       {{if $p.Colors}}
       <div class="product-card__colors">
@@ -25,10 +27,8 @@
       {{end}}
 
       <div class="product-card__price">
-        <span class="product-card__price-mkd">{{mkd $p.PriceMKD}} {{t $locale "currency.MKD"}}</span>
-        {{if showEUR $locale}}
-        <span class="product-card__price-eur">{{eur $p.PriceMKD}} €</span>
-        {{end}}
+        <span class="product-card__price-mkd font-semibold">{{mkd $p.PriceMKD}} {{t $locale "currency.MKD"}}</span>
+        {{if showEUR $locale}}<span class="product-card__price-eur text-muted text-xs">{{eur $p.PriceMKD}} €</span>{{end}}
       </div>
     </div>
   </a>

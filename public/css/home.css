@@ -1,0 +1,212 @@
+/* ── Hero ────────────────────────────────────────────── */
+
+.hero {
+  padding-block: var(--space-20);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.hero__content {
+  max-width: var(--prose-max);
+}
+
+.hero__heading {
+  font-size: var(--fs-3xl);
+  font-weight: var(--fw-bold);
+  letter-spacing: -0.03em;
+  line-height: var(--lh-tight);
+  margin-bottom: var(--space-4);
+}
+
+.hero__sub {
+  font-size: var(--fs-md);
+  line-height: var(--lh-normal);
+  margin-bottom: var(--space-8);
+}
+
+.hero__cta {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--space-3) var(--space-8);
+  background: var(--color-accent);
+  color: var(--color-white);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  border-radius: var(--radius-sm);
+  transition: background 0.2s ease;
+}
+
+.hero__cta:hover { background: var(--color-accent-hover); }
+
+/* ── Brand strip ─────────────────────────────────────── */
+
+.brand-strip {
+  border-bottom: 1px solid var(--color-border);
+  padding-block: var(--space-10);
+}
+
+.brand-strip__label {
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: var(--space-6);
+}
+
+.brand-strip__featured {
+  display: flex;
+  justify-content: center;
+  margin-bottom: var(--space-6);
+}
+
+.brand-live {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-md);
+  padding: var(--space-4) var(--space-10);
+  opacity: 0.88;
+  transition: opacity 0.15s ease, transform 0.15s var(--ease-out);
+}
+
+.brand-live:hover {
+  opacity: 1;
+  transform: translateY(-1px);
+}
+
+.brand-live--freet {
+  background: var(--color-freet);
+}
+
+.brand-live__logo {
+  height: 3rem;
+  width: auto;
+  object-fit: contain;
+}
+
+.brand-live__name {
+  font-size: var(--fs-2xl);
+  letter-spacing: -0.02em;
+  color: var(--color-white);
+}
+
+.brand-strip__soon {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-4);
+}
+
+.brand-soon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-6);
+  border-radius: var(--radius-md);
+  opacity: 0.4;
+}
+
+.brand-soon__logo {
+  height: 2rem;
+  width: auto;
+  object-fit: contain;
+  filter: grayscale(1);
+}
+
+.brand-soon__name {
+  font-size: var(--fs-base);
+  letter-spacing: -0.01em;
+}
+
+.brand-soon__label {
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+/* ── Why barefoot ────────────────────────────────────── */
+
+.why-barefoot {
+  background: var(--color-sage);
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+  padding-block: var(--space-20);
+}
+
+.why-barefoot__header {
+  max-width: var(--prose-max);
+  margin-inline: auto;
+  margin-bottom: var(--space-12);
+}
+
+.why-barefoot__title {
+  font-size: var(--fs-2xl);
+  letter-spacing: -0.02em;
+  margin-bottom: var(--space-4);
+}
+
+.why-barefoot__lead {
+  font-size: var(--fs-md);
+  line-height: var(--lh-normal);
+}
+
+.why-barefoot__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-8);
+}
+
+@media (min-width: 768px) {
+  .why-barefoot__grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-12);
+  }
+}
+
+.why-barefoot__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--size-icon);
+  height: var(--size-icon);
+  border-radius: 50%;
+  background: var(--color-white);
+  color: var(--color-accent);
+  margin-bottom: var(--space-6);
+}
+
+.why-barefoot__card-title {
+  font-size: var(--fs-lg);
+  letter-spacing: -0.02em;
+  margin-bottom: var(--space-2);
+}
+
+.why-barefoot__card-body {
+  font-size: var(--fs-sm);
+  line-height: var(--lh-normal);
+}
+
+/* ── Featured products ───────────────────────────────── */
+
+.home-featured {
+  padding-block: var(--space-16);
+}
+
+.home-featured__header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-bottom: var(--space-8);
+}
+
+.home-featured__title {
+  font-size: var(--fs-2xl);
+  letter-spacing: -0.02em;
+}
+
+.home-featured__view-all {
+  white-space: nowrap;
+  transition: color 0.15s ease;
+}
+
+.home-featured__view-all:hover { color: var(--color-accent); }

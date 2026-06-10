@@ -8,10 +8,10 @@
 <body>
   {{template "nav" .}}
 
-  <main class="listing">
+  <main class="listing container">
     <div class="listing__header">
-      <h1 class="listing__title">{{t .Locale "listing.title"}}</h1>
-      <p class="listing__count">{{.Count}} {{t .Locale "listing.count"}}</p>
+      <h1 class="listing__title font-semibold">{{t .Locale "listing.title"}}</h1>
+      <p class="listing__count text-muted text-sm">{{.Count}} {{t .Locale "listing.count"}}</p>
     </div>
 
     {{if .Products}}
@@ -21,7 +21,7 @@
       {{end}}
     </div>
     {{else}}
-    <p class="listing__empty">{{t .Locale "listing.empty"}}</p>
+    <p class="listing__empty text-muted">{{t .Locale "listing.empty"}}</p>
     {{end}}
   </main>
 

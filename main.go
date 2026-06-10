@@ -55,6 +55,7 @@ func main() {
 		DB:     db,
 		Logger: logInstance,
 	}
+	http.HandleFunc("/api/brands", productHandler.GetBrands)
 	http.HandleFunc("/api/products", productHandler.GetProducts)
 	http.HandleFunc("/api/products/{id}", productHandler.GetProductByID)
 
@@ -70,6 +71,9 @@ func main() {
 		Renderer: renderer,
 		SiteURL:  siteURL,
 	}
+	for _, loc := range []string{"mk", "sq", "en"} {
+		http.HandleFunc("/"+loc, pageHandler.Home)
+	}
 	http.HandleFunc("/{locale}/products", pageHandler.ProductListing)
 	http.HandleFunc("/sitemap.xml", pageHandler.Sitemap)
 
@@ -78,7 +82,7 @@ func main() {
 	// The more specific routes above take precedence over this handler.
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Path == "/" {
-			http.Redirect(w, r, "/mk/products", http.StatusFound)
+			http.Redirect(w, r, "/mk", http.StatusFound)
 			return
 		}
 		http.FileServer(http.Dir("public")).ServeHTTP(w, r)

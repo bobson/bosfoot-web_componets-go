@@ -31,7 +31,7 @@ func (h *PageHandler) Sitemap(w http.ResponseWriter, r *http.Request) {
 		// Caller passes pre-built full localed path; alternates are derived here.
 
 		b.WriteString("  <url>\n")
-		b.WriteString(fmt.Sprintf("    <loc>%s%s</loc>\n", base, localedPath))
+		fmt.Fprintf(&b, "    <loc>%s%s</loc>\n", base, localedPath)
 
 		// All alternates — each locale variant of this page.
 		// pathSuffix is everything after "/{locale}", e.g. "/products".
@@ -41,22 +41,22 @@ func (h *PageHandler) Sitemap(w http.ResponseWriter, r *http.Request) {
 			suffix = "/" + parts[1]
 		}
 		for _, loc := range locales {
-			b.WriteString(fmt.Sprintf(
+			fmt.Fprintf(&b,
 				"    <xhtml:link rel=\"alternate\" hreflang=\"%s\" href=\"%s/%s%s\"/>\n",
 				loc, base, loc, suffix,
-			))
+			)
 		}
 		// x-default points to the primary language (mk).
-		b.WriteString(fmt.Sprintf(
+		fmt.Fprintf(&b,
 			"    <xhtml:link rel=\"alternate\" hreflang=\"x-default\" href=\"%s/mk%s\"/>\n",
 			base, suffix,
-		))
+		)
 
 		if changefreq != "" {
-			b.WriteString(fmt.Sprintf("    <changefreq>%s</changefreq>\n", changefreq))
+			fmt.Fprintf(&b, "    <changefreq>%s</changefreq>\n", changefreq)
 		}
 		if priority != "" {
-			b.WriteString(fmt.Sprintf("    <priority>%s</priority>\n", priority))
+			fmt.Fprintf(&b, "    <priority>%s</priority>\n", priority)
 		}
 		b.WriteString("  </url>\n")
 	}

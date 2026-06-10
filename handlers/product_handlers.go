@@ -24,12 +24,78 @@ func (h *ProductHandler) writeJSONResponse(w http.ResponseWriter, data interface
 	}
 }
 
-// GetProducts returns all active, published products with brand info and colors.
-// Used for the product listing/shop page.
-func (h *ProductHandler) GetProducts(w http.ResponseWriter, r *http.Request) {
+// GetBrands returns all brands ordered by sort_order.
+func (h *ProductHandler) GetBrands(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
 	rows, err := h.DB.QueryContext(ctx, `
+		SELECT id, name, sku, slug,
+		       country_of_origin, year_founded, website_url,
+		       sizing_guide_url, logo_url,
+		       is_featured, sort_order, created_at, updated_at
+		FROM brands
+		ORDER BY sort_order ASC, name ASC
+	`)
+	if err != nil {
+		h.Logger.Error("GetBrands: query failed", err)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+	defer rows.Close()
+
+	var brands []models.Brand
+	for rows.Next() {
+		var b models.Brand
+		var country, website, sizingGuide, logo sql.NullString
+		var yearFounded sql.NullInt64
+		if err := rows.Scan(
+			&b.ID, &b.Name, &b.SKU, &b.Slug,
+			&country, &yearFounded, &website,
+			&sizingGuide, &logo,
+			&b.IsFeatured, &b.SortOrder, &b.CreatedAt, &b.UpdatedAt,
+		); err != nil {
+			h.Logger.Error("GetBrands: scan failed", err)
+			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+			return
+		}
+		if country.Valid {
+			b.CountryOfOrigin = &country.String
+		}
+		if yearFounded.Valid {
+			v := int(yearFounded.Int64)
+			b.YearFounded = &v
+		}
+		if website.Valid {
+			b.WebsiteURL = &website.String
+		}
+		if sizingGuide.Valid {
+			b.SizingGuideURL = &sizingGuide.String
+		}
+		if logo.Valid {
+			b.LogoURL = &logo.String
+		}
+		brands = append(brands, b)
+	}
+	if err := rows.Err(); err != nil {
+		h.Logger.Error("GetBrands: rows error", err)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+
+	if brands == nil {
+		brands = []models.Brand{}
+	}
+	h.writeJSONResponse(w, brands)
+}
+
+// GetProducts returns all active, published products with brand info and colors.
+// Supports ?featured=true to return only featured products.
+func (h *ProductHandler) GetProducts(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	featuredOnly := r.URL.Query().Get("featured") == "true"
+
+	query := `
 		SELECT p.id, p.sku, p.name, p.slug,
 		       p.brand_id, p.category_id, p.gender_id,
 		       p.price_mkd, p.original_price_mkd, p.image_url,
@@ -39,9 +105,13 @@ func (h *ProductHandler) GetProducts(w http.ResponseWriter, r *http.Request) {
 		       b.name, b.slug
 		FROM products p
 		JOIN brands b ON b.id = p.brand_id
-		WHERE p.is_active = TRUE AND p.is_published = TRUE
-		ORDER BY p.sort_order ASC, p.created_at DESC
-	`)
+		WHERE p.is_active = TRUE AND p.is_published = TRUE`
+	if featuredOnly {
+		query += ` AND p.is_featured = TRUE`
+	}
+	query += ` ORDER BY p.sort_order ASC, p.created_at DESC`
+
+	rows, err := h.DB.QueryContext(ctx, query)
 	if err != nil {
 		h.Logger.Error("GetProducts: query failed", err)
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
