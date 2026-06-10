@@ -95,6 +95,7 @@
   "filter.size": "Големина",
   "filter.gender": "За кого",
   "filter.activity": "Активност",
+  "filter.color": "Боја",
   "filter.inStock": "Само на залиха",
   "filter.clear": "Исчисти",
   "filter.apply": "Примени",

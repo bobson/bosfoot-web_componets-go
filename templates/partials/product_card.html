@@ -1,7 +1,12 @@
 {{define "product_card"}}
 {{$p := .Product}}
 {{$locale := .Locale}}
-<article class="product-card">
+<article class="product-card"
+  data-brand="{{$p.BrandSlug}}"
+  data-gender="{{$p.GenderValue}}"
+  data-activities="{{range $p.Activities}}{{.}}|{{end}}"
+  data-sizes="{{range $p.Sizes}}{{.}}|{{end}}"
+  data-colors="{{range $p.Colors}}{{lower .Color}}|{{end}}">
   {{if $p.IsNew}}<span class="product-card__badge product-card__badge--new">{{t $locale "product.new"}}</span>{{end}}
   {{if $p.IsOnSale}}<span class="product-card__badge product-card__badge--sale">{{t $locale "product.sale"}}</span>{{end}}
 
@@ -12,7 +17,7 @@
       {{end}}
     </div>
 
-    <div class="product-card__body text-center">
+    <div class="product-card__body">
       <p class="product-card__brand text-xs font-semibold text-muted">{{$p.BrandName}}</p>
       <h2 class="product-card__name font-medium">{{$p.Name}}</h2>
 

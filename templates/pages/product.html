@@ -1,0 +1,253 @@
+{{define "product"}}
+<!DOCTYPE html>
+<html lang="{{.Locale}}">
+<head>
+  {{template "head" .}}
+  <title>{{if .Translation.MetaTitle}}{{.Translation.MetaTitle}}{{else}}{{.Product.Name}} — {{.Product.BrandName}}{{end}} — Bosfoot</title>
+</head>
+<body class="page-product">
+  {{template "nav" .}}
+
+  <main class="product">
+    <div class="product__layout container">
+
+      {{/* ── Gallery ─────────────────────────────────── */}}
+      {{/* The card image (.Product.ImageURL — the clean, no-overlay shot) leads
+           the carousel; the numbered gallery images follow. */}}
+      <div class="product__gallery">
+        <div class="product__main-wrap">
+          {{if .Product.IsNew}}<span class="product__badge product__badge--new">{{t .Locale "product.new"}}</span>{{end}}
+          {{if .Product.IsOnSale}}<span class="product__badge product__badge--sale">{{t .Locale "product.sale"}}</span>{{end}}
+          {{$src := ""}}
+          {{if .Product.ImageURL}}{{$src = deref .Product.ImageURL}}{{else if .Product.Gallery}}{{$src = (index .Product.Gallery 0).ImageURL}}{{end}}
+          <img id="gallery-main" class="product__main-img" src="{{$src}}" alt="{{.Product.Name}}">
+        </div>
+        {{if or (and .Product.ImageURL .Product.Gallery) (gt (len .Product.Gallery) 1)}}
+        <div class="product__thumbs">
+          {{if .Product.ImageURL}}
+          <button class="product__thumb" data-src="{{deref .Product.ImageURL}}" aria-label="View image 1">
+            <img src="{{deref .Product.ImageURL}}" alt="" loading="lazy">
+          </button>
+          {{end}}
+          {{range .Product.Gallery}}
+          <button class="product__thumb" data-src="{{.ImageURL}}" aria-label="View image {{.SortOrder}}">
+            <img src="{{.ImageURL}}" alt="" loading="lazy">
+          </button>
+          {{end}}
+        </div>
+        {{end}}
+      </div>
+
+      {{/* ── Details ──────────────────────────────────── */}}
+      <div class="product__details">
+
+        <p class="product__brand text-xs font-semibold text-muted">
+          <a href="/{{.Locale}}/products?brand={{.Product.BrandSlug}}">{{.Product.BrandName}}</a>
+        </p>
+        <h1 class="product__name font-bold">{{.Product.Name}}</h1>
+
+        {{if .Product.Highlights}}
+        <div class="product__highlights">
+          {{range .Product.Highlights}}
+          <span class="product__highlight text-xs font-semibold">
+            {{- if eq $.Locale "mk"}}{{.MK}}{{else if eq $.Locale "sq"}}{{.SQ}}{{else}}{{.EN}}{{end -}}
+          </span>
+          {{end}}
+        </div>
+        {{end}}
+
+        {{if .Translation.Description}}
+        <p class="product__desc text-muted">{{.Translation.Description}}</p>
+        {{end}}
+
+        {{/* Color selector */}}
+        {{if .Product.Colors}}
+        <div class="product__option">
+          <div class="product__option-header">
+            <p class="product__option-label text-xs font-semibold">{{t .Locale "detail.color"}}</p>
+            <span class="product__color-name text-xs text-muted" id="color-name">{{(index .Product.Colors 0).Color}}</span>
+          </div>
+          <div class="product__colors" id="color-select">
+            {{range .Product.Colors}}
+            <button class="product__color-btn"
+              data-color="{{.Color}}"
+              title="{{.Color}}"
+              aria-label="{{.Color}}"
+              aria-pressed="false"
+              {{if .Hex}}style="background:{{.Hex}}"{{end}}></button>
+            {{end}}
+          </div>
+        </div>
+        {{end}}
+
+        {{/* Size selector */}}
+        {{if .Product.Sizes}}
+        <div class="product__option">
+          <div class="product__option-header">
+            <p class="product__option-label text-xs font-semibold">{{t .Locale "detail.size"}}</p>
+            <a class="product__size-guide-link text-xs text-muted" href="/{{.Locale}}/size-guide">{{t .Locale "detail.sizeGuide"}}</a>
+          </div>
+          <div class="product__sizes" id="size-select">
+            {{range .Product.Sizes}}
+            <button class="product__size-btn" data-size="{{.}}" aria-pressed="false">{{.}}</button>
+            {{end}}
+          </div>
+        </div>
+        {{end}}
+
+        {{/* Buy: price + add-to-cart. On mobile/tablet this becomes a fixed
+             bar pinned to the bottom of the viewport so it's always reachable;
+             on desktop it sits in the sticky details column. */}}
+        <div class="product__buy">
+          <div class="product__price-row">
+            <span class="product__price font-bold">{{mkd .Product.PriceMKD}} {{t .Locale "currency.MKD"}}</span>
+            {{if showEUR .Locale}}<span class="product__price-eur text-muted">{{eur .Product.PriceMKD}} €</span>{{end}}
+          </div>
+
+          <button class="product__add-to-cart" id="add-to-cart"
+            data-product-id="{{.Product.ID}}"
+            data-product-name="{{.Product.Name}}"
+            data-brand-name="{{.Product.BrandName}}"
+            data-image-url="{{if .Product.ImageURL}}{{deref .Product.ImageURL}}{{end}}"
+            data-price="{{.Product.PriceMKD}}"
+            data-label-pick="{{t .Locale "detail.selectSize"}}"
+            data-label-add="{{t .Locale "cta.addToCart"}}">
+            {{t .Locale "detail.selectSize"}}
+          </button>
+        </div>
+
+        {{/* Stock data for JS */}}
+        <script id="stock-data" type="application/json">{{json .Product.Stock}}</script>
+
+      </div>
+    </div>
+
+    {{/* ── Product info accordions ─────────────────────── */}}
+    <div class="product__info container">
+
+      {{if .Translation.About}}
+      <details class="product__tab" open>
+        <summary class="product__tab-header">
+          <span class="font-semibold">{{t .Locale "detail.aboutShoe"}}</span>
+          <svg class="product__tab-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+        </summary>
+        <div class="product__tab-body">{{nl2p .Translation.About}}</div>
+      </details>
+      {{end}}
+
+      {{if .Translation.SizeAndFit}}
+      <details class="product__tab">
+        <summary class="product__tab-header">
+          <span class="font-semibold">{{t .Locale "detail.sizeAndFit"}}</span>
+          <svg class="product__tab-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+        </summary>
+        <div class="product__tab-body">{{nl2p .Translation.SizeAndFit}}</div>
+      </details>
+      {{end}}
+
+      {{if .Translation.ProductInfo}}
+      <details class="product__tab">
+        <summary class="product__tab-header">
+          <span class="font-semibold">{{t .Locale "detail.productInfo"}}</span>
+          <svg class="product__tab-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+        </summary>
+        <div class="product__tab-body">{{nl2p .Translation.ProductInfo}}</div>
+      </details>
+      {{end}}
+
+      {{if .Translation.Sustainability}}
+      <details class="product__tab">
+        <summary class="product__tab-header">
+          <span class="font-semibold">{{t .Locale "detail.sustainability"}}</span>
+          <svg class="product__tab-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+        </summary>
+        <div class="product__tab-body">{{nl2p .Translation.Sustainability}}</div>
+      </details>
+      {{end}}
+
+      {{if .Product.Specs}}
+      <details class="product__tab" open>
+        <summary class="product__tab-header">
+          <span class="font-semibold">{{t .Locale "detail.specs"}}</span>
+          <svg class="product__tab-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+        </summary>
+        <div class="product__tab-body">
+          <dl class="product__specs">
+            {{range .Product.Specs}}
+            <div class="product__spec-row">
+              <dt class="product__spec-key text-sm font-semibold">{{.Key}}</dt>
+              <dd class="product__spec-val text-sm text-muted">{{.Value}}</dd>
+            </div>
+            {{end}}
+          </dl>
+        </div>
+      </details>
+      {{end}}
+
+      {{if .Product.SizeChart}}
+      <details class="product__tab">
+        <summary class="product__tab-header">
+          <span class="font-semibold">{{t .Locale "sizeGuide.title"}}</span>
+          <svg class="product__tab-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+        </summary>
+        <div class="product__tab-body">
+          <table class="product__size-table">
+            <thead>
+              <tr>
+                <th class="text-xs font-semibold">EU</th>
+                <th class="text-xs font-semibold">{{t .Locale "brand.sizeChart.measureFoot"}} (mm)</th>
+              </tr>
+            </thead>
+            <tbody>
+              {{range .Product.SizeChart}}
+              <tr>
+                <td class="text-sm">{{.EUSize}}</td>
+                <td class="text-sm text-muted">{{derefF .FootLengthMM}}</td>
+              </tr>
+              {{end}}
+            </tbody>
+          </table>
+        </div>
+      </details>
+      {{end}}
+
+    </div>
+
+    {{/* ── Related products ────────────────────────────── */}}
+    {{if .Related}}
+    <section class="product__related container">
+      <h2 class="product__related-title font-bold">{{t .Locale "detail.relatedTitle"}} {{.Product.BrandName}}</h2>
+      <div class="listing__grid">
+        {{range .Related}}
+        {{template "product_card" (dict "Product" . "Locale" $.Locale)}}
+        {{end}}
+      </div>
+    </section>
+    {{end}}
+
+  </main>
+
+  {{/* Floating buy bar — revealed only when the in-page button is scrolled
+       off-screen (IntersectionObserver in product-detail.js). Its label tracks
+       the same state as the real button: "Select size" until a size is picked,
+       then "Add to cart". */}}
+  <div class="product__floating" id="floating-buy" aria-hidden="true">
+    <div class="product__floating-inner container">
+      <div class="product__floating-info">
+        <span class="product__floating-name font-semibold">{{.Product.Name}}</span>
+        <span class="product__floating-price text-muted text-sm">{{mkd .Product.PriceMKD}} {{t .Locale "currency.MKD"}}{{if showEUR .Locale}} · {{eur .Product.PriceMKD}} €{{end}}</span>
+      </div>
+      <button class="product__add-to-cart" id="add-to-cart-floating"
+        data-label-pick="{{t .Locale "detail.selectSize"}}"
+        data-label-add="{{t .Locale "cta.addToCart"}}">
+        {{t .Locale "detail.selectSize"}}
+      </button>
+    </div>
+  </div>
+
+  {{template "footer" .}}
+
+  <script src="/components/product-detail.js" type="module"></script>
+</body>
+</html>
+{{end}}

@@ -2,11 +2,15 @@
 package tmpl
 
 import (
+	"bytes"
+	"encoding/json"
 	"fmt"
 	"html/template"
+	"log"
 	"math"
 	"net/http"
 	"path/filepath"
+	"strconv"
 	"strings"
 
 	"bosfoot/internal/locale"
@@ -45,6 +49,51 @@ func NewRenderer(dir string, ui *locale.UI) (*Renderer, error) {
 			return *s
 		},
 
+		// derefF dereferences a *float64 safely, formatting without trailing
+		// zeros (230.0 → "230", 40.5 → "40.5"). Returns "" for nil.
+		"derefF": func(f *float64) string {
+			if f == nil {
+				return ""
+			}
+			return strconv.FormatFloat(*f, 'g', -1, 64)
+		},
+
+		// lower lowercases a string: {{lower .Color}}
+		"lower": strings.ToLower,
+
+		// json encodes a value as JSON for use in <script type="application/json"> tags.
+		"json": func(v any) (template.JS, error) {
+			b, err := json.Marshal(v)
+			if err != nil {
+				return "", err
+			}
+			return template.JS(b), nil
+		},
+
+		// nl2p converts double-newline-separated text into <p> blocks with <br> for single newlines.
+		"nl2p": func(s string) template.HTML {
+			if s == "" {
+				return ""
+			}
+			var b strings.Builder
+			for _, para := range strings.Split(strings.TrimSpace(s), "\n\n") {
+				trimmed := strings.TrimSpace(para)
+				if trimmed == "" {
+					continue
+				}
+				b.WriteString("<p>")
+				lines := strings.Split(trimmed, "\n")
+				for i, line := range lines {
+					if i > 0 {
+						b.WriteString("<br>")
+					}
+					b.WriteString(template.HTMLEscapeString(line))
+				}
+				b.WriteString("</p>")
+			}
+			return template.HTML(b.String())
+		},
+
 		// dict builds a map from alternating key/value pairs.
 		// Used to pass multiple values into a sub-template:
 		//   {{template "product_card" (dict "Product" . "Locale" $.Locale)}}
@@ -79,13 +128,19 @@ func NewRenderer(dir string, ui *locale.UI) (*Renderer, error) {
 	return &Renderer{tmpl: tmpl}, nil
 }
 
-// Render executes the named template and writes to w.
-// On error it returns a 500 — the caller should not write anything after this.
+// Render executes the named template into a buffer first, then writes the
+// result to w. Buffering means a template execution error is caught BEFORE any
+// bytes reach the client, so we can send a clean 500 instead of a truncated
+// 200 with a half-written body (and the "superfluous WriteHeader" that causes).
 func (r *Renderer) Render(w http.ResponseWriter, name string, data any) {
-	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	if err := r.tmpl.ExecuteTemplate(w, name, data); err != nil {
+	var buf bytes.Buffer
+	if err := r.tmpl.ExecuteTemplate(&buf, name, data); err != nil {
+		log.Printf("template render %q failed: %v", name, err)
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
 	}
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	w.Write(buf.Bytes())
 }
 
 func formatMKD(amount int) string {

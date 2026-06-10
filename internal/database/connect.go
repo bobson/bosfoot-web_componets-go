@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/url"
 	"os"
+	"time"
 
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
@@ -45,6 +46,23 @@ func Connect() (*sql.DB, error) {
 	if err != nil {
 		return nil, fmt.Errorf("open db: %w", err)
 	}
+
+	// Pool tuning, sized to the Aiven plan's hard cap. This plan reports
+	// max_connections=20 with 3 reserved for superuser → only 17 usable for
+	// the app. We must stay well under that to leave room for: a second
+	// instance during a rolling deploy (old + new overlap), admin tools
+	// (cmd/dbimport, cmd/dbping), and a local dev server pointed at the same DB.
+	//
+	// 8 open per instance means two instances (16) still fit under 17. A few
+	// idle connections stay warm to skip the TLS handshake to Frankfurt on the
+	// common path; the rest are released quickly so we don't hog a shared,
+	// tiny connection budget. The product detail handler fans out queries
+	// concurrently but caps its own concurrency (errgroup SetLimit) so a single
+	// request never claims the whole pool.
+	db.SetMaxOpenConns(8)
+	db.SetMaxIdleConns(2)
+	db.SetConnMaxLifetime(5 * time.Minute)
+	db.SetConnMaxIdleTime(90 * time.Second)
 
 	if err := db.Ping(); err != nil {
 		db.Close()

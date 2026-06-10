@@ -95,6 +95,7 @@
   "filter.size": "Size",
   "filter.gender": "For",
   "filter.activity": "Activity",
+  "filter.color": "Color",
   "filter.inStock": "In stock only",
   "filter.clear": "Clear all",
   "filter.apply": "Apply",

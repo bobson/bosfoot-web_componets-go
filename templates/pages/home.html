@@ -11,66 +11,85 @@
   <main>
 
     {{/* ── Hero ─────────────────────────────────────────── */}}
-    <section class="hero container">
-      <div class="hero__content">
-        <h1 class="hero__heading">{{t .Locale "hero.heading"}}</h1>
-        <p class="hero__sub text-muted">{{t .Locale "hero.sub"}}</p>
-        <a class="hero__cta" href="/{{.Locale}}/products">{{t .Locale "hero.cta"}}</a>
+    <section class="hero">
+      <div class="container">
+        <h1 class="hero__heading">
+          <span class="hero__line--light">{{t .Locale "home.hero.line1"}}</span>
+          <span class="hero__line--bold">{{t .Locale "home.hero.line2"}}</span>
+        </h1>
+        <p class="hero__lead text-muted">{{t .Locale "home.hero.lead"}}</p>
+        <div class="hero__actions">
+          <a class="hero__cta" href="/{{.Locale}}/products">{{t .Locale "hero.cta"}}</a>
+          <nav class="hero__gender" aria-label="Shop by category">
+            <a href="/{{.Locale}}/products?gender=mens">{{t .Locale "home.hero.shopMen"}}</a>
+            <a href="/{{.Locale}}/products?gender=womens">{{t .Locale "home.hero.shopWomen"}}</a>
+            <a href="/{{.Locale}}/products?gender=kids">{{t .Locale "home.hero.shopKids"}}</a>
+          </nav>
+        </div>
       </div>
     </section>
 
-    {{/* ── Brand strip ──────────────────────────────────── */}}
+    {{/* ── Brands ───────────────────────────────────────── */}}
     {{if .Brands}}
-    <section class="brand-strip">
-      <div class="brand-strip__inner container">
-
-        <p class="brand-strip__label text-xs font-semibold text-muted text-center">
+    <section class="brands">
+      <div class="container">
+        <p class="brands__label text-xs font-semibold text-muted text-center">
           {{t .Locale "home.brands"}}
         </p>
-
-        <div class="brand-strip__featured">
+        <div class="brands__live">
           {{range .Brands}}{{if .IsFeatured}}
-          <a class="brand-live brand-live--{{.Slug}}" href="/{{$.Locale}}/products?brand={{.Slug}}">
+          <a class="brand-chip brand-chip--{{.Slug}}" href="/{{$.Locale}}/products?brand={{.Slug}}">
             {{if .LogoURL}}
-            <img class="brand-live__logo" src="{{deref .LogoURL}}" alt="{{.Name}}" loading="lazy">
+            <img class="brand-chip__logo" src="{{deref .LogoURL}}" alt="{{.Name}}" loading="lazy">
             {{else}}
-            <span class="brand-live__name font-bold">{{.Name}}</span>
+            <span class="brand-chip__name font-bold">{{.Name}}</span>
             {{end}}
           </a>
           {{end}}{{end}}
         </div>
-
-        <div class="brand-strip__soon">
+        <div class="brands__soon">
           {{range .Brands}}{{if not .IsFeatured}}
-          <div class="brand-soon">
-            {{if .LogoURL}}
-            <img class="brand-soon__logo" src="{{deref .LogoURL}}" alt="{{.Name}}" loading="lazy">
-            {{else}}
-            <span class="brand-soon__name font-semibold">{{.Name}}</span>
-            {{end}}
-            <span class="brand-soon__label text-xs font-semibold">{{t $.Locale "brands.comingSoon"}}</span>
+          <div class="brand-pill">
+            <span class="brand-pill__name font-semibold">{{.Name}}</span>
+            <span class="brand-pill__tag text-xs font-semibold">{{t $.Locale "brands.comingSoon"}}</span>
           </div>
           {{end}}{{end}}
         </div>
-
       </div>
     </section>
     {{end}}
 
-    {{/* ── Why barefoot ───────────────────────────────────── */}}
-    <section class="why-barefoot">
-      <div class="why-barefoot__inner container">
+    {{/* ── Featured products ────────────────────────────── */}}
+    {{if .Featured}}
+    <section class="featured container">
+      <header class="featured__header">
+        <h2 class="featured__title font-bold">{{t .Locale "home.featured.title"}}</h2>
+        <a class="featured__link text-sm text-muted" href="/{{.Locale}}/products">
+          {{t .Locale "cta.viewAll"}} →
+        </a>
+      </header>
+      <div class="listing__grid">
+        {{range .Featured}}
+        {{template "product_card" (dict "Product" . "Locale" $.Locale)}}
+        {{end}}
+      </div>
+    </section>
+    {{end}}
 
-        <header class="why-barefoot__header text-center">
+    {{/* ── Why barefoot ─────────────────────────────────── */}}
+    <section class="why-barefoot">
+      <div class="container">
+
+        <header class="why-barefoot__header">
           <h2 class="why-barefoot__title font-bold">{{t .Locale "home.whyBarefoot.title"}}</h2>
           <p class="why-barefoot__lead text-muted">{{t .Locale "home.whyBarefoot.lead"}}</p>
         </header>
 
         <div class="why-barefoot__grid">
 
-          <article class="why-barefoot__card text-center">
+          <article class="why-barefoot__card">
             <div class="why-barefoot__icon" aria-hidden="true">
-              <svg width="36" height="36" viewBox="0 0 36 36" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+              <svg width="32" height="32" viewBox="0 0 36 36" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
                 <line x1="6" y1="30" x2="3" y2="6"/>
                 <line x1="12" y1="30" x2="10" y2="4"/>
                 <line x1="18" y1="30" x2="18" y2="3"/>
@@ -82,9 +101,9 @@
             <p class="why-barefoot__card-body text-muted">{{t .Locale "home.whyBarefoot.1.body"}}</p>
           </article>
 
-          <article class="why-barefoot__card text-center">
+          <article class="why-barefoot__card">
             <div class="why-barefoot__icon" aria-hidden="true">
-              <svg width="36" height="36" viewBox="0 0 36 36" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <svg width="32" height="32" viewBox="0 0 36 36" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                 <line x1="3" y1="22" x2="33" y2="22"/>
                 <polyline points="9,16 4,22 9,28"/>
                 <polyline points="27,16 32,22 27,28"/>
@@ -95,9 +114,9 @@
             <p class="why-barefoot__card-body text-muted">{{t .Locale "home.whyBarefoot.2.body"}}</p>
           </article>
 
-          <article class="why-barefoot__card text-center">
+          <article class="why-barefoot__card">
             <div class="why-barefoot__icon" aria-hidden="true">
-              <svg width="36" height="36" viewBox="0 0 36 36" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <svg width="32" height="32" viewBox="0 0 36 36" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M3 22 Q 10 14, 18 22 T 33 22"/>
                 <line x1="3" y1="28" x2="33" y2="28" stroke-dasharray="2 2" opacity="0.5"/>
               </svg>
@@ -110,27 +129,39 @@
       </div>
     </section>
 
-    {{/* ── Featured products ────────────────────────────── */}}
-    {{if .Featured}}
-    <section class="home-featured container">
-      <div class="home-featured__header">
-        <h2 class="home-featured__title font-bold">{{t .Locale "home.featured"}}</h2>
-        <a class="home-featured__view-all text-sm text-muted" href="/{{.Locale}}/products">
-          {{t .Locale "cta.viewAll"}} →
-        </a>
-      </div>
-      <div class="listing__grid">
-        {{range .Featured}}
-        {{template "product_card" (dict "Product" . "Locale" $.Locale)}}
-        {{end}}
+    {{/* ── Why us ───────────────────────────────────────── */}}
+    <section class="why-us">
+      <div class="container">
+
+        <h2 class="why-us__title font-bold">{{t .Locale "home.whyUs.title"}}</h2>
+
+        <div class="why-us__grid">
+
+          <article class="why-us__item">
+            <div class="why-us__num" aria-hidden="true">01</div>
+            <h3 class="why-us__item-title font-bold">{{t .Locale "home.whyUs.1.title"}}</h3>
+            <p class="why-us__item-body text-muted">{{t .Locale "home.whyUs.1.body"}}</p>
+          </article>
+
+          <article class="why-us__item">
+            <div class="why-us__num" aria-hidden="true">02</div>
+            <h3 class="why-us__item-title font-bold">{{t .Locale "home.whyUs.2.title"}}</h3>
+            <p class="why-us__item-body text-muted">{{t .Locale "home.whyUs.2.body"}}</p>
+          </article>
+
+          <article class="why-us__item">
+            <div class="why-us__num" aria-hidden="true">03</div>
+            <h3 class="why-us__item-title font-bold">{{t .Locale "home.whyUs.3.title"}}</h3>
+            <p class="why-us__item-body text-muted">{{t .Locale "home.whyUs.3.body"}}</p>
+          </article>
+
+        </div>
       </div>
     </section>
-    {{end}}
 
   </main>
 
   {{template "footer" .}}
-
   <script src="/app.js" defer></script>
 </body>
 </html>

@@ -26,8 +26,9 @@ type Product struct {
 
 	// Denormalised brand fields — populated on every product response so the
 	// frontend doesn't need a second request to resolve the brand name/slug.
-	BrandName string `json:"brand_name,omitempty"`
-	BrandSlug string `json:"brand_slug,omitempty"`
+	BrandName   string `json:"brand_name,omitempty"`
+	BrandSlug   string `json:"brand_slug,omitempty"`
+	GenderValue string `json:"gender_value,omitempty"`
 
 	// Joined fields — populated when the API fetches a full product.
 	Translations []ProductTranslation `json:"translations,omitempty"`

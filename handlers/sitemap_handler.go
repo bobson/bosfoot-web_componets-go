@@ -67,6 +67,23 @@ func (h *PageHandler) Sitemap(w http.ResponseWriter, r *http.Request) {
 		writeURL("/"+loc+"/products", "weekly", "0.9")
 	}
 
+	// Product detail pages.
+	pRows, err := h.DB.QueryContext(r.Context(), `
+		SELECT p.slug, b.slug
+		FROM products p JOIN brands b ON b.id = p.brand_id
+		WHERE p.is_active = TRUE AND p.is_published = TRUE
+		ORDER BY b.sort_order, p.sort_order
+	`)
+	if err == nil {
+		defer pRows.Close()
+		for pRows.Next() {
+			var pSlug, bSlug string
+			if err := pRows.Scan(&pSlug, &bSlug); err == nil {
+				writeURL("/mk/products/"+bSlug+"/"+pSlug, "weekly", "0.8")
+			}
+		}
+	}
+
 	b.WriteString("</urlset>\n")
 
 	w.Header().Set("Content-Type", "application/xml; charset=utf-8")

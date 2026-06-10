@@ -75,6 +75,7 @@ func main() {
 		http.HandleFunc("/"+loc, pageHandler.Home)
 	}
 	http.HandleFunc("/{locale}/products", pageHandler.ProductListing)
+	http.HandleFunc("/{locale}/products/{brand}/{slug}", pageHandler.ProductDetail)
 	http.HandleFunc("/sitemap.xml", pageHandler.Sitemap)
 
 	// Catch-all: redirect / to the default locale, serve everything else
@@ -88,7 +89,13 @@ func main() {
 		http.FileServer(http.Dir("public")).ServeHTTP(w, r)
 	})
 
-	const addr = ":8080"
+	// PORT is overridable for deployment (DO/Hetzner) and local testing;
+	// defaults to 8080 for dev parity with air.
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
+	addr := ":" + port
 	logInstance.Info("Server listening on " + addr)
 	if err := http.ListenAndServe(addr, nil); err != nil {
 		logInstance.Error("Server failed", err)

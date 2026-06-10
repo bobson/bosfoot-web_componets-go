@@ -1,0 +1,475 @@
+/* ── Product detail layout ───────────────────────────── */
+
+.product__layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-8);
+  padding-block: var(--space-8);
+}
+
+/* Two-column only on real desktop widths. Below this the old 768px split left
+   the details column too narrow for the size grid on tablets. */
+@media (min-width: 1024px) {
+  .product__layout {
+    grid-template-columns: minmax(0, 1.4fr) 1fr;
+    gap: var(--space-12);
+    padding-block: var(--space-10);
+    align-items: start;
+  }
+
+  .product__details {
+    position: sticky;
+    top: calc(var(--nav-height) + var(--space-6));
+  }
+}
+
+/* min-width:0 lets the gallery shrink inside the grid track instead of forcing
+   overflow from the image's intrinsic width. */
+.product__gallery {
+  min-width: 0;
+}
+
+/* Reserve space at the page bottom so the floating buy bar (which is shown
+   whenever the in-page button is scrolled off-screen, including at the very
+   bottom) never covers the footer. Applies on all widths. */
+body.page-product {
+  padding-bottom: var(--space-20);
+}
+
+/* ── Gallery ─────────────────────────────────────────── */
+
+.product__main-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  background: var(--color-img-bg);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.product__main-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: opacity 0.2s ease;
+}
+
+.product__badge {
+  position: absolute;
+  top: var(--space-3);
+  left: var(--space-3);
+  z-index: 1;
+  padding: 3px var(--space-2);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  border-radius: var(--radius-sm);
+}
+
+.product__badge--new {
+  background: var(--color-accent);
+  color: var(--color-white);
+}
+
+.product__badge--sale {
+  background: var(--color-sale);
+  color: var(--color-white);
+}
+
+.product__thumbs {
+  display: flex;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+  overflow-x: auto;
+  padding-bottom: var(--space-1);
+}
+
+.product__thumb {
+  flex-shrink: 0;
+  width: var(--thumb-size);
+  height: var(--thumb-size);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: border-color 0.15s ease;
+  background: var(--color-img-bg);
+}
+
+.product__thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.product__thumb--active,
+.product__thumb:hover {
+  border-color: var(--color-accent);
+}
+
+/* ── Details panel ───────────────────────────────────── */
+
+.product__brand {
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: var(--space-2);
+}
+
+.product__brand a {
+  transition: color 0.15s ease;
+}
+
+.product__brand a:hover {
+  color: var(--color-accent);
+}
+
+.product__name {
+  font-size: var(--fs-2xl);
+  letter-spacing: -0.02em;
+  line-height: var(--lh-snug);
+  margin-bottom: var(--space-4);
+}
+
+.product__highlights {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-bottom: var(--space-5);
+}
+
+.product__highlight {
+  padding: 3px var(--space-3);
+  border: 1px solid var(--color-accent);
+  border-radius: var(--radius-full);
+  color: var(--color-accent);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.product__desc {
+  font-size: var(--fs-sm);
+  line-height: var(--lh-normal);
+  margin-bottom: var(--space-6);
+}
+
+/* ── Options (color / size) ──────────────────────────── */
+
+.product__option {
+  margin-bottom: var(--space-5);
+}
+
+.product__option-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: var(--space-3);
+}
+
+.product__option-label {
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.product__size-guide-link {
+  transition: color 0.15s ease;
+}
+
+.product__size-guide-link:hover {
+  color: var(--color-accent);
+}
+
+/* Color swatches */
+
+.product__colors {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.product__color-btn {
+  width: var(--swatch-lg);
+  height: var(--swatch-lg);
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: border-color 0.15s ease, transform 0.15s ease;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.12);
+}
+
+.product__color-btn:hover {
+  transform: scale(1.1);
+}
+
+.product__color-btn--active {
+  border-color: var(--color-accent);
+  transform: scale(1.08);
+}
+
+/* Size grid */
+
+.product__sizes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  transition: outline 0.15s ease;
+}
+
+.product__sizes--error .product__size-btn:not(.product__size-btn--oos) {
+  border-color: var(--color-sale);
+}
+
+.product__size-btn {
+  min-width: 3rem;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  color: var(--color-text);
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease, color 0.15s ease;
+}
+
+.product__size-btn:hover:not(:disabled) {
+  border-color: var(--color-text-muted);
+}
+
+.product__size-btn--active {
+  border-color: var(--color-accent);
+  background: var(--color-accent);
+  color: var(--color-white);
+}
+
+.product__size-btn--oos,
+.product__size-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+  text-decoration: line-through;
+}
+
+/* ── Buy: price + add-to-cart (in-flow, in the details column) ─────────── */
+
+.product__buy {
+  display: block;
+}
+
+.product__price-row {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+  margin-bottom: var(--space-6);
+}
+
+.product__price {
+  font-size: var(--fs-xl);
+  letter-spacing: -0.01em;
+}
+
+.product__price-eur {
+  font-size: var(--fs-sm);
+}
+
+.product__add-to-cart {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: var(--space-4) var(--space-6);
+  background: var(--color-accent);
+  color: var(--color-white);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-align: center;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.product__add-to-cart:hover {
+  background: var(--color-accent-hover);
+}
+
+.product__add-to-cart--added {
+  background: var(--color-accent-hover);
+}
+
+/* "Select size" state — not yet ready to add; muted so it reads as a prompt
+   rather than the final action. */
+.product__add-to-cart--pick {
+  background: var(--color-text-muted);
+}
+
+.product__add-to-cart--pick:hover {
+  background: var(--color-text);
+}
+
+/* ── Floating buy bar ────────────────────────────────── */
+
+/* Fixed to the viewport bottom, hidden by default. product-detail.js adds
+   --visible whenever the in-page button is scrolled out of view. */
+.product__floating {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 90;
+  background: var(--color-bg);
+  border-top: 1px solid var(--color-border);
+  box-shadow: var(--shadow-lg);
+  transform: translateY(100%);
+  transition: transform 0.25s var(--ease-out);
+}
+
+.product__floating--visible {
+  transform: translateY(0);
+}
+
+.product__floating-inner {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding-block: var(--space-3);
+  padding-bottom: calc(var(--space-3) + env(safe-area-inset-bottom));
+}
+
+.product__floating-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex-shrink: 1;
+}
+
+.product__floating-name {
+  font-size: var(--fs-sm);
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.product__floating .product__add-to-cart {
+  flex: 1;
+  width: auto;
+  padding: var(--space-3) var(--space-4);
+}
+
+@media (min-width: 768px) {
+  .product__floating .product__add-to-cart {
+    flex: 0 0 auto;
+    min-width: 16rem;
+    padding: var(--space-3) var(--space-8);
+  }
+}
+
+/* ── Info accordions ─────────────────────────────────── */
+
+.product__info {
+  padding-bottom: var(--space-16);
+  max-width: var(--content-max);
+}
+
+details.product__tab {
+  border-top: 1px solid var(--color-border);
+}
+
+details.product__tab:last-child {
+  border-bottom: 1px solid var(--color-border);
+}
+
+details.product__tab summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-5) 0;
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+}
+
+details.product__tab summary::-webkit-details-marker {
+  display: none;
+}
+
+.product__tab-arrow {
+  flex-shrink: 0;
+  color: var(--color-text-muted);
+  transition: transform 0.2s ease;
+}
+
+details.product__tab[open] .product__tab-arrow {
+  transform: rotate(180deg);
+}
+
+.product__tab-body {
+  padding-bottom: var(--space-6);
+  color: var(--color-text-muted);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-normal);
+}
+
+.product__tab-body p {
+  margin-bottom: var(--space-3);
+}
+
+.product__tab-body p:last-child {
+  margin-bottom: 0;
+}
+
+/* Specs */
+
+.product__specs {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+}
+
+.product__spec-row {
+  display: grid;
+  grid-template-columns: 10rem 1fr;
+  gap: var(--space-4);
+  padding: var(--space-3) 0;
+}
+
+.product__spec-row:not(:last-child) {
+  border-bottom: 1px solid var(--color-border);
+}
+
+.product__specs > * + * {
+  border-top: 1px solid var(--color-border);
+}
+
+/* Size chart */
+
+.product__size-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--fs-sm);
+}
+
+.product__size-table th,
+.product__size-table td {
+  padding: var(--space-2) var(--space-4);
+  text-align: left;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.product__size-table thead tr {
+  border-bottom: 2px solid var(--color-border);
+}
+
+/* ── Related products ────────────────────────────────── */
+
+.product__related {
+  padding-bottom: var(--space-16);
+}
+
+.product__related-title {
+  font-size: var(--fs-2xl);
+  letter-spacing: -0.02em;
+  margin-bottom: var(--space-8);
+}
