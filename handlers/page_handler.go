@@ -30,6 +30,32 @@ type PageBase struct {
 	MetaDescription string
 }
 
+// baseURL returns the scheme://host used for every absolute URL we emit
+// (canonical, hreflang, sitemap). The app runs behind Caddy, which terminates
+// TLS, so r.TLS is always nil and the request itself looks like plain HTTP —
+// using it would render http:// canonicals. Caddy forwards the real
+// client-facing scheme in X-Forwarded-Proto, so we trust that when present and
+// fall back to the configured SITE_URL otherwise (local dev, or a direct hit
+// that didn't pass through the proxy). No trailing slash.
+func (h *PageHandler) baseURL(r *http.Request) string {
+	proto := r.Header.Get("X-Forwarded-Proto")
+	if proto == "" {
+		return h.SiteURL
+	}
+	// A chain of proxies can set "https, http"; the client-facing scheme is
+	// the first entry.
+	if i := strings.IndexByte(proto, ','); i >= 0 {
+		proto = proto[:i]
+	}
+	proto = strings.TrimSpace(proto)
+
+	host := r.Header.Get("X-Forwarded-Host")
+	if host == "" {
+		host = r.Host
+	}
+	return proto + "://" + host
+}
+
 // ProductListingData is the template data for /{locale}/products.
 type ProductListingData struct {
 	PageBase
@@ -209,7 +235,7 @@ func (h *PageHandler) Home(w http.ResponseWriter, r *http.Request) {
 		PageBase: PageBase{
 			Locale:      loc,
 			CurrentPath: "",
-			SiteURL:     h.SiteURL,
+			SiteURL:     h.baseURL(r),
 		},
 		Brands:   brands,
 		Featured: featured,
@@ -228,7 +254,7 @@ func (h *PageHandler) Checkout(w http.ResponseWriter, r *http.Request) {
 	h.Renderer.Render(w, "checkout", PageBase{
 		Locale:      loc,
 		CurrentPath: "/checkout",
-		SiteURL:     h.SiteURL,
+		SiteURL:     h.baseURL(r),
 	})
 }
 
@@ -452,7 +478,7 @@ func (h *PageHandler) ProductListing(w http.ResponseWriter, r *http.Request) {
 		PageBase: PageBase{
 			Locale:      loc,
 			CurrentPath: "/products",
-			SiteURL:     h.SiteURL,
+			SiteURL:     h.baseURL(r),
 		},
 		Products:         products,
 		Count:            len(products),
@@ -511,9 +537,16 @@ func (h *PageHandler) ProductDetail(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		return
 	}
-	if origPrice.Valid  { v := int(origPrice.Int64); p.OriginalPriceMKD = &v }
-	if imageURL.Valid   { p.ImageURL = &imageURL.String }
-	if discountPct.Valid { p.DiscountPct = &discountPct.Float64 }
+	if origPrice.Valid {
+		v := int(origPrice.Int64)
+		p.OriginalPriceMKD = &v
+	}
+	if imageURL.Valid {
+		p.ImageURL = &imageURL.String
+	}
+	if discountPct.Valid {
+		p.DiscountPct = &discountPct.Float64
+	}
 
 	// All the related data is fetched concurrently. These queries are
 	// independent — each only needs p.ID (or p.BrandID) — so running them in
@@ -804,23 +837,31 @@ func (h *PageHandler) ProductDetail(w http.ResponseWriter, r *http.Request) {
 	// Find locale-specific translation; fall back to mk.
 	var translation models.ProductTranslation
 	for _, t := range p.Translations {
-		if t.Lang == loc { translation = t; break }
+		if t.Lang == loc {
+			translation = t
+			break
+		}
 	}
 	if translation.Lang == "" {
 		for _, t := range p.Translations {
-			if t.Lang == "mk" { translation = t; break }
+			if t.Lang == "mk" {
+				translation = t
+				break
+			}
 		}
 	}
 
 	metaDesc := translation.MetaDescription
-	if metaDesc == "" { metaDesc = translation.Description }
+	if metaDesc == "" {
+		metaDesc = translation.Description
+	}
 
 	currentPath := "/products/" + brandSlug + "/" + productSlug
 	h.Renderer.Render(w, "product", ProductDetailData{
 		PageBase: PageBase{
 			Locale:          loc,
 			CurrentPath:     currentPath,
-			SiteURL:         h.SiteURL,
+			SiteURL:         h.baseURL(r),
 			MetaDescription: metaDesc,
 		},
 		Product:     p,

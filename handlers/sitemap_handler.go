@@ -11,7 +11,7 @@ import (
 // each language version correctly instead of treating them as duplicate pages.
 // Add a route here each time a new SSR page is built and registered in main.go.
 func (h *PageHandler) Sitemap(w http.ResponseWriter, r *http.Request) {
-	base := h.SiteURL
+	base := h.baseURL(r)
 	locales := []string{"mk", "sq", "en"}
 
 	var b strings.Builder
