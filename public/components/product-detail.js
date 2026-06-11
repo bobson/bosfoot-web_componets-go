@@ -138,6 +138,7 @@
     }
     localStorage.setItem('bosfoot_cart', JSON.stringify(cart));
     window.dispatchEvent(new Event('cart:updated')); // refresh nav badge + cart drawer
+    window.dispatchEvent(new Event('cart:open'));     // slide the drawer in with the new item
 
     // Brief confirmation on both buttons, then restore the live state.
     buyBtns.forEach(b => {

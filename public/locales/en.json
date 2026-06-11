@@ -215,13 +215,20 @@
   "checkout.placeOrder": "Place order",
   "checkout.placing": "Placing order...",
   "checkout.terms": "By ordering you agree to our terms of sale.",
+  "checkout.error": "Your order didn't go through. Please try again.",
+  "checkout.confirmTitle": "Thank you!",
+  "checkout.confirmText": "Your order has been received. We'll contact you shortly to confirm.",
+  "checkout.orderNumber": "Order number",
+  "checkout.confirmCod": "Pay in cash on delivery. We'll contact you to confirm your address and delivery time.",
+  "checkout.confirmBank": "Transfer the amount to the account below and use your order number as the payment reference. Shipping starts after payment is confirmed.",
+  "checkout.bankDetails": "Bank details",
 
   "payment.cod": "Cash on delivery",
   "payment.codDescription": "Pay in cash when you receive the package.",
   "payment.bankTransfer": "Bank transfer",
   "payment.bankTransferDescription": "You'll receive bank details after the order. Shipping starts after payment confirmation.",
 
-  "country.MK": "North Macedonia",
+  "country.MK": "Macedonia",
   "country.AL": "Albania",
   "country.XK": "Kosovo",
   "country.RS": "Serbia",
@@ -357,9 +364,9 @@
   "shipping.title": "Shipping",
   "shipping.lead": "Fast delivery across the Balkans with trusted couriers.",
   "shipping.1.title": "Delivery time",
-  "shipping.1.body": "North Macedonia: 1-3 working days. Albania, Kosovo, Serbia: 3-5 days. Rest of Balkans: 4-7 days.",
+  "shipping.1.body": "Macedonia: 1-3 working days. Albania, Kosovo, Serbia: 3-5 days. Rest of Balkans: 4-7 days.",
   "shipping.2.title": "Prices",
-  "shipping.2.body": "Free shipping on orders over 3000 MKD within North Macedonia.",
+  "shipping.2.body": "Free shipping on orders over 3000 MKD within Macedonia.",
   "shipping.3.title": "Tracking",
   "shipping.3.body": "After your order you receive a confirmation with a tracking number."
 }

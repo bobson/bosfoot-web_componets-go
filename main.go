@@ -61,6 +61,12 @@ func main() {
 	http.HandleFunc("/api/products", productHandler.GetProducts)
 	http.HandleFunc("/api/products/{id}", productHandler.GetProductByID)
 
+	orderHandler := &handlers.OrderHandler{
+		DB:     db,
+		Logger: logInstance,
+	}
+	http.HandleFunc("/api/orders", orderHandler.CreateOrder)
+
 	siteURL := os.Getenv("SITE_URL")
 	if siteURL == "" {
 		siteURL = "http://localhost:8080"
@@ -83,6 +89,7 @@ func main() {
 	}
 	http.HandleFunc("/{locale}/products", pc.Wrap(pageHandler.ProductListing))
 	http.HandleFunc("/{locale}/products/{brand}/{slug}", pc.Wrap(pageHandler.ProductDetail))
+	http.HandleFunc("/{locale}/checkout", pc.Wrap(pageHandler.Checkout))
 	http.HandleFunc("/sitemap.xml", pageHandler.Sitemap)
 
 	// Catch-all: redirect / to the default locale, serve everything else

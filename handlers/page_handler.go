@@ -216,6 +216,22 @@ func (h *PageHandler) Home(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
+// Checkout handles GET /{locale}/checkout. The page is static chrome — the
+// order summary is rendered client-side from the localStorage cart by the
+// <checkout-form> component, so no DB query is needed here.
+func (h *PageHandler) Checkout(w http.ResponseWriter, r *http.Request) {
+	if !locale.IsValid(r.PathValue("locale")) {
+		http.Redirect(w, r, "/"+locale.Default+"/checkout", http.StatusFound)
+		return
+	}
+	loc := locale.FromPath(r.PathValue("locale"))
+	h.Renderer.Render(w, "checkout", PageBase{
+		Locale:      loc,
+		CurrentPath: "/checkout",
+		SiteURL:     h.SiteURL,
+	})
+}
+
 // ProductListing handles GET /{locale}/products.
 func (h *PageHandler) ProductListing(w http.ResponseWriter, r *http.Request) {
 	loc := locale.FromPath(r.PathValue("locale"))

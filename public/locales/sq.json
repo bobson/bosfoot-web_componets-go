@@ -215,13 +215,20 @@
   "checkout.placeOrder": "Porosit",
   "checkout.placing": "Po porositë...",
   "checkout.terms": "Duke porositur, pranoni kushtet tona të shitjes.",
+  "checkout.error": "Porosia nuk u krye. Provoni përsëri.",
+  "checkout.confirmTitle": "Faleminderit!",
+  "checkout.confirmText": "Porosia juaj u pranua. Do t'ju kontaktojmë së shpejti për konfirmim.",
+  "checkout.orderNumber": "Numri i porosisë",
+  "checkout.confirmCod": "Paguani në të holla gjatë dorëzimit. Do t'ju kontaktojmë për të konfirmuar adresën dhe kohën e dërgesës.",
+  "checkout.confirmBank": "Transferoni shumën në llogarinë më poshtë dhe shënoni numrin e porosisë si qëllim të pagesës. Dërgesa fillon pas konfirmimit të pagesës.",
+  "checkout.bankDetails": "Detajet bankare",
 
   "payment.cod": "Pagesë me dorëzim",
   "payment.codDescription": "Paguani në të holla kur të merrni paketën.",
   "payment.bankTransfer": "Transfertë bankare",
   "payment.bankTransferDescription": "Do të merrni detajet bankare pas porosisë. Dërgesa fillon pas konfirmimit të pagesës.",
 
-  "country.MK": "Maqedonia e Veriut",
+  "country.MK": "Maqedonia",
   "country.AL": "Shqipëri",
   "country.XK": "Kosovë",
   "country.RS": "Serbi",
@@ -357,9 +364,9 @@
   "shipping.title": "Dërgesa",
   "shipping.lead": "Dërgim i shpejtë nëpër Ballkan me kurierë të provuar.",
   "shipping.1.title": "Koha e dorëzimit",
-  "shipping.1.body": "Maqedonia e Veriut: 1-3 ditë pune. Shqipëri, Kosovë, Serbi: 3-5 ditë. Ballkani tjetër: 4-7 ditë.",
+  "shipping.1.body": "Maqedonia: 1-3 ditë pune. Shqipëri, Kosovë, Serbi: 3-5 ditë. Ballkani tjetër: 4-7 ditë.",
   "shipping.2.title": "Çmimet",
-  "shipping.2.body": "Dërgim falas për porosi mbi 3000 MKD brenda Maqedonisë së Veriut.",
+  "shipping.2.body": "Dërgim falas për porosi mbi 3000 MKD brenda Maqedonisë.",
   "shipping.3.title": "Gjurmimi",
   "shipping.3.body": "Pas porosisë merrni konfirmim me numër gjurmimi."
 }

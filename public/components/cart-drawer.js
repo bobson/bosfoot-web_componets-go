@@ -50,6 +50,10 @@ class CartDrawer extends HTMLElement {
     // Quantity steppers + remove, via event delegation.
     this.itemsEl.addEventListener('click', (e) => this.onItemClick(e));
 
+    // Open on demand — dispatched by the product page right after an item is
+    // added, so the drawer slides in showing what was just added.
+    window.addEventListener('cart:open', () => this.open());
+
     // Keep in sync with changes from the product page (same tab) and other tabs.
     window.addEventListener('cart:updated', () => this.render());
     window.addEventListener('storage', (e) => {
