@@ -29,8 +29,10 @@
 
   updateCartBadge();
 
-  // Keep badge in sync if cart changes in another tab.
+  // Keep badge in sync: another tab (storage) or this tab (cart:updated,
+  // dispatched by the product page and the cart drawer on any change).
   window.addEventListener('storage', (e) => {
     if (e.key === 'bosfoot_cart') updateCartBadge();
   });
+  window.addEventListener('cart:updated', updateCartBadge);
 }());

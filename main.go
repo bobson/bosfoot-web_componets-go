@@ -4,8 +4,10 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 
 	"bosfoot/handlers"
+	"bosfoot/internal/cache"
 	"bosfoot/internal/database"
 	"bosfoot/internal/locale"
 	"bosfoot/internal/tmpl"
@@ -71,11 +73,16 @@ func main() {
 		Renderer: renderer,
 		SiteURL:  siteURL,
 	}
+
+	// In-memory page cache. These SSR pages are identical for every visitor
+	// (the cart is client-side), so a 60s-TTL cache lets most requests skip the
+	// DB queries and template rendering entirely. See internal/cache.
+	pc := cache.New(60 * time.Second)
 	for _, loc := range []string{"mk", "sq", "en"} {
-		http.HandleFunc("/"+loc, pageHandler.Home)
+		http.HandleFunc("/"+loc, pc.Wrap(pageHandler.Home))
 	}
-	http.HandleFunc("/{locale}/products", pageHandler.ProductListing)
-	http.HandleFunc("/{locale}/products/{brand}/{slug}", pageHandler.ProductDetail)
+	http.HandleFunc("/{locale}/products", pc.Wrap(pageHandler.ProductListing))
+	http.HandleFunc("/{locale}/products/{brand}/{slug}", pc.Wrap(pageHandler.ProductDetail))
 	http.HandleFunc("/sitemap.xml", pageHandler.Sitemap)
 
 	// Catch-all: redirect / to the default locale, serve everything else

@@ -137,6 +137,7 @@
       });
     }
     localStorage.setItem('bosfoot_cart', JSON.stringify(cart));
+    window.dispatchEvent(new Event('cart:updated')); // refresh nav badge + cart drawer
 
     // Brief confirmation on both buttons, then restore the live state.
     buyBtns.forEach(b => {

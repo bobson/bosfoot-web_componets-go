@@ -133,7 +133,53 @@
 
 </div>
 
+{{/* Cart drawer — slides in from the right. The static chrome is server-rendered
+     (localized); the line items are rendered client-side from localStorage by
+     the <cart-drawer> custom element, since the cart is user-only state, not
+     SEO content. */}}
+<cart-drawer class="cart"
+  data-currency="{{t .Locale "currency.MKD"}}"
+  data-show-eur="{{if showEUR .Locale}}1{{end}}"
+  data-label-size="{{t .Locale "cart.size"}}"
+  data-label-remove="{{t .Locale "cart.remove"}}">
+
+  <div class="cart__overlay" data-cart-overlay aria-hidden="true"></div>
+
+  <aside class="cart__panel" role="dialog" aria-modal="true"
+         aria-label="{{t .Locale "cart.title"}}" aria-hidden="true">
+
+    <header class="cart__header">
+      <h2 class="cart__title font-semibold">{{t .Locale "cart.title"}}</h2>
+      <button class="cart__close" type="button" data-cart-close aria-label="Close cart">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </header>
+
+    <div class="cart__items" data-cart-items></div>
+
+    <div class="cart__empty" data-cart-empty hidden>
+      <p class="cart__empty-text text-muted">{{t .Locale "cart.empty"}}</p>
+      <a class="cart__empty-cta" href="/{{.Locale}}/products" data-cart-close>{{t .Locale "cart.emptyCta"}}</a>
+    </div>
+
+    <footer class="cart__footer" data-cart-footer hidden>
+      <div class="cart__subtotal">
+        <span class="cart__subtotal-label font-semibold">{{t .Locale "cart.subtotal"}}</span>
+        <span class="cart__subtotal-val font-bold" data-cart-subtotal></span>
+      </div>
+      <p class="cart__note text-xs text-muted">{{t .Locale "cart.shippingNote"}}</p>
+      <a class="cart__checkout" href="/{{.Locale}}/checkout">{{t .Locale "cart.checkout"}}</a>
+      <button class="cart__continue" type="button" data-cart-close>{{t .Locale "cart.continueShopping"}}</button>
+    </footer>
+
+  </aside>
+</cart-drawer>
+
+<script src="/app.js" defer></script>
 <script src="/components/nav-drawer.js" type="module"></script>
 <script src="/components/nav-locale.js" type="module"></script>
 <script src="/components/nav-search.js" type="module"></script>
+<script src="/components/cart-drawer.js" type="module"></script>
 {{end}}
