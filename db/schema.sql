@@ -256,6 +256,9 @@ CREATE TABLE articles (
     id           SERIAL PRIMARY KEY,
     slug         TEXT NOT NULL UNIQUE,  -- EN canonical
     is_published BOOLEAN NOT NULL DEFAULT FALSE,
+    is_featured  BOOLEAN NOT NULL DEFAULT FALSE,
+    author       TEXT,
+    published_at TIMESTAMPTZ,
     created_at   TIMESTAMPTZ NOT NULL DEFAULT now(),
     updated_at   TIMESTAMPTZ NOT NULL DEFAULT now()
 );
@@ -265,7 +268,8 @@ CREATE TABLE article_translations (
     article_id       INTEGER NOT NULL REFERENCES articles(id) ON DELETE CASCADE,
     lang             lang_code NOT NULL,
     title            TEXT NOT NULL,
-    body             TEXT,
+    lead             TEXT,
+    body             TEXT,  -- JSON array of {style,text} blocks (normal/h2/h3)
     slug             TEXT NOT NULL,
     meta_title       TEXT,
     meta_description TEXT,

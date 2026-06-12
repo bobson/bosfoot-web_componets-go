@@ -1,0 +1,214 @@
+{{define "foot-health"}}
+<!DOCTYPE html>
+<html lang="{{.Locale}}">
+<head>
+  {{template "head" .}}
+  <title>{{t .Locale "footHealth.title"}} — Bosfoot</title>
+</head>
+<body>
+  {{template "nav" .}}
+
+  <main class="fh">
+
+    {{/* ── Hero ─────────────────────────────────────────── */}}
+    <header class="section section--hero fh-hero">
+      <div class="container fh-hero__inner">
+        <div class="fh-hero__copy" data-reveal>
+          <p class="fh-hero__eyebrow label-caps text-accent">{{t .Locale "footHealth.eyebrow"}}</p>
+          <h1 class="fh-hero__title">{{t .Locale "footHealth.title"}}</h1>
+          <p class="fh-hero__subtitle text-muted">{{t .Locale "footHealth.subtitle"}}</p>
+          <a class="fh-hero__link" href="/{{.Locale}}/articles">{{t .Locale "home.articles.viewAll"}} →</a>
+        </div>
+        {{/* Decorative self-drawing foot-anatomy line motif. */}}
+        <div class="fh-hero__art" aria-hidden="true">
+          <svg viewBox="0 0 200 240" fill="none" stroke="currentColor" stroke-width="1.5"
+               stroke-linecap="round" stroke-linejoin="round" class="fh-foot">
+            <path class="fh-foot__line" d="M64 18c-14 6-20 26-18 52 2 22 10 40 8 64-2 22-16 34-16 56 0 20 14 32 38 32 30 0 46-16 50-40 3-18-2-34-2-52 0-30 8-54 6-82C136 70 120 28 96 18 84 13 74 14 64 18Z"/>
+            <path class="fh-foot__line" d="M70 70c2 14 6 22 18 24M86 64c0 14 2 22 12 26M104 62c-2 14-2 24 6 30M120 68c-4 12-6 22 0 30"/>
+            <circle class="fh-foot__dot" cx="78" cy="150" r="3"/>
+            <circle class="fh-foot__dot" cx="98" cy="166" r="3"/>
+            <circle class="fh-foot__dot" cx="86" cy="196" r="3"/>
+          </svg>
+        </div>
+      </div>
+    </header>
+
+    {{/* ── Stat strip ───────────────────────────────────── */}}
+    <section class="section--deep fh-stats">
+      <div class="container fh-stats__row" data-reveal>
+        <div class="fh-stat">
+          <span class="fh-stat__num" data-count="26">26</span>
+          <span class="fh-stat__label">{{t .Locale "footHealth.stat.bones"}}</span>
+        </div>
+        <div class="fh-stat">
+          <span class="fh-stat__num" data-count="33">33</span>
+          <span class="fh-stat__label">{{t .Locale "footHealth.stat.joints"}}</span>
+        </div>
+        <div class="fh-stat">
+          <span class="fh-stat__num" data-count="100" data-count-suffix="+">100+</span>
+          <span class="fh-stat__label">{{t .Locale "footHealth.stat.muscles"}}</span>
+        </div>
+      </div>
+    </section>
+
+    {{/* ── Topic cards ──────────────────────────────────── */}}
+    {{if .TopicCards}}
+    <section class="section container fh-topics">
+      <div class="fh-topics__grid">
+        {{range .TopicCards}}
+        <a class="fh-card{{if .Accent}} fh-card--accent{{end}}" href="/{{$.Locale}}/articles/{{.Slug}}" data-reveal>
+          <div class="fh-card__head">
+            <span class="fh-card__icon" aria-hidden="true">
+              {{if eq .IconName "knees"}}
+              <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4v9l-4 7a4 4 0 0 0 4 8h8"/><circle cx="11" cy="15" r="3"/><path d="M22 28V19l3-6"/></svg>
+              {{else if eq .IconName "heel"}}
+              <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7c-2 5-1 10 0 14 1 5 6 7 11 6 6-1 8-6 7-11-1-6-5-8-5-12"/><path d="M7 21c4 2 8 2 12 0"/><circle cx="9" cy="22" r="1.5"/></svg>
+              {{else if eq .IconName "veins"}}
+              <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3v26"/><path d="M16 9c-4 0-7 3-7 7M16 14c4 0 7 3 7 7M16 20c-3 0-5 2-5 5"/></svg>
+              {{else}}
+              <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 24h18M22 24l-5-5M22 24l-5 5"/><circle cx="8" cy="11" r="2"/><circle cx="15" cy="9" r="2"/></svg>
+              {{end}}
+            </span>
+            <span class="fh-card__cat label-caps">{{t $.Locale .CategoryKey}}</span>
+          </div>
+          <div class="fh-card__body">
+            <h2 class="fh-card__title">{{.Title}}</h2>
+            {{if .Lead}}<p class="fh-card__lead">{{.Lead}}</p>{{end}}
+            <span class="fh-card__more">{{t $.Locale "home.articles.readMore"}} →</span>
+          </div>
+        </a>
+        {{end}}
+      </div>
+    </section>
+    {{end}}
+
+    {{/* ── Symptoms ─────────────────────────────────────── */}}
+    <section class="section--sage fh-signs">
+      <div class="container">
+        <div class="fh-signs__head" data-reveal>
+          <p class="label-caps text-accent">{{t .Locale "footHealth.signs.eyebrow"}}</p>
+          <h2 class="fh-signs__title">{{t .Locale "footHealth.signs.title"}}</h2>
+        </div>
+        <ul class="fh-signs__grid" data-reveal>
+          {{range $k := list "kneePain" "heavyLegs" "heelPain" "flatFeet" "varicose" "backPain" "bentToes" "swollenFeet" "fatigue"}}
+          <li class="fh-sign"><span class="fh-sign__dot" aria-hidden="true"></span>{{t $.Locale (printf "footHealth.signs.%s" $k)}}</li>
+          {{end}}
+        </ul>
+        <div class="fh-signs__foot" data-reveal>
+          <p class="text-muted">{{t .Locale "footHealth.signs.note"}}</p>
+          <a class="fh-link-accent" href="#fh-guide">{{t .Locale "footHealth.signs.link"}} →</a>
+        </div>
+      </div>
+    </section>
+
+    {{/* ── Mid CTA banner ───────────────────────────────── */}}
+    <section class="section container">
+      <div class="fh-banner" data-reveal>
+        <div>
+          <p class="fh-banner__title">{{t .Locale "footHealth.cta.title"}}</p>
+          <p class="fh-banner__body">{{t .Locale "footHealth.cta.body"}}</p>
+        </div>
+        <a class="btn-brand" href="#fh-guide">{{t .Locale "footHealth.cta.button"}} →</a>
+      </div>
+    </section>
+
+    {{/* ── Guide: what makes them different ─────────────── */}}
+    <section id="fh-guide" class="section container fh-guide">
+      <div class="fh-guide__head" data-reveal>
+        <h2 class="fh-h2">{{t .Locale "newToBarefoot.what.title"}}</h2>
+        <p class="text-muted">{{t .Locale "newToBarefoot.what.lead"}}</p>
+      </div>
+      <div class="fh-features" data-reveal>
+        {{range $i := list "1" "2" "3"}}
+        <article class="fh-feature">
+          <span class="fh-feature__icon" aria-hidden="true">
+            {{if eq $i "1"}}
+            <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M16 28V18"/><path d="M16 18c-5 0-9-2-9-8M16 18c5 0 9-2 9-8M16 18c-2 0-3-3-3-9M16 18c2 0 3-3 3-9M16 18V7"/></svg>
+            {{else if eq $i "2"}}
+            <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h24"/><path d="M4 20l6-6h12l6 6"/><line x1="4" y1="25" x2="28" y2="25" stroke-dasharray="2 3"/></svg>
+            {{else}}
+            <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 16c4-6 8-9 12-9s8 3 12 9"/><path d="M4 22c4-5 8-7 12-7s8 2 12 7"/></svg>
+            {{end}}
+          </span>
+          <h3 class="fh-feature__title">{{t $.Locale (printf "newToBarefoot.feature%s.title" $i)}}</h3>
+          <p class="fh-feature__body text-muted">{{t $.Locale (printf "newToBarefoot.feature%s.body" $i)}}</p>
+        </article>
+        {{end}}
+      </div>
+    </section>
+
+    {{/* ── Transition timeline ──────────────────────────── */}}
+    <section class="section--sage fh-transition">
+      <div class="container">
+        <div class="fh-guide__head" data-reveal>
+          <h2 class="fh-h2">{{t .Locale "newToBarefoot.transition.title"}}</h2>
+          <p class="text-muted">{{t .Locale "newToBarefoot.transition.lead"}}</p>
+        </div>
+        <ol class="fh-timeline" data-timeline>
+          <span class="fh-timeline__rail" aria-hidden="true"><span class="fh-timeline__fill" data-timeline-fill></span></span>
+          {{range $k := list "week1" "week3" "month2"}}
+          <li class="fh-step" data-reveal>
+            <span class="fh-step__num" aria-hidden="true"></span>
+            <div class="fh-step__body">
+              <h3 class="fh-step__title">{{t $.Locale (printf "newToBarefoot.transition.%s.title" $k)}}</h3>
+              <p class="text-muted">{{t $.Locale (printf "newToBarefoot.transition.%s.body" $k)}}</p>
+            </div>
+          </li>
+          {{end}}
+        </ol>
+      </div>
+    </section>
+
+    {{/* ── Common mistakes ──────────────────────────────── */}}
+    <section class="section container fh-mistakes">
+      <h2 class="fh-h2" data-reveal>{{t .Locale "newToBarefoot.mistakes.title"}}</h2>
+      <div class="fh-mistakes__grid" data-reveal>
+        {{range $i := list "1" "2" "3"}}
+        <article class="fh-mistake">
+          <span class="fh-mistake__icon" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          </span>
+          <h3 class="fh-mistake__title">{{t $.Locale (printf "newToBarefoot.mistake%s.title" $i)}}</h3>
+          <p class="text-muted">{{t $.Locale (printf "newToBarefoot.mistake%s.body" $i)}}</p>
+        </article>
+        {{end}}
+      </div>
+    </section>
+
+    {{/* ── FAQ ──────────────────────────────────────────── */}}
+    <section class="section--sage fh-faq">
+      <div class="container fh-faq__inner">
+        <h2 class="fh-h2" data-reveal>{{t .Locale "newToBarefoot.faq.title"}}</h2>
+        <div class="fh-faq__list" data-reveal>
+          {{range $i := list "1" "2" "3" "4"}}
+          <details class="fh-faq__item">
+            <summary class="fh-faq__q">
+              {{t $.Locale (printf "newToBarefoot.faq.%s.q" $i)}}
+              <svg class="fh-faq__chev" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+            </summary>
+            <p class="fh-faq__a text-muted">{{t $.Locale (printf "newToBarefoot.faq.%s.a" $i)}}</p>
+          </details>
+          {{end}}
+        </div>
+      </div>
+    </section>
+
+    {{/* ── Final CTA ────────────────────────────────────── */}}
+    <section class="section--deep fh-final">
+      <div class="container" data-reveal>
+        <h2 class="fh-final__title">{{t .Locale "newToBarefoot.cta.title"}}</h2>
+        <p class="fh-final__body">{{t .Locale "newToBarefoot.cta.body"}}</p>
+        <div class="fh-final__actions">
+          <a class="btn-on-deep" href="/{{.Locale}}/products">{{t .Locale "cta.shopNow"}} →</a>
+          <a class="btn-ghost-deep" href="mailto:info@bosfoot.com">info@bosfoot.com</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  {{template "footer" .}}
+  <script src="/components/scroll-reveal.js" type="module"></script>
+</body>
+</html>
+{{end}}

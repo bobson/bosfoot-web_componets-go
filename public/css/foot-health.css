@@ -1,0 +1,625 @@
+/* ════════════════════════════════════════════════════
+   Foot-health page
+   Import from styles.css:  @import "./pages/foot-health.css";
+   Signature: topographic contours on deep-moss surfaces
+   + self-drawing foot line-art in the hero.
+   Everything derives from global tokens.
+   ════════════════════════════════════════════════════ */
+
+/* Contour tiles (inline SVG, zero requests) */
+.fh {
+    --contour-on-deep: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='400' fill='none' stroke='%23ffffff' stroke-opacity='0.07' stroke-width='1'%3E%3Cpath d='M0 70 Q150 30 300 70 T600 70'/%3E%3Cpath d='M0 150 Q150 100 300 150 T600 150'/%3E%3Cpath d='M0 230 Q150 190 300 230 T600 230'/%3E%3Cpath d='M0 310 Q150 260 300 310 T600 310'/%3E%3Cellipse cx='450' cy='110' rx='95' ry='42'/%3E%3Cellipse cx='450' cy='110' rx='62' ry='26'/%3E%3Cellipse cx='450' cy='110' rx='30' ry='12'/%3E%3C/svg%3E");
+}
+
+/* ── Eyebrow with leading rule ─────────────────────── */
+.fh-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-accent);
+    margin-bottom: var(--space-4);
+}
+
+.fh-eyebrow::before {
+    content: "";
+    width: 1.75rem;
+    height: 1px;
+    background: var(--color-accent);
+}
+
+.fh-eyebrow--center {
+    justify-content: center;
+}
+
+/* ── Arrow micro-interaction ───────────────────────── */
+.fh-arr {
+    display: inline-block;
+    transition: translate 0.2s var(--ease-out);
+}
+
+a:hover .fh-arr,
+.fh-card:hover .fh-arr {
+    translate: 4px 0;
+}
+
+/* ── Hero ──────────────────────────────────────────── */
+.fh-hero {
+    border-bottom: 1px solid var(--color-border);
+    overflow: hidden;
+}
+
+.fh-hero__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-8);
+    flex-wrap: wrap;
+}
+
+.fh-hero__copy {
+    max-width: 36rem;
+}
+
+.fh-hero__title {
+    font-size: var(--fs-3xl);
+    font-weight: var(--fw-bold);
+    letter-spacing: -0.025em;
+    line-height: var(--lh-tight);
+    margin-bottom: var(--space-4);
+    max-width: 18ch;
+}
+
+.fh-hero__subtitle {
+    font-size: var(--fs-md);
+    max-width: 44ch;
+    margin-bottom: var(--space-5);
+}
+
+.fh-hero__link {
+    font-size: var(--fs-sm);
+    font-weight: var(--fw-medium);
+    color: var(--color-accent);
+    padding-bottom: var(--space-1);
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.2s var(--ease-out);
+}
+
+.fh-hero__link:hover {
+    border-color: var(--color-accent);
+}
+
+/* Self-drawing foot line-art */
+.fh-hero__art {
+    color: var(--color-accent);
+    opacity: 0.55;
+    flex-shrink: 0;
+}
+
+.fh-foot {
+    width: clamp(120px, 18vw, 200px);
+    height: auto;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .fh-foot__line {
+        stroke-dasharray: 1;
+        stroke-dashoffset: 1;
+        animation: fh-draw 2.2s var(--ease-out) 0.3s forwards;
+    }
+
+    .fh-foot__line:nth-of-type(2) {
+        animation-delay: 1s;
+    }
+
+    .fh-foot__dot {
+        opacity: 0;
+        animation: fh-dot 0.5s var(--ease-out) forwards;
+    }
+
+    .fh-foot__dot:nth-of-type(1) {
+        animation-delay: 2s;
+    }
+
+    .fh-foot__dot:nth-of-type(2) {
+        animation-delay: 2.2s;
+    }
+
+    .fh-foot__dot:nth-of-type(3) {
+        animation-delay: 2.4s;
+    }
+}
+
+@keyframes fh-draw {
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+
+@keyframes fh-dot {
+    to {
+        opacity: 1;
+    }
+}
+
+@media (max-width: 640px) {
+    .fh-hero__art {
+        display: none;
+    }
+}
+
+/* ── Stat strip ────────────────────────────────────── */
+.fh-stats {
+    background: var(--contour-on-deep) center / 600px auto,
+        var(--wash-deep);
+    color: var(--color-text-on-dark);
+    padding-block: var(--space-10);
+}
+
+.fh-stats__row {
+    display: flex;
+    justify-content: space-around;
+    gap: var(--space-6);
+    flex-wrap: wrap;
+    text-align: center;
+}
+
+.fh-stat {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+}
+
+.fh-stat__num {
+    font-size: var(--fs-2xl);
+    font-weight: var(--fw-bold);
+    letter-spacing: -0.02em;
+    line-height: var(--lh-tight);
+    font-variant-numeric: tabular-nums;
+}
+
+.fh-stat__label {
+    font-size: var(--fs-sm);
+    color: color-mix(in oklch, var(--color-text-on-dark), transparent 25%);
+}
+
+/* ── Topic cards ───────────────────────────────────── */
+.fh-topics__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: var(--space-5);
+}
+
+.fh-card {
+    display: flex;
+    flex-direction: column;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    background: var(--color-white);
+    box-shadow: 0 0 0 1px var(--color-border);
+    transition: transform 0.25s var(--ease-out),
+        box-shadow 0.25s var(--ease-out);
+}
+
+.fh-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 0 0 1px color-mix(in oklch, var(--color-accent), transparent 60%),
+        var(--shadow-lg);
+}
+
+.fh-card__head {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+    min-height: 150px;
+    padding: var(--space-6) var(--space-6) var(--space-5);
+    background: var(--contour-on-deep) center / 600px auto,
+        var(--wash-deep);
+    color: var(--color-text-on-dark);
+}
+
+.fh-card__icon {
+    width: 28px;
+    height: 28px;
+    transition: translate 0.25s var(--ease-out);
+}
+
+.fh-card__icon svg {
+    width: 100%;
+    height: 100%;
+}
+
+.fh-card:hover .fh-card__icon {
+    translate: 0 -3px;
+}
+
+.fh-card__cat {
+    margin-top: auto;
+    font-size: var(--fs-2xs);
+    color: color-mix(in oklch, var(--color-text-on-dark), transparent 30%);
+}
+
+.fh-card__body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: var(--space-2);
+    padding: var(--space-6);
+}
+
+.fh-card__title {
+    font-size: var(--fs-md);
+    font-weight: var(--fw-bold);
+    letter-spacing: -0.01em;
+    line-height: var(--lh-snug);
+    transition: color 0.2s var(--ease-out);
+}
+
+.fh-card:hover .fh-card__title {
+    color: var(--color-accent);
+}
+
+.fh-card__lead {
+    flex: 1;
+    font-size: var(--fs-sm);
+    color: var(--color-text-muted);
+}
+
+.fh-card__more {
+    margin-top: var(--space-2);
+    font-size: var(--fs-sm);
+    font-weight: var(--fw-medium);
+    color: var(--color-accent);
+}
+
+/* Accent variant — whole card in brand moss */
+.fh-card--accent {
+    background: var(--contour-on-deep) center / 600px auto,
+        var(--color-accent);
+}
+
+.fh-card--accent .fh-card__head {
+    background: none;
+}
+
+.fh-card--accent .fh-card__title,
+.fh-card--accent .fh-card__more {
+    color: var(--color-text-on-dark);
+}
+
+.fh-card--accent .fh-card__lead {
+    color: color-mix(in oklch, var(--color-text-on-dark), transparent 15%);
+}
+
+.fh-card--accent:hover .fh-card__title {
+    color: var(--color-white);
+}
+
+/* ── Symptoms ──────────────────────────────────────── */
+.fh-signs {
+    border-block: 1px solid var(--color-border);
+}
+
+.fh-signs__head {
+    text-align: center;
+    max-width: var(--prose-max);
+    margin: 0 auto var(--space-10);
+}
+
+.fh-signs__title {
+    font-size: var(--fs-xl);
+    font-weight: var(--fw-bold);
+    letter-spacing: -0.015em;
+}
+
+.fh-signs__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: var(--space-3);
+    max-width: 56rem;
+    margin-inline: auto;
+}
+
+.fh-sign {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-3) var(--space-4);
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    font-size: var(--fs-sm);
+    transition: border-color 0.2s var(--ease-out),
+        background-color 0.2s var(--ease-out);
+}
+
+.fh-sign:hover {
+    border-color: color-mix(in oklch, var(--color-accent), transparent 50%);
+    background: var(--color-white);
+}
+
+.fh-sign__dot {
+    flex-shrink: 0;
+    width: 1rem;
+    height: 1rem;
+    border-radius: var(--radius-full);
+    border: 1.5px solid var(--color-accent);
+    transition: background-color 0.2s var(--ease-out);
+}
+
+.fh-sign:hover .fh-sign__dot {
+    background: var(--color-accent);
+}
+
+.fh-signs__foot {
+    text-align: center;
+    max-width: var(--prose-max);
+    margin: var(--space-10) auto 0;
+}
+
+.fh-signs__foot p {
+    margin-bottom: var(--space-3);
+    font-size: var(--fs-sm);
+}
+
+.fh-link {
+    font-size: var(--fs-sm);
+    font-weight: var(--fw-medium);
+    color: var(--color-accent);
+    transition: color 0.15s var(--ease-out);
+}
+
+.fh-link:hover {
+    color: var(--color-accent-hover);
+}
+
+/* ── Mid CTA banner ────────────────────────────────── */
+.fh-banner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-5);
+    flex-wrap: wrap;
+    padding: var(--space-8) var(--space-10);
+    border-radius: var(--radius-md);
+    background: var(--contour-on-deep) center / 600px auto,
+        var(--wash-deep);
+    color: var(--color-text-on-dark);
+}
+
+.fh-banner__title {
+    font-size: var(--fs-lg);
+    font-weight: var(--fw-semibold);
+    letter-spacing: -0.01em;
+    margin-bottom: var(--space-1);
+}
+
+.fh-banner__body {
+    font-size: var(--fs-sm);
+    max-width: 48ch;
+    color: color-mix(in oklch, var(--color-text-on-dark), transparent 25%);
+}
+
+/* ── Shared headings ───────────────────────────────── */
+.fh-h2 {
+    font-size: var(--fs-xl);
+    font-weight: var(--fw-bold);
+    letter-spacing: -0.015em;
+    margin-bottom: var(--space-3);
+}
+
+.fh-h2--solo {
+    margin-bottom: var(--space-10);
+}
+
+.fh-lead,
+.fh-guide__head p {
+    max-width: var(--prose-max);
+}
+
+.fh-guide__head {
+    margin-bottom: var(--space-10);
+}
+
+/* ── Feature cards ─────────────────────────────────── */
+.fh-guide {
+    scroll-margin-top: calc(var(--nav-height) + var(--space-4));
+}
+
+.fh-features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: var(--space-6);
+}
+
+.fh-feature {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    padding: var(--space-8) var(--space-6);
+    border-radius: var(--radius-md);
+    background: var(--color-sage);
+}
+
+.fh-feature__icon {
+    width: 32px;
+    height: 32px;
+}
+
+.fh-feature__icon svg {
+    width: 100%;
+    height: 100%;
+}
+
+.fh-feature__title {
+    font-size: var(--fs-lg);
+    font-weight: var(--fw-semibold);
+    letter-spacing: -0.01em;
+}
+
+/* ── Transition timeline ───────────────────────────── */
+.fh-timeline {
+    position: relative;
+    max-width: var(--prose-max);
+    display: flex;
+    flex-direction: column;
+    counter-reset: fh-step;
+}
+
+.fh-step {
+    position: relative;
+    display: flex;
+    gap: var(--space-6);
+    padding-bottom: var(--space-10);
+    counter-increment: fh-step;
+}
+
+.fh-step:not(:last-child)::before {
+    content: "";
+    position: absolute;
+    left: 17px;
+    top: 2.5rem;
+    bottom: 0;
+    width: 1px;
+    background: color-mix(in oklch, var(--color-accent), transparent 70%);
+}
+
+.fh-step__num {
+    z-index: 1;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: var(--radius-full);
+    background: var(--color-accent);
+    color: var(--color-white);
+    font-size: var(--fs-sm);
+    font-weight: var(--fw-bold);
+}
+
+.fh-step__num::before {
+    content: counter(fh-step);
+}
+
+.fh-step__title {
+    font-size: var(--fs-md);
+    font-weight: var(--fw-semibold);
+    letter-spacing: -0.01em;
+    margin-bottom: var(--space-2);
+}
+
+.fh-step__body {
+    padding-top: var(--space-1);
+}
+
+/* ── Common mistakes ───────────────────────────────── */
+.fh-mistakes__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: var(--space-6);
+}
+
+.fh-mistake {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    padding: var(--space-8) var(--space-6);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    transition: border-color 0.2s var(--ease-out);
+}
+
+.fh-mistake:hover {
+    border-color: hsl(38 70% 60%);
+}
+
+.fh-mistake__icon {
+    color: hsl(38 90% 50%);
+}
+
+.fh-mistake__title {
+    font-size: var(--fs-base);
+    font-weight: var(--fw-semibold);
+    letter-spacing: -0.01em;
+}
+
+/* ── FAQ ───────────────────────────────────────────── */
+.fh-faq__inner {
+    max-width: 48rem;
+}
+
+.fh-faq__list {
+    display: flex;
+    flex-direction: column;
+}
+
+.fh-faq__item {
+    padding-block: var(--space-5);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.fh-faq__item:first-of-type {
+    border-top: 1px solid var(--color-border);
+}
+
+.fh-faq__q {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    cursor: pointer;
+    list-style: none;
+    font-weight: var(--fw-semibold);
+    letter-spacing: -0.01em;
+    user-select: none;
+}
+
+.fh-faq__q::-webkit-details-marker {
+    display: none;
+}
+
+.fh-faq__chev {
+    flex-shrink: 0;
+    color: var(--color-text-muted);
+    transition: transform 0.25s var(--ease-out);
+}
+
+.fh-faq__item[open] .fh-faq__chev {
+    transform: rotate(180deg);
+}
+
+.fh-faq__a {
+    margin-top: var(--space-4);
+    font-size: var(--fs-sm);
+}
+
+/* ── Final CTA (deep section) ──────────────────────── */
+.fh-final {
+    background: var(--contour-on-deep) center / 600px auto,
+        var(--wash-deep);
+    color: var(--color-text-on-dark);
+}
+
+.fh-final__title {
+    font-size: var(--fs-xl);
+    font-weight: var(--fw-bold);
+    letter-spacing: -0.015em;
+    margin-bottom: var(--space-4);
+}
+
+.fh-final__body {
+    max-width: var(--prose-max);
+    margin-bottom: var(--space-8);
+    color: color-mix(in oklch, var(--color-text-on-dark), transparent 20%);
+}
+
+.fh-final__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+}

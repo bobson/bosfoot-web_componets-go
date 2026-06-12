@@ -6,6 +6,7 @@ import (
 	"bosfoot/logger"
 	"bosfoot/models"
 	"database/sql"
+	"encoding/json"
 	"net/http"
 	"sort"
 	"strings"
@@ -19,7 +20,8 @@ type PageHandler struct {
 	DB       *sql.DB
 	Logger   *logger.Logger
 	Renderer *tmpl.Renderer
-	SiteURL  string // e.g. "https://bosfoot.com" — no trailing slash
+	UI       *locale.UI // for translating strings outside templates (e.g. meta tags)
+	SiteURL  string     // e.g. "https://bosfoot.com" — no trailing slash
 }
 
 // PageBase holds the fields every page template needs.
@@ -28,6 +30,12 @@ type PageBase struct {
 	CurrentPath     string // path after the locale prefix, used by the language switcher
 	SiteURL         string // used for canonical and hreflang tags
 	MetaDescription string
+
+	// Alternates is the per-locale full path (e.g. "/en/articles/zero-drop")
+	// for pages whose slug differs per language — article pages. When set, the
+	// language switcher (nav) and hreflang/canonical (head) use these instead
+	// of prefix-swapping CurrentPath. nil for the common same-slug pages.
+	Alternates map[string]string
 }
 
 // baseURL returns the scheme://host used for every absolute URL we emit
@@ -104,6 +112,73 @@ type ProductDetailData struct {
 	Product     models.Product
 	Translation models.ProductTranslation
 	Related     []models.Product
+}
+
+// ArticleCard is an article teaser used on the listing grid, the foot-health
+// hub, and "related" rails. Slug is the current-locale slug; the link is
+// /{locale}/articles/{Slug}.
+type ArticleCard struct {
+	Slug       string
+	Title      string
+	Lead       string
+	Author     string
+	Date       string // pre-formatted published date, "" if none
+	IsFeatured bool
+}
+
+// TopicCard is a curated article on the foot-health hub, shown under a topic
+// label with an icon. Accent flips it to the brand-fill variant.
+type TopicCard struct {
+	ArticleCard
+	CategoryKey string // locale key for the topic label
+	IconName    string // selects the inline SVG in the template
+	Accent      bool
+}
+
+// FootHealthData is the template data for /{locale}/foot-health (the hub).
+type FootHealthData struct {
+	PageBase
+	TopicCards []TopicCard
+}
+
+// ArticlesListingData is the template data for /{locale}/articles.
+type ArticlesListingData struct {
+	PageBase
+	Articles []ArticleCard
+}
+
+// ArticleDetailData is the template data for /{locale}/articles/{slug}.
+type ArticleDetailData struct {
+	PageBase
+	Title   string
+	Lead    string
+	Author  string
+	Date    string
+	Blocks  []models.ArticleBlock
+	Related []ArticleCard
+}
+
+// hubTopics is the curated set of articles featured as topic cards on the
+// foot-health hub, in display order. ENSlug matches articles.slug (the EN
+// canonical); the per-locale slug/title/lead are looked up at render time.
+var hubTopics = []struct {
+	ENSlug      string
+	CategoryKey string
+	Icon        string
+	Accent      bool
+}{
+	{"knee-and-back-pain-could-your-shoes-be-the-cause", "footHealth.topic.knees", "knees", true},
+	{"foot-pain-plantar-fasciitis-and-heel-pain", "footHealth.topic.heel", "heel", false},
+	{"veins-circulation-barefoot-and-blood-flow", "footHealth.topic.veins", "veins", false},
+	{"your-first-60-days-in-barefoot-shoes", "footHealth.topic.transition", "transition", false},
+}
+
+// articleDate formats a nullable published_at for display, "" if absent.
+func articleDate(t sql.NullTime) string {
+	if t.Valid {
+		return t.Time.Format("2 Jan 2006")
+	}
+	return ""
 }
 
 // Home handles GET /mk, /sq, /en — the homepage.
@@ -255,6 +330,246 @@ func (h *PageHandler) Checkout(w http.ResponseWriter, r *http.Request) {
 		Locale:      loc,
 		CurrentPath: "/checkout",
 		SiteURL:     h.baseURL(r),
+	})
+}
+
+// FootHealth handles GET /{locale}/foot-health — the foot-health hub. It links
+// out to article pages via curated topic cards; the deeper beginner-guide
+// sections render from locale strings. Articles themselves live on their own
+// pages (ArticleDetail).
+func (h *PageHandler) FootHealth(w http.ResponseWriter, r *http.Request) {
+	if !locale.IsValid(r.PathValue("locale")) {
+		http.Redirect(w, r, "/"+locale.Default+"/foot-health", http.StatusFound)
+		return
+	}
+	loc := locale.FromPath(r.PathValue("locale"))
+
+	// Fetch the per-locale slug/title/lead for the curated topic articles in
+	// one query, then assemble cards in the configured order.
+	enSlugs := make([]string, len(hubTopics))
+	for i, t := range hubTopics {
+		enSlugs[i] = t.ENSlug
+	}
+	rows, err := h.DB.QueryContext(r.Context(), `
+		SELECT a.slug, t.slug, t.title, COALESCE(t.lead, '')
+		FROM articles a
+		JOIN article_translations t ON t.article_id = a.id AND t.lang = $1::lang_code
+		WHERE a.slug = ANY($2) AND a.is_published = TRUE
+	`, loc, pq.Array(enSlugs))
+	if err != nil {
+		h.Logger.Error("FootHealth: topics query failed", err)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+	defer rows.Close()
+
+	type card struct{ slug, title, lead string }
+	byEN := make(map[string]card)
+	for rows.Next() {
+		var enSlug string
+		var c card
+		if err := rows.Scan(&enSlug, &c.slug, &c.title, &c.lead); err != nil {
+			h.Logger.Error("FootHealth: topics scan failed", err)
+			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+			return
+		}
+		byEN[enSlug] = c
+	}
+	if err := rows.Err(); err != nil {
+		h.Logger.Error("FootHealth: topics rows error", err)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+
+	var topicCards []TopicCard
+	for _, t := range hubTopics {
+		c, ok := byEN[t.ENSlug]
+		if !ok {
+			continue // article not imported/published yet — skip its card
+		}
+		topicCards = append(topicCards, TopicCard{
+			ArticleCard: ArticleCard{Slug: c.slug, Title: c.title, Lead: c.lead},
+			CategoryKey: t.CategoryKey,
+			IconName:    t.Icon,
+			Accent:      t.Accent,
+		})
+	}
+
+	h.Renderer.Render(w, "foot-health", FootHealthData{
+		PageBase: PageBase{
+			Locale:          loc,
+			CurrentPath:     "/foot-health",
+			SiteURL:         h.baseURL(r),
+			MetaDescription: h.UI.T(loc, "footHealth.subtitle"),
+		},
+		TopicCards: topicCards,
+	})
+}
+
+// ArticlesListing handles GET /{locale}/articles — the full article index.
+func (h *PageHandler) ArticlesListing(w http.ResponseWriter, r *http.Request) {
+	if !locale.IsValid(r.PathValue("locale")) {
+		http.Redirect(w, r, "/"+locale.Default+"/articles", http.StatusFound)
+		return
+	}
+	loc := locale.FromPath(r.PathValue("locale"))
+
+	rows, err := h.DB.QueryContext(r.Context(), `
+		SELECT t.slug, t.title, COALESCE(t.lead, ''), COALESCE(a.author, ''),
+		       a.published_at, a.is_featured
+		FROM articles a
+		JOIN article_translations t ON t.article_id = a.id AND t.lang = $1::lang_code
+		WHERE a.is_published = TRUE
+		ORDER BY a.is_featured DESC, a.published_at DESC NULLS LAST
+	`, loc)
+	if err != nil {
+		h.Logger.Error("ArticlesListing: query failed", err)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+	defer rows.Close()
+
+	var articles []ArticleCard
+	for rows.Next() {
+		var c ArticleCard
+		var publishedAt sql.NullTime
+		if err := rows.Scan(&c.Slug, &c.Title, &c.Lead, &c.Author, &publishedAt, &c.IsFeatured); err != nil {
+			h.Logger.Error("ArticlesListing: scan failed", err)
+			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+			return
+		}
+		c.Date = articleDate(publishedAt)
+		articles = append(articles, c)
+	}
+	if err := rows.Err(); err != nil {
+		h.Logger.Error("ArticlesListing: rows error", err)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+
+	h.Renderer.Render(w, "articles", ArticlesListingData{
+		PageBase: PageBase{
+			Locale:          loc,
+			CurrentPath:     "/articles",
+			SiteURL:         h.baseURL(r),
+			MetaDescription: h.UI.T(loc, "home.articles.lead"),
+		},
+		Articles: articles,
+	})
+}
+
+// ArticleDetail handles GET /{locale}/articles/{slug} — one article. Slugs are
+// per-locale, so it looks the article up by (lang, slug), then builds explicit
+// hreflang/language-switcher Alternates from every translation's own slug.
+func (h *PageHandler) ArticleDetail(w http.ResponseWriter, r *http.Request) {
+	if !locale.IsValid(r.PathValue("locale")) {
+		http.NotFound(w, r)
+		return
+	}
+	loc := locale.FromPath(r.PathValue("locale"))
+	slug := r.PathValue("slug")
+	ctx := r.Context()
+
+	var articleID int
+	var author string
+	var publishedAt sql.NullTime
+	err := h.DB.QueryRowContext(ctx, `
+		SELECT a.id, COALESCE(a.author, ''), a.published_at
+		FROM articles a
+		JOIN article_translations t ON t.article_id = a.id
+		WHERE t.lang = $1::lang_code AND t.slug = $2 AND a.is_published = TRUE
+	`, loc, slug).Scan(&articleID, &author, &publishedAt)
+	if err == sql.ErrNoRows {
+		http.NotFound(w, r)
+		return
+	}
+	if err != nil {
+		h.Logger.Error("ArticleDetail: lookup failed", err)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+
+	// All translations: build the per-locale alternates and pull this locale's
+	// title/lead/body.
+	tRows, err := h.DB.QueryContext(ctx, `
+		SELECT lang, title, COALESCE(lead, ''), COALESCE(body, '[]'), slug
+		FROM article_translations WHERE article_id = $1
+	`, articleID)
+	if err != nil {
+		h.Logger.Error("ArticleDetail: translations query failed", err)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+	defer tRows.Close()
+
+	alternates := make(map[string]string)
+	var title, lead, bodyJSON string
+	for tRows.Next() {
+		var lang, tTitle, tLead, tBody, tSlug string
+		if err := tRows.Scan(&lang, &tTitle, &tLead, &tBody, &tSlug); err != nil {
+			h.Logger.Error("ArticleDetail: translation scan failed", err)
+			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+			return
+		}
+		alternates[lang] = "/" + lang + "/articles/" + tSlug
+		if lang == loc {
+			title, lead, bodyJSON = tTitle, tLead, tBody
+		}
+	}
+	if err := tRows.Err(); err != nil {
+		h.Logger.Error("ArticleDetail: translations rows error", err)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+
+	var blocks []models.ArticleBlock
+	if err := json.Unmarshal([]byte(bodyJSON), &blocks); err != nil {
+		h.Logger.Error("ArticleDetail: body parse failed", err)
+	}
+
+	// A few other articles for the "keep reading" rail.
+	relRows, err := h.DB.QueryContext(ctx, `
+		SELECT t.slug, t.title, COALESCE(t.lead, ''), COALESCE(a.author, ''),
+		       a.published_at, a.is_featured
+		FROM articles a
+		JOIN article_translations t ON t.article_id = a.id AND t.lang = $1::lang_code
+		WHERE a.is_published = TRUE AND a.id != $2
+		ORDER BY a.is_featured DESC, a.published_at DESC NULLS LAST
+		LIMIT 3
+	`, loc, articleID)
+	if err != nil {
+		h.Logger.Error("ArticleDetail: related query failed", err)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+	defer relRows.Close()
+	var related []ArticleCard
+	for relRows.Next() {
+		var c ArticleCard
+		var pa sql.NullTime
+		if err := relRows.Scan(&c.Slug, &c.Title, &c.Lead, &c.Author, &pa, &c.IsFeatured); err != nil {
+			h.Logger.Error("ArticleDetail: related scan failed", err)
+			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+			return
+		}
+		c.Date = articleDate(pa)
+		related = append(related, c)
+	}
+
+	h.Renderer.Render(w, "article", ArticleDetailData{
+		PageBase: PageBase{
+			Locale:          loc,
+			CurrentPath:     "/articles/" + slug, // only used if Alternates is nil
+			SiteURL:         h.baseURL(r),
+			MetaDescription: lead,
+			Alternates:      alternates,
+		},
+		Title:   title,
+		Lead:    lead,
+		Author:  author,
+		Date:    articleDate(publishedAt),
+		Blocks:  blocks,
+		Related: related,
 	})
 }
 

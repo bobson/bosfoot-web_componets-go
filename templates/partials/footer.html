@@ -1,9 +1,7 @@
 {{define "footer"}}
 <footer class="footer">
   <div class="container">
-
     <div class="footer__grid">
-
       <div class="footer__brand">
         <a class="footer__logo font-bold" href="/{{.Locale}}">Bosfoot</a>
         <p class="footer__tagline text-muted">{{t .Locale "footer.tagline"}}</p>
@@ -11,32 +9,49 @@
 
       <nav aria-label="Explore">
         <ul class="footer__links">
-          <li><a href="/{{.Locale}}/products">{{t .Locale "nav.products"}}</a></li>
+          <li>
+            <a href="/{{.Locale}}/products">{{t .Locale "nav.products"}}</a>
+          </li>
           <li><a href="/{{.Locale}}/brands">{{t .Locale "nav.brands"}}</a></li>
-          <li><a href="/{{.Locale}}/size-guide">{{t .Locale "nav.sizeGuide"}}</a></li>
-          <li><a href="/{{.Locale}}/new-to-barefoot">{{t .Locale "nav.newToBarefoot"}}</a></li>
+          <li>
+            <a href="/{{.Locale}}/size-guide">{{t .Locale "nav.sizeGuide"}}</a>
+          </li>
+          <li>
+            <a href="/{{.Locale}}/foot-health"
+              >{{t .Locale "nav.newToBarefoot"}}</a
+            >
+          </li>
+          <li>
+            <a href="/{{.Locale}}/articles"
+              >{{t .Locale "home.articles.viewAll"}}</a
+            >
+          </li>
         </ul>
       </nav>
 
       <nav aria-label="Help">
         <ul class="footer__links">
           <li><a href="/{{.Locale}}/about">{{t .Locale "nav.about"}}</a></li>
-          <li><a href="/{{.Locale}}/shipping">{{t .Locale "nav.shipping"}}</a></li>
-          <li><a href="/{{.Locale}}/returns">{{t .Locale "nav.returns"}}</a></li>
+          <li>
+            <a href="/{{.Locale}}/shipping">{{t .Locale "nav.shipping"}}</a>
+          </li>
+          <li>
+            <a href="/{{.Locale}}/returns">{{t .Locale "nav.returns"}}</a>
+          </li>
           <li><a href="mailto:info@bosfoot.com">info@bosfoot.com</a></li>
         </ul>
       </nav>
-
     </div>
 
     <div class="footer__bottom">
-      <p class="footer__copyright text-muted text-xs">{{t .Locale "footer.copyright"}}</p>
+      <p class="footer__copyright text-muted text-xs">
+        {{t .Locale "footer.copyright"}}
+      </p>
       <nav class="footer__legal" aria-label="Legal">
         <a href="/{{.Locale}}/privacy">{{t .Locale "nav.privacy"}}</a>
         <a href="/{{.Locale}}/terms">{{t .Locale "nav.terms"}}</a>
       </nav>
     </div>
-
   </div>
 </footer>
 {{end}}

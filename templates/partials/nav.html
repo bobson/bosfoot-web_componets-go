@@ -20,7 +20,7 @@
       <li><a href="/{{.Locale}}/products" {{if eq .CurrentPath "/products"}}class="nav__link--active" aria-current="page"{{end}}>{{t .Locale "nav.products"}}</a></li>
       <li><a href="/{{.Locale}}/brands"   {{if eq .CurrentPath "/brands"}}class="nav__link--active" aria-current="page"{{end}}>{{t .Locale "nav.brands"}}</a></li>
       <li><a href="/{{.Locale}}/size-guide" {{if eq .CurrentPath "/size-guide"}}class="nav__link--active" aria-current="page"{{end}}>{{t .Locale "nav.sizeGuide"}}</a></li>
-      <li><a href="/{{.Locale}}/new-to-barefoot" {{if eq .CurrentPath "/new-to-barefoot"}}class="nav__link--active" aria-current="page"{{end}}>{{t .Locale "nav.newToBarefoot"}}</a></li>
+      <li><a href="/{{.Locale}}/foot-health" {{if eq .CurrentPath "/foot-health"}}class="nav__link--active" aria-current="page"{{end}}>{{t .Locale "nav.newToBarefoot"}}</a></li>
       <li><a href="/{{.Locale}}/about" {{if eq .CurrentPath "/about"}}class="nav__link--active" aria-current="page"{{end}}>{{t .Locale "nav.about"}}</a></li>
     </ul>
   </nav>
@@ -28,15 +28,15 @@
   {{/* Desktop right group: lang switcher + actions */}}
   <div class="nav__right">
     <div class="nav__lang" role="navigation" aria-label="Language switcher">
-      <a href="/mk{{.CurrentPath}}" {{if eq .Locale "mk"}}class="nav__lang--active" aria-current="true"{{end}} lang="mk" aria-label="Македонски">
+      <a href="{{if .Alternates}}{{index .Alternates "mk"}}{{else}}/mk{{.CurrentPath}}{{end}}" {{if eq .Locale "mk"}}class="nav__lang--active" aria-current="true"{{end}} lang="mk" aria-label="Македонски">
         <span class="nav__lang-flag" aria-hidden="true">🇲🇰</span>
         <span class="nav__lang-code">МК</span>
       </a>
-      <a href="/sq{{.CurrentPath}}" {{if eq .Locale "sq"}}class="nav__lang--active" aria-current="true"{{end}} lang="sq" aria-label="Shqip">
+      <a href="{{if .Alternates}}{{index .Alternates "sq"}}{{else}}/sq{{.CurrentPath}}{{end}}" {{if eq .Locale "sq"}}class="nav__lang--active" aria-current="true"{{end}} lang="sq" aria-label="Shqip">
         <span class="nav__lang-flag" aria-hidden="true">🇦🇱</span>
         <span class="nav__lang-code">SQ</span>
       </a>
-      <a href="/en{{.CurrentPath}}" {{if eq .Locale "en"}}class="nav__lang--active" aria-current="true"{{end}} lang="en" aria-label="English">
+      <a href="{{if .Alternates}}{{index .Alternates "en"}}{{else}}/en{{.CurrentPath}}{{end}}" {{if eq .Locale "en"}}class="nav__lang--active" aria-current="true"{{end}} lang="en" aria-label="English">
         <span class="nav__lang-flag" aria-hidden="true">🇬🇧</span>
         <span class="nav__lang-code">EN</span>
       </a>
@@ -102,22 +102,22 @@
       <li><a href="/{{.Locale}}/products">{{t .Locale "nav.products"}}</a></li>
       <li><a href="/{{.Locale}}/brands">{{t .Locale "nav.brands"}}</a></li>
       <li><a href="/{{.Locale}}/size-guide">{{t .Locale "nav.sizeGuide"}}</a></li>
-      <li><a href="/{{.Locale}}/new-to-barefoot">{{t .Locale "nav.newToBarefoot"}}</a></li>
+      <li><a href="/{{.Locale}}/foot-health">{{t .Locale "nav.newToBarefoot"}}</a></li>
       <li><a href="/{{.Locale}}/about">{{t .Locale "nav.about"}}</a></li>
     </ul>
   </nav>
 
   {{/* Language inline in drawer */}}
   <div class="nav__drawer-lang" role="navigation" aria-label="Language switcher">
-    <a href="/mk{{.CurrentPath}}" {{if eq .Locale "mk"}}class="nav__lang--active" aria-current="true"{{end}} lang="mk" aria-label="Македонски">
+    <a href="{{if .Alternates}}{{index .Alternates "mk"}}{{else}}/mk{{.CurrentPath}}{{end}}" {{if eq .Locale "mk"}}class="nav__lang--active" aria-current="true"{{end}} lang="mk" aria-label="Македонски">
       <span class="nav__lang-flag" aria-hidden="true">🇲🇰</span>
       <span class="nav__lang-code">МК</span>
     </a>
-    <a href="/sq{{.CurrentPath}}" {{if eq .Locale "sq"}}class="nav__lang--active" aria-current="true"{{end}} lang="sq" aria-label="Shqip">
+    <a href="{{if .Alternates}}{{index .Alternates "sq"}}{{else}}/sq{{.CurrentPath}}{{end}}" {{if eq .Locale "sq"}}class="nav__lang--active" aria-current="true"{{end}} lang="sq" aria-label="Shqip">
       <span class="nav__lang-flag" aria-hidden="true">🇦🇱</span>
       <span class="nav__lang-code">SQ</span>
     </a>
-    <a href="/en{{.CurrentPath}}" {{if eq .Locale "en"}}class="nav__lang--active" aria-current="true"{{end}} lang="en" aria-label="English">
+    <a href="{{if .Alternates}}{{index .Alternates "en"}}{{else}}/en{{.CurrentPath}}{{end}}" {{if eq .Locale "en"}}class="nav__lang--active" aria-current="true"{{end}} lang="en" aria-label="English">
       <span class="nav__lang-flag" aria-hidden="true">🇬🇧</span>
       <span class="nav__lang-code">EN</span>
     </a>

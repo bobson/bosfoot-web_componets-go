@@ -3,18 +3,27 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 {{if .MetaDescription}}<meta name="description" content="{{.MetaDescription}}">{{end}}
 
-{{/* Canonical: tells Google the authoritative URL for this language version */}}
-<link rel="canonical" href="{{.SiteURL}}/{{.Locale}}{{.CurrentPath}}">
-
 {{/*
-  hreflang: tells Google these URLs are language variants of the same page,
-  not duplicate content. Every language variant must list all others.
-  x-default points to the primary language (mk) for unmatched locales.
+  Canonical + hreflang. hreflang tells Google these URLs are language variants
+  of the same page, not duplicate content; every variant lists all others.
+  x-default points to the primary language (mk).
+
+  Most pages share one slug across locales, so we prefix-swap CurrentPath.
+  Article pages have per-locale slugs and supply explicit .Alternates instead.
 */}}
+{{if .Alternates}}
+<link rel="canonical" href="{{.SiteURL}}{{index .Alternates .Locale}}">
+<link rel="alternate" hreflang="mk" href="{{.SiteURL}}{{index .Alternates "mk"}}">
+<link rel="alternate" hreflang="sq" href="{{.SiteURL}}{{index .Alternates "sq"}}">
+<link rel="alternate" hreflang="en" href="{{.SiteURL}}{{index .Alternates "en"}}">
+<link rel="alternate" hreflang="x-default" href="{{.SiteURL}}{{index .Alternates "mk"}}">
+{{else}}
+<link rel="canonical" href="{{.SiteURL}}/{{.Locale}}{{.CurrentPath}}">
 <link rel="alternate" hreflang="mk" href="{{.SiteURL}}/mk{{.CurrentPath}}">
 <link rel="alternate" hreflang="sq" href="{{.SiteURL}}/sq{{.CurrentPath}}">
 <link rel="alternate" hreflang="en" href="{{.SiteURL}}/en{{.CurrentPath}}">
 <link rel="alternate" hreflang="x-default" href="{{.SiteURL}}/mk{{.CurrentPath}}">
+{{end}}
 
 <link rel="stylesheet" href="/styles.css">
 <link rel="manifest" href="/app.webmanifest">

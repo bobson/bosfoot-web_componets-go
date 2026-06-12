@@ -61,6 +61,10 @@ func NewRenderer(dir string, ui *locale.UI) (*Renderer, error) {
 		// lower lowercases a string: {{lower .Color}}
 		"lower": strings.ToLower,
 
+		// list builds a []string from its args, for ranging over literal keys:
+		//   {{range list "kneePain" "heelPain"}}...{{end}}
+		"list": func(items ...string) []string { return items },
+
 		// json encodes a value as JSON for use in <script type="application/json"> tags.
 		"json": func(v any) (template.JS, error) {
 			b, err := json.Marshal(v)

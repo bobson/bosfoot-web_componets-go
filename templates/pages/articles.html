@@ -1,0 +1,44 @@
+{{define "articles"}}
+<!DOCTYPE html>
+<html lang="{{.Locale}}">
+<head>
+  {{template "head" .}}
+  <title>{{t .Locale "home.articles.title"}} — Bosfoot</title>
+</head>
+<body>
+  {{template "nav" .}}
+
+  <main class="articles">
+
+    <header class="section section--hero articles__hero">
+      <div class="container" data-reveal>
+        <p class="label-caps text-accent">{{t .Locale "footHealth.eyebrow"}}</p>
+        <h1 class="articles__title">{{t .Locale "home.articles.title"}}</h1>
+        <p class="articles__lead text-muted">{{t .Locale "home.articles.lead"}}</p>
+      </div>
+    </header>
+
+    <section class="section container">
+      <div class="articles__grid" data-reveal>
+        {{range .Articles}}
+        <a class="article-card{{if .IsFeatured}} article-card--featured{{end}}" href="/{{$.Locale}}/articles/{{.Slug}}">
+          {{if or .Author .Date}}
+          <p class="article-card__meta label-caps text-muted">
+            {{if .Author}}{{.Author}}{{end}}{{if and .Author .Date}} · {{end}}{{if .Date}}{{.Date}}{{end}}
+          </p>
+          {{end}}
+          <h2 class="article-card__title">{{.Title}}</h2>
+          {{if .Lead}}<p class="article-card__lead text-muted">{{.Lead}}</p>{{end}}
+          <span class="article-card__more">{{t $.Locale "home.articles.readMore"}} →</span>
+        </a>
+        {{end}}
+      </div>
+    </section>
+
+  </main>
+
+  {{template "footer" .}}
+  <script src="/components/scroll-reveal.js" type="module"></script>
+</body>
+</html>
+{{end}}

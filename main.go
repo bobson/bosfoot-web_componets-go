@@ -77,6 +77,7 @@ func main() {
 		DB:       db,
 		Logger:   logInstance,
 		Renderer: renderer,
+		UI:       ui,
 		SiteURL:  siteURL,
 	}
 
@@ -90,6 +91,9 @@ func main() {
 	http.HandleFunc("/{locale}/products", pc.Wrap(pageHandler.ProductListing))
 	http.HandleFunc("/{locale}/products/{brand}/{slug}", pc.Wrap(pageHandler.ProductDetail))
 	http.HandleFunc("/{locale}/checkout", pc.Wrap(pageHandler.Checkout))
+	http.HandleFunc("/{locale}/foot-health", pc.Wrap(pageHandler.FootHealth))
+	http.HandleFunc("/{locale}/articles", pc.Wrap(pageHandler.ArticlesListing))
+	http.HandleFunc("/{locale}/articles/{slug}", pc.Wrap(pageHandler.ArticleDetail))
 	http.HandleFunc("/sitemap.xml", pageHandler.Sitemap)
 
 	// Catch-all: redirect / to the default locale, serve everything else

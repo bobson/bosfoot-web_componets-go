@@ -1,0 +1,57 @@
+{{define "article"}}
+<!DOCTYPE html>
+<html lang="{{.Locale}}">
+<head>
+  {{template "head" .}}
+  <title>{{.Title}} — Bosfoot</title>
+</head>
+<body>
+  {{template "nav" .}}
+
+  <main class="article">
+
+    <article class="container article__inner">
+      <a class="article__back" href="/{{.Locale}}/foot-health">← {{t .Locale "footHealth.eyebrow"}}</a>
+
+      <header class="article__head" data-reveal>
+        <h1 class="article__title">{{.Title}}</h1>
+        {{if or .Author .Date}}
+        <p class="article__meta label-caps text-muted">
+          {{if .Author}}{{.Author}}{{end}}{{if and .Author .Date}} · {{end}}{{if .Date}}{{.Date}}{{end}}
+        </p>
+        {{end}}
+        {{if .Lead}}<p class="article__lead">{{.Lead}}</p>{{end}}
+      </header>
+
+      <div class="article__body" data-reveal>
+        {{range .Blocks}}
+          {{if eq .Style "normal"}}<p>{{.Text}}</p>{{else}}<h2 class="article__h">{{.Text}}</h2>{{end}}
+        {{end}}
+      </div>
+    </article>
+
+    {{/* ── Keep reading ─────────────────────────────────── */}}
+    {{if .Related}}
+    <section class="section--sage article-rail">
+      <div class="container">
+        <h2 class="fh-h2" data-reveal>{{t .Locale "article.keepReading"}}</h2>
+        <div class="article-rail__grid" data-reveal>
+          {{range .Related}}
+          <a class="article-card" href="/{{$.Locale}}/articles/{{.Slug}}">
+            <h3 class="article-card__title">{{.Title}}</h3>
+            {{if .Lead}}<p class="article-card__lead text-muted">{{.Lead}}</p>{{end}}
+            <span class="article-card__more">{{t $.Locale "home.articles.readMore"}} →</span>
+          </a>
+          {{end}}
+        </div>
+      </div>
+    </section>
+    {{end}}
+
+  </main>
+
+  {{template "footer" .}}
+  <script src="/components/scroll-reveal.js" type="module"></script>
+</body>
+</html>
+{{end}}
