@@ -96,7 +96,7 @@
   transform: translateY(-1px);
 }
 
-.brand-chip--freet { background: var(--color-freet); }
+.brand-chip--freet { background: var(--color-brand-freet); }
 
 .brand-chip__logo {
   height: 3rem;

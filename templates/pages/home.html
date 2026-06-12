@@ -40,9 +40,9 @@
         </div>
       </section>
 
-      {{/* ── Brands ───────────────────────────────────────── */}} {{if
-      .Brands}}
-      <section class="brands section--sage">
+      {{/* ── Brands ───────────────────────────────────────── */}} 
+      {{if .Brands}}
+      <section class="brands section section--sage">
         <div class="container">
           <p class="brands__label text-xs font-semibold text-muted text-center">
             {{t .Locale "home.brands"}}
@@ -78,17 +78,20 @@
           </div>
         </div>
       </section>
-      {{end}} {{/* ── Featured products ────────────────────────────── */}} {{if
-      .Featured}}
-      <section class="featured container">
-        <header class="featured__header">
+      {{end}} 
+
+      {{/* ── Featured products ────────────────────────────── */}} 
+      {{if .Featured}}
+      <section class="featured section container">
+        <header class="featured__header" data-reveal>
           <h2 class="featured__title font-bold">
             {{t .Locale "home.featured.title"}}
           </h2>
           <a
-            class="featured__link text-sm text-muted"
+            class="text-accent font-semibold text-sm"
             href="/{{.Locale}}/products"
           >
+            <span class="sr-only">Show all products</span>
             {{t .Locale "cta.viewAll"}} →
           </a>
         </header>
@@ -97,10 +100,12 @@
           "Locale" $.Locale)}} {{end}}
         </div>
       </section>
-      {{end}} {{/* ── Why barefoot ─────────────────────────────────── */}}
-      <section class="why-barefoot">
+      {{end}}
+
+      {{/* ── Why barefoot ─────────────────────────────────── */}}
+      <section class="why-barefoot section">
         <div class="container">
-          <header class="why-barefoot__header">
+          <header class="why-barefoot__header" data-reveal>
             <h2 class="why-barefoot__title font-bold">
               {{t .Locale "home.whyBarefoot.title"}}
             </h2>
@@ -110,7 +115,7 @@
           </header>
 
           <div class="why-barefoot__grid">
-            <article class="why-barefoot__card">
+            <article class="why-barefoot__card" data-reveal>
               <div class="why-barefoot__icon" aria-hidden="true">
                 <svg
                   width="32"
@@ -136,7 +141,7 @@
               </p>
             </article>
 
-            <article class="why-barefoot__card">
+            <article class="why-barefoot__card" data-reveal>
               <div class="why-barefoot__icon" aria-hidden="true">
                 <svg
                   width="32"
@@ -168,7 +173,7 @@
               </p>
             </article>
 
-            <article class="why-barefoot__card">
+            <article class="why-barefoot__card" data-reveal>
               <div class="why-barefoot__icon" aria-hidden="true">
                 <svg
                   width="32"
@@ -199,18 +204,24 @@
               </p>
             </article>
           </div>
+
+          <div class="text-center" style="margin-top: var(--space-12)" data-reveal>
+            <a href="/{{.Locale}}/foot-health" class="text-accent font-semibold" aria-label="{{t .Locale "home.whyBarefoot.learnMore"}}">
+              {{t .Locale "home.whyBarefoot.learnMore"}} →
+            </a>
+          </div>
         </div>
       </section>
 
       {{/* ── Why us ───────────────────────────────────────── */}}
-      <section class="why-us">
+      <section class="why-us section">
         <div class="container">
-          <h2 class="why-us__title font-bold">
+          <h2 class="why-us__title font-bold" data-reveal>
             {{t .Locale "home.whyUs.title"}}
           </h2>
 
           <div class="why-us__grid">
-            <article class="why-us__item">
+            <article class="why-us__item" data-reveal>
               <div class="why-us__num" aria-hidden="true">01</div>
               <h3 class="why-us__item-title font-bold">
                 {{t .Locale "home.whyUs.1.title"}}
@@ -220,7 +231,7 @@
               </p>
             </article>
 
-            <article class="why-us__item">
+            <article class="why-us__item" data-reveal>
               <div class="why-us__num" aria-hidden="true">02</div>
               <h3 class="why-us__item-title font-bold">
                 {{t .Locale "home.whyUs.2.title"}}
@@ -230,7 +241,7 @@
               </p>
             </article>
 
-            <article class="why-us__item">
+            <article class="why-us__item" data-reveal>
               <div class="why-us__num" aria-hidden="true">03</div>
               <h3 class="why-us__item-title font-bold">
                 {{t .Locale "home.whyUs.3.title"}}
@@ -239,6 +250,12 @@
                 {{t .Locale "home.whyUs.3.body"}}
               </p>
             </article>
+          </div>
+
+          <div class="text-center" style="margin-top: var(--space-12)" data-reveal>
+            <a href="/{{.Locale}}/about" class="text-accent font-semibold" aria-label="{{t .Locale "home.whyUs.checkUs"}}">
+              {{t .Locale "home.whyUs.checkUs"}} →
+            </a>
           </div>
         </div>
       </section>

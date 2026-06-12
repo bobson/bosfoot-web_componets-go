@@ -3,28 +3,58 @@ package tmpl
 
 import (
 	"bytes"
+	"crypto/sha256"
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"html/template"
+	"io"
 	"log"
 	"math"
 	"net/http"
+	"os"
 	"path/filepath"
 	"strconv"
 	"strings"
+	"sync"
 
 	"bosfoot/internal/locale"
 )
 
 // Renderer parses all templates at startup and caches them.
 type Renderer struct {
-	tmpl *template.Template
+	tmpl   *template.Template
+	hashes sync.Map // path -> hash string
 }
 
 // NewRenderer parses all templates under dir/partials/*.html and dir/pages/*.html.
 // The provided UI is used by the t() template function.
 func NewRenderer(dir string, ui *locale.UI) (*Renderer, error) {
+	r := &Renderer{}
 	funcMap := template.FuncMap{
+		// asset appends a content hash to a public asset path: /styles.css -> /styles.css?v=abcdef
+		"asset": func(path string) string {
+			if h, ok := r.hashes.Load(path); ok {
+				return fmt.Sprintf("%s?v=%s", path, h)
+			}
+
+			// If not in map, try to calculate it (first-time use or dev)
+			fullPath := filepath.Join("public", strings.TrimPrefix(path, "/"))
+			f, err := os.Open(fullPath)
+			if err != nil {
+				return path // fallback to original path if file missing
+			}
+			defer f.Close()
+
+			hash := sha256.New()
+			if _, err := io.Copy(hash, f); err != nil {
+				return path
+			}
+			hStr := hex.EncodeToString(hash.Sum(nil))[:8]
+			r.hashes.Store(path, hStr)
+			return fmt.Sprintf("%s?v=%s", path, hStr)
+		},
+
 		// t translates a key for the given locale: {{t .Locale "nav.products"}}
 		"t": ui.T,
 
@@ -118,6 +148,7 @@ func NewRenderer(dir string, ui *locale.UI) (*Renderer, error) {
 	}
 
 	tmpl := template.New("").Funcs(funcMap)
+	r.tmpl = tmpl
 
 	// Parse partials first so page templates can reference them by name.
 	for _, pattern := range []string{

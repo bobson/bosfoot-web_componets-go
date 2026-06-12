@@ -52,7 +52,7 @@
       </header>
 
       {{/* ── Stat strip ───────────────────────────────────── */}}
-      <section class="section--deep fh-stats">
+      <section class="section section--deep fh-stats">
         <div class="container fh-stats__row" data-reveal>
           <div class="fh-stat">
             <span class="fh-stat__num" data-count="26">26</span>
@@ -164,7 +164,7 @@
         </div>
       </section>
       {{end}} {{/* ── Symptoms ─────────────────────────────────────── */}}
-      <section class="section--sage fh-signs">
+      <section class="section section--sage fh-signs">
         <div class="container">
           <div class="fh-signs__head" data-reveal>
             <p class="label-caps text-accent">
@@ -268,7 +268,7 @@
       </section>
 
       {{/* ── Transition timeline ──────────────────────────── */}}
-      <section class="section--sage fh-transition">
+      <section class="section section--sage fh-transition">
         <div class="container">
           <div class="fh-guide__head" data-reveal>
             <h2 class="fh-h2">
@@ -337,7 +337,7 @@
       </section>
 
       {{/* ── FAQ ──────────────────────────────────────────── */}}
-      <section class="section--sage fh-faq">
+      <section class="section section--sage fh-faq">
         <div class="container fh-faq__inner">
           <h2 class="fh-h2" data-reveal>
             {{t .Locale "newToBarefoot.faq.title"}}
@@ -372,7 +372,7 @@
       </section>
 
       {{/* ── Final CTA ────────────────────────────────────── */}}
-      <section class="section--deep fh-final">
+      <section class="section section--deep fh-final">
         <div class="container" data-reveal>
           <h2 class="fh-final__title">
             {{t .Locale "newToBarefoot.cta.title"}}
@@ -391,7 +391,7 @@
     </main>
 
     {{template "footer" .}}
-    <script src="/components/scroll-reveal.js" type="module"></script>
+    <script src="{{asset "/components/scroll-reveal.js"}}" type="module"></script>
   </body>
 </html>
 {{end}}

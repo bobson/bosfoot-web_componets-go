@@ -156,7 +156,6 @@ a:hover .fh-arr,
     background: var(--contour-on-deep) center / 600px auto,
         var(--wash-deep);
     color: var(--color-text-on-dark);
-    padding-block: var(--space-10);
 }
 
 .fh-stats__row {
@@ -299,10 +298,6 @@ a:hover .fh-arr,
 }
 
 /* ── Symptoms ──────────────────────────────────────── */
-.fh-signs {
-    border-block: 1px solid var(--color-border);
-}
-
 .fh-signs__head {
     text-align: center;
     max-width: var(--prose-max);

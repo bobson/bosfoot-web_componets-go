@@ -19,6 +19,7 @@
         --color-overlay: rgb(0 0 0 / 0.4);
         --color-sale: hsl(0 72% 45%);
         --color-sage: hsl(88 14% 92%);
+        --color-cream: hsl(40 33% 94%);
 
         /* ── Third-party brand colors ────────────────────
        Use only for that brand's logo/badge context,
@@ -116,64 +117,37 @@
         -moz-osx-font-smoothing: grayscale;
     }
 
-    /* ── Self-hosted fonts ─────────────────────────────
-     Download woff2 from Google Fonts (cyrillic + latin)
-     and serve from /static/fonts/ via your Go server. */
+    /* ── Local Golos Text fonts ──────────────────────── */
     @font-face {
         font-family: "Golos Text";
-        src: url("/static/fonts/golos-text-cyrillic-400.woff2") format("woff2");
+        src: url("/fonts/GolosText-Regular.ttf") format("truetype");
         font-weight: 400;
         font-style: normal;
         font-display: swap;
-        unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
     }
 
     @font-face {
         font-family: "Golos Text";
-        src: url("/static/fonts/golos-text-latin-400.woff2") format("woff2");
-        font-weight: 400;
-        font-style: normal;
-        font-display: swap;
-        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6,
-            U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2212;
-    }
-
-    @font-face {
-        font-family: "Golos Text";
-        src: url("/static/fonts/golos-text-cyrillic-500.woff2") format("woff2");
+        src: url("/fonts/GolosText-Medium.ttf") format("truetype");
         font-weight: 500;
         font-style: normal;
         font-display: swap;
-        unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
     }
 
     @font-face {
         font-family: "Golos Text";
-        src: url("/static/fonts/golos-text-latin-500.woff2") format("woff2");
-        font-weight: 500;
-        font-style: normal;
-        font-display: swap;
-        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6,
-            U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2212;
-    }
-
-    @font-face {
-        font-family: "Golos Text";
-        src: url("/static/fonts/golos-text-cyrillic-600.woff2") format("woff2");
+        src: url("/fonts/GolosText-SemiBold.ttf") format("truetype");
         font-weight: 600;
         font-style: normal;
         font-display: swap;
-        unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
     }
 
     @font-face {
         font-family: "Golos Text";
-        src: url("/static/fonts/golos-text-latin-600.woff2") format("woff2");
-        font-weight: 600;
+        src: url("/fonts/GolosText-Bold.ttf") format("truetype");
+        font-weight: 700;
         font-style: normal;
         font-display: swap;
-        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6,
-            U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2212;
     }
 }
 
@@ -320,7 +294,7 @@
 
     /* Section spacing */
     .section {
-        padding-block: var(--space-12);
+        padding-block: var(--space-20);
     }
 
     /* ── Section washes ───────────────────────────────
@@ -332,11 +306,18 @@
 
     .section--deep {
         background: var(--wash-deep);
-        color: var(--color-text-on-dark);
+        color: var(--color-cream);
+    }
+
+    .section--deep h1,
+    .section--deep h2,
+    .section--deep h3,
+    .section--deep .font-bold {
+        color: var(--color-white);
     }
 
     .section--deep .text-muted {
-        color: color-mix(in oklch, var(--color-text-on-dark), transparent 30%);
+        color: color-mix(in oklch, var(--color-cream), transparent 25%);
     }
 
     /* Hero: soft radial glow behind the product image.
@@ -359,6 +340,7 @@
     .line-clamp-3 {
         display: -webkit-box;
         -webkit-line-clamp: 3;
+        line-clamp: 3;
         -webkit-box-orient: vertical;
         overflow: hidden;
     }
@@ -421,14 +403,14 @@
      Elements with [data-reveal] fade-rise in on scroll.
      No-JS and reduced-motion users see content normally. */
     @media (prefers-reduced-motion: no-preference) {
-        .js [data-reveal] {
+        .js-reveal-ready [data-reveal] {
             opacity: 0;
             translate: 0 16px;
             transition: opacity 0.6s var(--ease-out),
                 translate 0.6s var(--ease-out);
         }
 
-        .js [data-reveal].is-visible {
+        .js-reveal-ready [data-reveal].is-visible {
             opacity: 1;
             translate: 0 0;
         }
