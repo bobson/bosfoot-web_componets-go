@@ -34,15 +34,22 @@ func NewRenderer(dir string, ui *locale.UI) (*Renderer, error) {
 	funcMap := template.FuncMap{
 		// asset appends a content hash to a public asset path: /styles.css -> /styles.css?v=abcdef
 		"asset": func(path string) string {
-			if h, ok := r.hashes.Load(path); ok {
-				return fmt.Sprintf("%s?v=%s", path, h)
+			fullPath := filepath.Join("public", strings.TrimPrefix(path, "/"))
+			info, err := os.Stat(fullPath)
+			if err != nil {
+				log.Printf("Asset not found: %s (path: %s)", fullPath, path)
+				return path
 			}
 
-			// If not in map, try to calculate it (first-time use or dev)
-			fullPath := filepath.Join("public", strings.TrimPrefix(path, "/"))
+			// Use path + modtime + size as a cache key
+			key := fmt.Sprintf("%s:%d:%d", path, info.ModTime().Unix(), info.Size())
+			if h, ok := r.hashes.Load(key); ok {
+				return fmt.Sprintf("%s?v=%s", path, h.(string))
+			}
+
 			f, err := os.Open(fullPath)
 			if err != nil {
-				return path // fallback to original path if file missing
+				return path
 			}
 			defer f.Close()
 
@@ -51,7 +58,7 @@ func NewRenderer(dir string, ui *locale.UI) (*Renderer, error) {
 				return path
 			}
 			hStr := hex.EncodeToString(hash.Sum(nil))[:8]
-			r.hashes.Store(path, hStr)
+			r.hashes.Store(key, hStr)
 			return fmt.Sprintf("%s?v=%s", path, hStr)
 		},
 
@@ -160,7 +167,7 @@ func NewRenderer(dir string, ui *locale.UI) (*Renderer, error) {
 		}
 	}
 
-	return &Renderer{tmpl: tmpl}, nil
+	return r, nil
 }
 
 // Render executes the named template into a buffer first, then writes the
