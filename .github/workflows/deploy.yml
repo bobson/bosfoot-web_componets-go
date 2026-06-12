@@ -22,7 +22,6 @@ jobs:
             cd /srv/bosfoot
             git fetch origin main
             git reset --hard origin/main
-            touch public/styles.css
             /usr/local/go/bin/go build -o bosfoot-app .
             sudo /usr/bin/systemctl restart bosfoot
             echo "Deployed $(git rev-parse --short HEAD)"

@@ -171,14 +171,18 @@
 
   "sizeGuide.title": "Size guide",
   "sizeGuide.lead": "Barefoot shoes are measured differently. Toes need room, so width is just as important as length. This guide will help you find the perfect pair.",
-  "sizeGuide.step1.title": "1. Start with your usual size",
+  "sizeGuide.step1.title": "Start with your usual size",
   "sizeGuide.step1.body": "The best sizing guide is to start with your normal shoe size. On each product page you'll find specific fit information.",
-  "sizeGuide.step2.title": "2. Trace your foot",
+  "sizeGuide.step1.imgAlt": "Place your foot on paper and trace the outline",
+  "sizeGuide.step2.title": "Trace your foot",
   "sizeGuide.step2.body": "Stand near a wall and place a piece of paper on the floor. Place your foot on the paper with heel against the wall. Trace the outline with a pencil.",
-  "sizeGuide.step3.title": "3. Keep the pencil vertical",
+  "sizeGuide.step2.imgAlt": "Foot with heel against the wall while tracing",
+  "sizeGuide.step3.title": "Keep the pencil vertical",
   "sizeGuide.step3.body": "When tracing, the pencil must be at 90° — straight up, not angled. Both feet are rarely the same — measure both and take the larger measurement.",
-  "sizeGuide.step4.title": "4. Measure and add room",
+  "sizeGuide.step3.imgAlt": "Hold the pencil vertical while tracing for accuracy",
+  "sizeGuide.step4.title": "Measure and add room",
   "sizeGuide.step4.body": "Measure the length in millimetres. Add 5–10 mm extra. If you wear thick socks, factor those in.",
+  "sizeGuide.step4.imgAlt": "Measure the length and add 5–10 mm of extra room",
   "sizeGuide.tip.title": "Tip",
   "sizeGuide.tip.body": "Measure your feet in the evening — they expand throughout the day. Wear the socks you'd normally use when measuring.",
   "sizeGuide.brands.title": "Charts for each brand",
@@ -374,5 +378,8 @@
   "shipping.2.title": "Prices",
   "shipping.2.body": "Free shipping on orders over 3000 MKD within Macedonia.",
   "shipping.3.title": "Tracking",
-  "shipping.3.body": "After your order you receive a confirmation with a tracking number."
+  "shipping.3.body": "After your order you receive a confirmation with a tracking number.",
+  "brands.groundies": "Groundies",
+  "brands.xeroShoes": "Xero Shoes",
+  "brands.vivobarefoot": "Vivobarefoot"
 }

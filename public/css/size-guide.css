@@ -1,0 +1,236 @@
+/* ── Size guide page ──────────────────────────────────── */
+
+/* Hero */
+.sg-hero {
+    padding-block: var(--space-24);
+}
+
+.sg-hero__inner {
+    max-width: var(--prose-max);
+}
+
+.sg-hero__title {
+    font-size: var(--fs-3xl);
+    font-weight: var(--fw-bold);
+    letter-spacing: -0.025em;
+    line-height: var(--lh-tight);
+    margin-block: var(--space-4) var(--space-5);
+}
+
+.sg-hero__lead {
+    font-size: var(--fs-md);
+}
+
+/* Steps */
+.sg-steps {
+    max-width: var(--prose-max);
+    margin-inline: auto;
+}
+
+.sg-steps__list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+    margin-bottom: var(--space-10);
+}
+
+/* Mobile-first: compact image under the text */
+.sg-step {
+    display: grid;
+    grid-template-columns: 2.5rem 1fr;
+    gap: var(--space-4);
+    align-items: start;
+}
+
+/* step media (mobile-first: smaller) */
+.sg-step__media {
+    width: 3rem; /* mobile default — smaller */
+    height: 3rem;
+    overflow: hidden;
+    border-radius: var(--radius-sm);
+    background: var(--color-bg);
+    grid-column: 1 / -1; /* span full width under the text */
+    justify-self: center;
+    margin-top: var(--space-3);
+}
+
+.sg-step__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.sg-step__num {
+    width: 2.5rem;
+    height: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-full);
+    background: var(--color-accent-light);
+    color: var(--color-accent);
+    font-size: var(--fs-sm);
+    font-weight: var(--fw-bold);
+    flex-shrink: 0;
+    margin-top: 0.15rem;
+}
+
+/* Keep text simple — no card wrapper */
+.sg-step__body {
+    padding: 0; /* allow page spacing to control rhythm */
+}
+
+.sg-step__title {
+    font-size: var(--fs-md);
+    margin-bottom: var(--space-2);
+}
+
+/* Desktop: larger images */
+@media (min-width: 720px) {
+    .sg-step {
+        grid-template-columns: 2.5rem 1fr;
+        gap: var(--space-6);
+    }
+    .sg-step__media {
+        width: 10rem; /* increase for desktop */
+        height: 10rem;
+        margin-top: var(--space-4);
+    }
+}
+
+/* Ensure images become full-width when explicitly on very small screens */
+@media (max-width: 420px) {
+    .sg-step__media {
+        width: 2.4rem; /* very small screens */
+        height: 2.4rem;
+    }
+}
+
+/* Responsive: stack media above text on small screens */
+@media (max-width: 720px) {
+    .sg-step {
+        grid-template-columns: 1fr;
+    }
+    .sg-step__media {
+        width: 100%;
+        height: auto;
+    }
+    .sg-step__media img {
+        height: auto;
+    }
+}
+
+.sg-step__title {
+    font-size: var(--fs-md);
+    font-weight: var(--fw-semibold);
+    margin-bottom: var(--space-2);
+}
+
+/* Tip callout */
+.sg-tip {
+    display: flex;
+    gap: var(--space-4);
+    align-items: flex-start;
+    padding: var(--space-5) var(--space-6);
+    background: var(--color-accent-light);
+    border-left: 3px solid var(--color-accent);
+    border-radius: var(--radius-md);
+}
+
+.sg-tip__icon {
+    flex-shrink: 0;
+    width: 1.25rem;
+    height: 1.25rem;
+    color: var(--color-accent);
+    margin-top: 0.1rem;
+}
+
+.sg-tip__icon svg {
+    width: 100%;
+    height: 100%;
+}
+
+.sg-tip__title {
+    margin-bottom: var(--space-1);
+}
+
+/* Chart */
+.sg-chart__inner {
+    max-width: var(--prose-max);
+    margin-inline: auto;
+}
+
+.sg-chart__heading {
+    margin-bottom: var(--space-8);
+}
+
+.sg-chart__wrap {
+    overflow-x: auto;
+    margin-bottom: var(--space-6);
+}
+
+.sg-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--fs-sm);
+}
+
+.sg-table th,
+.sg-table td {
+    padding: var(--space-3) var(--space-4);
+    text-align: left;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.sg-table th {
+    font-weight: var(--fw-semibold);
+    color: var(--color-text-muted);
+    font-size: var(--fs-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+.sg-table tbody tr:hover {
+    background: var(--color-white);
+}
+
+.sg-chart__note {
+    margin-top: var(--space-4);
+}
+
+.sg-chart__note a {
+    color: var(--color-accent);
+}
+
+/* Help CTA */
+.sg-help__inner {
+    max-width: var(--prose-max);
+}
+
+.sg-help__title {
+    margin-bottom: var(--space-4);
+}
+
+.sg-help__inner p {
+    margin-bottom: var(--space-6);
+}
+
+.sg-help__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4) var(--space-8);
+}
+
+.sg-help__link {
+    font-size: var(--fs-md);
+    font-weight: var(--fw-medium);
+    color: var(--color-text-on-dark);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    transition: color 0.15s var(--ease-out);
+}
+
+.sg-help__link:hover {
+    color: var(--color-white);
+}

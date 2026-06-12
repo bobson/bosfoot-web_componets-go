@@ -333,6 +333,41 @@ func (h *PageHandler) Checkout(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
+// SizeGuide handles GET /{locale}/size-guide. Static page — no DB queries.
+func (h *PageHandler) SizeGuide(w http.ResponseWriter, r *http.Request) {
+	if !locale.IsValid(r.PathValue("locale")) {
+		http.Redirect(w, r, "/"+locale.Default+"/size-guide", http.StatusFound)
+		return
+	}
+	loc := locale.FromPath(r.PathValue("locale"))
+	h.Renderer.Render(w, "size-guide", PageBase{
+		Locale:          loc,
+		CurrentPath:     "/size-guide",
+		SiteURL:         h.baseURL(r),
+		MetaDescription: h.UI.T(loc, "sizeGuide.lead"),
+	})
+}
+
+// About handles GET /{locale}/about. Static page — no DB queries.
+func (h *PageHandler) About(w http.ResponseWriter, r *http.Request) {
+	if !locale.IsValid(r.PathValue("locale")) {
+		http.Redirect(w, r, "/"+locale.Default+"/about", http.StatusFound)
+		return
+	}
+	loc := locale.FromPath(r.PathValue("locale"))
+	metas := map[string]string{
+		"mk": "Дознајте ја приказната зад Bosfoot — зошто постоиме и како ги избираме брендовите.",
+		"sq": "Mësoni historinë pas Bosfoot — pse ekzistojmë dhe si i zgjedhim markat.",
+		"en": "Learn the story behind Bosfoot — why we started it and how we choose the brands we carry.",
+	}
+	h.Renderer.Render(w, "about", PageBase{
+		Locale:          loc,
+		CurrentPath:     "/about",
+		SiteURL:         h.baseURL(r),
+		MetaDescription: metas[loc],
+	})
+}
+
 // FootHealth handles GET /{locale}/foot-health — the foot-health hub. It links
 // out to article pages via curated topic cards; the deeper beginner-guide
 // sections render from locale strings. Articles themselves live on their own
@@ -1182,5 +1217,98 @@ func (h *PageHandler) ProductDetail(w http.ResponseWriter, r *http.Request) {
 		Product:     p,
 		Translation: translation,
 		Related:     related,
+	})
+}
+
+// BrandCard is used for rendering brand cards on the brands listing page.
+type BrandCard struct {
+	ID              int
+	Name            string
+	Slug            string
+	Description     string
+	LogoURL         *string
+	ProductCount    int
+	IsFeatured      bool
+	IsComingSoon    bool
+	WebsiteURL      *string
+	CountryOfOrigin *string
+}
+
+// BrandsData holds data for the brands listing page.
+type BrandsData struct {
+	PageBase
+	Brands []BrandCard
+}
+
+// Brands handles GET /{locale}/brands — the brands listing page with cards.
+func (h *PageHandler) Brands(w http.ResponseWriter, r *http.Request) {
+	if !locale.IsValid(r.PathValue("locale")) {
+		http.Redirect(w, r, "/"+locale.Default+"/brands", http.StatusFound)
+		return
+	}
+	loc := locale.FromPath(r.PathValue("locale"))
+	ctx := r.Context()
+
+	// Query all brands with product counts
+	rows, err := h.DB.QueryContext(ctx, `
+		SELECT b.id, b.name, b.slug, b.logo_url, b.is_featured,
+		       b.website_url, b.country_of_origin,
+		       COALESCE(bt.description, '') as description,
+		       COUNT(p.id) as product_count
+		FROM brands b
+		LEFT JOIN brand_translations bt ON b.id = bt.brand_id AND bt.lang = $1
+		LEFT JOIN products p ON b.id = p.brand_id AND p.is_active = TRUE AND p.is_published = TRUE
+		GROUP BY b.id, b.name, b.slug, b.logo_url, b.is_featured, b.website_url, b.country_of_origin, bt.description
+		ORDER BY b.is_featured DESC, b.sort_order ASC, b.name ASC
+	`, loc)
+	if err != nil {
+		h.Logger.Error("Brands: query failed", err)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+	defer rows.Close()
+
+	var brands []BrandCard
+	for rows.Next() {
+		var b BrandCard
+		var logo, website, country sql.NullString
+		var description sql.NullString
+		if err := rows.Scan(
+			&b.ID, &b.Name, &b.Slug, &logo, &b.IsFeatured,
+			&website, &country,
+			&description, &b.ProductCount,
+		); err != nil {
+			h.Logger.Error("Brands: scan failed", err)
+			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+			return
+		}
+		if logo.Valid {
+			b.LogoURL = &logo.String
+		}
+		if website.Valid {
+			b.WebsiteURL = &website.String
+		}
+		if country.Valid {
+			b.CountryOfOrigin = &country.String
+		}
+		if description.Valid {
+			b.Description = description.String
+		}
+		brands = append(brands, b)
+	}
+	if err := rows.Err(); err != nil {
+		h.Logger.Error("Brands: rows error", err)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+
+	h.Renderer.Render(w, "brands", BrandsData{
+		PageBase: PageBase{
+			Locale:          loc,
+			CurrentPath:     "/brands",
+			SiteURL:         h.baseURL(r),
+			MetaDescription: h.UI.T(loc, "brands.lead"),
+		},
+		Brands: brands,
 	})
 }

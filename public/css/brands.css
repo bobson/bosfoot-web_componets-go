@@ -1,0 +1,173 @@
+/* ── Brands page ───────────────────────────────────────── */
+
+/* ── Hero ─────────────────────────────────────────────── */
+.brands-hero {
+    padding-block: var(--space-24);
+}
+
+.brands-hero__inner {
+    max-width: var(--prose-max);
+}
+
+.brands-hero__title {
+    font-size: var(--fs-3xl);
+    font-weight: var(--fw-bold);
+    letter-spacing: -0.025em;
+    line-height: var(--lh-tight);
+    margin-block: var(--space-4) var(--space-5);
+}
+
+.brands-hero__lead {
+    font-size: var(--fs-md);
+}
+
+/* ── Grid ──────────────────────────────────────────────── */
+.brands-grid {
+    padding-block: var(--space-12) var(--space-24);
+}
+
+.brands-grid__list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-8);
+}
+
+@media (min-width: 640px) {
+    .brands-grid__list {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--space-10);
+    }
+}
+
+@media (min-width: 1024px) {
+    .brands-grid__list {
+        grid-template-columns: repeat(3, 1fr);
+        gap: var(--space-12);
+    }
+}
+
+/* ── Brand Card ────────────────────────────────────────── */
+.brand-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+    padding: var(--space-6);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-bg);
+    transition: border-color 0.15s var(--ease-out),
+                box-shadow 0.15s var(--ease-out);
+}
+
+.brand-card:hover {
+    border-color: var(--color-accent);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* Featured (Freet) card */
+.brand-card--featured {
+    background: var(--color-brand-freet);
+    border-color: var(--color-brand-freet);
+    color: var(--color-white);
+}
+
+.brand-card--featured:hover {
+    border-color: var(--color-brand-freet);
+    box-shadow: 0 4px 12px rgba(146, 190, 0, 0.2);
+}
+
+.brand-card--featured .brand-card__name,
+.brand-card--featured .brand-card__description,
+.brand-card--featured .brand-card__meta,
+.brand-card--featured .brand-card__badge--coming-soon {
+    color: var(--color-white);
+}
+
+.brand-card--featured .brand-card__badge--coming-soon {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* Logo */
+.brand-card__logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 6rem;
+    background: var(--color-wash);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+}
+
+.brand-card__logo img {
+    max-width: 100%;
+    max-height: 6rem;
+    object-fit: contain;
+}
+
+/* Content */
+.brand-card__content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    flex: 1;
+}
+
+.brand-card__name {
+    font-size: var(--fs-lg);
+    font-weight: var(--fw-bold);
+    letter-spacing: -0.01em;
+    line-height: var(--lh-tight);
+}
+
+.brand-card__description {
+    font-size: var(--fs-sm);
+    line-height: var(--lh-relaxed);
+}
+
+.brand-card__meta {
+    font-size: var(--fs-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* Badge */
+.brand-card__badge {
+    display: inline-block;
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: var(--space-2) var(--space-4);
+    border-radius: var(--radius-sm);
+}
+
+.brand-card__badge--coming-soon {
+    background: color-mix(in oklch, var(--color-accent), transparent 85%);
+    color: var(--color-accent);
+}
+
+/* Footer */
+.brand-card__footer {
+    display: flex;
+    gap: var(--space-3);
+    margin-top: auto;
+}
+
+.btn--external {
+    white-space: nowrap;
+}
+
+/* Featured card button */
+.brand-card--featured .btn--secondary {
+    background: transparent;
+    color: var(--color-white);
+    border-color: transparent;
+    font-weight: var(--fw-bold);
+    padding: 0;
+}
+
+.brand-card--featured .btn--secondary:hover {
+    background: transparent;
+    color: var(--color-white);
+    border-color: transparent;
+}

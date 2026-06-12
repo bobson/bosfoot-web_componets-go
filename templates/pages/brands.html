@@ -1,0 +1,77 @@
+{{define "brands"}}
+<!doctype html>
+<html lang="{{.Locale}}">
+<head>
+  {{template "head" .}}
+  <title>{{t .Locale "brands.title"}} — Bosfoot</title>
+  <link rel="stylesheet" href="{{asset "/css/brands.css"}}">
+</head>
+<body>
+  {{template "nav" .}}
+
+  <main class="brands">
+
+    {{/* ── Hero ─────────────────────────────────────────── */}}
+    <header class="section section--hero brands-hero">
+      <div class="container brands-hero__inner">
+        <p class="label-caps text-accent" data-reveal>Bosfoot</p>
+        <h1 class="brands-hero__title" data-reveal>{{t .Locale "brands.title"}}</h1>
+        <p class="brands-hero__lead text-muted" data-reveal>{{t .Locale "brands.lead"}}</p>
+      </div>
+    </header>
+
+    {{/* ── Brand Cards ──────────────────────────────────── */}}
+    <section class="section container brands-grid">
+      <div class="brands-grid__list">
+        {{range .Brands}}
+        <article class="brand-card{{if .IsFeatured}} brand-card--featured{{end}}" data-reveal>
+          {{if .LogoURL}}
+          <div class="brand-card__logo">
+            <img src="{{.LogoURL}}" alt="{{.Name}}" loading="lazy" decoding="async">
+          </div>
+          {{end}}
+          
+          <div class="brand-card__content">
+            <h2 class="brand-card__name">{{.Name}}</h2>
+            {{if .Description}}
+            <p class="brand-card__description text-muted">{{.Description}}</p>
+            {{end}}
+            
+            {{if .ProductCount}}
+            <p class="brand-card__meta text-muted">
+              {{.ProductCount}}
+              {{if eq .ProductCount 1}}
+                {{t $.Locale "brands.productCount.one"}}
+              {{else}}
+                {{t $.Locale "brands.productCount.many"}}
+              {{end}}
+            </p>
+            {{else}}
+            <p class="brand-card__badge brand-card__badge--coming-soon">
+              {{t $.Locale "brands.comingSoon"}}
+            </p>
+            {{end}}
+          </div>
+          
+          <div class="brand-card__footer">
+            {{if .ProductCount}}
+            <a href="/{{$.Locale}}/products?brand={{.Slug}}" class="btn btn--secondary">
+              {{t $.Locale "brands.viewProducts"}}
+            </a>
+            {{else if .WebsiteURL}}
+            <a href="{{.WebsiteURL}}" target="_blank" rel="noopener noreferrer" class="btn btn--secondary btn--external">
+              {{t $.Locale "brand.officialSite"}} ↗
+            </a>
+            {{end}}
+          </div>
+        </article>
+        {{end}}
+      </div>
+    </section>
+
+  </main>
+
+  {{template "footer" .}}
+</body>
+</html>
+{{end}}

@@ -171,14 +171,18 @@
 
   "sizeGuide.title": "Udhëzues përmasash",
   "sizeGuide.lead": "Këpucët barefoot maten ndryshe. Gishtërinjtë kanë nevojë për hapësirë, kështu që gjerësia është po aq e rëndësishme sa gjatësia. Ky udhëzues do të ndihmojë të gjesh çiftin e përsosur.",
-  "sizeGuide.step1.title": "1. Fillo me madhësinë tënde të zakonshme",
+  "sizeGuide.step1.title": "Fillo me madhësinë tënde të zakonshme",
   "sizeGuide.step1.body": "Udhëzuesi më i mirë i madhësisë është të fillosh me madhësinë tënde normale të këpucëve. Në faqen e çdo produkti do të gjesh informacion specifik për përshtatshmërinë.",
-  "sizeGuide.step2.title": "2. Vizato këmbën",
+  "sizeGuide.step1.imgAlt": "Vendos këmbën mbi letër dhe vizato konturin",
+  "sizeGuide.step2.title": "Vizato këmbën",
   "sizeGuide.step2.body": "Qëndro pranë një muri dhe vendos një fletë letre në dysheme. Vendos këmbën mbi letër me thembër mbi mur. Vizato konturin me laps.",
-  "sizeGuide.step3.title": "3. Mbaje lapsin vertikal",
+  "sizeGuide.step2.imgAlt": "Këmba me thembër në mur ndërsa vizatohet konturi",
+  "sizeGuide.step3.title": "Mbaje lapsin vertikal",
   "sizeGuide.step3.body": "Gjatë vizatimit, lapsi duhet të jetë 90° — drejt lart, jo i anuar. Të dy këmbët rrallëherë janë njësoj — mati të dyja dhe merr masën më të madhe.",
-  "sizeGuide.step4.title": "4. Mat dhe shto hapësirë",
+  "sizeGuide.step3.imgAlt": "Mbaj lapsin drejt për një matje të saktë",
+  "sizeGuide.step4.title": "Mat dhe shto hapësirë",
   "sizeGuide.step4.body": "Mat gjatësinë në milimetra. Shto 5–10 mm ekstra. Nëse mban çorape të trasha, merri parasysh.",
+  "sizeGuide.step4.imgAlt": "Mat gjatësinë dhe shto 5–10 mm hapësirë",
   "sizeGuide.tip.title": "Këshillë",
   "sizeGuide.tip.body": "Mati këmbët në mbrëmje — ato zgjerohen gjatë ditës. Mbaj çorapet me të cilat do të mbash këpucët kur mat.",
   "sizeGuide.brands.title": "Tabela për çdo markë",
@@ -374,5 +378,8 @@
   "shipping.2.title": "Çmimet",
   "shipping.2.body": "Dërgim falas për porosi mbi 3000 MKD brenda Maqedonisë.",
   "shipping.3.title": "Gjurmimi",
-  "shipping.3.body": "Pas porosisë merrni konfirmim me numër gjurmimi."
+  "shipping.3.body": "Pas porosisë merrni konfirmim me numër gjurmimi.",
+  "brands.groundies": "Groundies",
+  "brands.xeroShoes": "Xero Shoes",
+  "brands.vivobarefoot": "Vivobarefoot"
 }

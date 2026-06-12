@@ -1,0 +1,290 @@
+/* ── About page ───────────────────────────────────────── */
+
+.about {
+    --contour-on-deep: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='400' fill='none' stroke='%23ffffff' stroke-opacity='0.07' stroke-width='1'%3E%3Cpath d='M0 70 Q150 30 300 70 T600 70'/%3E%3Cpath d='M0 150 Q150 100 300 150 T600 150'/%3E%3Cpath d='M0 230 Q150 190 300 230 T600 230'/%3E%3Cpath d='M0 310 Q150 260 300 310 T600 310'/%3E%3Cellipse cx='450' cy='110' rx='95' ry='42'/%3E%3Cellipse cx='450' cy='110' rx='62' ry='26'/%3E%3Cellipse cx='450' cy='110' rx='30' ry='12'/%3E%3C/svg%3E");
+}
+
+/* Eyebrow with leading rule */
+.about-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-accent);
+}
+
+.about-eyebrow::before {
+    content: "";
+    width: 1.75rem;
+    height: 1px;
+    background: var(--color-accent);
+}
+
+.about-eyebrow--on-dark {
+    color: var(--color-text-on-dark);
+}
+
+.about-eyebrow--on-dark::before {
+    background: var(--color-text-on-dark);
+}
+
+/* Arrow micro-interaction */
+.about-arr {
+    display: inline-block;
+    transition: translate 0.2s var(--ease-out);
+}
+
+a:hover .about-arr {
+    translate: 4px 0;
+}
+
+/* ── Hero ─────────────────────────────────────────────── */
+.about-hero {
+    padding-block: var(--space-24);
+}
+
+.about-hero__inner {
+    max-width: var(--prose-max);
+}
+
+.about-hero__title {
+    font-size: var(--fs-3xl);
+    font-weight: var(--fw-bold);
+    letter-spacing: -0.025em;
+    line-height: var(--lh-tight);
+    margin-block: var(--space-4) var(--space-5);
+}
+
+.about-hero__lead {
+    font-size: var(--fs-md);
+}
+
+/* ── Promise strip ────────────────────────────────────── */
+.about-stats {
+    background: var(--contour-on-deep) center / 600px auto,
+        var(--wash-deep);
+    color: var(--color-text-on-dark);
+    padding-block: var(--space-10);
+}
+
+.about-stats__row {
+    display: flex;
+    justify-content: space-around;
+    gap: var(--space-6);
+    flex-wrap: wrap;
+    text-align: center;
+}
+
+.about-stat {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    max-width: 14rem;
+}
+
+.about-stat__num {
+    font-size: var(--fs-2xl);
+    font-weight: var(--fw-bold);
+    letter-spacing: -0.02em;
+    line-height: var(--lh-tight);
+    font-variant-numeric: tabular-nums;
+}
+
+.about-stat__label {
+    font-size: var(--fs-sm);
+    color: color-mix(in oklch, var(--color-text-on-dark), transparent 25%);
+}
+
+/* ── Story ────────────────────────────────────────────── */
+.about-story__inner {
+    max-width: var(--prose-max);
+}
+
+.about-story__copy .about-eyebrow {
+    margin-bottom: var(--space-4);
+}
+
+.about-story__heading {
+    margin-bottom: var(--space-6);
+}
+
+.about-story__copy p+p {
+    margin-top: var(--space-4);
+}
+
+/* ── What is barefoot ─────────────────────────────────── */
+.about-what .about-eyebrow {
+    margin-bottom: var(--space-4);
+}
+
+.about-what__heading {
+    margin-bottom: var(--space-10);
+}
+
+.about-what__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--space-8);
+    margin-bottom: var(--space-10);
+}
+
+.about-feature__icon {
+    display: block;
+    width: var(--size-icon);
+    height: var(--size-icon);
+    color: var(--color-accent);
+    margin-bottom: var(--space-4);
+}
+
+.about-feature__icon svg {
+    width: 100%;
+    height: 100%;
+}
+
+.about-feature h3 {
+    margin-bottom: var(--space-2);
+}
+
+.about-what__note a {
+    color: var(--color-accent);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+/* ── Sizing dilemma ───────────────────────────────────── */
+.about-sizing {
+    border-block: 1px solid var(--color-border);
+}
+
+.about-sizing__head {
+    margin-bottom: var(--space-10);
+}
+
+.about-sizing__head .about-eyebrow {
+    margin-bottom: var(--space-4);
+}
+
+.about-sizing__heading {
+    margin-bottom: var(--space-3);
+}
+
+.about-sizing__lead {
+    max-width: var(--prose-max);
+}
+
+.about-sizing__grid {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: var(--space-12);
+    align-items: center;
+}
+
+@media (max-width: 760px) {
+    .about-sizing__grid {
+        grid-template-columns: 1fr;
+    }
+
+    .about-sizing__art {
+        display: none;
+    }
+}
+
+.about-sizing__steps {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+    max-width: var(--prose-max);
+}
+
+.about-sizestep {
+    padding-left: var(--space-5);
+    border-left: 2px solid var(--color-accent);
+}
+
+.about-sizestep h3 {
+    font-size: var(--fs-md);
+    margin-bottom: var(--space-1);
+}
+
+.about-sizing__art {
+    color: var(--color-accent);
+    opacity: 0.65;
+}
+
+.about-sizing__art svg {
+    width: clamp(140px, 16vw, 180px);
+    height: auto;
+}
+
+.about-sizing__mm {
+    font-size: 11px;
+    fill: currentColor;
+    stroke: none;
+    font-family: var(--ff-base);
+}
+
+/* ── Brands ───────────────────────────────────────────── */
+.about-brands__inner {
+    max-width: var(--prose-max);
+}
+
+.about-brands__inner .about-eyebrow {
+    margin-bottom: var(--space-4);
+}
+
+.about-brands__heading {
+    margin-bottom: var(--space-6);
+}
+
+.about-brands__inner p+p {
+    margin-top: var(--space-4);
+}
+
+.about-brands__cta {
+    margin-top: var(--space-8);
+}
+
+/* ── Contact ──────────────────────────────────────────── */
+.about-contact {
+    background: var(--contour-on-deep) center / 600px auto,
+        var(--wash-deep);
+}
+
+.about-contact__inner {
+    max-width: var(--prose-max);
+}
+
+.about-contact__inner .about-eyebrow {
+    margin-bottom: var(--space-4);
+}
+
+.about-contact__heading {
+    margin-bottom: var(--space-6);
+}
+
+.about-contact__inner p+p {
+    margin-top: var(--space-3);
+}
+
+.about-contact__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4) var(--space-8);
+    margin-top: var(--space-8);
+}
+
+.about-contact__link {
+    font-size: var(--fs-md);
+    font-weight: var(--fw-medium);
+    color: var(--color-text-on-dark);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    transition: color 0.15s var(--ease-out);
+}
+
+.about-contact__link:hover {
+    color: var(--color-white);
+}

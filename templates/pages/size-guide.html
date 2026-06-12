@@ -1,0 +1,113 @@
+{{define "size-guide"}}
+<!doctype html>
+<html lang="{{.Locale}}">
+<head>
+  {{template "head" .}}
+  <title>{{t .Locale "sizeGuide.title"}} — Bosfoot</title>
+</head>
+<body>
+  {{template "nav" .}}
+
+  <main class="sg">
+
+    {{/* ── Hero ─────────────────────────────────────────── */}}
+    <header class="section section--hero sg-hero">
+      <div class="container sg-hero__inner">
+        <p class="label-caps text-accent" data-reveal>Bosfoot</p>
+        <h1 class="sg-hero__title" data-reveal>{{t .Locale "sizeGuide.title"}}</h1>
+        <p class="sg-hero__lead text-muted" data-reveal>{{t .Locale "sizeGuide.lead"}}</p>
+      </div>
+    </header>
+
+    {{/* ── Steps ────────────────────────────────────────── */}}
+    <section class="section container sg-steps">
+      <ol class="sg-steps__list">
+        {{range $i := list "1" "2" "3" "4"}}
+        <li class="sg-step" data-reveal>
+          <span class="sg-step__num" aria-hidden="true">{{$i}}</span>
+          <div class="sg-step__body">
+            <h2 class="sg-step__title">{{t $.Locale (printf "sizeGuide.step%s.title" $i)}}</h2>
+            <p class="text-muted">{{t $.Locale (printf "sizeGuide.step%s.body" $i)}}</p>
+          </div>
+          <figure class="sg-step__media" aria-hidden="true">
+            <picture>
+              <source srcset="{{asset (printf "/images/how-to-measure/step%s.webp" $i)}}" type="image/webp">
+              <img src="{{asset (printf "/images/how-to-measure/step%s.webp" $i)}}" alt="{{t $.Locale (printf "sizeGuide.step%s.imgAlt" $i)}}" loading="lazy">
+            </picture>
+          </figure>
+        </li>
+        {{end}}
+      </ol>
+
+      {{/* ── Tip callout ──────────────────────────────────── */}}
+      <aside class="sg-tip" data-reveal>
+        <span class="sg-tip__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+               stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="8" x2="12" y2="12"/>
+            <line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+        </span>
+        <div>
+          <p class="sg-tip__title font-semibold">{{t .Locale "sizeGuide.tip.title"}}</p>
+          <p class="text-muted">{{t .Locale "sizeGuide.tip.body"}}</p>
+        </div>
+      </aside>
+    </section>
+
+    {{/* ── EU size chart ────────────────────────────────── */}}
+    <section class="section section--sage sg-chart">
+      <div class="container sg-chart__inner">
+        <h2 class="sg-chart__heading" data-reveal>
+          {{t .Locale "brand.sizeChart"}}
+        </h2>
+        <div class="sg-chart__wrap" data-reveal>
+          <table class="sg-table">
+            <thead>
+              <tr>
+                <th scope="col">EU</th>
+                <th scope="col">{{t .Locale "brand.sizeChart.measureFoot"}} (mm)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>36</td><td>230</td></tr>
+              <tr><td>37</td><td>237</td></tr>
+              <tr><td>38</td><td>244</td></tr>
+              <tr><td>39</td><td>251</td></tr>
+              <tr><td>40</td><td>258</td></tr>
+              <tr><td>41</td><td>265</td></tr>
+              <tr><td>42</td><td>272</td></tr>
+              <tr><td>43</td><td>279</td></tr>
+              <tr><td>44</td><td>286</td></tr>
+              <tr><td>45</td><td>293</td></tr>
+              <tr><td>46</td><td>300</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="sg-chart__note text-muted text-sm" data-reveal>
+          {{t .Locale "sizeGuide.brands.lead"}}
+          <a href="/{{.Locale}}/products">→</a>
+        </p>
+      </div>
+    </section>
+
+    {{/* ── Help CTA ─────────────────────────────────────── */}}
+    <section class="section section--deep sg-help">
+      <div class="container sg-help__inner" data-reveal>
+        <h2 class="sg-help__title">{{t .Locale "sizeGuide.help.title"}}</h2>
+        <p>{{t .Locale "sizeGuide.help.body"}}</p>
+        <div class="sg-help__links">
+          <a class="sg-help__link" href="mailto:info@bosfoot.com">info@bosfoot.com</a>
+          <a class="sg-help__link" href="tel:+38970255906">+389 70 255 906</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  {{template "footer" .}}
+  <script src="{{asset "/components/scroll-reveal.js"}}" type="module"></script>
+</body>
+</html>
+{{end}}

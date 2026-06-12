@@ -90,6 +90,9 @@ func main() {
 	}
 	http.HandleFunc("/{locale}/products", pc.Wrap(pageHandler.ProductListing))
 	http.HandleFunc("/{locale}/products/{brand}/{slug}", pc.Wrap(pageHandler.ProductDetail))
+	http.HandleFunc("/{locale}/brands", pc.Wrap(pageHandler.Brands))
+	http.HandleFunc("/{locale}/size-guide", pc.Wrap(pageHandler.SizeGuide))
+	http.HandleFunc("/{locale}/about", pc.Wrap(pageHandler.About))
 	http.HandleFunc("/{locale}/checkout", pc.Wrap(pageHandler.Checkout))
 	http.HandleFunc("/{locale}/foot-health", pc.Wrap(pageHandler.FootHealth))
 	http.HandleFunc("/{locale}/articles", pc.Wrap(pageHandler.ArticlesListing))

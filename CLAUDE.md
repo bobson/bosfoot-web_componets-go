@@ -24,6 +24,9 @@ go run ./cmd/dbping
 # Load schema + seed + brand data into Aiven (idempotent, safe to re-run)
 go run ./cmd/dbimport
 
+# Load articles from db/articles.json into the DB (idempotent, upserts translations)
+go run ./cmd/articleimport
+
 # Run tests
 go test ./...
 go test ./handlers/...
@@ -45,9 +48,10 @@ Both the server and `cmd/` utilities must be run from the project root — `.env
 
 **Backend** (`net/http`, no router library, Go 1.22+ path parameters):
 - `main.go` — initialises logger → connects DB → loads locale strings → parses templates → registers routes → starts server. All dependencies injected; no globals.
-- `handlers/` — two handler structs:
+- `handlers/` — three handler structs:
   - `ProductHandler{DB, Logger}` — JSON API handlers
-  - `PageHandler{DB, Logger, Renderer, SiteURL}` — SSR page handlers + sitemap
+  - `OrderHandler{DB, Logger}` — order creation API
+  - `PageHandler{DB, Logger, Renderer, UI, SiteURL}` — SSR page handlers + sitemap (`UI` is the locale package's `*locale.UI`, used for translating meta description strings outside templates)
 - `models/` — plain Go structs with JSON tags, one file per resource. Nullable DB columns use pointer fields (`*string`, `*int`, `*float64`) for clean `omitempty` JSON. `PasswordHash` is deliberately absent from `User`.
 - `internal/database/connect.go` — shared Aiven connection (upgrades `sslmode=require` → `verify-ca` using `ca.pem`). Used by server and `cmd/` utilities.
 - `internal/locale/locale.go` — loads `public/locales/{mk,sq,en}.json` at startup. Provides `T(locale, key)` for template translations and `FromPath(segment)` / `IsValid(loc)` for URL parsing.
@@ -67,12 +71,17 @@ Both the server and `cmd/` utilities must be run from the project root — `.env
 - `GET /api/brands` — JSON brand list
 - `GET /api/products` — JSON listing with colors (bulk `ANY($1)` query, no N+1)
 - `GET /api/products/{id}` — JSON full detail (10 sequential queries)
+- `POST /api/orders` — create guest or user order
 - `GET /{mk,sq,en}` — SSR homepage (registered per-locale, not via `{locale}` wildcard)
 - `GET /{locale}/products` — SSR product listing page (with filter facets)
 - `GET /{locale}/products/{brand}/{slug}` — SSR product detail page
+- `GET /{locale}/checkout` — SSR checkout page
+- `GET /{locale}/foot-health` — SSR foot health article hub page
+- `GET /{locale}/articles` — SSR articles listing page
+- `GET /{locale}/articles/{slug}` — SSR article detail page (slug is locale-specific, from `article_translations.slug`)
 - `GET /sitemap.xml` — dynamic multilingual sitemap (only lists live routes)
 - `GET /` → redirect to `/mk`; all other paths → `public/` file server
-- The three SSR page handlers (home, listing, detail) are wrapped in `pc.Wrap` (the 60s page cache); `sitemap.xml` and the JSON API are not cached.
+- All SSR page handlers are wrapped in `pc.Wrap` (60s page cache); `/sitemap.xml` and JSON API are not cached.
 
 **SSR + SEO** (`templates/`):
 - Every SSR page template calls `{{template "head" .}}` which emits canonical + all three hreflang alternates + `x-default` using `.SiteURL` and `.CurrentPath`. This is the fix for Google treating language variants as duplicate pages.
@@ -82,13 +91,13 @@ Both the server and `cmd/` utilities must be run from the project root — `.env
 
 **Templates** (`templates/`):
 - Partials: `head.html` (meta/canonical/hreflang/CSS), `nav.html` (language switcher + cart button), `footer.html`, `product_card.html`
-- Pages: `home.html`, `products.html` (listing + filter facets), `product.html` (detail)
+- Pages: `home.html`, `products.html` (listing + filter facets), `product.html` (detail), `checkout.html`, `foot-health.html`, `articles.html` (listing), `article.html` (detail)
 - Template data structs live in `handlers/page_handler.go`. Every page embeds `PageBase{Locale, CurrentPath, SiteURL, MetaDescription}`.
 - `ProductDetail` fetches its ~9 related-data queries (translations, colors, sizes, gallery, specs, highlights, stock, size chart, related products) concurrently via `errgroup` with `SetLimit(4)` — capped so one request can't exhaust the 8-connection Aiven pool. Each goroutine writes a distinct field of the product struct, so there's no shared-memory race.
 - Sub-templates that need locale + the current item use `dict`: `{{template "product_card" (dict "Product" . "Locale" $.Locale)}}` — necessary because `range` replaces `.` with the loop item.
 
 **Frontend** (`public/`, no build step — files served as-is):
-- Interactivity is built as **HTML Web Components** (custom elements, light DOM, no shadow root) in `public/components/`: `cart-drawer`, `listing-filter`, `nav-drawer`, `nav-locale`, `nav-search`, `product-detail`. The static chrome is server-rendered inside each element; the JS class only adds behaviour. Because there's no shadow boundary, global CSS styles them normally and SSR HTML stays crawlable.
+- Interactivity is built as **HTML Web Components** (custom elements, light DOM, no shadow root) in `public/components/`: `cart-drawer`, `checkout-form`, `listing-filter`, `nav-drawer`, `nav-locale`, `nav-search`, `product-detail`, `scroll-reveal`. The static chrome is server-rendered inside each element; the JS class only adds behaviour. Because there's no shadow boundary, global CSS styles them normally and SSR HTML stays crawlable.
 - Cart state lives in `localStorage` under `bosfoot_cart`. Client-side price formatting mirrors the server: `MKD_TO_EUR = 61.5`, space thousands separator — keep these in sync with `tmpl` helpers (`eur`, `formatMKD`) and the schema's EUR rule if the rate ever changes.
 - CSS is split per feature in `public/css/` (`global.css` holds the design-token `:root`, plus `nav`, `home`, `listing`, `product`, `cart`, `search`, `footer`). Use design tokens for all values; only define tokens that are actually used.
 
@@ -103,4 +112,5 @@ Both the server and `cmd/` utilities must be run from the project root — `.env
 - New JSON API endpoint: add method on `ProductHandler` (or new `XHandler`), register in `main.go`. Queries go directly in handlers — no repository layer.
 - New brand: add `public/images/{brand-slug}/` with `brand.json` + per-product `shoe.json`, write `db/{brand-slug}.sql` following `db/freet.sql` as template, run `go run ./cmd/dbimport`.
 - New locale string: add to all three `public/locales/*.json` files.
+- New article: add to `db/articles.json` (each article has per-locale `slug`, `title`, `lead`, and `body` as an array of `ArticleBlock{style, text}` where style is `"normal"`, `"h2"`, or `"h3"`), then run `go run ./cmd/articleimport`. The EN slug is the canonical; locale slugs are stored in `article_translations.slug` and used for routing.
 - `db/` SQL files are idempotent (`ON CONFLICT DO NOTHING`) — safe to re-run.
