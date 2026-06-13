@@ -14,6 +14,7 @@ import (
 	"bosfoot/internal/cache"
 	"bosfoot/internal/database"
 	"bosfoot/internal/locale"
+	"bosfoot/internal/middleware"
 	"bosfoot/internal/routes"
 	"bosfoot/internal/tmpl"
 	"bosfoot/logger"
@@ -71,8 +72,10 @@ func main() {
 		port = "8080"
 	}
 	srv := &http.Server{
-		Addr:              ":" + port,
-		Handler:           nil, // nil → http.DefaultServeMux, where routes.Register registered everything
+		Addr: ":" + port,
+		// RealIP wraps the default mux (where routes.Register registered everything)
+		// so every handler sees the Cloudflare visitor IP in r.RemoteAddr.
+		Handler:           middleware.RealIP(http.DefaultServeMux),
 		ReadHeaderTimeout: 5 * time.Second,
 		ReadTimeout:       15 * time.Second,
 		WriteTimeout:      30 * time.Second,

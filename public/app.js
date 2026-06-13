@@ -1,31 +1,26 @@
-import { initNavDrawer } from "./components/nav-drawer.js";
-import { initCartDrawer } from "./components/cart-drawer.js";
-import { initNavLocale } from "./components/nav-locale.js";
-import { initNavSearch } from "./components/nav-search.js";
-import { initCheckoutForm } from "./components/checkout-form.js";
-import { initListingFilter } from "./components/listing-filter.js";
-import { initProductDetail } from "./components/product-detail.js";
-import { initScrollReveal } from "./components/scroll-reveal.js";
-
+// Each component is loaded with a dynamic import and initialised in isolation.
+// Static `import` would force the browser to parse EVERY component before app.js
+// runs, so one broken/unfinished module takes down all interactivity. Dynamic
+// import + try/catch contains a failure to that single component (logged), and a
+// finished module just lights up — no edits here needed.
 const components = [
-  initNavDrawer,
-  initCartDrawer,
-  initNavLocale,
-  initNavSearch,
-  initCheckoutForm,
-  initListingFilter,
-  initProductDetail,
-  initScrollReveal,
+  ["./components/nav-drawer.js", "initNavDrawer"],
+  ["./components/cart-drawer.js", "initCartDrawer"],
+  ["./components/nav-locale.js", "initNavLocale"],
+  ["./components/nav-search.js", "initNavSearch"],
+  ["./components/checkout-form.js", "initCheckoutForm"],
+  ["./components/listing-filter.js", "initListingFilter"],
+  ["./components/product-detail.js", "initProductDetail"],
+  ["./components/scroll-reveal.js", "initScrollReveal"],
 ];
 
-components.forEach((init) => {
-  try {
-    init();
-  } catch (err) {
-    console.error("Component initialization failed", err);
-  }
-});
+for (const [path, fn] of components) {
+  import(path)
+    .then((mod) => mod[fn]?.())
+    .catch((err) => console.error(`Component failed to load: ${path}`, err));
+}
 
+// Cart badge — runs synchronously, independent of the components above.
 function getCartCount() {
   try {
     const cart = JSON.parse(localStorage.getItem("bosfoot_cart") || "[]");

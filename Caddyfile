@@ -26,11 +26,9 @@ bosfoot.com {
         file_server
     }
 
-    # Everything else (Pages, API, Sitemap) goes to the Go backend
-    reverse_proxy localhost:8080 {
-        header_up X-Forwarded-Proto {scheme}
-        header_up X-Forwarded-Host {host}
-    }
+    # Everything else (Pages, API, Sitemap) goes to the Go backend.
+    # Caddy sets X-Forwarded-For/Proto/Host automatically — no header_up needed.
+    reverse_proxy localhost:8080
 
     # Standard Security Headers
     header {

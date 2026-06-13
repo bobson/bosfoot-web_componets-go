@@ -131,7 +131,7 @@ export function initListingFilter() {
     v.split(',').forEach(val => {
       pending[dim].add(val);
       applied[dim].add(val);
-      const chip = document.querySelector(\`.filter-chip[data-filter="\${dim}"][data-value="\${val}"]\`);
+      const chip = document.querySelector(`.filter-chip[data-filter="${dim}"][data-value="${val}"]`);
       if (chip) { chip.classList.add('filter-chip--active'); chip.setAttribute('aria-pressed', 'true'); }
     });
     restored = true;
