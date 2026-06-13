@@ -10,7 +10,7 @@ import { initScrollReveal } from "./components/scroll-reveal.js";
 (function () {
   "use strict";
 
-  // Component Registration
+  // Component Registration for better error handling and potential future features like hot reloading.
   const components = [
     initNavDrawer,
     initCartDrawer,
