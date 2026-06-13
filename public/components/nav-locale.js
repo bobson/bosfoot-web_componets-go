@@ -57,14 +57,15 @@ async function navigate(url) {
   announce(document.title)
 }
 
-// Document-level delegation — survives header replacement
-document.addEventListener('click', e => {
-  const a = e.target.closest('.nav__lang a')
-  if (!a) return
-  e.preventDefault()
-  navigate(a.href)
-})
+export function initNavLocale() {
+  document.addEventListener('click', e => {
+    const a = e.target.closest('.nav__lang a')
+    if (!a) return
+    e.preventDefault()
+    navigate(a.href)
+  })
 
-window.addEventListener('popstate', e => {
-  navigate(e.state?.url ?? location.href)
-})
+  window.addEventListener('popstate', e => {
+    navigate(e.state?.url ?? location.href)
+  })
+}

@@ -1,6 +1,4 @@
-(function () {
-  'use strict';
-
+export function initListingFilter() {
   const sidebar  = document.getElementById('filter-sidebar');
   const overlay  = document.getElementById('filter-overlay');
   const openBtn  = document.getElementById('filter-open');
@@ -11,6 +9,8 @@
   const countEl  = document.getElementById('filter-count');
   const noRes    = document.getElementById('filter-noresults');
   const cards    = Array.from(document.querySelectorAll('.product-card'));
+  
+  if (!sidebar) return; // Guard for non-listing pages
 
   // pending = selections visible in the sidebar (not yet applied to the grid)
   // applied = what is actually filtering the grid
@@ -131,11 +131,10 @@
     v.split(',').forEach(val => {
       pending[dim].add(val);
       applied[dim].add(val);
-      const chip = document.querySelector(`.filter-chip[data-filter="${dim}"][data-value="${val}"]`);
+      const chip = document.querySelector(\`.filter-chip[data-filter="\${dim}"][data-value="\${val}"]\`);
       if (chip) { chip.classList.add('filter-chip--active'); chip.setAttribute('aria-pressed', 'true'); }
     });
     restored = true;
   });
   if (restored) runFilter();
-
-}());
+}

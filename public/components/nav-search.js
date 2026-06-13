@@ -8,6 +8,7 @@ function getEls() {
 
 export function openSearch() {
   const { dropdown, btn, input } = getEls()
+  if (!dropdown) return 
   dropdown.setAttribute('aria-hidden', 'false')
   btn.setAttribute('aria-expanded', 'true')
   input?.focus()
@@ -15,22 +16,24 @@ export function openSearch() {
 
 export function closeSearch() {
   const { dropdown, btn } = getEls()
-  if (dropdown.getAttribute('aria-hidden') === 'true') return
+  if (!dropdown || dropdown.getAttribute('aria-hidden') === 'true') return
   dropdown.setAttribute('aria-hidden', 'true')
   btn.setAttribute('aria-expanded', 'false')
   btn?.focus()
 }
 
-document.addEventListener('click', e => {
-  if (e.target.closest('#search-btn')) {
-    openSearch()
-  } else if (e.target.closest('#search-close')) {
-    closeSearch()
-  } else if (!e.target.closest('#search-dropdown')) {
-    closeSearch()
-  }
-})
+export function initNavSearch() {
+  document.addEventListener('click', e => {
+    if (e.target.closest('#search-btn')) {
+      openSearch()
+    } else if (e.target.closest('#search-close')) {
+      closeSearch()
+    } else if (!e.target.closest('#search-dropdown')) {
+      closeSearch()
+    }
+  })
 
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') closeSearch()
-})
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeSearch()
+  })
+}

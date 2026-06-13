@@ -1,9 +1,14 @@
 package models
 
-import "time"
+import (
+	"errors"
+	"net/mail"
+	"time"
+)
 
 // Order maps to the orders table. UserID is nil for guest checkouts.
 type Order struct {
+// ... existing fields ...
 	ID            int       `json:"id"`
 	UserID        *int      `json:"user_id,omitempty"`
 	Email         string    `json:"email"`
@@ -22,6 +27,26 @@ type Order struct {
 	UpdatedAt     time.Time `json:"updated_at"`
 
 	Items []OrderItem `json:"items,omitempty"`
+}
+
+// Validate checks if the order data is structurally valid.
+func (o *Order) Validate() error {
+	if _, err := mail.ParseAddress(o.Email); err != nil {
+		return errors.New("invalid email address")
+	}
+	if o.FirstName == "" || o.LastName == "" {
+		return errors.New("first name and last name are required")
+	}
+	if o.Address == "" || o.City == "" {
+		return errors.New("address and city are required")
+	}
+	if o.PaymentMethod != "cod" && o.PaymentMethod != "bank_transfer" {
+		return errors.New("invalid payment method")
+	}
+	if len(o.Items) == 0 {
+		return errors.New("order must contain at least one item")
+	}
+	return nil
 }
 
 // OrderItem maps to the order_items table. Size, Color, and price are
