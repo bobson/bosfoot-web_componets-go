@@ -2,3 +2,9 @@ tmp/
 bosfoot.log
 bosfoot
 .env
+
+# Binaries
+main
+imgopt
+*.log
+
