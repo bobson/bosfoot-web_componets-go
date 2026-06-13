@@ -1,0 +1,56 @@
+{{define "about"}}
+<!DOCTYPE html>
+<html lang="{{.Locale}}">
+<head>
+  {{template "head" .}}
+  <title>{{t .Locale "about.title"}} — Bosfoot</title>
+</head>
+<body>
+  {{template "nav" .}}
+
+  <main class="about-main">
+    <div class="container about-container">
+      <header class="about-header">
+        <h1 class="about-title font-bold">{{t .Locale "about.title"}}</h1>
+        <p class="about-lead text-muted">{{t .Locale "about.lead"}}</p>
+      </header>
+
+      <section class="about-section">
+        <h2 class="font-semibold">{{t .Locale "about.story.title"}}</h2>
+        <p class="text-muted">{{t .Locale "about.story.body"}}</p>
+      </section>
+
+      <section class="about-section">
+        <h2 class="font-semibold">{{t .Locale "about.mission.title"}}</h2>
+        <p class="text-muted">{{t .Locale "about.mission.body"}}</p>
+      </section>
+
+      <section class="about-section">
+        <h2 class="font-semibold">{{t .Locale "about.values.title"}}</h2>
+        <ul class="about-values" role="list">
+          <li class="about-value">
+            <h3 class="font-medium">{{t .Locale "about.values.1.title"}}</h3>
+            <p class="text-muted">{{t .Locale "about.values.1.body"}}</p>
+          </li>
+          <li class="about-value">
+            <h3 class="font-medium">{{t .Locale "about.values.2.title"}}</h3>
+            <p class="text-muted">{{t .Locale "about.values.2.body"}}</p>
+          </li>
+          <li class="about-value">
+            <h3 class="font-medium">{{t .Locale "about.values.3.title"}}</h3>
+            <p class="text-muted">{{t .Locale "about.values.3.body"}}</p>
+          </li>
+        </ul>
+      </section>
+
+      <section class="about-section">
+        <h2 class="font-semibold">{{t .Locale "about.contact.title"}}</h2>
+        <p class="text-muted">{{t .Locale "about.contact.body"}}</p>
+      </section>
+    </div>
+  </main>
+
+  {{template "footer" .}}
+</body>
+</html>
+{{end}}

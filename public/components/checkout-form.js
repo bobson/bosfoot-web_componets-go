@@ -134,9 +134,10 @@ class CheckoutForm extends HTMLElement {
 
     this.setBusy(true);
     try {
+      const csrfToken = document.cookie.match(/(?:^|;\s*)_csrf=([^;]+)/)?.[1] ?? '';
       const res = await fetch('/api/orders', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': csrfToken },
         body: JSON.stringify(payload),
       });
       if (!res.ok) throw new Error('order failed');

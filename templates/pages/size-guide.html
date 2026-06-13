@@ -1,0 +1,57 @@
+{{define "size-guide"}}
+<!DOCTYPE html>
+<html lang="{{.Locale}}">
+<head>
+  {{template "head" .}}
+  <title>{{t .Locale "sizeGuide.title"}} — Bosfoot</title>
+</head>
+<body>
+  {{template "nav" .}}
+
+  <main class="size-guide-main">
+    <div class="container size-guide-container">
+      <header class="size-guide-header">
+        <h1 class="size-guide-title font-bold">{{t .Locale "sizeGuide.title"}}</h1>
+        <p class="size-guide-lead text-muted">{{t .Locale "sizeGuide.lead"}}</p>
+      </header>
+
+      <ol class="size-guide-steps">
+        <li class="size-guide-step">
+          <h2 class="font-semibold">{{t .Locale "sizeGuide.step1.title"}}</h2>
+          <p class="text-muted">{{t .Locale "sizeGuide.step1.body"}}</p>
+        </li>
+        <li class="size-guide-step">
+          <h2 class="font-semibold">{{t .Locale "sizeGuide.step2.title"}}</h2>
+          <p class="text-muted">{{t .Locale "sizeGuide.step2.body"}}</p>
+        </li>
+        <li class="size-guide-step">
+          <h2 class="font-semibold">{{t .Locale "sizeGuide.step3.title"}}</h2>
+          <p class="text-muted">{{t .Locale "sizeGuide.step3.body"}}</p>
+        </li>
+        <li class="size-guide-step">
+          <h2 class="font-semibold">{{t .Locale "sizeGuide.step4.title"}}</h2>
+          <p class="text-muted">{{t .Locale "sizeGuide.step4.body"}}</p>
+        </li>
+      </ol>
+
+      <aside class="size-guide-tip">
+        <h3 class="font-semibold">{{t .Locale "sizeGuide.tip.title"}}</h3>
+        <p class="text-muted">{{t .Locale "sizeGuide.tip.body"}}</p>
+      </aside>
+
+      <section class="size-guide-brands">
+        <h2 class="font-semibold">{{t .Locale "sizeGuide.brands.title"}}</h2>
+        <p class="text-muted">{{t .Locale "sizeGuide.brands.lead"}}</p>
+      </section>
+
+      <section class="size-guide-help">
+        <h2 class="font-semibold">{{t .Locale "sizeGuide.help.title"}}</h2>
+        <p class="text-muted">{{t .Locale "sizeGuide.help.body"}}</p>
+      </section>
+    </div>
+  </main>
+
+  {{template "footer" .}}
+</body>
+</html>
+{{end}}

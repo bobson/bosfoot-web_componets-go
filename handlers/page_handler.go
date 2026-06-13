@@ -5,6 +5,7 @@ import (
 	"bosfoot/internal/tmpl"
 	"bosfoot/logger"
 	"bosfoot/models"
+	"context"
 	"database/sql"
 	"encoding/json"
 	"net/http"
@@ -14,6 +15,85 @@ import (
 	"github.com/lib/pq"
 	"golang.org/x/sync/errgroup"
 )
+
+// rowScanner is satisfied by both *sql.Row and *sql.Rows, so scanProduct works
+// for a single QueryRow result and for each row of a Query loop. (*sql.Row defers
+// sql.ErrNoRows to Scan, so callers using QueryRow still get it through scanProduct.)
+type rowScanner interface {
+	Scan(dest ...any) error
+}
+
+// scanProduct scans one product row in the canonical column order shared by every
+// product query in this file:
+//
+//	p.id, sku, name, slug, brand_id, category_id, gender_id,
+//	price_mkd, original_price_mkd, image_url,
+//	is_new, is_featured, is_on_sale, discount_pct,
+//	is_active, is_published, sort_order, created_at, updated_at,
+//	b.name, b.slug, g.value
+//
+// The three nullable columns are mapped to their pointer fields.
+func scanProduct(s rowScanner) (models.Product, error) {
+	var p models.Product
+	var origPrice sql.NullInt64
+	var imageURL sql.NullString
+	var discountPct sql.NullFloat64
+	if err := s.Scan(
+		&p.ID, &p.SKU, &p.Name, &p.Slug,
+		&p.BrandID, &p.CategoryID, &p.GenderID,
+		&p.PriceMKD, &origPrice, &imageURL,
+		&p.IsNew, &p.IsFeatured, &p.IsOnSale, &discountPct,
+		&p.IsActive, &p.IsPublished, &p.SortOrder,
+		&p.CreatedAt, &p.UpdatedAt,
+		&p.BrandName, &p.BrandSlug, &p.GenderValue,
+	); err != nil {
+		return p, err
+	}
+	if origPrice.Valid {
+		v := int(origPrice.Int64)
+		p.OriginalPriceMKD = &v
+	}
+	if imageURL.Valid {
+		p.ImageURL = &imageURL.String
+	}
+	if discountPct.Valid {
+		p.DiscountPct = &discountPct.Float64
+	}
+	return p, nil
+}
+
+// fetchColors returns the colors for the given product IDs as a map keyed by
+// product_id, in one bulk query (no N+1). Empty ids → empty map, no query.
+func (h *PageHandler) fetchColors(ctx context.Context, ids []int) (map[int][]models.ProductColor, error) {
+	colorMap := make(map[int][]models.ProductColor)
+	if len(ids) == 0 {
+		return colorMap, nil
+	}
+	rows, err := h.DB.QueryContext(ctx, `
+		SELECT product_id, color, hex
+		FROM product_colors
+		WHERE product_id = ANY($1)
+		ORDER BY product_id, color
+	`, pq.Array(ids))
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	for rows.Next() {
+		var productID int
+		var color string
+		var hex sql.NullString
+		if err := rows.Scan(&productID, &color, &hex); err != nil {
+			return nil, err
+		}
+		c := models.ProductColor{Color: color}
+		if hex.Valid {
+			c.Hex = &hex.String
+		}
+		colorMap[productID] = append(colorMap[productID], c)
+	}
+	return colorMap, rows.Err()
+}
 
 // PageHandler serves SSR pages. Each method renders a full HTML page.
 type PageHandler struct {
@@ -223,9 +303,10 @@ func (h *PageHandler) Home(w http.ResponseWriter, r *http.Request) {
 		       p.is_new, p.is_featured, p.is_on_sale, p.discount_pct,
 		       p.is_active, p.is_published, p.sort_order,
 		       p.created_at, p.updated_at,
-		       b.name, b.slug
+		       b.name, b.slug, g.value
 		FROM products p
 		JOIN brands b ON b.id = p.brand_id
+		JOIN genders g ON g.id = p.gender_id
 		WHERE p.is_active = TRUE AND p.is_published = TRUE
 		ORDER BY p.sort_order ASC, p.created_at DESC
 		LIMIT 3
@@ -240,70 +321,25 @@ func (h *PageHandler) Home(w http.ResponseWriter, r *http.Request) {
 	var featured []models.Product
 	var ids []int
 	for featRows.Next() {
-		var p models.Product
-		var origPrice sql.NullInt64
-		var imageURL sql.NullString
-		var discountPct sql.NullFloat64
-		if err := featRows.Scan(
-			&p.ID, &p.SKU, &p.Name, &p.Slug,
-			&p.BrandID, &p.CategoryID, &p.GenderID,
-			&p.PriceMKD, &origPrice, &imageURL,
-			&p.IsNew, &p.IsFeatured, &p.IsOnSale, &discountPct,
-			&p.IsActive, &p.IsPublished, &p.SortOrder,
-			&p.CreatedAt, &p.UpdatedAt,
-			&p.BrandName, &p.BrandSlug,
-		); err != nil {
+		p, err := scanProduct(featRows)
+		if err != nil {
 			h.Logger.Error("Home: featured scan failed", err)
 			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 			return
-		}
-		if origPrice.Valid {
-			v := int(origPrice.Int64)
-			p.OriginalPriceMKD = &v
-		}
-		if imageURL.Valid {
-			p.ImageURL = &imageURL.String
-		}
-		if discountPct.Valid {
-			p.DiscountPct = &discountPct.Float64
 		}
 		featured = append(featured, p)
 		ids = append(ids, p.ID)
 	}
 
 	// Colors for featured products
-	if len(ids) > 0 {
-		colorRows, err := h.DB.QueryContext(ctx, `
-			SELECT product_id, color, hex
-			FROM product_colors
-			WHERE product_id = ANY($1)
-			ORDER BY product_id, color
-		`, pq.Array(ids))
-		if err != nil {
-			h.Logger.Error("Home: colors query failed", err)
-			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-			return
-		}
-		defer colorRows.Close()
-		colorMap := make(map[int][]models.ProductColor)
-		for colorRows.Next() {
-			var productID int
-			var color string
-			var hex sql.NullString
-			if err := colorRows.Scan(&productID, &color, &hex); err != nil {
-				h.Logger.Error("Home: color scan failed", err)
-				http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-				return
-			}
-			c := models.ProductColor{Color: color}
-			if hex.Valid {
-				c.Hex = &hex.String
-			}
-			colorMap[productID] = append(colorMap[productID], c)
-		}
-		for i := range featured {
-			featured[i].Colors = colorMap[featured[i].ID]
-		}
+	colorMap, err := h.fetchColors(ctx, ids)
+	if err != nil {
+		h.Logger.Error("Home: colors query failed", err)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+	for i := range featured {
+		featured[i].Colors = colorMap[featured[i].ID]
 	}
 
 	h.Renderer.Render(w, "home", HomePageData{
@@ -314,6 +350,128 @@ func (h *PageHandler) Home(w http.ResponseWriter, r *http.Request) {
 		},
 		Brands:   brands,
 		Featured: featured,
+	})
+}
+
+// BrandCard is one row on the brands listing page.
+type BrandCard struct {
+	models.Brand
+	Description  string
+	ProductCount int
+}
+
+// BrandsPageData is the template data for /{locale}/brands.
+type BrandsPageData struct {
+	PageBase
+	Brands []BrandCard
+}
+
+// Brands handles GET /{locale}/brands.
+func (h *PageHandler) Brands(w http.ResponseWriter, r *http.Request) {
+	if !locale.IsValid(r.PathValue("locale")) {
+		http.Redirect(w, r, "/"+locale.Default+"/brands", http.StatusFound)
+		return
+	}
+	loc := locale.FromPath(r.PathValue("locale"))
+
+	rows, err := h.DB.QueryContext(r.Context(), `
+		SELECT b.id, b.name, b.slug,
+		       b.country_of_origin, b.year_founded, b.website_url,
+		       b.sizing_guide_url, b.logo_url, b.is_featured,
+		       COALESCE(t.description, ''),
+		       COUNT(p.id) FILTER (WHERE p.is_active AND p.is_published)
+		FROM brands b
+		LEFT JOIN brand_translations t ON t.brand_id = b.id AND t.lang = $1::lang_code
+		LEFT JOIN products p ON p.brand_id = b.id
+		GROUP BY b.id, b.name, b.slug, b.country_of_origin, b.year_founded,
+		         b.website_url, b.sizing_guide_url, b.logo_url, b.is_featured, t.description
+		ORDER BY b.is_featured DESC, b.sort_order ASC, b.name ASC
+	`, loc)
+	if err != nil {
+		h.Logger.Error("Brands: query failed", err)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+	defer rows.Close()
+
+	var brands []BrandCard
+	for rows.Next() {
+		var c BrandCard
+		var country sql.NullString
+		var year sql.NullInt64
+		var website, sizingGuide, logo sql.NullString
+		if err := rows.Scan(
+			&c.ID, &c.Name, &c.Slug,
+			&country, &year, &website,
+			&sizingGuide, &logo, &c.IsFeatured,
+			&c.Description, &c.ProductCount,
+		); err != nil {
+			h.Logger.Error("Brands: scan failed", err)
+			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+			return
+		}
+		if country.Valid {
+			c.CountryOfOrigin = &country.String
+		}
+		if year.Valid {
+			v := int(year.Int64)
+			c.YearFounded = &v
+		}
+		if website.Valid {
+			c.WebsiteURL = &website.String
+		}
+		if sizingGuide.Valid {
+			c.SizingGuideURL = &sizingGuide.String
+		}
+		if logo.Valid {
+			c.LogoURL = &logo.String
+		}
+		brands = append(brands, c)
+	}
+	if err := rows.Err(); err != nil {
+		h.Logger.Error("Brands: rows error", err)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+
+	h.Renderer.Render(w, "brands", BrandsPageData{
+		PageBase: PageBase{
+			Locale:          loc,
+			CurrentPath:     "/brands",
+			SiteURL:         h.baseURL(r),
+			MetaDescription: h.UI.T(loc, "brands.lead"),
+		},
+		Brands: brands,
+	})
+}
+
+// SizeGuide handles GET /{locale}/size-guide — static content from locale strings.
+func (h *PageHandler) SizeGuide(w http.ResponseWriter, r *http.Request) {
+	if !locale.IsValid(r.PathValue("locale")) {
+		http.Redirect(w, r, "/"+locale.Default+"/size-guide", http.StatusFound)
+		return
+	}
+	loc := locale.FromPath(r.PathValue("locale"))
+	h.Renderer.Render(w, "size-guide", PageBase{
+		Locale:          loc,
+		CurrentPath:     "/size-guide",
+		SiteURL:         h.baseURL(r),
+		MetaDescription: h.UI.T(loc, "sizeGuide.lead"),
+	})
+}
+
+// About handles GET /{locale}/about — static content from locale strings.
+func (h *PageHandler) About(w http.ResponseWriter, r *http.Request) {
+	if !locale.IsValid(r.PathValue("locale")) {
+		http.Redirect(w, r, "/"+locale.Default+"/about", http.StatusFound)
+		return
+	}
+	loc := locale.FromPath(r.PathValue("locale"))
+	h.Renderer.Render(w, "about", PageBase{
+		Locale:          loc,
+		CurrentPath:     "/about",
+		SiteURL:         h.baseURL(r),
+		MetaDescription: h.UI.T(loc, "about.lead"),
 	})
 }
 
@@ -608,33 +766,11 @@ func (h *PageHandler) ProductListing(w http.ResponseWriter, r *http.Request) {
 	var ids []int
 
 	for rows.Next() {
-		var p models.Product
-		var origPrice sql.NullInt64
-		var imageURL sql.NullString
-		var discountPct sql.NullFloat64
-
-		if err := rows.Scan(
-			&p.ID, &p.SKU, &p.Name, &p.Slug,
-			&p.BrandID, &p.CategoryID, &p.GenderID,
-			&p.PriceMKD, &origPrice, &imageURL,
-			&p.IsNew, &p.IsFeatured, &p.IsOnSale, &discountPct,
-			&p.IsActive, &p.IsPublished, &p.SortOrder,
-			&p.CreatedAt, &p.UpdatedAt,
-			&p.BrandName, &p.BrandSlug, &p.GenderValue,
-		); err != nil {
+		p, err := scanProduct(rows)
+		if err != nil {
 			h.Logger.Error("ProductListing: scan failed", err)
 			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 			return
-		}
-		if origPrice.Valid {
-			v := int(origPrice.Int64)
-			p.OriginalPriceMKD = &v
-		}
-		if imageURL.Valid {
-			p.ImageURL = &imageURL.String
-		}
-		if discountPct.Valid {
-			p.DiscountPct = &discountPct.Float64
 		}
 		products = append(products, p)
 		ids = append(ids, p.ID)
@@ -646,40 +782,18 @@ func (h *PageHandler) ProductListing(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Fetch colors for all products in one query.
+	colorMap, err := h.fetchColors(ctx, ids)
+	if err != nil {
+		h.Logger.Error("ProductListing: colors query failed", err)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+	for i := range products {
+		products[i].Colors = colorMap[products[i].ID]
+	}
+
+	// Fetch activities, sizes for all products.
 	if len(ids) > 0 {
-		colorRows, err := h.DB.QueryContext(ctx, `
-			SELECT product_id, color, hex
-			FROM product_colors
-			WHERE product_id = ANY($1)
-			ORDER BY product_id, color
-		`, pq.Array(ids))
-		if err != nil {
-			h.Logger.Error("ProductListing: colors query failed", err)
-			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-			return
-		}
-		defer colorRows.Close()
-
-		colorMap := make(map[int][]models.ProductColor)
-		for colorRows.Next() {
-			var productID int
-			var color string
-			var hex sql.NullString
-			if err := colorRows.Scan(&productID, &color, &hex); err != nil {
-				h.Logger.Error("ProductListing: color scan failed", err)
-				http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-				return
-			}
-			c := models.ProductColor{Color: color}
-			if hex.Valid {
-				c.Hex = &hex.String
-			}
-			colorMap[productID] = append(colorMap[productID], c)
-		}
-		for i := range products {
-			products[i].Colors = colorMap[products[i].ID]
-		}
-
 		// Fetch activities for all products.
 		actRows, err := h.DB.QueryContext(ctx, `
 			SELECT product_id, activity
@@ -817,12 +931,7 @@ func (h *PageHandler) ProductDetail(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
 	// Base product row.
-	var p models.Product
-	var origPrice sql.NullInt64
-	var imageURL sql.NullString
-	var discountPct sql.NullFloat64
-
-	err := h.DB.QueryRowContext(ctx, `
+	p, err := scanProduct(h.DB.QueryRowContext(ctx, `
 		SELECT p.id, p.sku, p.name, p.slug,
 		       p.brand_id, p.category_id, p.gender_id,
 		       p.price_mkd, p.original_price_mkd, p.image_url,
@@ -834,15 +943,7 @@ func (h *PageHandler) ProductDetail(w http.ResponseWriter, r *http.Request) {
 		JOIN brands b ON b.id = p.brand_id
 		JOIN genders g ON g.id = p.gender_id
 		WHERE b.slug = $1 AND p.slug = $2 AND p.is_active = TRUE
-	`, brandSlug, productSlug).Scan(
-		&p.ID, &p.SKU, &p.Name, &p.Slug,
-		&p.BrandID, &p.CategoryID, &p.GenderID,
-		&p.PriceMKD, &origPrice, &imageURL,
-		&p.IsNew, &p.IsFeatured, &p.IsOnSale, &discountPct,
-		&p.IsActive, &p.IsPublished, &p.SortOrder,
-		&p.CreatedAt, &p.UpdatedAt,
-		&p.BrandName, &p.BrandSlug, &p.GenderValue,
-	)
+	`, brandSlug, productSlug))
 	if err == sql.ErrNoRows {
 		http.NotFound(w, r)
 		return
@@ -851,16 +952,6 @@ func (h *PageHandler) ProductDetail(w http.ResponseWriter, r *http.Request) {
 		h.Logger.Error("ProductDetail: query failed", err)
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		return
-	}
-	if origPrice.Valid {
-		v := int(origPrice.Int64)
-		p.OriginalPriceMKD = &v
-	}
-	if imageURL.Valid {
-		p.ImageURL = &imageURL.String
-	}
-	if discountPct.Valid {
-		p.DiscountPct = &discountPct.Float64
 	}
 
 	// All the related data is fetched concurrently. These queries are
@@ -1076,30 +1167,9 @@ func (h *PageHandler) ProductDetail(w http.ResponseWriter, r *http.Request) {
 
 		var relIDs []int
 		for rows.Next() {
-			var rp models.Product
-			var rOrigPrice sql.NullInt64
-			var rImageURL sql.NullString
-			var rDiscountPct sql.NullFloat64
-			if err := rows.Scan(
-				&rp.ID, &rp.SKU, &rp.Name, &rp.Slug,
-				&rp.BrandID, &rp.CategoryID, &rp.GenderID,
-				&rp.PriceMKD, &rOrigPrice, &rImageURL,
-				&rp.IsNew, &rp.IsFeatured, &rp.IsOnSale, &rDiscountPct,
-				&rp.IsActive, &rp.IsPublished, &rp.SortOrder,
-				&rp.CreatedAt, &rp.UpdatedAt,
-				&rp.BrandName, &rp.BrandSlug, &rp.GenderValue,
-			); err != nil {
+			rp, err := scanProduct(rows)
+			if err != nil {
 				return err
-			}
-			if rOrigPrice.Valid {
-				v := int(rOrigPrice.Int64)
-				rp.OriginalPriceMKD = &v
-			}
-			if rImageURL.Valid {
-				rp.ImageURL = &rImageURL.String
-			}
-			if rDiscountPct.Valid {
-				rp.DiscountPct = &rDiscountPct.Float64
 			}
 			related = append(related, rp)
 			relIDs = append(relIDs, rp.ID)
@@ -1107,34 +1177,10 @@ func (h *PageHandler) ProductDetail(w http.ResponseWriter, r *http.Request) {
 		if err := rows.Err(); err != nil {
 			return err
 		}
-		if len(relIDs) == 0 {
-			return nil
-		}
 
 		// Colors for related products.
-		crows, err := h.DB.QueryContext(gctx, `
-			SELECT product_id, color, hex FROM product_colors
-			WHERE product_id = ANY($1) ORDER BY product_id, color
-		`, pq.Array(relIDs))
+		rcMap, err := h.fetchColors(gctx, relIDs)
 		if err != nil {
-			return err
-		}
-		defer crows.Close()
-		rcMap := make(map[int][]models.ProductColor)
-		for crows.Next() {
-			var pid int
-			var color string
-			var hex sql.NullString
-			if err := crows.Scan(&pid, &color, &hex); err != nil {
-				return err
-			}
-			c := models.ProductColor{Color: color}
-			if hex.Valid {
-				c.Hex = &hex.String
-			}
-			rcMap[pid] = append(rcMap[pid], c)
-		}
-		if err := crows.Err(); err != nil {
 			return err
 		}
 		for i := range related {

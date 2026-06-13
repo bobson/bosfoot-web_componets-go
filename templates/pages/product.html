@@ -20,7 +20,7 @@
           {{if .Product.IsOnSale}}<span class="product__badge product__badge--sale">{{t .Locale "product.sale"}}</span>{{end}}
           {{$src := ""}}
           {{if .Product.ImageURL}}{{$src = deref .Product.ImageURL}}{{else if .Product.Gallery}}{{$src = (index .Product.Gallery 0).ImageURL}}{{end}}
-          <img id="gallery-main" class="product__main-img" src="{{$src}}" alt="{{.Product.Name}}">
+          <img id="gallery-main" class="product__main-img" src="{{$src}}" width="1000" height="1000" alt="{{.Product.Name}}">
         </div>
         {{if or (and .Product.ImageURL .Product.Gallery) (gt (len .Product.Gallery) 1)}}
         <div class="product__thumbs">
@@ -247,7 +247,6 @@
 
   {{template "footer" .}}
 
-  <script src="{{asset "/components/product-detail.js"}}" type="module"></script>
 </body>
 </html>
 {{end}}

@@ -1,9 +1,13 @@
 package main
 
 import (
+	"context"
+	"errors"
 	"log"
 	"net/http"
 	"os"
+	"os/signal"
+	"syscall"
 	"time"
 
 	"bosfoot/handlers"
@@ -15,16 +19,11 @@ import (
 	"bosfoot/logger"
 )
 
-func initializeLogger() *logger.Logger {
+func main() {
 	logInstance, err := logger.NewLogger("bosfoot.log")
 	if err != nil {
 		log.Fatalf("Failed to initialize logger: %v", err)
 	}
-	return logInstance
-}
-
-func main() {
-	logInstance := initializeLogger()
 	defer logInstance.Close()
 
 	db, err := database.Connect()
@@ -71,10 +70,36 @@ func main() {
 	if port == "" {
 		port = "8080"
 	}
-	addr := ":" + port
-	logInstance.Info("Server listening on " + addr)
-	if err := http.ListenAndServe(addr, nil); err != nil {
-		logInstance.Error("Server failed", err)
-		log.Fatalf("Server failed: %v", err)
+	srv := &http.Server{
+		Addr:              ":" + port,
+		Handler:           nil, // nil → http.DefaultServeMux, where routes.Register registered everything
+		ReadHeaderTimeout: 5 * time.Second,
+		ReadTimeout:       15 * time.Second,
+		WriteTimeout:      30 * time.Second,
+		IdleTimeout:       120 * time.Second,
 	}
+
+	// Shut down gracefully on SIGINT/SIGTERM so in-flight requests — including
+	// order POSTs — finish instead of being cut off on deploy.
+	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+	defer stop()
+
+	go func() {
+		logInstance.Info("Server listening on " + srv.Addr)
+		if err := srv.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
+			logInstance.Error("Server failed", err)
+			log.Fatalf("Server failed: %v", err)
+		}
+	}()
+
+	<-ctx.Done()
+	stop() // restore default signal handling so a second signal force-quits
+	logInstance.Info("Shutting down server")
+
+	shutdownCtx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
+	defer cancel()
+	if err := srv.Shutdown(shutdownCtx); err != nil {
+		logInstance.Error("Graceful shutdown failed", err)
+	}
+	logInstance.Info("Server stopped")
 }

@@ -1,0 +1,63 @@
+{{define "brands"}}
+<!DOCTYPE html>
+<html lang="{{.Locale}}">
+<head>
+  {{template "head" .}}
+  <title>{{t .Locale "brands.title"}} — Bosfoot</title>
+</head>
+<body>
+  {{template "nav" .}}
+
+  <main class="brands-main">
+    <div class="container">
+      <header class="brands-header">
+        <h1 class="brands-title font-bold">{{t .Locale "brands.title"}}</h1>
+        <p class="brands-lead text-muted">{{t .Locale "brands.lead"}}</p>
+      </header>
+
+      <ul class="brands-grid" role="list">
+        {{range .Brands}}
+        <li class="brand-card">
+          {{if .LogoURL}}
+          <a class="brand-card__logo-link" href="/{{$.Locale}}/products?brand={{.Slug}}">
+            <img class="brand-card__logo" src="{{deref .LogoURL}}" alt="{{.Name}}" loading="lazy">
+          </a>
+          {{end}}
+          <div class="brand-card__body">
+            <h2 class="brand-card__name font-semibold">{{.Name}}</h2>
+            {{if .Description}}
+            <p class="brand-card__desc text-muted">{{.Description}}</p>
+            {{end}}
+            <dl class="brand-card__meta">
+              {{if .CountryOfOrigin}}
+              <div><dt>{{t $.Locale "brand.from"}}</dt><dd>{{deref .CountryOfOrigin}}</dd></div>
+              {{end}}
+              {{if .YearFounded}}
+              <div><dt>{{t $.Locale "brand.foundedIn"}}</dt><dd>{{deref .YearFounded}}</dd></div>
+              {{end}}
+            </dl>
+            <div class="brand-card__actions">
+              {{if gt .ProductCount 0}}
+              <a class="brand-card__cta" href="/{{$.Locale}}/products?brand={{.Slug}}">
+                {{t $.Locale "brands.viewProducts"}}
+              </a>
+              {{else}}
+              <span class="brand-card__coming-soon text-muted text-xs">{{t $.Locale "brands.comingSoon"}}</span>
+              {{end}}
+              {{if .WebsiteURL}}
+              <a class="brand-card__site text-xs text-muted" href="{{deref .WebsiteURL}}" target="_blank" rel="noopener">
+                {{t $.Locale "brand.officialSite"}} ↗
+              </a>
+              {{end}}
+            </div>
+          </div>
+        </li>
+        {{end}}
+      </ul>
+    </div>
+  </main>
+
+  {{template "footer" .}}
+</body>
+</html>
+{{end}}

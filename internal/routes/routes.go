@@ -29,7 +29,7 @@ func Register(
 	http.HandleFunc("/{locale}/brands", pc.Wrap(pageHandler.Brands))
 	http.HandleFunc("/{locale}/size-guide", pc.Wrap(pageHandler.SizeGuide))
 	http.HandleFunc("/{locale}/about", pc.Wrap(pageHandler.About))
-	http.HandleFunc("/{locale}/checkout", pc.Wrap(pageHandler.Checkout))
+	http.HandleFunc("/{locale}/checkout", middleware.WithCSRFCookie(pc.Wrap(pageHandler.Checkout)))
 	http.HandleFunc("/{locale}/foot-health", pc.Wrap(pageHandler.FootHealth))
 	http.HandleFunc("/{locale}/articles", pc.Wrap(pageHandler.ArticlesListing))
 	http.HandleFunc("/{locale}/articles/{slug}", pc.Wrap(pageHandler.ArticleDetail))

@@ -1,6 +1,7 @@
 package logger
 
 import (
+	"io"
 	"log/slog"
 	"os"
 )
@@ -11,20 +12,20 @@ type Logger struct {
 	file *os.File
 }
 
-// NewLogger creates a new structured logger outputting JSON to a file and stdout
+// NewLogger creates a structured JSON logger that writes every record to both
+// stdout (so it's visible via journalctl/docker logs) and logFilePath (for a
+// persistent on-disk record).
 func NewLogger(logFilePath string) (*Logger, error) {
 	file, err := os.OpenFile(logFilePath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
 		return nil, err
 	}
 
-	// Create a multi-handler that logs to both stdout and file
-	// Using JSON handler for structured logging
-	handler := slog.NewJSONHandler(file, &slog.HandlerOptions{Level: slog.LevelInfo})
-	logger := slog.New(handler)
+	w := io.MultiWriter(os.Stdout, file)
+	handler := slog.NewJSONHandler(w, &slog.HandlerOptions{Level: slog.LevelInfo})
 
 	return &Logger{
-		slog: logger,
+		slog: slog.New(handler),
 		file: file,
 	}, nil
 }
