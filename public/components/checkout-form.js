@@ -173,3 +173,7 @@ class CheckoutForm extends HTMLElement {
 }
 
 customElements.define('checkout-form', CheckoutForm);
+
+export function initCheckoutForm() {
+  // WebComponent automatically initializes on connection
+}

@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"bosfoot/logger"
+	"bosfoot/models"
 	"database/sql"
 	"encoding/json"
 	"net/http"
@@ -59,9 +60,7 @@ func (h *OrderHandler) CreateOrder(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Normalise + validate the contact/shipping fields. email and the name +
-	// address fields are NOT NULL in the schema; phone is required in practice
-	// because COD couriers call ahead.
+	// Normalise + validate the contact/shipping fields.
 	req.Email = strings.TrimSpace(req.Email)
 	req.Phone = strings.TrimSpace(req.Phone)
 	req.FirstName = strings.TrimSpace(req.FirstName)
@@ -71,18 +70,27 @@ func (h *OrderHandler) CreateOrder(w http.ResponseWriter, r *http.Request) {
 	req.PostalCode = strings.TrimSpace(req.PostalCode)
 	req.Notes = strings.TrimSpace(req.Notes)
 
-	if req.Email == "" || !strings.Contains(req.Email, "@") ||
-		req.Phone == "" || req.FirstName == "" || req.LastName == "" ||
-		req.Address == "" || req.City == "" {
-		writeJSONError(w, http.StatusBadRequest, "missing required fields")
-		return
+	// Map request to model for validation
+	order := models.Order{
+		Email:         req.Email,
+		Phone:         &req.Phone,
+		FirstName:     req.FirstName,
+		LastName:      req.LastName,
+		Address:       req.Address,
+		City:          req.City,
+		PostalCode:    &req.PostalCode,
+		Notes:         &req.Notes,
+		PaymentMethod: req.PaymentMethod,
 	}
-	if req.PaymentMethod != "cod" && req.PaymentMethod != "bank_transfer" {
-		writeJSONError(w, http.StatusBadRequest, "invalid payment method")
-		return
+	for _, it := range req.Items {
+		order.Items = append(order.Items, models.OrderItem{
+			ProductID: it.ProductID,
+			Quantity:  it.Qty,
+		})
 	}
-	if len(req.Items) == 0 {
-		writeJSONError(w, http.StatusBadRequest, "cart is empty")
+
+	if err := order.Validate(); err != nil {
+		writeJSONError(w, http.StatusBadRequest, err.Error())
 		return
 	}
 

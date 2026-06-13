@@ -1,9 +1,9 @@
-(function () {
-  'use strict';
-
+export function initProductDetail() {
   // ── Stock data ────────────────────────────────────────
   // Build {color: {size: qty}} map from the embedded JSON.
-  const rawStock = JSON.parse(document.getElementById('stock-data')?.textContent || '[]');
+  const stockEl = document.getElementById('stock-data');
+  if (!stockEl) return;
+  const rawStock = JSON.parse(stockEl.textContent || '[]');
   const stockMap = {};
   rawStock.forEach(({ eu_size, color, qty }) => {
     if (!stockMap[color]) stockMap[color] = {};
@@ -164,4 +164,4 @@
     }, { threshold: 0 });
     obs.observe(realBtn);
   }
-}());
+}

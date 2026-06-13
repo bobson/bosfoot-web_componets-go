@@ -162,3 +162,7 @@ class CartDrawer extends HTMLElement {
 }
 
 customElements.define('cart-drawer', CartDrawer);
+
+export function initCartDrawer() {
+  // WebComponent automatically initializes on connection
+}

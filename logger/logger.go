@@ -1,38 +1,43 @@
 package logger
 
 import (
-	"log"
+	"log/slog"
 	"os"
 )
 
+// Logger wraps the slog.Logger to maintain compatibility
 type Logger struct {
-	infoLogger  *log.Logger
-	errorLogger *log.Logger
-	file        *os.File
+	slog *slog.Logger
+	file *os.File
 }
 
-// NewLogger creates a new logger with output to both file and stdout
+// NewLogger creates a new structured logger outputting JSON to a file and stdout
 func NewLogger(logFilePath string) (*Logger, error) {
 	file, err := os.OpenFile(logFilePath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
 		return nil, err
 	}
 
+	// Create a multi-handler that logs to both stdout and file
+	// Using JSON handler for structured logging
+	handler := slog.NewJSONHandler(file, &slog.HandlerOptions{Level: slog.LevelInfo})
+	logger := slog.New(handler)
+
 	return &Logger{
-		infoLogger:  log.New(os.Stdout, "INFO: ", log.Ldate|log.Ltime|log.Lshortfile),
-		errorLogger: log.New(file, "ERROR: ", log.Ldate|log.Ltime|log.Lshortfile),
-		file:        file,
+		slog: logger,
+		file: file,
 	}, nil
 }
 
-// Info logs informational messages to stdout
-func (l *Logger) Info(msg string) {
-	l.infoLogger.Printf("%s", msg)
+// Info logs informational messages
+func (l *Logger) Info(msg string, args ...any) {
+	l.slog.Info(msg, args...)
 }
 
-// Error logs error messages to file
-func (l *Logger) Error(msg string, err error) {
-	l.errorLogger.Printf("%s: %v", msg, err)
+// Error logs error messages
+func (l *Logger) Error(msg string, err error, args ...any) {
+	args = append(args, "error", err)
+	l.slog.Error(msg, args...)
 }
 
 // Close closes the log file

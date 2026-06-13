@@ -27,6 +27,7 @@ function trapFocus(e) {
 
 export function openDrawer() {
   const { drawer, openBtn, closeBtn } = getEls()
+  if (!drawer) return // Guard against SSR missing chrome
   drawer.setAttribute('aria-hidden', 'false')
   openBtn.setAttribute('aria-expanded', 'true')
   document.body.classList.add('nav-open')
@@ -36,7 +37,7 @@ export function openDrawer() {
 
 export function closeDrawer() {
   const { drawer, openBtn } = getEls()
-  if (drawer.getAttribute('aria-hidden') === 'true') return
+  if (!drawer || drawer.getAttribute('aria-hidden') === 'true') return
   drawer.setAttribute('aria-hidden', 'true')
   openBtn.setAttribute('aria-expanded', 'false')
   document.body.classList.remove('nav-open')
@@ -44,13 +45,15 @@ export function closeDrawer() {
   openBtn.focus()
 }
 
-document.addEventListener('click', e => {
-  if (e.target.closest('#nav-open'))   openDrawer()
-  else if (e.target.closest('#nav-close'))   closeDrawer()
-  else if (e.target.closest('#nav-overlay')) closeDrawer()
-})
+export function initNavDrawer() {
+  document.addEventListener('click', e => {
+    if (e.target.closest('#nav-open'))   openDrawer()
+    else if (e.target.closest('#nav-close'))   closeDrawer()
+    else if (e.target.closest('#nav-overlay')) closeDrawer()
+  })
 
-document.addEventListener('keydown', e => {
-  const { drawer } = getEls()
-  if (e.key === 'Escape' && drawer?.getAttribute('aria-hidden') === 'false') closeDrawer()
-})
+  document.addEventListener('keydown', e => {
+    const { drawer } = getEls()
+    if (e.key === 'Escape' && drawer?.getAttribute('aria-hidden') === 'false') closeDrawer()
+  })
+}

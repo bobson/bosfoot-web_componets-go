@@ -6,6 +6,21 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Bosfoot — a barefoot shoes e-commerce store. Go backend (standard library only, no framework) + Vanilla JS frontend. Three languages: MK (Macedonian, default), SQ (Albanian), EN (English). ~30 products, Freet brand is live with 5 products.
 
+## Operations Guide
+
+### Testing
+- **Unit Tests:** Found in `internal/locale/locale_test.go` and `models/*_test.go`. Run with `go test -v ./internal/locale/... ./models/...`.
+- **Handler Tests:** Integration-style tests using mocks (sqlite in-memory) are in `handlers/product_handlers_mock_test.go`. Run with `go test -v ./handlers/...`.
+
+### Security
+- **SQL Injection:** All queries use parameterized queries (`$1`, `$2`) via `QueryContext` / `ExecContext`. Do not concatenate user inputs.
+- **CSRF:** All state-changing API endpoints (`POST`, `PUT`, `DELETE`) are protected by `internal/middleware/csrf.go`. Ensure requests include the `X-CSRF-Token` header.
+- **Input Validation:** Order submissions are validated via `models.Order.Validate()`.
+
+### Observability
+- **Structured Logging:** The application uses Go's `log/slog` for structured JSON logging. All logs are output to stdout and `bosfoot.log`. 
+- **Usage:** Use `Logger.Info(msg, keysAndValues...)` or `Logger.Error(msg, err, keysAndValues...)` to add context to logs, improving production traceability.
+
 ## Commands
 
 ```bash
@@ -26,8 +41,11 @@ go run ./cmd/dbimport
 
 # Run tests
 go test ./...
-go test ./handlers/...
+
+# Run image optimization scan
+go run ./cmd/imgopt
 ```
+...
 
 ## Environment
 

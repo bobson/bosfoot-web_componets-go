@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"bosfoot/internal/database"
 	"bosfoot/logger"
 	"bosfoot/models"
 	"database/sql"
@@ -12,7 +13,7 @@ import (
 )
 
 type ProductHandler struct {
-	DB     *sql.DB
+	DB     database.DBQuerier
 	Logger *logger.Logger
 }
 
@@ -250,7 +251,7 @@ func (h *ProductHandler) GetProductByID(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 	if err != nil {
-		h.Logger.Error("GetProductByID: query failed", err)
+		h.Logger.Error("GetProductByID: query failed", err, "product_id", id)
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		return
 	}
