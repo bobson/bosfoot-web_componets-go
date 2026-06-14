@@ -188,8 +188,8 @@ func (h *OrderHandler) CreateOrder(w http.ResponseWriter, r *http.Request) {
 			JOIN product_sizes ps ON ps.id = pst.size_id
 			JOIN product_colors pc ON pc.id = pst.color_id
 			WHERE pst.product_id = $1
-			  AND ps.eu_size = (CASE WHEN $2 = '' THEN NULL ELSE $2::numeric END)
-			  AND pc.color = (CASE WHEN $3 = '' THEN NULL ELSE $3 END)
+			  AND ps.eu_size IS NOT DISTINCT FROM (CASE WHEN $2 = '' THEN NULL ELSE $2::numeric END)
+			  AND pc.color   IS NOT DISTINCT FROM (CASE WHEN $3 = '' THEN NULL ELSE $3 END)
 			FOR UPDATE
 		`, it.ProductID, it.Size, it.Color).Scan(&stockID, &currentQty)
 

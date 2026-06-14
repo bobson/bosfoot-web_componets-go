@@ -264,6 +264,24 @@
 
 @layer utilities {
 
+    /* Skeleton placeholder — shown in place of an <img> when a product has no
+       image. The global prefers-reduced-motion reset above stops the shimmer. */
+    .skeleton {
+        background-color: var(--color-img-bg);
+        background-image: linear-gradient(100deg,
+                transparent 30%,
+                color-mix(in oklch, var(--color-border), white 30%) 50%,
+                transparent 70%);
+        background-size: 200% 100%;
+        background-repeat: no-repeat;
+        animation: skeleton-shimmer 1.4s ease-in-out infinite;
+    }
+
+    @keyframes skeleton-shimmer {
+        from { background-position: 150% 0; }
+        to   { background-position: -50% 0; }
+    }
+
     /* Screen reader only */
     .sr-only {
         position: absolute;

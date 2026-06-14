@@ -12,13 +12,17 @@
 
   <a class="product-card__link" href="/{{$locale}}/products/{{$p.BrandSlug}}/{{$p.Slug}}">
     <div class="product-card__image-wrap">
-      {{$img := safeImg (deref $p.ImageURL)}}
+      {{$img := deref $p.ImageURL}}
+      {{if $img}}
       <img class="product-card__image"
         src="{{cardImg $img}}"
         srcset="{{cardImg $img}} 500w, {{$img}} 1000w"
         sizes="(max-width: 700px) 45vw, 300px"
         width="1000" height="1000"
         alt="{{$p.Name}}" loading="lazy">
+      {{else}}
+      <div class="product-card__image skeleton" aria-hidden="true"></div>
+      {{end}}
     </div>
 
     <div class="product-card__body">

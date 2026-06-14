@@ -9,8 +9,14 @@ import (
 	"net/http"
 	"os"
 	"strings"
+	"sync"
 	"time"
 )
+
+// tgDedupWindow suppresses repeat Telegram alerts for the same message, so an
+// error storm (e.g. DB pool exhaustion firing the same error in a loop) can't
+// spam the bot or trip Telegram's rate limits.
+const tgDedupWindow = 60 * time.Second
 
 // Logger wraps the slog.Logger to maintain compatibility
 type Logger struct {
@@ -19,6 +25,9 @@ type Logger struct {
 	tgTok  string
 	tgID   string
 	appEnv string
+
+	tgMu   sync.Mutex
+	tgSeen map[string]time.Time // alert message -> last time it was sent
 }
 
 // NewLogger creates a structured JSON logger that writes every record to both
@@ -44,6 +53,7 @@ func NewLogger(logFilePath string) (*Logger, error) {
 		tgTok:  os.Getenv("TELEGRAM_BOT_TOKEN"),
 		tgID:   os.Getenv("TELEGRAM_CHAT_ID"),
 		appEnv: env,
+		tgSeen: make(map[string]time.Time),
 	}, nil
 }
 
@@ -57,9 +67,29 @@ func (l *Logger) Error(msg string, err error, args ...any) {
 	args = append(args, "error", err)
 	l.slog.Error(msg, args...)
 
-	if l.tgTok != "" && l.tgID != "" {
+	if l.tgTok != "" && l.tgID != "" && l.shouldAlert(msg) {
 		go l.sendTelegramAlert(msg, err)
 	}
+}
+
+// shouldAlert reports whether a Telegram alert for msg should be sent now, and
+// records the send. It de-duplicates identical messages within tgDedupWindow and
+// prunes stale entries so the map can't grow unbounded.
+func (l *Logger) shouldAlert(msg string) bool {
+	now := time.Now()
+	l.tgMu.Lock()
+	defer l.tgMu.Unlock()
+
+	if last, ok := l.tgSeen[msg]; ok && now.Sub(last) < tgDedupWindow {
+		return false
+	}
+	for k, t := range l.tgSeen {
+		if now.Sub(t) >= tgDedupWindow {
+			delete(l.tgSeen, k)
+		}
+	}
+	l.tgSeen[msg] = now
+	return true
 }
 
 func (l *Logger) sendTelegramAlert(msg string, err error) {
@@ -67,13 +97,15 @@ func (l *Logger) sendTelegramAlert(msg string, err error) {
 	client := &http.Client{Timeout: 10 * time.Second}
 	url := fmt.Sprintf("https://api.telegram.org/bot%s/sendMessage", l.tgTok)
 
-	text := fmt.Sprintf("🚨 *Bosfoot Alert [%s]*\n\n*Message:* %s\n*Error:* `%v` \n\n_Time: %s_",
+	// Plain text only — no parse_mode. Go error strings routinely contain
+	// Markdown metacharacters (_ * ` [), which would make Telegram reject the
+	// message with a 400 exactly when an error is happening.
+	text := fmt.Sprintf("🚨 Bosfoot Alert [%s]\n\nMessage: %s\nError: %v\n\nTime: %s",
 		strings.ToUpper(l.appEnv), msg, err, time.Now().Format(time.RFC822))
 
 	payload := map[string]string{
-		"chat_id":    l.tgID,
-		"text":       text,
-		"parse_mode": "Markdown",
+		"chat_id": l.tgID,
+		"text":    text,
 	}
 
 	b, _ := json.Marshal(payload)

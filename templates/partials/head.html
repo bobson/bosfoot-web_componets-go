@@ -11,7 +11,7 @@
 <meta property="og:url" content="{{.SiteURL}}/{{.Locale}}{{.CurrentPath}}">
 <meta property="og:site_name" content="Bosfoot">
 
-{{$ogImg := .OGImage}}{{if not $ogImg}}{{$ogImg = "/images/freet/hero.webp"}}{{end}}
+{{$ogImg := .OGImage}}{{if not $ogImg}}{{$ogImg = "/images/freet/images/hero.webp"}}{{end}}
 {{if not (hasPrefix $ogImg "http")}}<meta property="og:image" content="{{.SiteURL}}{{$ogImg}}">{{else}}<meta property="og:image" content="{{$ogImg}}">{{end}}
 
 <meta name="twitter:card" content="summary_large_image">

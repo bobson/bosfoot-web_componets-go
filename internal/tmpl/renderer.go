@@ -99,14 +99,6 @@ func NewRenderer(dir string, ui *locale.UI) (*Renderer, error) {
 		// lower lowercases a string: {{lower .Color}}
 		"lower": strings.ToLower,
 
-		// safeImg returns the provided URL, or a placeholder if empty.
-		"safeImg": func(url string) string {
-			if url == "" {
-				return "/images/placeholder.webp"
-			}
-			return url
-		},
-
 		// cardImg returns the 500px "-card" variant path for a primary product
 		// image (/a/x.webp → /a/x-card.webp), used in product-card srcset.
 		// If the variant doesn't exist on disk, it returns the original URL.
@@ -120,18 +112,22 @@ func NewRenderer(dir string, ui *locale.UI) (*Renderer, error) {
 			}
 			variant := strings.TrimSuffix(url, ext) + "-card" + ext
 
-			// Cache the check for performance
-			if _, ok := r.hashes.Load("exists:" + variant); ok {
-				return variant
+			// Cache the disk check (both hit and miss) so a missing variant
+			// doesn't re-stat on every render.
+			if v, ok := r.hashes.Load("exists:" + variant); ok {
+				if v.(bool) {
+					return variant
+				}
+				return url
 			}
 
-			// Check disk
 			fullPath := filepath.Join("public", strings.TrimPrefix(variant, "/"))
-			if _, err := os.Stat(fullPath); err == nil {
-				r.hashes.Store("exists:"+variant, true)
+			_, err := os.Stat(fullPath)
+			exists := err == nil
+			r.hashes.Store("exists:"+variant, exists)
+			if exists {
 				return variant
 			}
-
 			return url
 		},
 

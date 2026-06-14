@@ -127,7 +127,7 @@ func (m *Mailer) CustomerConfirmation(o Order) {
 	}
 	go func() {
 		defer m.recover("Customer confirmation", o.ID)
-		if err := m.send([]string{o.Email}, buildCustomerMessage(m.from, o)); err != nil {
+		if err := m.send([]string{o.Email}, buildCustomerMessage(m.from, strings.Join(m.to, ", "), o)); err != nil {
 			m.log.Error("Customer confirmation failed to send", err, "order_id", o.ID)
 			return
 		}
@@ -232,8 +232,10 @@ func buildMessage(from string, to []string, o Order) []byte {
 	return []byte(b.String())
 }
 
-// buildCustomerMessage renders the RFC 5322 message for the customer.
-func buildCustomerMessage(from string, o Order) []byte {
+// buildCustomerMessage renders the RFC 5322 message for the customer. replyTo is
+// the monitored order inbox, so a customer's reply ("reply to this email") lands
+// somewhere a human reads rather than the unattended From address.
+func buildCustomerMessage(from, replyTo string, o Order) []byte {
 	var b strings.Builder
 	header := func(k, v string) {
 		v = strings.NewReplacer("\r", "", "\n", "").Replace(v)
@@ -302,6 +304,9 @@ func buildCustomerMessage(from string, o Order) []byte {
 
 	header("From", from)
 	header("To", o.Email)
+	if replyTo != "" {
+		header("Reply-To", replyTo)
+	}
 	header("Subject", subject)
 	header("MIME-Version", "1.0")
 	header("Content-Type", "text/plain; charset=utf-8")
