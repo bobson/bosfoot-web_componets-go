@@ -40,6 +40,10 @@ go run ./cmd/imgvariants -force
 
 # Run tests (internal/locale, models, internal/middleware)
 go test ./...
+
+# Syntax-check all browser JS modules (run before pushing; CI gates deploy on it).
+# Catches a broken import/parse error that would kill app.js and all interactivity.
+bash scripts/check-js.sh
 ```
 
 ## Environment

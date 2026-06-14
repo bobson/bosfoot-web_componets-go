@@ -73,9 +73,9 @@ func main() {
 	}
 	srv := &http.Server{
 		Addr: ":" + port,
-		// RealIP wraps the default mux (where routes.Register registered everything)
-		// so every handler sees the Cloudflare visitor IP in r.RemoteAddr.
-		Handler:           middleware.RealIP(http.DefaultServeMux),
+		// Outermost: RealIP (Cloudflare visitor IP) → RedirectTrailingSlash
+		// (/en/ → /en for old indexed Astro URLs) → the default mux.
+		Handler:           middleware.RealIP(middleware.RedirectTrailingSlash(http.DefaultServeMux)),
 		ReadHeaderTimeout: 5 * time.Second,
 		ReadTimeout:       15 * time.Second,
 		WriteTimeout:      30 * time.Second,

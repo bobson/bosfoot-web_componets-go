@@ -8,7 +8,23 @@ on:
   workflow_dispatch: {} # allow manual runs from the Actions tab
 
 jobs:
+  # Gate the deploy: the Go binary must compile, tests must pass, and every
+  # browser JS module must parse. The JS check is what catches a broken import
+  # (e.g. a bad template literal) that would kill app.js — go build can't see it.
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+      - run: go build ./...
+      - run: go test ./...
+      - name: JS syntax check
+        run: bash scripts/check-js.sh
+
   deploy:
+    needs: check
     runs-on: ubuntu-latest
     steps:
       - name: Deploy to droplet
