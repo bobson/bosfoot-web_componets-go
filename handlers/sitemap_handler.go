@@ -64,6 +64,9 @@ func (h *PageHandler) Sitemap(w http.ResponseWriter, r *http.Request) {
 	// Only emit routes that are currently live.
 	// Add a route here each time a new SSR page is built and registered in main.go.
 	for _, loc := range locales {
+		writeURL("/"+loc, "daily", "1.0") // homepages — the most important pages
+	}
+	for _, loc := range locales {
 		writeURL("/"+loc+"/products", "weekly", "0.9")
 	}
 	for _, loc := range locales {
@@ -80,6 +83,18 @@ func (h *PageHandler) Sitemap(w http.ResponseWriter, r *http.Request) {
 	}
 	for _, loc := range locales {
 		writeURL("/"+loc+"/articles", "weekly", "0.6")
+	}
+	for _, loc := range locales {
+		writeURL("/"+loc+"/shipping", "yearly", "0.3")
+	}
+	for _, loc := range locales {
+		writeURL("/"+loc+"/returns", "yearly", "0.3")
+	}
+	for _, loc := range locales {
+		writeURL("/"+loc+"/privacy", "yearly", "0.3")
+	}
+	for _, loc := range locales {
+		writeURL("/"+loc+"/terms", "yearly", "0.3")
 	}
 
 	// Product detail pages.

@@ -1,0 +1,33 @@
+{{define "legal"}}
+<!doctype html>
+<html lang="{{.Locale}}">
+<head>
+  {{template "head" .}}
+  <link rel="stylesheet" href="{{asset "/css/legal.css"}}">
+  <title>{{.Doc.Title}} — Bosfoot</title>
+</head>
+<body>
+  {{template "nav" .}}
+
+  <main class="legal">
+    <article class="legal__inner container">
+      <header class="legal__head">
+        <p class="label-caps text-accent" data-reveal>Bosfoot</p>
+        <h1 class="legal__title" data-reveal>{{.Doc.Title}}</h1>
+        {{if .Doc.Updated}}<p class="legal__updated text-muted text-xs" data-reveal>{{.Doc.Updated}}</p>{{end}}
+        {{if .Doc.Intro}}<p class="legal__intro text-muted" data-reveal>{{.Doc.Intro}}</p>{{end}}
+      </header>
+
+      {{range .Doc.Sections}}
+      <section class="legal__section" data-reveal>
+        <h2 class="legal__h2">{{.Heading}}</h2>
+        {{range .Body}}<p class="legal__p">{{.}}</p>{{end}}
+      </section>
+      {{end}}
+    </article>
+  </main>
+
+  {{template "footer" .}}
+</body>
+</html>
+{{end}}

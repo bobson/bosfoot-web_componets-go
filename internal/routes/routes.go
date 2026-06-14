@@ -33,6 +33,10 @@ func Register(
 	http.HandleFunc("/{locale}/foot-health", pc.Wrap(pageHandler.FootHealth))
 	http.HandleFunc("/{locale}/articles", pc.Wrap(pageHandler.ArticlesListing))
 	http.HandleFunc("/{locale}/articles/{slug}", pc.Wrap(pageHandler.ArticleDetail))
+	http.HandleFunc("/{locale}/privacy", pc.Wrap(pageHandler.Privacy))
+	http.HandleFunc("/{locale}/terms", pc.Wrap(pageHandler.Terms))
+	http.HandleFunc("/{locale}/returns", pc.Wrap(pageHandler.Returns))
+	http.HandleFunc("/{locale}/shipping", pc.Wrap(pageHandler.Shipping))
 	http.HandleFunc("/sitemap.xml", pageHandler.Sitemap)
 
 	// Catch-all

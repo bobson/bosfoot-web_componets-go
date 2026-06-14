@@ -1,0 +1,47 @@
+/* Legal / policy pages (privacy, terms, returns, shipping). Single-column prose
+   constrained to --prose-max for comfortable reading. */
+
+.legal {
+  padding: var(--space-16) 0 var(--space-20);
+}
+
+.legal__inner {
+  max-width: var(--prose-max);
+}
+
+.legal__head {
+  margin-bottom: var(--space-10);
+}
+
+.legal__title {
+  font-size: var(--fs-2xl);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-tight);
+  margin: var(--space-2) 0 var(--space-3);
+}
+
+.legal__updated {
+  margin-bottom: var(--space-4);
+}
+
+.legal__intro {
+  font-size: var(--fs-md);
+  line-height: var(--lh-normal);
+}
+
+.legal__section {
+  margin-top: var(--space-8);
+}
+
+.legal__h2 {
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-semibold);
+  line-height: var(--lh-snug);
+  margin-bottom: var(--space-3);
+}
+
+.legal__p {
+  color: var(--color-text-muted);
+  line-height: var(--lh-normal);
+  margin-bottom: var(--space-3);
+}
