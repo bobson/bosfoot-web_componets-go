@@ -109,7 +109,9 @@ type PageBase struct {
 	Locale          string
 	CurrentPath     string // path after the locale prefix, used by the language switcher
 	SiteURL         string // used for canonical and hreflang tags
+	MetaTitle       string
 	MetaDescription string
+	OGImage         string // Absolute URL to the social sharing image
 
 	// Alternates is the per-locale full path (e.g. "/en/articles/zero-drop")
 	// for pages whose slug differs per language — article pages. When set, the
@@ -725,6 +727,7 @@ func (h *PageHandler) ArticleDetail(w http.ResponseWriter, r *http.Request) {
 			Locale:          loc,
 			CurrentPath:     "/articles/" + slug, // only used if Alternates is nil
 			SiteURL:         h.baseURL(r),
+			MetaTitle:       title,
 			MetaDescription: lead,
 			Alternates:      alternates,
 		},
@@ -1223,13 +1226,25 @@ func (h *PageHandler) ProductDetail(w http.ResponseWriter, r *http.Request) {
 		metaDesc = translation.Description
 	}
 
+	metaTitle := p.BrandName + " " + p.Name
+	if translation.MetaTitle != "" {
+		metaTitle = translation.MetaTitle
+	}
+
+	ogImage := ""
+	if p.ImageURL != nil {
+		ogImage = *p.ImageURL
+	}
+
 	currentPath := "/products/" + brandSlug + "/" + productSlug
 	h.Renderer.Render(w, "product", ProductDetailData{
 		PageBase: PageBase{
 			Locale:          loc,
 			CurrentPath:     currentPath,
 			SiteURL:         h.baseURL(r),
+			MetaTitle:       metaTitle,
 			MetaDescription: metaDesc,
+			OGImage:         ogImage,
 		},
 		Product:     p,
 		Translation: translation,

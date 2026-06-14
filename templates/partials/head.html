@@ -3,6 +3,22 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 {{if .MetaDescription}}<meta name="description" content="{{.MetaDescription}}">{{end}}
 
+{{/* Social Meta (OpenGraph / Twitter) */}}
+{{$title := .MetaTitle}}{{if not $title}}{{$title = t .Locale "hero.heading"}}{{end}}
+<meta property="og:title" content="{{$title}} — Bosfoot">
+{{if .MetaDescription}}<meta property="og:description" content="{{.MetaDescription}}">{{end}}
+<meta property="og:type" content="website">
+<meta property="og:url" content="{{.SiteURL}}/{{.Locale}}{{.CurrentPath}}">
+<meta property="og:site_name" content="Bosfoot">
+
+{{$ogImg := .OGImage}}{{if not $ogImg}}{{$ogImg = "/images/freet/hero.webp"}}{{end}}
+{{if not (hasPrefix $ogImg "http")}}<meta property="og:image" content="{{.SiteURL}}{{$ogImg}}">{{else}}<meta property="og:image" content="{{$ogImg}}">{{end}}
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{{$title}} — Bosfoot">
+{{if .MetaDescription}}<meta name="twitter:description" content="{{.MetaDescription}}">{{end}}
+{{if not (hasPrefix $ogImg "http")}}<meta name="twitter:image" content="{{.SiteURL}}{{$ogImg}}">{{else}}<meta name="twitter:image" content="{{$ogImg}}">{{end}}
+
 {{/*
   Canonical + hreflang. hreflang tells Google these URLs are language variants
   of the same page, not duplicate content; every variant lists all others.
