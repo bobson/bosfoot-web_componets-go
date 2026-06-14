@@ -23,6 +23,8 @@ class CheckoutForm extends HTMLElement {
     this.currency = this.dataset.currency || 'MKD';
     this.showEur = this.dataset.showEur === '1';
     this.labelSize = this.dataset.labelSize || 'Size';
+    this.labelEmailSent = this.dataset.labelEmailSent || '';
+    this.labelSpamNote = this.dataset.labelSpamNote || '';
 
     this.emptyEl = this.querySelector('[data-checkout-empty]');
     this.gridEl = this.querySelector('[data-checkout-grid]');
@@ -34,6 +36,7 @@ class CheckoutForm extends HTMLElement {
     this.submitBtn = this.querySelector('[data-checkout-submit]');
     this.confirmEl = this.querySelector('[data-checkout-confirm]');
     this.confirmOrderEl = this.querySelector('[data-confirm-order]');
+    this.confirmEmailNoteEl = this.querySelector('[data-confirm-email-note]');
     this.confirmCodEl = this.querySelector('[data-confirm-cod]');
     this.confirmBankEl = this.querySelector('[data-confirm-bank]');
 
@@ -132,6 +135,7 @@ class CheckoutForm extends HTMLElement {
       })),
     };
 
+    this.lastEmail = payload.email;
     this.setBusy(true);
     try {
       const csrfToken = document.cookie.match(/(?:^|;\s*)_csrf=([^;]+)/)?.[1] ?? '';
@@ -162,6 +166,10 @@ class CheckoutForm extends HTMLElement {
     window.dispatchEvent(new Event('cart:updated'));
 
     this.confirmOrderEl.textContent = '#' + data.id;
+    if (this.confirmEmailNoteEl) {
+      this.confirmEmailNoteEl.innerHTML = `${esc(this.labelEmailSent)} <strong>${esc(this.lastEmail)}</strong>. ${this.labelSpamNote}`;
+      this.confirmEmailNoteEl.hidden = false;
+    }
     const bank = data.payment_method === 'bank_transfer';
     this.confirmBankEl.hidden = !bank;
     this.confirmCodEl.hidden = bank;

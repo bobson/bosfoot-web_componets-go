@@ -19,7 +19,9 @@
       data-locale="{{.Locale}}"
       data-currency="{{t .Locale "currency.MKD"}}"
       data-show-eur="{{if showEUR .Locale}}1{{end}}"
-      data-label-size="{{t .Locale "cart.size"}}">
+      data-label-size="{{t .Locale "cart.size"}}"
+      data-label-email-sent="{{t .Locale "checkout.confirmEmailSent"}}"
+      data-label-spam-note="{{t .Locale "checkout.confirmSpamNote"}}">
 
       {{/* ── Empty-cart state ─────────────────────────────── */}}
       <div class="checkout__empty" data-checkout-empty hidden>
@@ -155,6 +157,7 @@
         </div>
         <h1 class="checkout__confirm-title font-bold">{{t .Locale "checkout.confirmTitle"}}</h1>
         <p class="checkout__confirm-text text-muted">{{t .Locale "checkout.confirmText"}}</p>
+        <p class="checkout__confirm-email text-muted" data-confirm-email-note hidden></p>
         <p class="checkout__confirm-order">
           {{t .Locale "checkout.orderNumber"}}: <strong data-confirm-order>#—</strong>
         </p>

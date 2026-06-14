@@ -227,6 +227,8 @@
   "checkout.error": "Your order didn't go through. Please try again.",
   "checkout.confirmTitle": "Thank you!",
   "checkout.confirmText": "Your order has been received. We'll contact you shortly to confirm.",
+  "checkout.confirmEmailSent": "We've sent a confirmation email to ",
+  "checkout.confirmSpamNote": "If you don't see it, please check your <strong>spam folder</strong>.",
   "checkout.orderNumber": "Order number",
   "checkout.confirmCod": "Pay in cash on delivery. We'll contact you to confirm your address and delivery time.",
   "checkout.confirmBank": "Transfer the amount to the account below and use your order number as the payment reference. Shipping starts after payment is confirmed.",

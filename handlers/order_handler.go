@@ -40,6 +40,7 @@ type orderReq struct {
 	PostalCode    string         `json:"postal_code"`
 	Notes         string         `json:"notes"`
 	PaymentMethod string         `json:"payment_method"`
+	Locale        string         `json:"locale"` // mk | sq | en
 	Items         []orderItemReq `json:"items"`
 }
 
@@ -71,6 +72,10 @@ func (h *OrderHandler) CreateOrder(w http.ResponseWriter, r *http.Request) {
 	req.City = strings.TrimSpace(req.City)
 	req.PostalCode = strings.TrimSpace(req.PostalCode)
 	req.Notes = strings.TrimSpace(req.Notes)
+	req.Locale = strings.ToLower(strings.TrimSpace(req.Locale))
+	if req.Locale != "mk" && req.Locale != "sq" && req.Locale != "en" {
+		req.Locale = "mk" // default
+	}
 
 	// Map request to model for validation
 	order := models.Order{
@@ -83,6 +88,7 @@ func (h *OrderHandler) CreateOrder(w http.ResponseWriter, r *http.Request) {
 		PostalCode:    &req.PostalCode,
 		Notes:         &req.Notes,
 		PaymentMethod: req.PaymentMethod,
+		Locale:        req.Locale,
 	}
 	for _, it := range req.Items {
 		order.Items = append(order.Items, models.OrderItem{
@@ -159,12 +165,12 @@ func (h *OrderHandler) CreateOrder(w http.ResponseWriter, r *http.Request) {
 	err = tx.QueryRowContext(r.Context(), `
 		INSERT INTO orders
 			(email, phone, first_name, last_name, address, city, postal_code,
-			 country, notes, payment_method, total_mkd)
-		VALUES ($1,$2,$3,$4,$5,$6,$7,'MK',$8,$9,$10)
+			 country, notes, payment_method, total_mkd, locale)
+		VALUES ($1,$2,$3,$4,$5,$6,$7,'MK',$8,$9,$10,$11)
 		RETURNING id
 	`,
 		req.Email, req.Phone, req.FirstName, req.LastName, req.Address, req.City,
-		nullStr(req.PostalCode), nullStr(req.Notes), req.PaymentMethod, total,
+		nullStr(req.PostalCode), nullStr(req.Notes), req.PaymentMethod, total, req.Locale,
 	).Scan(&orderID)
 	if err != nil {
 		h.Logger.Error("CreateOrder: insert order failed", err)
@@ -173,6 +179,43 @@ func (h *OrderHandler) CreateOrder(w http.ResponseWriter, r *http.Request) {
 	}
 
 	for _, it := range req.Items {
+		// Strict variant validation + stock decrement. We check if the combination exists
+		// and has sufficient qty. SELECT FOR UPDATE locks the row to prevent races.
+		var stockID, currentQty int
+		err := tx.QueryRowContext(r.Context(), `
+			SELECT pst.id, pst.qty
+			FROM product_stock pst
+			JOIN product_sizes ps ON ps.id = pst.size_id
+			JOIN product_colors pc ON pc.id = pst.color_id
+			WHERE pst.product_id = $1
+			  AND ps.eu_size = (CASE WHEN $2 = '' THEN NULL ELSE $2::numeric END)
+			  AND pc.color = (CASE WHEN $3 = '' THEN NULL ELSE $3 END)
+			FOR UPDATE
+		`, it.ProductID, it.Size, it.Color).Scan(&stockID, &currentQty)
+
+		if err == sql.ErrNoRows {
+			writeJSONError(w, http.StatusBadRequest, "variant not found for product")
+			return
+		}
+		if err != nil {
+			h.Logger.Error("CreateOrder: variant check failed", err)
+			writeJSONError(w, http.StatusInternalServerError, "internal error")
+			return
+		}
+
+		if currentQty < it.Qty {
+			writeJSONError(w, http.StatusBadRequest, "insufficient stock")
+			return
+		}
+
+		if _, err := tx.ExecContext(r.Context(), `
+			UPDATE product_stock SET qty = qty - $1 WHERE id = $2
+		`, it.Qty, stockID); err != nil {
+			h.Logger.Error("CreateOrder: update stock failed", err)
+			writeJSONError(w, http.StatusInternalServerError, "internal error")
+			return
+		}
+
 		if _, err := tx.ExecContext(r.Context(), `
 			INSERT INTO order_items
 				(order_id, product_id, size, color, quantity, unit_price_mkd)
@@ -208,7 +251,7 @@ func (h *OrderHandler) CreateOrder(w http.ResponseWriter, r *http.Request) {
 				Price: prodByID[it.ProductID].price,
 			})
 		}
-		h.Notifier.OrderPlaced(notify.Order{
+		notifyOrder := notify.Order{
 			ID:            orderID,
 			Total:         total,
 			PaymentMethod: req.PaymentMethod,
@@ -219,8 +262,11 @@ func (h *OrderHandler) CreateOrder(w http.ResponseWriter, r *http.Request) {
 			City:          req.City,
 			PostalCode:    req.PostalCode,
 			Notes:         req.Notes,
+			Locale:        req.Locale,
 			Items:         items,
-		})
+		}
+		h.Notifier.OrderPlaced(notifyOrder)
+		h.Notifier.CustomerConfirmation(notifyOrder)
 	}
 
 	w.Header().Set("Content-Type", "application/json")

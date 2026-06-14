@@ -227,6 +227,8 @@
   "checkout.error": "Porosia nuk u krye. Provoni përsëri.",
   "checkout.confirmTitle": "Faleminderit!",
   "checkout.confirmText": "Porosia juaj u pranua. Do t'ju kontaktojmë së shpejti për konfirmim.",
+  "checkout.confirmEmailSent": "Kemi dërguar një e-mail konfirmimi në ",
+  "checkout.confirmSpamNote": "Nëse nuk e shihni, ju lutemi kontrolloni edhe dosjen tuaj <strong>spam</strong>.",
   "checkout.orderNumber": "Numri i porosisë",
   "checkout.confirmCod": "Paguani në të holla gjatë dorëzimit. Do t'ju kontaktojmë për të konfirmuar adresën dhe kohën e dërgesës.",
   "checkout.confirmBank": "Transferoni shumën në llogarinë më poshtë dhe shënoni numrin e porosisë si qëllim të pagesës. Dërgesa fillon pas konfirmimit të pagesës.",

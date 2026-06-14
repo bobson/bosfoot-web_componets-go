@@ -232,6 +232,7 @@ CREATE TABLE orders (
     payment_method payment_method NOT NULL,        -- cod | bank_transfer
     status         order_status NOT NULL DEFAULT 'pending',
     total_mkd      INTEGER NOT NULL,               -- whole MKD, no decimals
+    locale         lang_code NOT NULL DEFAULT 'mk',
     created_at     TIMESTAMPTZ NOT NULL DEFAULT now(),
     updated_at     TIMESTAMPTZ NOT NULL DEFAULT now()
 );

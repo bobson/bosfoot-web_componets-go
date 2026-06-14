@@ -23,6 +23,7 @@ type Order struct {
 	PaymentMethod string    `json:"payment_method"` // cod | bank_transfer
 	Status        string    `json:"status"`         // pending | shipped | delivered
 	TotalMKD      int       `json:"total_mkd"`
+	Locale        string    `json:"locale"` // mk | sq | en
 	CreatedAt     time.Time `json:"created_at"`
 	UpdatedAt     time.Time `json:"updated_at"`
 
