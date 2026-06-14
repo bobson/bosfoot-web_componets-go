@@ -3,6 +3,7 @@
 <html lang="{{.Locale}}">
 <head>
   {{template "head" .}}
+  <link rel="stylesheet" href="{{asset "/css/about.css"}}">
   <title>
     {{if eq .Locale "mk"}}За нас{{else if eq .Locale "sq"}}Rreth Nesh{{else}}About{{end}}
     — Bosfoot

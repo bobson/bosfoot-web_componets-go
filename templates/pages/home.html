@@ -3,7 +3,9 @@
 <html lang="{{.Locale}}">
   <head>
     {{template "head" .}}
-    <title>Bosfoot — {{t .Locale "hero.sub"}}</title>
+    <link rel="stylesheet" href="{{asset "/css/home.css"}}">
+    <link rel="stylesheet" href="{{asset "/css/listing.css"}}">
+    <title>{{t .Locale "seo.title.home"}} — Bosfoot</title>
   </head>
   <body>
     {{template "nav" .}}

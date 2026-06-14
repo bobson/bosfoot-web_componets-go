@@ -3,7 +3,9 @@
 <html lang="{{.Locale}}">
 <head>
   {{template "head" .}}
-  <title>{{if .Translation.MetaTitle}}{{.Translation.MetaTitle}}{{else}}{{.Product.Name}} — {{.Product.BrandName}}{{end}} — Bosfoot</title>
+  <link rel="stylesheet" href="{{asset "/css/product.css"}}">
+  <link rel="stylesheet" href="{{asset "/css/listing.css"}}">
+  <title>{{if .Translation.MetaTitle}}{{.Translation.MetaTitle}}{{else}}{{.Product.BrandName}} {{.Product.Name}} — {{t .Locale "seo.title.productTag"}}{{end}} — Bosfoot</title>
 </head>
 <body class="page-product">
   {{template "nav" .}}

@@ -8,6 +8,7 @@ import (
 	"context"
 	"database/sql"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"sort"
 	"strings"
@@ -112,6 +113,12 @@ type PageBase struct {
 	MetaTitle       string
 	MetaDescription string
 	OGImage         string // Absolute URL to the social sharing image
+
+	// StructuredData, when non-nil, is marshalled into a
+	// <script type="application/ld+json"> block in the page head. Usually a
+	// slice of schema.org objects (Product + BreadcrumbList, Organization +
+	// WebSite, Article, …).
+	StructuredData any
 
 	// Alternates is the per-locale full path (e.g. "/en/articles/zero-drop")
 	// for pages whose slug differs per language — article pages. When set, the
@@ -346,9 +353,11 @@ func (h *PageHandler) Home(w http.ResponseWriter, r *http.Request) {
 
 	h.Renderer.Render(w, "home", HomePageData{
 		PageBase: PageBase{
-			Locale:      loc,
-			CurrentPath: "",
-			SiteURL:     h.baseURL(r),
+			Locale:          loc,
+			CurrentPath:     "",
+			SiteURL:         h.baseURL(r),
+			MetaDescription: h.UI.T(loc, "seo.home"),
+			StructuredData:  homeStructuredData(h.baseURL(r)),
 		},
 		Brands:   brands,
 		Featured: featured,
@@ -437,12 +446,26 @@ func (h *PageHandler) Brands(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Dynamic, keyword-rich meta description listing the actual brands we carry
+	// (capped so the snippet stays under Google's ~160-char limit).
+	var names []string
+	for _, b := range brands {
+		if len(names) == 6 {
+			break
+		}
+		names = append(names, b.Name)
+	}
+	metaDesc := h.UI.T(loc, "brands.lead")
+	if len(names) > 0 {
+		metaDesc = fmt.Sprintf(h.UI.T(loc, "seo.brands"), strings.Join(names, ", "))
+	}
+
 	h.Renderer.Render(w, "brands", BrandsData{
 		PageBase: PageBase{
 			Locale:          loc,
 			CurrentPath:     "/brands",
 			SiteURL:         h.baseURL(r),
-			MetaDescription: h.UI.T(loc, "brands.lead"),
+			MetaDescription: metaDesc,
 		},
 		Brands: brands,
 	})
@@ -493,9 +516,10 @@ func (h *PageHandler) Checkout(w http.ResponseWriter, r *http.Request) {
 	}
 	loc := locale.FromPath(r.PathValue("locale"))
 	h.Renderer.Render(w, "checkout", PageBase{
-		Locale:      loc,
-		CurrentPath: "/checkout",
-		SiteURL:     h.baseURL(r),
+		Locale:          loc,
+		CurrentPath:     "/checkout",
+		SiteURL:         h.baseURL(r),
+		MetaDescription: h.UI.T(loc, "seo.checkout"),
 	})
 }
 
@@ -722,14 +746,20 @@ func (h *PageHandler) ArticleDetail(w http.ResponseWriter, r *http.Request) {
 		related = append(related, c)
 	}
 
+	siteURL := h.baseURL(r)
+	articleURL := siteURL + "/" + loc + "/articles/" + slug
 	h.Renderer.Render(w, "article", ArticleDetailData{
 		PageBase: PageBase{
 			Locale:          loc,
 			CurrentPath:     "/articles/" + slug, // only used if Alternates is nil
-			SiteURL:         h.baseURL(r),
+			SiteURL:         siteURL,
 			MetaTitle:       title,
 			MetaDescription: lead,
 			Alternates:      alternates,
+			StructuredData: articleStructuredData(
+				articleURL, title, lead, author,
+				siteURL+defaultSocialImage, publishedAt,
+			),
 		},
 		Title:   title,
 		Lead:    lead,
@@ -914,9 +944,10 @@ func (h *PageHandler) ProductListing(w http.ResponseWriter, r *http.Request) {
 
 	h.Renderer.Render(w, "products", ProductListingData{
 		PageBase: PageBase{
-			Locale:      loc,
-			CurrentPath: "/products",
-			SiteURL:     h.baseURL(r),
+			Locale:          loc,
+			CurrentPath:     "/products",
+			SiteURL:         h.baseURL(r),
+			MetaDescription: h.UI.T(loc, "seo.listing"),
 		},
 		Products:         products,
 		Count:            len(products),
@@ -1221,9 +1252,14 @@ func (h *PageHandler) ProductDetail(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
+	// Prefer the curated meta, then the real product copy, then a keyword-rich
+	// generated fallback so no product ships without a useful description.
 	metaDesc := translation.MetaDescription
 	if metaDesc == "" {
 		metaDesc = translation.Description
+	}
+	if metaDesc == "" {
+		metaDesc = fmt.Sprintf(h.UI.T(loc, "seo.product"), p.BrandName, p.Name)
 	}
 
 	metaTitle := p.BrandName + " " + p.Name
@@ -1237,14 +1273,25 @@ func (h *PageHandler) ProductDetail(w http.ResponseWriter, r *http.Request) {
 	}
 
 	currentPath := "/products/" + brandSlug + "/" + productSlug
+	siteURL := h.baseURL(r)
+	productURL := siteURL + "/" + loc + currentPath
+	structured := []any{
+		productStructuredData(siteURL, productURL, metaDesc, p),
+		breadcrumbLD(
+			[2]string{"Bosfoot", siteURL + "/" + loc},
+			[2]string{h.UI.T(loc, "listing.title"), siteURL + "/" + loc + "/products"},
+			[2]string{p.Name, productURL},
+		),
+	}
 	h.Renderer.Render(w, "product", ProductDetailData{
 		PageBase: PageBase{
 			Locale:          loc,
 			CurrentPath:     currentPath,
-			SiteURL:         h.baseURL(r),
+			SiteURL:         siteURL,
 			MetaTitle:       metaTitle,
 			MetaDescription: metaDesc,
 			OGImage:         ogImage,
+			StructuredData:  structured,
 		},
 		Product:     p,
 		Translation: translation,

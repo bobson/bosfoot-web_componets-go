@@ -3,7 +3,8 @@
 <html lang="{{.Locale}}">
 <head>
   {{template "head" .}}
-  <title>{{t .Locale "listing.title"}} — Bosfoot</title>
+  <link rel="stylesheet" href="{{asset "/css/listing.css"}}">
+  <title>{{t .Locale "seo.title.listing"}} — Bosfoot</title>
 </head>
 <body>
   {{template "nav" .}}
@@ -147,8 +148,8 @@
 
         {{if .Products}}
         <div class="listing__grid">
-          {{range .Products}}
-          {{template "product_card" (dict "Product" . "Locale" $.Locale)}}
+          {{range $i, $p := .Products}}
+          {{template "product_card" (dict "Product" $p "Locale" $.Locale "Priority" (eq $i 0))}}
           {{end}}
         </div>
         <p class="listing__empty text-muted" id="filter-noresults" hidden>{{t .Locale "listing.empty"}}</p>

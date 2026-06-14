@@ -1,6 +1,9 @@
 {{define "product_card"}}
 {{$p := .Product}}
 {{$locale := .Locale}}
+{{/* Priority is set true for the first card on the listing page (the LCP image):
+     it fetches eagerly with high priority instead of being lazy-loaded. */}}
+{{$priority := .Priority}}
 <article class="product-card"
   data-brand="{{$p.BrandSlug}}"
   data-gender="{{$p.GenderValue}}"
@@ -19,7 +22,7 @@
         srcset="{{cardImg $img}} 500w, {{$img}} 1000w"
         sizes="(max-width: 700px) 45vw, 300px"
         width="1000" height="1000"
-        alt="{{$p.Name}}" loading="lazy">
+        alt="{{$p.Name}}" {{if $priority}}fetchpriority="high"{{else}}loading="lazy"{{end}}>
       {{else}}
       <div class="product-card__image skeleton" aria-hidden="true"></div>
       {{end}}

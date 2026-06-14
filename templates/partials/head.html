@@ -19,6 +19,9 @@
 {{if .MetaDescription}}<meta name="twitter:description" content="{{.MetaDescription}}">{{end}}
 {{if not (hasPrefix $ogImg "http")}}<meta name="twitter:image" content="{{.SiteURL}}{{$ogImg}}">{{else}}<meta name="twitter:image" content="{{$ogImg}}">{{end}}
 
+{{/* schema.org structured data (Product/Article/Organization), set per-page. */}}
+{{if .StructuredData}}<script type="application/ld+json">{{json .StructuredData}}</script>{{end}}
+
 {{/*
   Canonical + hreflang. hreflang tells Google these URLs are language variants
   of the same page, not duplicate content; every variant lists all others.
@@ -41,19 +44,15 @@
 <link rel="alternate" hreflang="x-default" href="{{.SiteURL}}/mk{{.CurrentPath}}">
 {{end}}
 
+{{/* Always-on chrome: design tokens/utilities (global), nav, search box, cart
+   drawer and footer all appear on every page. Page-specific stylesheets are
+   loaded by each page template right after this partial, so a page only pulls
+   the CSS it actually uses (fewer render-blocking requests). */}}
 <link rel="stylesheet" href="{{asset "/css/global.css"}}">
 <link rel="stylesheet" href="{{asset "/css/nav.css"}}">
 <link rel="stylesheet" href="{{asset "/css/search.css"}}">
-<link rel="stylesheet" href="{{asset "/css/home.css"}}">
-<link rel="stylesheet" href="{{asset "/css/listing.css"}}">
-<link rel="stylesheet" href="{{asset "/css/footer.css"}}">
-<link rel="stylesheet" href="{{asset "/css/product.css"}}">
 <link rel="stylesheet" href="{{asset "/css/cart.css"}}">
-<link rel="stylesheet" href="{{asset "/css/checkout.css"}}">
-<link rel="stylesheet" href="{{asset "/css/foot-health.css"}}">
-<link rel="stylesheet" href="{{asset "/css/article.css"}}">
-<link rel="stylesheet" href="{{asset "/css/about.css"}}">
-<link rel="stylesheet" href="{{asset "/css/size-guide.css"}}">
+<link rel="stylesheet" href="{{asset "/css/footer.css"}}">
 <link rel="manifest" href="/app.webmanifest">
 <script>/* JS detected */</script>
 {{end}}
