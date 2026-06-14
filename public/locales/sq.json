@@ -125,6 +125,9 @@
 
   "detail.size": "Madhësia",
   "detail.color": "Ngjyra",
+  "detail.gallery": "Imazhet e produktit",
+  "detail.prevImage": "Imazhi i mëparshëm",
+  "detail.nextImage": "Imazhi tjetër",
   "detail.selectSize": "Zgjedh madhësinë",
   "detail.sizeGuide": "Udhëzues madhësish",
   "detail.lowStock": "Mbeten vetëm",

@@ -15,6 +15,7 @@ import (
 	"bosfoot/internal/database"
 	"bosfoot/internal/locale"
 	"bosfoot/internal/middleware"
+	"bosfoot/internal/notify"
 	"bosfoot/internal/routes"
 	"bosfoot/internal/tmpl"
 	"bosfoot/logger"
@@ -46,8 +47,10 @@ func main() {
 		log.Fatalf("Failed to parse templates: %v", err)
 	}
 
+	notifier := notify.New(logInstance)
+
 	productHandler := &handlers.ProductHandler{DB: db, Logger: logInstance}
-	orderHandler := &handlers.OrderHandler{DB: db, Logger: logInstance}
+	orderHandler := &handlers.OrderHandler{DB: db, Logger: logInstance, Notifier: notifier}
 
 	siteURL := os.Getenv("SITE_URL")
 	if siteURL == "" {

@@ -38,21 +38,48 @@ body.page-product {
 
 /* ── Gallery ─────────────────────────────────────────── */
 
-.product__main-wrap {
+.product__carousel {
   position: relative;
-  width: 100%;
-  aspect-ratio: 4 / 3;
-  background: var(--color-img-bg);
-  border-radius: var(--radius-md);
-  overflow: hidden;
 }
 
-.product__main-img {
+/* Horizontal scroll-snap track: native swipe, one image per gesture
+   (scroll-snap-stop: always). Keep it gap-free — the JS positions slides by
+   index * clientWidth, which is exact only without gaps/padding. */
+.product__track {
+  display: flex;
+  aspect-ratio: 1 / 1;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  background: var(--color-img-bg);
+  border-radius: var(--radius-md);
+  scrollbar-width: none; /* Firefox */
+}
+
+.product__track::-webkit-scrollbar {
+  display: none; /* WebKit */
+}
+
+.product__track:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.product__slide {
+  flex: 0 0 100%;
+  scroll-snap-align: center;
+  scroll-snap-stop: always;
+}
+
+/* contain shows the whole shoe (vs the old cover crop). Square track + square
+   product shots fill edge-to-edge; any non-square gallery image letterboxes
+   against --color-img-bg. */
+.product__slide-img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   display: block;
-  transition: opacity 0.2s ease;
 }
 
 .product__badge {
@@ -108,6 +135,53 @@ body.page-product {
 .product__thumb--active,
 .product__thumb:hover {
   border-color: var(--color-accent);
+}
+
+/* Arrows sit below the carousel. Swipe is enough on mobile, so they appear on
+   tablet and up. */
+.product__gallery-controls {
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-top: var(--space-3);
+}
+
+@media (min-width: 768px) {
+  .product__gallery-controls {
+    display: flex;
+  }
+}
+
+.product__nav {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  background: var(--color-white);
+  color: var(--color-text);
+  cursor: pointer;
+  transition: border-color 0.15s var(--ease-out), color 0.15s var(--ease-out);
+}
+
+.product__nav:hover:not(:disabled) {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.product__nav:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.product__gallery-counter {
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+  font-variant-numeric: tabular-nums;
 }
 
 /* ── Details panel ───────────────────────────────────── */

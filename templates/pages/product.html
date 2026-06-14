@@ -15,27 +15,52 @@
       {{/* The card image (.Product.ImageURL — the clean, no-overlay shot) leads
            the carousel; the numbered gallery images follow. */}}
       <div class="product__gallery">
-        <div class="product__main-wrap">
+        <div class="product__carousel">
           {{if .Product.IsNew}}<span class="product__badge product__badge--new">{{t .Locale "product.new"}}</span>{{end}}
           {{if .Product.IsOnSale}}<span class="product__badge product__badge--sale">{{t .Locale "product.sale"}}</span>{{end}}
-          {{$src := ""}}
-          {{if .Product.ImageURL}}{{$src = deref .Product.ImageURL}}{{else if .Product.Gallery}}{{$src = (index .Product.Gallery 0).ImageURL}}{{end}}
-          <img id="gallery-main" class="product__main-img" src="{{$src}}" width="1000" height="1000" alt="{{.Product.Name}}">
+
+          {{/* Horizontal scroll-snap carousel: the card image (.Product.ImageURL,
+               the clean no-overlay shot) leads, the numbered gallery follows.
+               The first slide stays eager (it's the LCP image). */}}
+          <div class="product__track" id="gallery-track" tabindex="0" aria-label="{{t .Locale "detail.gallery"}}">
+            {{if .Product.ImageURL}}
+            <div class="product__slide">
+              <img class="product__slide-img" src="{{deref .Product.ImageURL}}" width="1000" height="1000" alt="{{.Product.Name}}">
+            </div>
+            {{end}}
+            {{range .Product.Gallery}}
+            <div class="product__slide">
+              <img class="product__slide-img" src="{{.ImageURL}}" width="1000" height="1000" loading="lazy" alt="{{$.Product.Name}}">
+            </div>
+            {{end}}
+          </div>
         </div>
-        {{if or (and .Product.ImageURL .Product.Gallery) (gt (len .Product.Gallery) 1)}}
-        <div class="product__thumbs">
+
+        {{/* Arrows below the carousel (shown on tablet+ via CSS); the counter
+             tracks position. JS removes this block for single-image products. */}}
+        <div class="product__gallery-controls" id="gallery-controls">
+          <button class="product__nav product__nav--prev" id="gallery-prev" type="button" aria-label="{{t .Locale "detail.prevImage"}}">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+          <span class="product__gallery-counter" id="gallery-counter" aria-hidden="true"></span>
+          <button class="product__nav product__nav--next" id="gallery-next" type="button" aria-label="{{t .Locale "detail.nextImage"}}">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+        </div>
+
+        {{/* Thumbnails also drive the carousel (JS); removed if single image. */}}
+        <div class="product__thumbs" id="gallery-thumbs">
           {{if .Product.ImageURL}}
-          <button class="product__thumb" data-src="{{deref .Product.ImageURL}}" aria-label="View image 1">
+          <button class="product__thumb" type="button" aria-label="View image 1">
             <img src="{{deref .Product.ImageURL}}" alt="" loading="lazy">
           </button>
           {{end}}
           {{range .Product.Gallery}}
-          <button class="product__thumb" data-src="{{.ImageURL}}" aria-label="View image {{.SortOrder}}">
+          <button class="product__thumb" type="button" aria-label="View image {{.SortOrder}}">
             <img src="{{.ImageURL}}" alt="" loading="lazy">
           </button>
           {{end}}
         </div>
-        {{end}}
       </div>
 
       {{/* ── Details ──────────────────────────────────── */}}

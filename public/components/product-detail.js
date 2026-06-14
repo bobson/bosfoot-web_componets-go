@@ -30,20 +30,60 @@ export function initProductDetail() {
     });
   }
 
-  // ── Gallery ───────────────────────────────────────────
-  const mainImg = document.getElementById('gallery-main');
+  // ── Gallery carousel ──────────────────────────────────
+  // Native horizontal scroll-snap (scroll-snap-stop: always in CSS) handles the
+  // swipe and one-image-per-gesture. JS only syncs the active thumb + counter and
+  // drives the prev/next arrows; the track stays gap-free so index * clientWidth
+  // is an exact slide offset.
+  const track = document.getElementById('gallery-track');
+  if (track) {
+    const slides = Array.from(track.querySelectorAll('.product__slide'));
+    const thumbs = Array.from(document.querySelectorAll('.product__thumb'));
+    const prevBtn = document.getElementById('gallery-prev');
+    const nextBtn = document.getElementById('gallery-next');
+    const counter = document.getElementById('gallery-counter');
 
-  document.querySelectorAll('.product__thumb').forEach((btn, i) => {
-    if (i === 0) btn.classList.add('product__thumb--active');
-    btn.addEventListener('click', () => {
-      if (mainImg) {
-        mainImg.style.opacity = '0';
-        setTimeout(() => { mainImg.src = btn.dataset.src; mainImg.style.opacity = ''; }, 150);
-      }
-      document.querySelectorAll('.product__thumb').forEach(b => b.classList.remove('product__thumb--active'));
-      btn.classList.add('product__thumb--active');
-    });
-  });
+    if (slides.length <= 1) {
+      // Single image: nothing to navigate — drop the arrows + thumbs.
+      document.getElementById('gallery-controls')?.remove();
+      document.getElementById('gallery-thumbs')?.remove();
+    } else {
+      let current = 0;
+
+      const goTo = (i) => {
+        const clamped = Math.max(0, Math.min(slides.length - 1, i));
+        track.scrollTo({ left: clamped * track.clientWidth, behavior: 'smooth' });
+      };
+
+      const sync = () => {
+        current = Math.round(track.scrollLeft / track.clientWidth);
+        thumbs.forEach((t, k) => {
+          const on = k === current;
+          t.classList.toggle('product__thumb--active', on);
+          t.setAttribute('aria-current', on ? 'true' : 'false');
+        });
+        if (counter) counter.textContent = `${current + 1} / ${slides.length}`;
+        if (prevBtn) prevBtn.disabled = current === 0;
+        if (nextBtn) nextBtn.disabled = current === slides.length - 1;
+      };
+
+      prevBtn?.addEventListener('click', () => goTo(current - 1));
+      nextBtn?.addEventListener('click', () => goTo(current + 1));
+      thumbs.forEach((t, i) => t.addEventListener('click', () => goTo(i)));
+
+      let raf = 0;
+      track.addEventListener('scroll', () => {
+        if (raf) return;
+        raf = requestAnimationFrame(() => { raf = 0; sync(); });
+      });
+      // Keep alignment exact when the viewport (and slide width) changes.
+      window.addEventListener('resize', () => {
+        track.scrollTo({ left: current * track.clientWidth });
+      });
+
+      sync(); // initial active state + counter
+    }
+  }
 
   // ── Colour selection ──────────────────────────────────
   const colorBtns = Array.from(document.querySelectorAll('.product__color-btn'));

@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"bosfoot/internal/notify"
 	"bosfoot/logger"
 	"bosfoot/models"
 	"database/sql"
@@ -17,8 +18,9 @@ import (
 // server re-prices every line from the DB so a tampered client can't change
 // what an order costs.
 type OrderHandler struct {
-	DB     *sql.DB
-	Logger *logger.Logger
+	DB       *sql.DB
+	Logger   *logger.Logger
+	Notifier *notify.Mailer // emails the owner on each order; nil/disabled is fine
 }
 
 type orderItemReq struct {
@@ -107,7 +109,7 @@ func (h *OrderHandler) CreateOrder(w http.ResponseWriter, r *http.Request) {
 	}
 
 	priceRows, err := h.DB.QueryContext(r.Context(), `
-		SELECT id, price_mkd
+		SELECT id, name, price_mkd
 		FROM products
 		WHERE id = ANY($1) AND is_active = TRUE AND is_published = TRUE
 	`, pq.Array(ids))
@@ -116,27 +118,32 @@ func (h *OrderHandler) CreateOrder(w http.ResponseWriter, r *http.Request) {
 		writeJSONError(w, http.StatusInternalServerError, "internal error")
 		return
 	}
-	priceByID := make(map[int]int)
+	type prodInfo struct {
+		name  string
+		price int
+	}
+	prodByID := make(map[int]prodInfo)
 	for priceRows.Next() {
 		var id, price int
-		if err := priceRows.Scan(&id, &price); err != nil {
+		var name string
+		if err := priceRows.Scan(&id, &name, &price); err != nil {
 			priceRows.Close()
 			h.Logger.Error("CreateOrder: price scan failed", err)
 			writeJSONError(w, http.StatusInternalServerError, "internal error")
 			return
 		}
-		priceByID[id] = price
+		prodByID[id] = prodInfo{name: name, price: price}
 	}
 	priceRows.Close()
 
 	total := 0
 	for _, it := range req.Items {
-		price, ok := priceByID[it.ProductID]
+		p, ok := prodByID[it.ProductID]
 		if !ok {
 			writeJSONError(w, http.StatusBadRequest, "product unavailable")
 			return
 		}
-		total += price * it.Qty
+		total += p.price * it.Qty
 	}
 
 	// Persist the order + items in one transaction.
@@ -170,7 +177,7 @@ func (h *OrderHandler) CreateOrder(w http.ResponseWriter, r *http.Request) {
 			INSERT INTO order_items
 				(order_id, product_id, size, color, quantity, unit_price_mkd)
 			VALUES ($1,$2,$3,$4,$5,$6)
-		`, orderID, it.ProductID, nullStr(it.Size), nullStr(it.Color), it.Qty, priceByID[it.ProductID]); err != nil {
+		`, orderID, it.ProductID, nullStr(it.Size), nullStr(it.Color), it.Qty, prodByID[it.ProductID].price); err != nil {
 			h.Logger.Error("CreateOrder: insert item failed", err)
 			writeJSONError(w, http.StatusInternalServerError, "internal error")
 			return
@@ -181,6 +188,39 @@ func (h *OrderHandler) CreateOrder(w http.ResponseWriter, r *http.Request) {
 		h.Logger.Error("CreateOrder: commit failed", err)
 		writeJSONError(w, http.StatusInternalServerError, "internal error")
 		return
+	}
+
+	// Durable record of the sale, independent of email — visible in stdout/journalctl
+	// even if SMTP is down or unconfigured.
+	h.Logger.Info("Order placed",
+		"order_id", orderID, "total_mkd", total,
+		"email", req.Email, "payment", req.PaymentMethod, "items", len(req.Items))
+
+	// Best-effort owner notification (async; never blocks or fails the order).
+	if h.Notifier != nil {
+		items := make([]notify.Item, 0, len(req.Items))
+		for _, it := range req.Items {
+			items = append(items, notify.Item{
+				Name:  prodByID[it.ProductID].name,
+				Size:  it.Size,
+				Color: it.Color,
+				Qty:   it.Qty,
+				Price: prodByID[it.ProductID].price,
+			})
+		}
+		h.Notifier.OrderPlaced(notify.Order{
+			ID:            orderID,
+			Total:         total,
+			PaymentMethod: req.PaymentMethod,
+			Name:          strings.TrimSpace(req.FirstName + " " + req.LastName),
+			Email:         req.Email,
+			Phone:         req.Phone,
+			Address:       req.Address,
+			City:          req.City,
+			PostalCode:    req.PostalCode,
+			Notes:         req.Notes,
+			Items:         items,
+		})
 	}
 
 	w.Header().Set("Content-Type", "application/json")

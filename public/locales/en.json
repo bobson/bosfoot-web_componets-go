@@ -125,6 +125,9 @@
 
   "detail.size": "Size",
   "detail.color": "Color",
+  "detail.gallery": "Product images",
+  "detail.prevImage": "Previous image",
+  "detail.nextImage": "Next image",
   "detail.selectSize": "Select size",
   "detail.sizeGuide": "Size guide",
   "detail.lowStock": "Only",
