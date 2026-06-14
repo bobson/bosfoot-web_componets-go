@@ -132,9 +132,17 @@ body.page-product {
   display: block;
 }
 
-.product__thumb--active,
-.product__thumb:hover {
+.product__thumb--active {
   border-color: var(--color-accent);
+}
+
+/* Only highlight on hover for devices that truly hover. On touch, :hover sticks
+   after a tap, which would leave the tapped thumb accented alongside the active
+   (swiped-to) one — two focuses instead of one. */
+@media (hover: hover) {
+  .product__thumb:hover {
+    border-color: var(--color-accent);
+  }
 }
 
 /* Arrows sit below the carousel. Swipe is enough on mobile, so they appear on
