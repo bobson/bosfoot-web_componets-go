@@ -100,6 +100,7 @@
           {{/* Payment */}}
           <section class="checkout__section">
             <h2 class="checkout__legend font-semibold">{{t .Locale "checkout.payment"}}</h2>
+            <p class="checkout__paynote text-xs text-muted">{{t .Locale "checkout.paymentNote"}}</p>
             <label class="pay">
               <input class="pay__radio" type="radio" name="payment_method" value="cod" checked>
               <span class="pay__body">

@@ -115,13 +115,13 @@ export function initProductDetail() {
       b.setAttribute('aria-pressed', 'false');
     });
 
-    const sizes = selectedColor ? (stockMap[selectedColor] || {}) : {};
+    // Reservation mode (pre-launch): every size is reservable regardless of
+    // stock, so we never disable a size here. Restore the per-size OOS check
+    // (using stockMap[selectedColor]) when switching back to real selling.
     sizeBtns.forEach(btn => {
-      const qty = sizes[parseFloat(btn.dataset.size)] ?? 0;
-      const oos = qty === 0;
-      btn.disabled = oos;
-      btn.classList.toggle('product__size-btn--oos', oos);
-      btn.setAttribute('aria-disabled', String(oos));
+      btn.disabled = false;
+      btn.classList.remove('product__size-btn--oos');
+      btn.setAttribute('aria-disabled', 'false');
     });
 
     refreshBuyState();

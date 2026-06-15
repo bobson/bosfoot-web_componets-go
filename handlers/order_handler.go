@@ -178,44 +178,13 @@ func (h *OrderHandler) CreateOrder(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Reservation mode (pre-launch): we take reservations, not real sales, so we
+	// do NOT validate against or decrement product_stock — every size is
+	// reservable regardless of inventory. Product existence and price are already
+	// validated in the pricing loop above. To switch back to real selling, restore
+	// the SELECT ... FOR UPDATE variant check, the insufficient-stock guard, and
+	// the `UPDATE product_stock SET qty = qty - $1` decrement here.
 	for _, it := range req.Items {
-		// Strict variant validation + stock decrement. We check if the combination exists
-		// and has sufficient qty. SELECT FOR UPDATE locks the row to prevent races.
-		var stockID, currentQty int
-		err := tx.QueryRowContext(r.Context(), `
-			SELECT pst.id, pst.qty
-			FROM product_stock pst
-			JOIN product_sizes ps ON ps.id = pst.size_id
-			JOIN product_colors pc ON pc.id = pst.color_id
-			WHERE pst.product_id = $1
-			  AND ps.eu_size IS NOT DISTINCT FROM (CASE WHEN $2 = '' THEN NULL ELSE $2::numeric END)
-			  AND pc.color   IS NOT DISTINCT FROM (CASE WHEN $3 = '' THEN NULL ELSE $3 END)
-			FOR UPDATE
-		`, it.ProductID, it.Size, it.Color).Scan(&stockID, &currentQty)
-
-		if err == sql.ErrNoRows {
-			writeJSONError(w, http.StatusBadRequest, "variant not found for product")
-			return
-		}
-		if err != nil {
-			h.Logger.Error("CreateOrder: variant check failed", err)
-			writeJSONError(w, http.StatusInternalServerError, "internal error")
-			return
-		}
-
-		if currentQty < it.Qty {
-			writeJSONError(w, http.StatusBadRequest, "insufficient stock")
-			return
-		}
-
-		if _, err := tx.ExecContext(r.Context(), `
-			UPDATE product_stock SET qty = qty - $1 WHERE id = $2
-		`, it.Qty, stockID); err != nil {
-			h.Logger.Error("CreateOrder: update stock failed", err)
-			writeJSONError(w, http.StatusInternalServerError, "internal error")
-			return
-		}
-
 		if _, err := tx.ExecContext(r.Context(), `
 			INSERT INTO order_items
 				(order_id, product_id, size, color, quantity, unit_price_mkd)
