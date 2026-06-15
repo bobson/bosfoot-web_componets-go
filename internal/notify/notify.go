@@ -262,11 +262,11 @@ func buildCustomerMessage(from, replyTo string, o Order) []byte {
 
 	switch o.Locale {
 	case "mk":
-		subject = fmt.Sprintf("Потврда за нарачка #%d — Bosfoot", o.ID)
+		subject = fmt.Sprintf("Потврда за резервација #%d — Bosfoot", o.ID)
 		hello = "Здраво " + firstName + ","
-		thanks = "Ви благодариме за вашата нарачка од Bosfoot! Ја примивме вашата нарачка и ја подготвуваме."
-		details = "Детали за нарачката"
-		ordNum = "Број на нарачка:"
+		thanks = "Ви благодариме за вашата резервација во Bosfoot! Ја примивме вашата резервација и ќе ве контактираме за да ја потврдиме. Не треба да плаќате однапред."
+		details = "Детали за резервацијата"
+		ordNum = "Број на резервација:"
 		totalL = "Вкупно:"
 		paymntL = "Начин на плаќање:"
 		shipAdd = "Адреса за испорака:"
@@ -275,11 +275,11 @@ func buildCustomerMessage(from, replyTo string, o Order) []byte {
 		regards = "Со почит,"
 		team = "Тимот на Bosfoot"
 	case "sq":
-		subject = fmt.Sprintf("Konfirmimi i porosisë #%d — Bosfoot", o.ID)
+		subject = fmt.Sprintf("Konfirmimi i rezervimit #%d — Bosfoot", o.ID)
 		hello = "Përshëndetje " + firstName + ","
-		thanks = "Faleminderit për porosinë tuaj nga Bosfoot! Kemi marrë porosinë tuaj dhe po e përgatisim atë."
-		details = "Detajet e porosisë"
-		ordNum = "Numri i porosisë:"
+		thanks = "Faleminderit për rezervimin tuaj në Bosfoot! Kemi marrë rezervimin tuaj dhe do t'ju kontaktojmë për ta konfirmuar. Nuk keni nevojë të paguani paraprakisht."
+		details = "Detajet e rezervimit"
+		ordNum = "Numri i rezervimit:"
 		totalL = "Total:"
 		paymntL = "Metoda e pagesës:"
 		shipAdd = "Adresa e dërgesës:"
@@ -288,11 +288,11 @@ func buildCustomerMessage(from, replyTo string, o Order) []byte {
 		regards = "Gjithë të mirat,"
 		team = "Ekipi i Bosfoot"
 	default: // en
-		subject = fmt.Sprintf("Order Confirmation #%d — Bosfoot", o.ID)
+		subject = fmt.Sprintf("Reservation Confirmation #%d — Bosfoot", o.ID)
 		hello = "Hello " + firstName + ","
-		thanks = "Thank you for your order from Bosfoot! We've received your order and are getting it ready."
-		details = "Order Details"
-		ordNum = "Order Number:"
+		thanks = "Thank you for your reservation at Bosfoot! We've received your reservation and will contact you to confirm it. No upfront payment is required."
+		details = "Reservation Details"
+		ordNum = "Reservation Number:"
 		totalL = "Total:"
 		paymntL = "Payment:"
 		shipAdd = "Shipping Address:"
