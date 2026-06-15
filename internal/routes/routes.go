@@ -5,6 +5,7 @@ import (
 	"bosfoot/internal/cache"
 	"bosfoot/internal/middleware"
 	"net/http"
+	"strings"
 )
 
 func Register(
@@ -39,12 +40,54 @@ func Register(
 	http.HandleFunc("/{locale}/shipping", pc.Wrap(pageHandler.Shipping))
 	http.HandleFunc("/sitemap.xml", pageHandler.Sitemap)
 
-	// Catch-all
+	// Catch-all: static files from public/ with tiered caching (see
+	// setStaticCacheHeaders). Keeps fingerprinted assets cached hard while
+	// letting un-fingerprinted files (e.g. component JS modules) revalidate, so
+	// code/content updates reach clients without a manual cache purge.
+	fileServer := http.FileServer(http.Dir("public"))
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Path == "/" {
 			http.Redirect(w, r, "/mk", http.StatusFound)
 			return
 		}
-		http.FileServer(http.Dir("public")).ServeHTTP(w, r)
+		setStaticCacheHeaders(w, r)
+		fileServer.ServeHTTP(w, r)
 	})
+}
+
+// setStaticCacheHeaders applies a Cache-Control tier based on the request:
+//   - fingerprinted URLs (the asset helper adds ?v=<content-hash>) are immutable
+//     and cached for a year — the URL changes whenever the content does;
+//   - images/fonts rarely change and aren't fingerprinted, so cache for a week;
+//   - everything else (JS modules, JSON, HTML) uses no-cache, meaning it is
+//     still stored but revalidated (cheap 304s) so updates are picked up at once.
+func setStaticCacheHeaders(w http.ResponseWriter, r *http.Request) {
+	switch {
+	case r.URL.Query().Has("v"):
+		w.Header().Set("Cache-Control", "public, max-age=31536000, immutable")
+	case isLongLivedAsset(r.URL.Path):
+		w.Header().Set("Cache-Control", "public, max-age=604800")
+	default:
+		w.Header().Set("Cache-Control", "no-cache")
+	}
+}
+
+// isLongLivedAsset reports whether a path is an image or font — content that
+// changes rarely and is safe to cache for a while even without a fingerprint.
+func isLongLivedAsset(path string) bool {
+	switch {
+	case strings.HasSuffix(path, ".webp"),
+		strings.HasSuffix(path, ".avif"),
+		strings.HasSuffix(path, ".png"),
+		strings.HasSuffix(path, ".jpg"),
+		strings.HasSuffix(path, ".jpeg"),
+		strings.HasSuffix(path, ".gif"),
+		strings.HasSuffix(path, ".svg"),
+		strings.HasSuffix(path, ".ico"),
+		strings.HasSuffix(path, ".woff"),
+		strings.HasSuffix(path, ".woff2"):
+		return true
+	default:
+		return false
+	}
 }

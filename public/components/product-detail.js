@@ -33,8 +33,9 @@ export function initProductDetail() {
   // ── Gallery carousel ──────────────────────────────────
   // Native horizontal scroll-snap (scroll-snap-stop: always in CSS) handles the
   // swipe and one-image-per-gesture. JS only syncs the active thumb + counter and
-  // drives the prev/next arrows; the track stays gap-free so index * clientWidth
-  // is an exact slide offset.
+  // drives the prev/next arrows. The visible slide is tracked with an
+  // IntersectionObserver (reliable on touch devices, unlike scroll-position math),
+  // and navigation uses scrollIntoView so it works regardless of slide width.
   const track = document.getElementById('gallery-track');
   if (track) {
     const slides = Array.from(track.querySelectorAll('.product__slide'));
@@ -50,13 +51,9 @@ export function initProductDetail() {
     } else {
       let current = 0;
 
-      const goTo = (i) => {
-        const clamped = Math.max(0, Math.min(slides.length - 1, i));
-        track.scrollTo({ left: clamped * track.clientWidth, behavior: 'smooth' });
-      };
-
-      const sync = () => {
-        current = Math.round(track.scrollLeft / track.clientWidth);
+      // Reflect the active slide onto the thumbs, counter and arrows.
+      const setCurrent = (i) => {
+        current = i;
         thumbs.forEach((t, k) => {
           const on = k === current;
           t.classList.toggle('product__thumb--active', on);
@@ -67,21 +64,29 @@ export function initProductDetail() {
         if (nextBtn) nextBtn.disabled = current === slides.length - 1;
       };
 
+      // Scroll a slide into view. inline:'center' matches scroll-snap-align;
+      // block:'nearest' keeps the page from jumping vertically.
+      const goTo = (i) => {
+        const clamped = Math.max(0, Math.min(slides.length - 1, i));
+        slides[clamped].scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+      };
+
       prevBtn?.addEventListener('click', () => goTo(current - 1));
       nextBtn?.addEventListener('click', () => goTo(current + 1));
       thumbs.forEach((t, i) => t.addEventListener('click', () => goTo(i)));
 
-      let raf = 0;
-      track.addEventListener('scroll', () => {
-        if (raf) return;
-        raf = requestAnimationFrame(() => { raf = 0; sync(); });
-      });
-      // Keep alignment exact when the viewport (and slide width) changes.
-      window.addEventListener('resize', () => {
-        track.scrollTo({ left: current * track.clientWidth });
-      });
+      // Whichever slide is most visible inside the track becomes the active one.
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting && e.intersectionRatio >= 0.6) {
+            const i = slides.indexOf(e.target);
+            if (i !== -1) setCurrent(i);
+          }
+        });
+      }, { root: track, threshold: 0.6 });
+      slides.forEach((s) => io.observe(s));
 
-      sync(); // initial active state + counter
+      setCurrent(0); // initial active state + counter
     }
   }
 
