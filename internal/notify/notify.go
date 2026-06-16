@@ -221,7 +221,7 @@ func buildMessage(from string, to []string, o Order) []byte {
 	for _, it := range o.Items {
 		variant := ""
 		if it.Size != "" || it.Color != "" {
-			variant = fmt.Sprintf(" — Size: %s, Color: %s", it.Size, it.Color)
+			variant = fmt.Sprintf(" — size %s, %s", it.Size, it.Color)
 		}
 		line("  - %s%s ×%d — %s MKD", it.Name, variant, it.Qty, mkd(it.Price*it.Qty))
 	}
