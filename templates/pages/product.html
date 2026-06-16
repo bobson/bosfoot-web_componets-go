@@ -139,7 +139,7 @@
             data-product-id="{{.Product.ID}}"
             data-product-name="{{.Product.Name}}"
             data-brand-name="{{.Product.BrandName}}"
-            data-image-url="{{if .Product.ImageURL}}{{deref .Product.ImageURL}}{{end}}"
+            data-image-url="{{if .Product.ImageURL}}{{asset (deref .Product.ImageURL)}}{{end}}"
             data-price="{{.Product.PriceMKD}}"
             data-label-pick="{{t .Locale "detail.selectSize"}}"
             data-label-add="{{t .Locale "cta.addToCart"}}">

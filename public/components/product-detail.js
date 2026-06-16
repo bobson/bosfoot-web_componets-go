@@ -46,7 +46,8 @@ export function initProductDetail() {
   // hyphens: /images/freet/feldom-3/images/olive-green/feldom-3-1.webp → 'olive-green'
   function colorFolder(src) {
     if (!src) return null;
-    const parts = src.split('/');
+    const path = src.split('?')[0]; // strip ?v=...
+    const parts = path.split('/');
     const idx = parts.lastIndexOf('images');
     return (idx !== -1 && idx + 2 < parts.length)
       ? parts[idx + 1].toLowerCase().replace(/\s+/g, '-')
@@ -55,7 +56,7 @@ export function initProductDetail() {
 
   // Returns only the slides currently visible (not hidden by colour filter).
   function visibleSlides() {
-    return slides.filter(s => s.style.display !== 'none');
+    return slides.filter(s => !s.hasAttribute('hidden'));
   }
 
   let current = 0;
@@ -86,14 +87,14 @@ export function initProductDetail() {
   };
 
   if (slides.length > 1) {
-    prevBtn?.addEventListener('click', () => {
-      const visIdx = visibleSlides().indexOf(slides[current]);
-      goToVisible(visIdx - 1);
-    });
-    nextBtn?.addEventListener('click', () => {
-      const visIdx = visibleSlides().indexOf(slides[current]);
-      goToVisible(visIdx + 1);
-    });
+    const handleNav = (dir) => {
+      const vis = visibleSlides();
+      const visIdx = vis.indexOf(slides[current]);
+      goToVisible(visIdx + dir);
+    };
+
+    prevBtn?.addEventListener('click', () => handleNav(-1));
+    nextBtn?.addEventListener('click', () => handleNav(1));
     thumbs.forEach((t, i) => t.addEventListener('click', () => goToSlide(i)));
 
     const io = new IntersectionObserver((entries) => {
@@ -122,20 +123,32 @@ export function initProductDetail() {
     const key = color.toLowerCase().replace(/\s+/g, '-');
     let firstIdx = -1;
     slides.forEach((slide, i) => {
-      const src = slide.querySelector('img')?.getAttribute('src') || '';
+      const img = slide.querySelector('img');
+      const src = img ? (img.getAttribute('src') || '') : '';
       const folder = colorFolder(src);
       const show = !folder || folder === key;
-      slide.style.display = show ? '' : 'none';
-      if (thumbs[i]) thumbs[i].style.display = show ? '' : 'none';
-      if (show && firstIdx === -1) firstIdx = i;
+      
+      if (show) {
+        slide.removeAttribute('hidden');
+        if (thumbs[i]) thumbs[i].removeAttribute('hidden');
+        if (firstIdx === -1) firstIdx = i;
+      } else {
+        slide.setAttribute('hidden', '');
+        if (thumbs[i]) thumbs[i].setAttribute('hidden', '');
+      }
     });
+
     if (firstIdx !== -1) {
-      goToSlide(firstIdx);
-      setCurrent(firstIdx);
+      // Force layout recalculation then scroll
+      requestAnimationFrame(() => {
+        goToSlide(firstIdx);
+        setCurrent(firstIdx);
+      });
     }
   }
 
   function selectColor(color) {
+    if (!color) return;
     selectedColor = color;
     selectedSize  = null;
 
@@ -148,9 +161,25 @@ export function initProductDetail() {
     if (colorNameEl) colorNameEl.textContent = color;
     applyColorFilter(color);
     updateSizes();
+
+    // Update the cart button image to match the selected color
+    const firstVisible = visibleSlides()[0];
+    if (firstVisible) {
+      const img = firstVisible.querySelector('img');
+      if (img && realBtn) {
+        realBtn.dataset.imageUrl = img.getAttribute('src');
+      }
+    }
   }
 
-  colorBtns.forEach(btn => btn.addEventListener('click', () => selectColor(btn.dataset.color)));
+  colorBtns.forEach(btn => {
+    // Use both click and touchstart for better mobile response
+    const handler = (e) => {
+      e.preventDefault();
+      selectColor(btn.dataset.color);
+    };
+    btn.addEventListener('click', handler);
+  });
 
   // ── Size availability ─────────────────────────────────
   const sizeBtns = Array.from(document.querySelectorAll('.product__size-btn'));
