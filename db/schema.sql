@@ -137,7 +137,8 @@ CREATE TABLE product_gallery (
     id         SERIAL PRIMARY KEY,
     product_id INTEGER NOT NULL REFERENCES products(id) ON DELETE CASCADE,
     image_url  TEXT NOT NULL,
-    sort_order INTEGER NOT NULL DEFAULT 0
+    sort_order INTEGER NOT NULL DEFAULT 0,
+    UNIQUE (product_id, image_url)
 );
 CREATE INDEX idx_product_gallery_product_id ON product_gallery(product_id);
 
@@ -157,7 +158,8 @@ CREATE TABLE product_highlights (
     sort_order INTEGER NOT NULL DEFAULT 0,
     mk         TEXT NOT NULL,
     sq         TEXT NOT NULL,
-    en         TEXT NOT NULL
+    en         TEXT NOT NULL,
+    UNIQUE (product_id, en)
 );
 CREATE INDEX idx_product_highlights_product_id ON product_highlights(product_id);
 

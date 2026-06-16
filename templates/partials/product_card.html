@@ -18,8 +18,8 @@
       {{$img := deref $p.ImageURL}}
       {{if $img}}
       <img class="product-card__image"
-        src="{{cardImg $img}}"
-        srcset="{{cardImg $img}} 500w, {{$img}} 1000w"
+        src="{{asset (cardImg $img)}}"
+        srcset="{{asset (cardImg $img)}} 500w, {{asset $img}} 1000w"
         sizes="(max-width: 700px) 45vw, 300px"
         width="1000" height="1000"
         alt="{{$p.Name}}" {{if $priority}}fetchpriority="high"{{else}}loading="lazy"{{end}}>

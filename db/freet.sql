@@ -67,7 +67,7 @@ VALUES
         (SELECT id FROM categories WHERE slug = 'shoes'),
         (SELECT id FROM genders WHERE value = 'unisex'),
         12900,
-        '/images/freet/chamois/images/chamois.webp',
+        '/images/freet/chamois/images/brown-black/chamois.webp',
         TRUE, TRUE, 1
     ),
     (
@@ -76,7 +76,7 @@ VALUES
         (SELECT id FROM categories WHERE slug = 'shoes'),
         (SELECT id FROM genders WHERE value = 'unisex'),
         5500,
-        '/images/freet/keld-3/images/keld-3.webp',
+        '/images/freet/keld-3/images/olive/keld-3.webp',
         TRUE, TRUE, 2
     ),
     (
@@ -85,7 +85,7 @@ VALUES
         (SELECT id FROM categories WHERE slug = 'shoes'),
         (SELECT id FROM genders WHERE value = 'unisex'),
         8600,
-        '/images/freet/richmond-2/images/richmond-2.webp',
+        '/images/freet/richmond-2/images/brown-black/richmond-2.webp',
         TRUE, TRUE, 3
     ),
     (
@@ -94,7 +94,7 @@ VALUES
         (SELECT id FROM categories WHERE slug = 'shoes'),
         (SELECT id FROM genders WHERE value = 'unisex'),
         6200,
-        '/images/freet/vibe-2/images/vibe-2.webp',
+        '/images/freet/vibe-2/images/black/vibe-2.webp',
         TRUE, TRUE, 4
     ),
     (
@@ -103,7 +103,7 @@ VALUES
         (SELECT id FROM categories WHERE slug = 'shoes'),
         (SELECT id FROM genders WHERE value = 'unisex'),
         8300,
-        '/images/freet/york-2/images/york-2.webp',
+        '/images/freet/york-2/images/black/york-2.webp',
         TRUE, TRUE, 5
     )
 ON CONFLICT (sku) DO NOTHING;
@@ -163,43 +163,44 @@ ON CONFLICT (product_id, activity) DO NOTHING;
 INSERT INTO product_gallery (product_id, image_url, sort_order)
 VALUES
     -- Chamois
-    ((SELECT id FROM products WHERE sku = 'FREET-CHAMOIS'), '/images/freet/chamois/images/chamois-1.webp', 1),
-    ((SELECT id FROM products WHERE sku = 'FREET-CHAMOIS'), '/images/freet/chamois/images/chamois-2.webp', 2),
-    ((SELECT id FROM products WHERE sku = 'FREET-CHAMOIS'), '/images/freet/chamois/images/chamois-3.webp', 3),
-    ((SELECT id FROM products WHERE sku = 'FREET-CHAMOIS'), '/images/freet/chamois/images/chamois-4.webp', 4),
-    ((SELECT id FROM products WHERE sku = 'FREET-CHAMOIS'), '/images/freet/chamois/images/chamois-5.webp', 5),
-    ((SELECT id FROM products WHERE sku = 'FREET-CHAMOIS'), '/images/freet/chamois/images/chamois-6.webp', 6),
-    ((SELECT id FROM products WHERE sku = 'FREET-CHAMOIS'), '/images/freet/chamois/images/chamois-7.webp', 7),
-    ((SELECT id FROM products WHERE sku = 'FREET-CHAMOIS'), '/images/freet/chamois/images/chamois-8.webp', 8),
+    ((SELECT id FROM products WHERE sku = 'FREET-CHAMOIS'), '/images/freet/chamois/images/brown-black/chamois-1.webp', 1),
+    ((SELECT id FROM products WHERE sku = 'FREET-CHAMOIS'), '/images/freet/chamois/images/brown-black/chamois-2.webp', 2),
+    ((SELECT id FROM products WHERE sku = 'FREET-CHAMOIS'), '/images/freet/chamois/images/brown-black/chamois-3.webp', 3),
+    ((SELECT id FROM products WHERE sku = 'FREET-CHAMOIS'), '/images/freet/chamois/images/brown-black/chamois-4.webp', 4),
+    ((SELECT id FROM products WHERE sku = 'FREET-CHAMOIS'), '/images/freet/chamois/images/brown-black/chamois-5.webp', 5),
+    ((SELECT id FROM products WHERE sku = 'FREET-CHAMOIS'), '/images/freet/chamois/images/brown-black/chamois-6.webp', 6),
+    ((SELECT id FROM products WHERE sku = 'FREET-CHAMOIS'), '/images/freet/chamois/images/brown-black/chamois-7.webp', 7),
+    ((SELECT id FROM products WHERE sku = 'FREET-CHAMOIS'), '/images/freet/chamois/images/brown-black/chamois-8.webp', 8),
     -- Keld 3
-    ((SELECT id FROM products WHERE sku = 'FREET-KELD-3'), '/images/freet/keld-3/images/keld-3-1.webp', 1),
-    ((SELECT id FROM products WHERE sku = 'FREET-KELD-3'), '/images/freet/keld-3/images/keld-3-2.webp', 2),
-    ((SELECT id FROM products WHERE sku = 'FREET-KELD-3'), '/images/freet/keld-3/images/keld-3-3.webp', 3),
-    ((SELECT id FROM products WHERE sku = 'FREET-KELD-3'), '/images/freet/keld-3/images/keld-3-4.webp', 4),
-    ((SELECT id FROM products WHERE sku = 'FREET-KELD-3'), '/images/freet/keld-3/images/keld-3-5.webp', 5),
-    ((SELECT id FROM products WHERE sku = 'FREET-KELD-3'), '/images/freet/keld-3/images/keld-3-6.webp', 6),
-    ((SELECT id FROM products WHERE sku = 'FREET-KELD-3'), '/images/freet/keld-3/images/keld-3-7.webp', 7),
-    ((SELECT id FROM products WHERE sku = 'FREET-KELD-3'), '/images/freet/keld-3/images/keld-3-8.webp', 8),
+    ((SELECT id FROM products WHERE sku = 'FREET-KELD-3'), '/images/freet/keld-3/images/olive/keld-3-1.webp', 1),
+    ((SELECT id FROM products WHERE sku = 'FREET-KELD-3'), '/images/freet/keld-3/images/olive/keld-3-2.webp', 2),
+    ((SELECT id FROM products WHERE sku = 'FREET-KELD-3'), '/images/freet/keld-3/images/olive/keld-3-3.webp', 3),
+    ((SELECT id FROM products WHERE sku = 'FREET-KELD-3'), '/images/freet/keld-3/images/olive/keld-3-4.webp', 4),
+    ((SELECT id FROM products WHERE sku = 'FREET-KELD-3'), '/images/freet/keld-3/images/olive/keld-3-5.webp', 5),
+    ((SELECT id FROM products WHERE sku = 'FREET-KELD-3'), '/images/freet/keld-3/images/olive/keld-3-6.webp', 6),
+    ((SELECT id FROM products WHERE sku = 'FREET-KELD-3'), '/images/freet/keld-3/images/olive/keld-3-7.webp', 7),
+    ((SELECT id FROM products WHERE sku = 'FREET-KELD-3'), '/images/freet/keld-3/images/olive/keld-3-8.webp', 8),
     -- Richmond 2
-    ((SELECT id FROM products WHERE sku = 'FREET-RICHMOND-2'), '/images/freet/richmond-2/images/richmond-2-1.webp', 1),
-    ((SELECT id FROM products WHERE sku = 'FREET-RICHMOND-2'), '/images/freet/richmond-2/images/richmond-2-2.webp', 2),
-    ((SELECT id FROM products WHERE sku = 'FREET-RICHMOND-2'), '/images/freet/richmond-2/images/richmond-2-3.webp', 3),
-    ((SELECT id FROM products WHERE sku = 'FREET-RICHMOND-2'), '/images/freet/richmond-2/images/richmond-2-4.webp', 4),
-    ((SELECT id FROM products WHERE sku = 'FREET-RICHMOND-2'), '/images/freet/richmond-2/images/richmond-2-5.webp', 5),
+    ((SELECT id FROM products WHERE sku = 'FREET-RICHMOND-2'), '/images/freet/richmond-2/images/brown-black/richmond-2-1.webp', 1),
+    ((SELECT id FROM products WHERE sku = 'FREET-RICHMOND-2'), '/images/freet/richmond-2/images/brown-black/richmond-2-2.webp', 2),
+    ((SELECT id FROM products WHERE sku = 'FREET-RICHMOND-2'), '/images/freet/richmond-2/images/brown-black/richmond-2-3.webp', 3),
+    ((SELECT id FROM products WHERE sku = 'FREET-RICHMOND-2'), '/images/freet/richmond-2/images/brown-black/richmond-2-4.webp', 4),
+    ((SELECT id FROM products WHERE sku = 'FREET-RICHMOND-2'), '/images/freet/richmond-2/images/brown-black/richmond-2-5.webp', 5),
     -- Vibe 2
-    ((SELECT id FROM products WHERE sku = 'FREET-VIBE-2'), '/images/freet/vibe-2/images/vibe-2-2.webp',  1),
-    ((SELECT id FROM products WHERE sku = 'FREET-VIBE-2'), '/images/freet/vibe-2/images/vibe-2-3.webp',  2),
-    ((SELECT id FROM products WHERE sku = 'FREET-VIBE-2'), '/images/freet/vibe-2/images/vibe-2-5.webp',  3),
-    ((SELECT id FROM products WHERE sku = 'FREET-VIBE-2'), '/images/freet/vibe-2/images/vibe-2-6.webp',  4),
-    ((SELECT id FROM products WHERE sku = 'FREET-VIBE-2'), '/images/freet/vibe-2/images/vibe-2-8.webp',  5),
-    ((SELECT id FROM products WHERE sku = 'FREET-VIBE-2'), '/images/freet/vibe-2/images/vibe-2-9.webp',  6),
-    ((SELECT id FROM products WHERE sku = 'FREET-VIBE-2'), '/images/freet/vibe-2/images/vibe-2-10.webp', 7),
+    ((SELECT id FROM products WHERE sku = 'FREET-VIBE-2'), '/images/freet/vibe-2/images/black/vibe-2-2.webp',  1),
+    ((SELECT id FROM products WHERE sku = 'FREET-VIBE-2'), '/images/freet/vibe-2/images/black/vibe-2-3.webp',  2),
+    ((SELECT id FROM products WHERE sku = 'FREET-VIBE-2'), '/images/freet/vibe-2/images/black/vibe-2-5.webp',  3),
+    ((SELECT id FROM products WHERE sku = 'FREET-VIBE-2'), '/images/freet/vibe-2/images/black/vibe-2-6.webp',  4),
+    ((SELECT id FROM products WHERE sku = 'FREET-VIBE-2'), '/images/freet/vibe-2/images/black/vibe-2-8.webp',  5),
+    ((SELECT id FROM products WHERE sku = 'FREET-VIBE-2'), '/images/freet/vibe-2/images/black/vibe-2-9.webp',  6),
+    ((SELECT id FROM products WHERE sku = 'FREET-VIBE-2'), '/images/freet/vibe-2/images/black/vibe-2-10.webp', 7),
     -- York 2
-    ((SELECT id FROM products WHERE sku = 'FREET-YORK-2'), '/images/freet/york-2/images/york-2-2.webp',  1),
-    ((SELECT id FROM products WHERE sku = 'FREET-YORK-2'), '/images/freet/york-2/images/york-2-5.webp',  2),
-    ((SELECT id FROM products WHERE sku = 'FREET-YORK-2'), '/images/freet/york-2/images/york-2-7.webp',  3),
-    ((SELECT id FROM products WHERE sku = 'FREET-YORK-2'), '/images/freet/york-2/images/york-2-10.webp', 4),
-    ((SELECT id FROM products WHERE sku = 'FREET-YORK-2'), '/images/freet/york-2/images/york-2-11.webp', 5);
+    ((SELECT id FROM products WHERE sku = 'FREET-YORK-2'), '/images/freet/york-2/images/black/york-2-2.webp',  1),
+    ((SELECT id FROM products WHERE sku = 'FREET-YORK-2'), '/images/freet/york-2/images/black/york-2-5.webp',  2),
+    ((SELECT id FROM products WHERE sku = 'FREET-YORK-2'), '/images/freet/york-2/images/black/york-2-7.webp',  3),
+    ((SELECT id FROM products WHERE sku = 'FREET-YORK-2'), '/images/freet/york-2/images/black/york-2-10.webp', 4),
+    ((SELECT id FROM products WHERE sku = 'FREET-YORK-2'), '/images/freet/york-2/images/black/york-2-11.webp', 5)
+ON CONFLICT (product_id, image_url) DO NOTHING;
 
 -- ---------- Product specs (EN key-value, extracted from technical details) ----------
 
@@ -279,7 +280,8 @@ VALUES
     ((SELECT id FROM products WHERE sku = 'FREET-YORK-2'), 1, 'Урбано',          'Urban',              'URBAN'),
     ((SELECT id FROM products WHERE sku = 'FREET-YORK-2'), 2, 'Удобно',          'Komod',              'COMFORT'),
     ((SELECT id FROM products WHERE sku = 'FREET-YORK-2'), 3, 'Отпорно на вода', 'Rezistent ndaj ujit','WATER RESISTANT'),
-    ((SELECT id FROM products WHERE sku = 'FREET-YORK-2'), 4, 'Издржливо',       'I qëndrueshëm',      'DURABLE');
+    ((SELECT id FROM products WHERE sku = 'FREET-YORK-2'), 4, 'Издржливо',       'I qëndrueshëm',      'DURABLE')
+ON CONFLICT (product_id, en) DO NOTHING;
 
 -- ---------- Translations ----------
 

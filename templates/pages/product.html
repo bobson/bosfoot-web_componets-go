@@ -27,7 +27,7 @@
           <div class="product__track" id="gallery-track" tabindex="0" aria-label="{{t .Locale "detail.gallery"}}">
             {{if deref .Product.ImageURL}}
             <div class="product__slide">
-              <img class="product__slide-img" src="{{deref .Product.ImageURL}}" width="1000" height="1000" alt="{{.Product.Name}}">
+              <img class="product__slide-img" src="{{asset (deref .Product.ImageURL)}}" width="1000" height="1000" alt="{{.Product.Name}}">
             </div>
             {{else if not .Product.Gallery}}
             <div class="product__slide">
@@ -36,7 +36,7 @@
             {{end}}
             {{range .Product.Gallery}}
             <div class="product__slide">
-              <img class="product__slide-img" src="{{.ImageURL}}" width="1000" height="1000" loading="lazy" alt="{{$.Product.Name}}">
+              <img class="product__slide-img" src="{{asset .ImageURL}}" width="1000" height="1000" loading="lazy" alt="{{$.Product.Name}}">
             </div>
             {{end}}
           </div>
@@ -58,12 +58,12 @@
         <div class="product__thumbs" id="gallery-thumbs">
           {{if deref .Product.ImageURL}}
           <button class="product__thumb" type="button" aria-label="View image 1">
-            <img src="{{deref .Product.ImageURL}}" alt="" loading="lazy">
+            <img src="{{asset (deref .Product.ImageURL)}}" alt="" loading="lazy">
           </button>
           {{end}}
           {{range .Product.Gallery}}
           <button class="product__thumb" type="button" aria-label="View image {{.SortOrder}}">
-            <img src="{{.ImageURL}}" alt="" loading="lazy">
+            <img src="{{asset .ImageURL}}" alt="" loading="lazy">
           </button>
           {{end}}
         </div>
