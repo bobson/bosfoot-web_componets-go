@@ -52,7 +52,19 @@ class CheckoutForm extends HTMLElement {
 
   read() {
     try {
-      return JSON.parse(localStorage.getItem(CART_KEY) || '[]');
+      const cart = JSON.parse(localStorage.getItem(CART_KEY) || '[]');
+      // Self-healing: fix any old URLs with spaces that were broken by the cleanup
+      let changed = false;
+      cart.forEach(item => {
+        if (item.imageUrl && item.imageUrl.includes(' ')) {
+          item.imageUrl = item.imageUrl.replace(/\s+/g, '-');
+          changed = true;
+        }
+      });
+      if (changed) {
+        localStorage.setItem(CART_KEY, JSON.stringify(cart));
+      }
+      return cart;
     } catch {
       return [];
     }

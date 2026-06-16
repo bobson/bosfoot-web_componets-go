@@ -161,6 +161,15 @@ export function initProductDetail() {
     if (colorNameEl) colorNameEl.textContent = color;
     applyColorFilter(color);
     updateSizes();
+
+    // Update the cart button image to match the selected color
+    const firstVisible = visibleSlides()[0];
+    if (firstVisible) {
+      const img = firstVisible.querySelector('img');
+      if (img && realBtn) {
+        realBtn.dataset.imageUrl = img.getAttribute('src');
+      }
+    }
   }
 
   colorBtns.forEach(btn => {
