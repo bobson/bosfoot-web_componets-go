@@ -11,6 +11,7 @@ const components = [
   ["./components/checkout-form.js", "initCheckoutForm"],
   ["./components/listing-filter.js", "initListingFilter"],
   ["./components/product-detail.js", "initProductDetail"],
+  ["./components/size-guide-modal.js", "initSizeGuideModal"],
   ["./components/scroll-reveal.js", "initScrollReveal"],
 ];
 

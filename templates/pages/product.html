@@ -5,6 +5,7 @@
   {{template "head" .}}
   <link rel="stylesheet" href="{{asset "/css/product.css"}}">
   <link rel="stylesheet" href="{{asset "/css/listing.css"}}">
+  <link rel="stylesheet" href="{{asset "/css/size-guide-modal.css"}}">
   <title>{{if .Translation.MetaTitle}}{{.Translation.MetaTitle}}{{else}}{{.Product.BrandName}} {{.Product.Name}} — {{t .Locale "seo.title.productTag"}}{{end}} — Bosfoot</title>
 </head>
 <body class="page-product">
@@ -116,7 +117,7 @@
         <div class="product__option">
           <div class="product__option-header">
             <p class="product__option-label text-xs font-semibold">{{t .Locale "detail.size"}}</p>
-            <a class="product__size-guide-link text-xs text-muted" href="/{{.Locale}}/size-guide">{{t .Locale "detail.sizeGuide"}}</a>
+            <button class="product__size-guide-link text-xs text-muted" type="button" id="open-size-guide">{{t .Locale "detail.sizeGuide"}}</button>
           </div>
           <div class="product__sizes" id="size-select">
             {{range .Product.Sizes}}
@@ -277,6 +278,8 @@
   </div>
 
   {{template "footer" .}}
+  {{template "size-guide-modal" .}}
+  <script type="module" src="{{asset "/components/size-guide-modal.js"}}"></script>
 
 </body>
 </html>

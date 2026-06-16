@@ -9,6 +9,11 @@
   overflow: hidden;
   box-shadow: 0 8px 40px rgba(0,0,0,0.18);
   background: var(--color-bg);
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  margin: 0;
 }
 
 .sg-modal::backdrop {
@@ -174,5 +179,33 @@
   .sg-modal__step-img {
     width: 100px;
     height: 100px;
+  }
+}
+
+/* ── Mobile full-screen ── */
+
+@media (max-width: 640px) {
+  .sg-modal {
+    width: 100vw;
+    max-height: 100dvh;
+    max-width: 100vw;
+    border-radius: 0;
+    top: 0;
+    left: 0;
+    transform: none;
+  }
+
+  .sg-modal__inner {
+    max-height: 100dvh;
+  }
+
+  .sg-modal__body {
+    padding: var(--space-4);
+    gap: var(--space-6);
+  }
+
+  .sg-modal__step-img {
+    width: 80px;
+    height: 80px;
   }
 }
