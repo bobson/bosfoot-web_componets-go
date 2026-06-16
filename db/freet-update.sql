@@ -44,43 +44,7 @@ UPDATE products SET
     image_url   = '/images/freet/york-2/images/black/york-2.webp'
 WHERE sku = 'FREET-YORK-2';
 
--- ── 2. Update existing gallery paths (add colour subfolders) ─────────────────
-
-UPDATE product_gallery
-SET image_url = REPLACE(image_url,
-    '/images/freet/chamois/images/',
-    '/images/freet/chamois/images/brown-black/')
-WHERE product_id = (SELECT id FROM products WHERE sku = 'FREET-CHAMOIS')
-  AND image_url NOT LIKE '%/brown-black/%';
-
-UPDATE product_gallery
-SET image_url = REPLACE(image_url,
-    '/images/freet/keld-3/images/',
-    '/images/freet/keld-3/images/olive/')
-WHERE product_id = (SELECT id FROM products WHERE sku = 'FREET-KELD-3')
-  AND image_url NOT LIKE '%/olive/%';
-
-UPDATE product_gallery
-SET image_url = REPLACE(image_url,
-    '/images/freet/richmond-2/images/',
-    '/images/freet/richmond-2/images/brown-black/')
-WHERE product_id = (SELECT id FROM products WHERE sku = 'FREET-RICHMOND-2')
-  AND image_url NOT LIKE '%/brown-black/%';
-
-UPDATE product_gallery
-SET image_url = REPLACE(image_url,
-    '/images/freet/vibe-2/images/',
-    '/images/freet/vibe-2/images/black/')
-WHERE product_id = (SELECT id FROM products WHERE sku = 'FREET-VIBE-2')
-  AND image_url NOT LIKE '%/black/%'
-  AND image_url NOT LIKE '%/white/%';
-
-UPDATE product_gallery
-SET image_url = REPLACE(image_url,
-    '/images/freet/york-2/images/',
-    '/images/freet/york-2/images/black/')
-WHERE product_id = (SELECT id FROM products WHERE sku = 'FREET-YORK-2')
-  AND image_url NOT LIKE '%/black/%';
+-- ── 2. Gallery paths (already consolidated in freet.sql) ──────────────────────
 
 -- ── 3. Vibe 2 — add white colour gallery ─────────────────────────────────────
 
