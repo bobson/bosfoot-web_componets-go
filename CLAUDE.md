@@ -38,6 +38,11 @@ go run ./cmd/imgvariants
 # photo in place (a plain run would skip the stale variant).
 go run ./cmd/imgvariants -force
 
+# Export reservations: writes reservations_to_order.csv (qty per product/size/
+# color, i.e. what to order from suppliers) + reservations_contacts.csv (who to
+# contact) and prints a "to order" summary. Used during the reservation phase.
+go run ./cmd/reservations
+
 # Run tests (internal/locale, models, internal/middleware)
 go test ./...
 

@@ -30,73 +30,114 @@ export function initProductDetail() {
     });
   }
 
-  // ── Gallery carousel ──────────────────────────────────
-  // Native horizontal scroll-snap (scroll-snap-stop: always in CSS) handles the
-  // swipe and one-image-per-gesture. JS only syncs the active thumb + counter and
-  // drives the prev/next arrows. The visible slide is tracked with an
-  // IntersectionObserver (reliable on touch devices, unlike scroll-position math),
-  // and navigation uses scrollIntoView so it works regardless of slide width.
+  // ── Gallery carousel + colour filtering ──────────────
+  // Native scroll-snap handles swipe. JS tracks the active slide via
+  // IntersectionObserver and navigates with scrollIntoView. When a colour is
+  // selected, slides whose image URL does not contain that colour's folder are
+  // hidden (display:none), so the carousel only shows the chosen colour.
   const track = document.getElementById('gallery-track');
-  if (track) {
-    const slides = Array.from(track.querySelectorAll('.product__slide'));
-    const thumbs = Array.from(document.querySelectorAll('.product__thumb'));
-    const prevBtn = document.getElementById('gallery-prev');
-    const nextBtn = document.getElementById('gallery-next');
-    const counter = document.getElementById('gallery-counter');
+  const slides = track ? Array.from(track.querySelectorAll('.product__slide')) : [];
+  const thumbs = Array.from(document.querySelectorAll('.product__thumb'));
+  const prevBtn = document.getElementById('gallery-prev');
+  const nextBtn = document.getElementById('gallery-next');
+  const counter = document.getElementById('gallery-counter');
 
-    if (slides.length <= 1) {
-      // Single image: nothing to navigate — drop the arrows + thumbs.
-      document.getElementById('gallery-controls')?.remove();
-      document.getElementById('gallery-thumbs')?.remove();
-    } else {
-      let current = 0;
+  // Extract the colour folder name from an image path and normalise spaces to
+  // hyphens: /images/freet/feldom-3/images/olive-green/feldom-3-1.webp → 'olive-green'
+  function colorFolder(src) {
+    if (!src) return null;
+    const parts = src.split('/');
+    const idx = parts.lastIndexOf('images');
+    return (idx !== -1 && idx + 2 < parts.length)
+      ? parts[idx + 1].toLowerCase().replace(/\s+/g, '-')
+      : null;
+  }
 
-      // Reflect the active slide onto the thumbs, counter and arrows.
-      const setCurrent = (i) => {
-        current = i;
-        thumbs.forEach((t, k) => {
-          const on = k === current;
-          t.classList.toggle('product__thumb--active', on);
-          t.setAttribute('aria-current', on ? 'true' : 'false');
-        });
-        if (counter) counter.textContent = `${current + 1} / ${slides.length}`;
-        if (prevBtn) prevBtn.disabled = current === 0;
-        if (nextBtn) nextBtn.disabled = current === slides.length - 1;
-      };
+  // Returns only the slides currently visible (not hidden by colour filter).
+  function visibleSlides() {
+    return slides.filter(s => s.style.display !== 'none');
+  }
 
-      // Scroll a slide into view. inline:'center' matches scroll-snap-align;
-      // block:'nearest' keeps the page from jumping vertically.
-      const goTo = (i) => {
-        const clamped = Math.max(0, Math.min(slides.length - 1, i));
-        slides[clamped].scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
-      };
+  let current = 0;
 
-      prevBtn?.addEventListener('click', () => goTo(current - 1));
-      nextBtn?.addEventListener('click', () => goTo(current + 1));
-      thumbs.forEach((t, i) => t.addEventListener('click', () => goTo(i)));
+  const setCurrent = (i) => {
+    current = i;
+    const vis = visibleSlides();
+    const visIdx = vis.indexOf(slides[i]);
+    thumbs.forEach((t, k) => {
+      const on = k === i;
+      t.classList.toggle('product__thumb--active', on);
+      t.setAttribute('aria-current', on ? 'true' : 'false');
+    });
+    if (counter) counter.textContent = `${visIdx + 1} / ${vis.length}`;
+    if (prevBtn) prevBtn.disabled = visIdx <= 0;
+    if (nextBtn) nextBtn.disabled = visIdx >= vis.length - 1;
+  };
 
-      // Whichever slide is most visible inside the track becomes the active one.
-      const io = new IntersectionObserver((entries) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting && e.intersectionRatio >= 0.6) {
-            const i = slides.indexOf(e.target);
-            if (i !== -1) setCurrent(i);
-          }
-        });
-      }, { root: track, threshold: 0.6 });
-      slides.forEach((s) => io.observe(s));
+  // Navigate by visible position (prev = -1, next = +1, or absolute index).
+  const goToVisible = (visIdx) => {
+    const vis = visibleSlides();
+    const clamped = Math.max(0, Math.min(vis.length - 1, visIdx));
+    vis[clamped]?.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+  };
 
-      setCurrent(0); // initial active state + counter
-    }
+  const goToSlide = (arrayIdx) => {
+    slides[arrayIdx]?.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+  };
+
+  if (slides.length > 1) {
+    prevBtn?.addEventListener('click', () => {
+      const visIdx = visibleSlides().indexOf(slides[current]);
+      goToVisible(visIdx - 1);
+    });
+    nextBtn?.addEventListener('click', () => {
+      const visIdx = visibleSlides().indexOf(slides[current]);
+      goToVisible(visIdx + 1);
+    });
+    thumbs.forEach((t, i) => t.addEventListener('click', () => goToSlide(i)));
+
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting && e.intersectionRatio >= 0.6) {
+          const i = slides.indexOf(e.target);
+          if (i !== -1) setCurrent(i);
+        }
+      });
+    }, { root: track, threshold: 0.6 });
+    slides.forEach((s) => io.observe(s));
+
+    setCurrent(0);
+  } else if (slides.length <= 1) {
+    document.getElementById('gallery-controls')?.remove();
+    document.getElementById('gallery-thumbs')?.remove();
   }
 
   // ── Colour selection ──────────────────────────────────
   const colorBtns = Array.from(document.querySelectorAll('.product__color-btn'));
   const colorNameEl = document.getElementById('color-name');
+  const multiColor = colorBtns.length > 1;
+
+  function applyColorFilter(color) {
+    if (!multiColor) return; // single-colour: nothing to filter
+    const key = color.toLowerCase().replace(/\s+/g, '-');
+    let firstIdx = -1;
+    slides.forEach((slide, i) => {
+      const src = slide.querySelector('img')?.getAttribute('src') || '';
+      const folder = colorFolder(src);
+      const show = !folder || folder === key;
+      slide.style.display = show ? '' : 'none';
+      if (thumbs[i]) thumbs[i].style.display = show ? '' : 'none';
+      if (show && firstIdx === -1) firstIdx = i;
+    });
+    if (firstIdx !== -1) {
+      goToSlide(firstIdx);
+      setCurrent(firstIdx);
+    }
+  }
 
   function selectColor(color) {
     selectedColor = color;
-    selectedSize  = null; // changing colour invalidates the chosen size
+    selectedSize  = null;
 
     colorBtns.forEach(b => {
       const active = b.dataset.color === color;
@@ -105,6 +146,7 @@ export function initProductDetail() {
     });
 
     if (colorNameEl) colorNameEl.textContent = color;
+    applyColorFilter(color);
     updateSizes();
   }
 

@@ -77,8 +77,9 @@ func main() {
 }
 
 // isPrimaryProductImage reports whether path is a product's primary image — a
-// .webp whose basename equals the product slug directory two levels up
-// (.../<slug>/images/<slug>.webp), and which isn't itself a -card variant.
+// .webp whose basename equals the product slug. Handles both layouts:
+//   - .../slug/images/slug.webp          (flat, no colour subfolder)
+//   - .../slug/images/colour/slug.webp   (colour subfolder per variant)
 func isPrimaryProductImage(path string) bool {
 	if strings.ToLower(filepath.Ext(path)) != ".webp" {
 		return false
@@ -87,8 +88,12 @@ func isPrimaryProductImage(path string) bool {
 	if strings.HasSuffix(name, variantSfx) {
 		return false
 	}
-	productDir := filepath.Base(filepath.Dir(filepath.Dir(path)))
-	return name == productDir
+	// Two levels up: .../slug/images/slug.webp
+	if name == filepath.Base(filepath.Dir(filepath.Dir(path))) {
+		return true
+	}
+	// Three levels up: .../slug/images/colour/slug.webp
+	return name == filepath.Base(filepath.Dir(filepath.Dir(filepath.Dir(path))))
 }
 
 // variantPath turns /a/b/x.webp into /a/b/x-card.webp.

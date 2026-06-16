@@ -1,0 +1,46 @@
+{
+  "name": { "mk": "Tanga 3", "sq": "Tanga 3", "en": "Tanga 3" },
+  "price": 6200,
+  "status": "active",
+  "gender": "unisex",
+  "activities": ["casual", "training", "office"],
+  "highlights": [
+    { "mk": "Дишливо", "sq": "I ajrosur", "en": "BREATHABLE" },
+    { "mk": "Брзо сушење", "sq": "Tharje e shpejtë", "en": "QUICK-DRY" },
+    { "mk": "Лесно", "sq": "I lehtë", "en": "LIGHTWEIGHT" }
+  ],
+  "colors": [
+    { "name": { "mk": "Сина", "sq": "Blu", "en": "Blue" }, "hex": "#3a6ea5" },
+    { "name": { "mk": "Сомон", "sq": "Salmon", "en": "Salmon" }, "hex": "#e8875c" }
+  ],
+  "stock": {
+    "36": 0, "37": 0, "38": 0, "39": 0,
+    "40": 0, "41": 0, "42": 0, "43": 0, "44": 0,
+    "45": 0, "46": 0
+  },
+  "shortDescription": {
+    "mk": "Ултра-лесна дишлива патика за теретана, патување и урбана средина со флексибилна целодневна удобност.",
+    "sq": "Trajner ultra-i-lehtë dhe i ajrosur për palestër, udhëtime dhe veshje urbane me komfort gjatë gjithë ditës.",
+    "en": "Ultra-light breathable everyday trainer built for gym, travel and urban wear with flexible all-day comfort."
+  },
+  "aboutShoe": {
+    "mk": "Ултра-лесна дишлива патика за секојдневно носење, проектирана за теретана, патување и урбана средина со флексибилна целодневна удобност.\n\nЕднопарчесна горна страна со CoffeeYarn flyknit за целодневни перформанси, дишливост и удобност.\n\nДоволно елегантна за секојдневно, незгодно и канцелариско носење, но исто така функционална за спорт. Секој пар вклучува еластични врвки кои лесно можете да ги замените.",
+    "sq": "Trajner ultra-i-lehtë dhe i ajrosur i ndërtuar për palestër, udhëtime dhe veshje urbane me komfort të plotë gjatë gjithë ditës.\n\nPjesë e sipërme njëcopësh me CoffeeYarn flyknit për performancë, ajrosje dhe komfort gjatë gjithë ditës.\n\nI mençur për veshje të përditshme, casual dhe zyre, por edhe funksional për sport. Çdo çift përfshin lidhëse elastike që mund t'i ndërroni lehtë.",
+    "en": "Ultra-light breathable everyday trainer built for gym, travel and urban wear with flexible all-day comfort.\n\nSingle piece upper with CoffeeYarn flyknit for all day performance, breathability and comfort.\n\nSmart enough for everyday, casual and office wear, but also functional for sport. Each pair includes elastic laces you can easily swap in."
+  },
+  "sizeAndFit": {
+    "mk": "Купувачите велат дека одговара точно по големината — можете да ја носите вашата вообичаена големина.",
+    "sq": "Klientët thonë se përshtatet sipas madhësisë — mund të mbani madhësinë tuaj të zakonshme.",
+    "en": "Customers say it fits true to size — you may stay at your usual size."
+  },
+  "productInfo": {
+    "mk": "Горен дел\nCoffeYarn: издржлива, дишлива, антимикробна и брзо сушечка перформанс мрежа, направена од рециклирани кафе зрна.\nРамни врвки — сини со зелени точки или розеви со сиви точки.\n\nОбвивка\nБез обвивка за целосна дишливост.\n\nВлошка\nFlexile: 3,0 мм одредена амортизација со одличен осет за подлогата за целосно природно движење.\n\nСредна потпетица\nSoftFlex: целосно флексибилна за максимално движење на стапалото.\n\nГон\nUrbanGrip: 3,0 мм газен профил со широка површина за оптимален грип и издржливост на урбани површини.\n\nВодоотпорност\nНе е водоотпорно, високо дишливо. Користете водоотпорни чорапи за студени/влажни услови.\n\nТежина\n460 грама на пар во големина 42.\n\nВисина на ѓонот\n9,5 мм со влошка; 6,5 мм без влошка.\n\nНега\nРачно перете со млака вода и благ детергент. Сушете на воздух.\nНе препорачуваме ставање на вашите Freet патики во машина за перење или сушара.",
+    "sq": "Pjesa e sipërme\nCoffeYarn: rrjetë performance e qëndrueshme, e ajrosur, antimikrobike dhe me tharje të shpejtë, nga lëndët e ricikluara të kafesë.\nLidhëse të sheshta — blu me njolla jeshile ose rozë me njolla gri.\n\nVeshja\nPa veshje për ajrosje të plotë.\n\nSole e brendshme\nFlexile: 3.0 mm njëfarë amortizimi me lidhje të shkëlqyer me tokën për lëvizje natyrale.\n\nMidsole\nSoftFlex: plotësisht fleksibël për lëvizje maksimale të këmbës.\n\nSolla e jashtme\nUrbanGrip: 3.0 mm gjurmë me sipërfaqe të gjerë për grip optimal dhe qëndrueshmëri në sipërfaqe urbane.\n\nPapërshkueshmëria nga uji\nNuk është i papërshkueshëm nga uji, shumë i ajrosur. Përdor çorape të papërshkueshme për kushte të ftohta / të lagështa.\n\nPesha\n460 gramë çift në madhësinë 42.\n\nLartësia e solës\n9.5 mm me sole; 6.5 mm pa sole.\n\nKujdesi\nLani me dorë me ujë të vakët dhe detergjent të butë. Thajeni në ajër.\nNuk rekomandojmë vendosjen e Freet-eve tuaj në lavatriçe ose tharëse.",
+    "en": "Upper\nCoffeYarn: durable, breathable, antimicrobial and quick drying performance, made from recycled coffee grounds.\nFlat lace — blue with green speckle or pink with grey speckle.\n\nLining\nUnlined for complete breathability.\n\nInsole\nFlexile: 3.0 mm some shock absorption with excellent ground connectivity to allow full natural movement.\n\nMidsole\nSoftFlex: fully flexible for maximum foot movement.\n\nOutsole\nUrbanGrip: 3.0 mm wide-area tread for optimum grip and durability on urban surfaces.\n\nWaterproofness\nNot waterproof, highly breathable. Use a waterproof sock for cold / wet conditions.\n\nWeight\n460 grams per pair size 42.\n\nStack Height\n9.5 mm with insole; 6.5 mm without insole.\n\nCare\nHand wash with luke warm water and mild detergent. Air dry.\nWe do not recommend putting your Freets in the washing machine or dryer."
+  },
+  "sustainability": {
+    "mk": "Горен дел: 65% рециклирано (CoffeeYarn)\nВрвки: 70% рециклирано (BottleYarn)\nСредна потпетица: 70% рециклирано (BottleYarn)\nВлошка: 60% рециклирано\nГон: 60% природен каучук\nПакување: кутија/обвивка од рециклирани и рециклабилни картон и хартија\nНадворешно пакување: рециклирана и рециклабилна пластика или картон/хартиен пакет",
+    "sq": "Pjesa e sipërme: 65% e ricikluar (CoffeeYarn)\nLidhëset: 70% të ricikluara (BottleYarn)\nMidsole: 70% e ricikluar (BottleYarn)\nSolla e brendshme: 60% e ricikluar\nSolla e jashtme: 60% gomë natyrale\nPaketimi: kuti/mbështjellje nga karton dhe letër të ricikluara dhe të riciklueshme\nPaketimi i jashtëm: plastikë ose karton/letër i ricikluar dhe i riciklueshëm",
+    "en": "Upper: 65% recycled (CoffeeYarn)\nLaces: 70% recycled (BottleYarn)\nMidsole: 70% recycled (BottleYarn)\nInsole: 60% recycled\nOutsole: 60% natural rubber\nPackaging: box/wrapping recycled and recyclable card & paper\nOuter packaging: recycled and recyclable plastic or card/paper packet"
+  }
+}

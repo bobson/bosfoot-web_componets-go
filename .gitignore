@@ -10,3 +10,7 @@ bosfoot
 /bosfoot
 *.log
 
+# Reservation exports — contain customer PII (emails/phones), never commit
+reservations_to_order.csv
+reservations_contacts.csv
+

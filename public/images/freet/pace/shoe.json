@@ -1,0 +1,47 @@
+{
+  "name": { "mk": "Pace", "sq": "Pace", "en": "Pace" },
+  "price": 6500,
+  "status": "active",
+  "gender": "unisex",
+  "activities": ["running", "hiking", "training", "casual"],
+  "highlights": [
+    { "mk": "Лесно", "sq": "I lehtë", "en": "LIGHTWEIGHT" },
+    { "mk": "Удобност", "sq": "Komfort", "en": "COMFORT" },
+    { "mk": "Одржливо", "sq": "I qëndrueshëm", "en": "SUSTAINABLE" },
+    { "mk": "Урбано и патека", "sq": "Urbane dhe shteg", "en": "URBAN & TRAIL" }
+  ],
+  "colors": [
+    { "name": { "mk": "Црно", "sq": "E zezë", "en": "Black" }, "hex": "#1a1a1a" },
+    { "name": { "mk": "Антрацит", "sq": "Antracit", "en": "Charcoal" }, "hex": "#3d3d3d" }
+  ],
+  "stock": {
+    "36": 0, "37": 0, "38": 0, "39": 0,
+    "40": 0, "41": 0, "42": 0, "43": 0, "44": 0,
+    "45": 0, "46": 0
+  },
+  "shortDescription": {
+    "mk": "Перформанс спортска патика за повеќе активности со влошка OrthoLite 6мм за амортизација на потврди, мешани површини.",
+    "sq": "Këpucë sportive me shumë aktivitete me solën OrthoLite 6mm për amortizim në sipërfaqe të forta dhe të ndryshme.",
+    "en": "Performance multi activity sports shoe with our 6mm OrthoLite insole giving shock absorption for harder, mixed surfaces and longer distances."
+  },
+  "aboutShoe": {
+    "mk": "Перформанс патика за повеќе активности со нашата влошка OrthoLite 6мм за амортизација на потврди, мешани површини и подолги растојанија.\n\nFlyKnit горен дел изработен од рециклирани кафе зрна за неверојатни перформанси за трчање, планинарење, спорт, теретана или секојдневно носење.\n\nЕдна од нашите најодржливи патики.",
+    "sq": "Këpucë sportive me shumë aktivitete me solën tonë OrthoLite 6mm duke dhënë amortizim për sipërfaqe më të forta, të ndryshme dhe distanca më të gjata.\n\nPjesa e sipërme FlyKnit e bërë nga lëndë të ricikluara kafeje për performancë të mrekullueshme, qoftë për vrapim, ecje malore, sport, palestër apo veshje të gjithë ditës.\n\nNjëra nga këpucët tona më të qëndrueshme.",
+    "en": "Performance multi activity sports shoe with our 6mm OrthoLite insole giving shock absorption for harder, mixed surfaces and longer distances.\n\nFlyKnit upper made from recycled coffee grounds for amazing performance whether for running, hiking, sport, gym or casual all day wear.\n\nOne of our most sustainable shoes."
+  },
+  "sizeAndFit": {
+    "mk": "Купувачите велат дека одговара точно по големината — можете да ја носите вашата вообичаена големина.",
+    "sq": "Klientët thonë se përshtatet sipas madhësisë — mund të mbani madhësinë tuaj të zakonshme.",
+    "en": "Customers say it fits true to size — you may stay at your usual size."
+  },
+  "productInfo": {
+    "mk": "Горен дел\nCoffeYarn: издржлива, дишлива, антимикробна и брзо сушечка перформанс мрежа, направена од рециклирани кафе зрна.\nКонвенционални врвки — со точки.\n\nОбвивка\nБез обвивка за целосна дишливост.\n\nВлошка\nOrthoLite: 6,0 мм подлабока, премиум влошка со повисоко ниво на амортизација за потврди патеки и урбани површини и подолги растојанија.\n\nСредна потпетица\nSoftFlex: целосно флексибилна за максимално движење на стапалото.\n\nГон\nMultiGrip: 2,0 мм газен профил обезбедува грип и издржливост на урбани површини и квалитетни патеки.\n\nВодоотпорност\nНе е водоотпорно, високо дишливо. Користете водоотпорни чорапи за студени/влажни услови.\n\nТежина\n452 грама на пар во големина 42.\n\nВисина на ѓонот\n11,5 мм со OrthoLite 6,0 мм влошка; 5,5 мм без влошка. Нула надолен пад.\n\nНега\nРачно перете со млака вода и благ детергент. Сушете на воздух.\nНе препорачуваме ставање на вашите Freet патики во машина за перење или сушара.",
+    "sq": "Pjesa e sipërme\nCoffeYarn: rrjetë performance e qëndrueshme, e ajrosur, antimikrobike dhe me tharje të shpejtë, nga lëndët e ricikluara të kafesë.\nLidhëse konvencionale — me pika.\n\nVeshja\nPa veshje për ajrosje të plotë.\n\nSole e brendshme\nOrthoLite: 6.0 mm një sole e brendshme më e thellë, premium me nivel më të lartë amortizimi për shtigje dhe sipërfaqe urbane më të forta dhe distanca më të gjata.\n\nMidsole\nSoftFlex: plotësisht fleksibël për lëvizje maksimale të këmbës.\n\nSolla e jashtme\nMultiGrip: 2.0 mm gjurmë jep grip dhe qëndrueshmëri në sipërfaqe urbane dhe shtigje të cilësisë së mirë.\n\nPapërshkueshmëria nga uji\nNuk është i papërshkueshëm nga uji, shumë i ajrosur. Përdor çorape të papërshkueshme për kushte të ftohta / të lagështa.\n\nPesha\n452 gramë çift në madhësinë 42.\n\nLartësia e solës\n11.5 mm me OrthoLite 6.0 mm sole; 5.5 mm pa sole. Zero drop.\n\nKujdesi\nLani me dorë me ujë të vakët dhe detergjent të butë. Thajeni në ajër.\nNuk rekomandojmë vendosjen e Freet-eve tuaj në lavatriçe ose tharëse.",
+    "en": "Upper\nCoffeYarn: durable, breathable, antimicrobial and quick drying performance, made from recycled coffee grounds.\nConventional lace — flecked.\n\nLining\nUnlined for complete breathability.\n\nInsole\nOrthoLite: 6.0mm a deeper, premium insole with a higher level of shock absorption for harder trails and urban surfaces and longer distances.\n\nMidsole\nSoftFlex: fully flexible for maximum foot movement.\n\nOutsole\nMultiGrip: 2.0 mm tread gives grip and durability on urban surfaces and good quality trails.\n\nWaterproofness\nNot waterproof, highly breathable. Use a waterproof sock for cold / wet conditions.\n\nWeight\n452 grams per pair size 42.\n\nStack Height\n11.5 mm with OrthoLite 6.0 mm insole; 5.5 mm without insole, zero drop.\n\nCare\nHand wash with luke warm water and mild detergent. Air dry.\nWe do not recommend putting your Freets in the washing machine or dryer."
+  },
+  "sustainability": {
+    "mk": "Горен дел: 60% рециклирани кафе зрна (CoffeeYarn)\nГон: 60% природен каучук\nПакување: кутија/обвивка од рециклирани и рециклабилни картон и хартија\nНадворешно пакување: рециклирана и рециклабилна пластика или картон/хартиен пакет",
+    "sq": "Pjesa e sipërme: 60% lëndë të ricikluara kafeje (CoffeeYarn)\nSolla e jashtme: 60% gomë natyrale\nPaketimi: kuti/mbështjellje nga karton dhe letër të ricikluara dhe të riciklueshme\nPaketimi i jashtëm: plastikë ose karton/letër i ricikluar dhe i riciklueshëm",
+    "en": "Upper: 60% recycled coffee grounds (CoffeeYarn)\nOutsole: 60% natural rubber\nPackaging: box/wrapping recycled and recyclable card & paper\nOuter packaging: recycled and recyclable plastic or card/paper packet"
+  }
+}
