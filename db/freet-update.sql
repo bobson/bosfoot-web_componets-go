@@ -219,7 +219,7 @@ VALUES
     ((SELECT id FROM products WHERE sku = 'FREET-PACE'), '/images/freet/pace/images/charcoal/pace-3.webp', 8),
     ((SELECT id FROM products WHERE sku = 'FREET-PACE'), '/images/freet/pace/images/charcoal/pace-4.webp', 9),
     ((SELECT id FROM products WHERE sku = 'FREET-PACE'), '/images/freet/pace/images/charcoal/pace-5.webp', 10)
-ON CONFLICT DO NOTHING;
+ON CONFLICT (product_id, image_url) DO NOTHING;
 
 -- ── 10. Specs ─────────────────────────────────────────────────────────────────
 
