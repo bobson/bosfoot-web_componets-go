@@ -398,5 +398,23 @@
   "shipping.3.body": "Pas porosisë merrni konfirmim me numër gjurmimi.",
   "brands.groundies": "Groundies",
   "brands.xeroShoes": "Xero Shoes",
-  "brands.vivobarefoot": "Vivobarefoot"
+  "brands.vivobarefoot": "Vivobarefoot",
+
+  "sizeModal.title": "Udhëzues i madhësive — Freet",
+  "sizeModal.close": "Mbyll",
+  "sizeModal.trueToSize.title": "Përshtatet sipas madhësisë",
+  "sizeModal.trueToSize.body": "Udhëzuesi më i mirë për zgjedhjen e madhësisë suaj të re Freet është të filloni me madhësinë tuaj të zakonshme. Mendoni nëse gjithmonë merrni këtë madhësi ose ndonjëherë keni nevojë për madhësi tjetër.\n\nFeedback-u i klientëve tregon se ky stil përshtatet sipas madhësisë — porosit madhësinë tuaj të zakonshme.\n\nGjatësitë e treguara janë gjatësi të solës së brendshme (gjatësia aktuale e këpucës do të jetë 2–3 mm më e gjatë). Gjerësia matet nëpër pikën e fleksionit — gjerësia aktuale e këpucës është 2–4 mm më e madhe nga çdo anë.",
+  "sizeModal.adult": "Të rritur",
+  "sizeModal.kids": "Fëmijë",
+  "sizeModal.insoleLength": "Gjatësia e solës",
+  "sizeModal.width": "Gjerësia",
+  "sizeModal.howToMeasure": "Matni këmbën",
+  "sizeModal.step1.title": "Qëndroni pranë murit",
+  "sizeModal.step1.body": "Vendosni një fletë letre në dysheme. Vendosni këmbën me thembër pranë murit.",
+  "sizeModal.step2.title": "Vizatoni konturin",
+  "sizeModal.step2.body": "Kërkoni ndihmë nëse mundeni. Vendosni lapsin vertikal dhe vizatoni konturin e këmbës duke filluar nga themra.",
+  "sizeModal.step3.title": "Mbajeni lapsin vertikal",
+  "sizeModal.step3.body": "Lapsi duhet të jetë në 90° — drejt lart, jo i anuar. Matni të dyja këmbët dhe merrni të madhën.",
+  "sizeModal.step4.title": "Matni dhe shtoni hapësirë",
+  "sizeModal.step4.body": "Matni gjatësinë në mm. Shtoni 5–10 mm për rehatësi. Nëse vishni çorape të trasha, rriteni sipas nevojës."
 }

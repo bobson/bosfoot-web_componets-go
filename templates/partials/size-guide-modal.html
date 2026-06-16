@@ -1,0 +1,123 @@
+{{define "size-guide-modal"}}
+<dialog class="sg-modal" id="size-guide-modal" aria-labelledby="sg-modal-title">
+  <div class="sg-modal__inner">
+
+    <header class="sg-modal__header">
+      <h2 class="sg-modal__title font-bold" id="sg-modal-title">{{t .Locale "sizeModal.title"}}</h2>
+      <button class="sg-modal__close" type="button" aria-label="{{t .Locale "sizeModal.close"}}">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </header>
+
+    <div class="sg-modal__body">
+
+      {{/* ── True to size ──────────────────────────────── */}}
+      <section class="sg-modal__section">
+        <h3 class="sg-modal__section-title font-semibold">{{t .Locale "sizeModal.trueToSize.title"}}</h3>
+        <div class="sg-modal__text text-muted">
+          {{nl2p (t .Locale "sizeModal.trueToSize.body")}}
+        </div>
+      </section>
+
+      {{/* ── Adult size table ──────────────────────────── */}}
+      <section class="sg-modal__section">
+        <h3 class="sg-modal__section-title font-semibold">{{t .Locale "sizeModal.adult"}}</h3>
+        <div class="sg-modal__table-wrap">
+          <table class="sg-modal__table">
+            <thead>
+              <tr>
+                <th>EU</th>
+                <th>{{t .Locale "sizeModal.insoleLength"}}</th>
+                <th>{{t .Locale "sizeModal.width"}}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td class="sg-modal__eu">37</td><td>236 mm</td><td>88 mm</td></tr>
+              <tr><td class="sg-modal__eu">38</td><td>242 mm</td><td>89 mm</td></tr>
+              <tr><td class="sg-modal__eu">39</td><td>249 mm</td><td>90 mm</td></tr>
+              <tr><td class="sg-modal__eu">40</td><td>257 mm</td><td>92 mm</td></tr>
+              <tr><td class="sg-modal__eu">41</td><td>262 mm</td><td>93 mm</td></tr>
+              <tr><td class="sg-modal__eu">42</td><td>268 mm</td><td>95 mm</td></tr>
+              <tr><td class="sg-modal__eu">43</td><td>275 mm</td><td>98 mm</td></tr>
+              <tr><td class="sg-modal__eu">44</td><td>284 mm</td><td>100 mm</td></tr>
+              <tr><td class="sg-modal__eu">45</td><td>290 mm</td><td>101 mm</td></tr>
+              <tr><td class="sg-modal__eu">46</td><td>295 mm</td><td>102 mm</td></tr>
+              <tr class="sg-modal__row--muted"><td class="sg-modal__eu">47</td><td>300 mm</td><td>104 mm</td></tr>
+              <tr class="sg-modal__row--muted"><td class="sg-modal__eu">48</td><td>307 mm</td><td>106 mm</td></tr>
+              <tr class="sg-modal__row--muted"><td class="sg-modal__eu">49</td><td>313 mm</td><td>107 mm</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      {{/* ── Kids size table ───────────────────────────── */}}
+      <section class="sg-modal__section">
+        <h3 class="sg-modal__section-title font-semibold">{{t .Locale "sizeModal.kids"}}</h3>
+        <div class="sg-modal__table-wrap">
+          <table class="sg-modal__table">
+            <thead>
+              <tr>
+                <th>EU</th>
+                <th>{{t .Locale "sizeModal.insoleLength"}}</th>
+                <th>{{t .Locale "sizeModal.width"}}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td class="sg-modal__eu">27</td><td>176 mm</td><td>74 mm</td></tr>
+              <tr><td class="sg-modal__eu">28</td><td>183 mm</td><td>75 mm</td></tr>
+              <tr><td class="sg-modal__eu">29</td><td>189 mm</td><td>77 mm</td></tr>
+              <tr><td class="sg-modal__eu">30</td><td>195 mm</td><td>79 mm</td></tr>
+              <tr><td class="sg-modal__eu">31</td><td>201 mm</td><td>81 mm</td></tr>
+              <tr><td class="sg-modal__eu">32</td><td>207 mm</td><td>83 mm</td></tr>
+              <tr><td class="sg-modal__eu">33</td><td>214 mm</td><td>84 mm</td></tr>
+              <tr><td class="sg-modal__eu">34</td><td>221 mm</td><td>85 mm</td></tr>
+              <tr><td class="sg-modal__eu">35</td><td>228 mm</td><td>88 mm</td></tr>
+              <tr><td class="sg-modal__eu">36</td><td>234 mm</td><td>90 mm</td></tr>
+              <tr><td class="sg-modal__eu">37</td><td>240 mm</td><td>92 mm</td></tr>
+              <tr><td class="sg-modal__eu">38</td><td>246 mm</td><td>94 mm</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      {{/* ── How to measure ────────────────────────────── */}}
+      <section class="sg-modal__section">
+        <h3 class="sg-modal__section-title font-semibold">{{t .Locale "sizeModal.howToMeasure"}}</h3>
+        <ol class="sg-modal__steps">
+          <li class="sg-modal__step">
+            <img class="sg-modal__step-img" src="/images/how-to-measure/step1.webp" alt="{{t .Locale "sizeModal.step1.title"}}" loading="lazy" width="200" height="200">
+            <div class="sg-modal__step-text">
+              <p class="sg-modal__step-title font-semibold">{{t .Locale "sizeModal.step1.title"}}</p>
+              <p class="sg-modal__step-body text-muted">{{t .Locale "sizeModal.step1.body"}}</p>
+            </div>
+          </li>
+          <li class="sg-modal__step">
+            <img class="sg-modal__step-img" src="/images/how-to-measure/step2.webp" alt="{{t .Locale "sizeModal.step2.title"}}" loading="lazy" width="200" height="200">
+            <div class="sg-modal__step-text">
+              <p class="sg-modal__step-title font-semibold">{{t .Locale "sizeModal.step2.title"}}</p>
+              <p class="sg-modal__step-body text-muted">{{t .Locale "sizeModal.step2.body"}}</p>
+            </div>
+          </li>
+          <li class="sg-modal__step">
+            <img class="sg-modal__step-img" src="/images/how-to-measure/step3.webp" alt="{{t .Locale "sizeModal.step3.title"}}" loading="lazy" width="200" height="200">
+            <div class="sg-modal__step-text">
+              <p class="sg-modal__step-title font-semibold">{{t .Locale "sizeModal.step3.title"}}</p>
+              <p class="sg-modal__step-body text-muted">{{t .Locale "sizeModal.step3.body"}}</p>
+            </div>
+          </li>
+          <li class="sg-modal__step">
+            <img class="sg-modal__step-img" src="/images/how-to-measure/step4.webp" alt="{{t .Locale "sizeModal.step4.title"}}" loading="lazy" width="200" height="200">
+            <div class="sg-modal__step-text">
+              <p class="sg-modal__step-title font-semibold">{{t .Locale "sizeModal.step4.title"}}</p>
+              <p class="sg-modal__step-body text-muted">{{t .Locale "sizeModal.step4.body"}}</p>
+            </div>
+          </li>
+        </ol>
+      </section>
+
+    </div>
+  </div>
+</dialog>
+{{end}}

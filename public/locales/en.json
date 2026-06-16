@@ -398,5 +398,23 @@
   "shipping.3.body": "After your order you receive a confirmation with a tracking number.",
   "brands.groundies": "Groundies",
   "brands.xeroShoes": "Xero Shoes",
-  "brands.vivobarefoot": "Vivobarefoot"
+  "brands.vivobarefoot": "Vivobarefoot",
+
+  "sizeModal.title": "Size Guide — Freet",
+  "sizeModal.close": "Close",
+  "sizeModal.trueToSize.title": "Sizing True to Size",
+  "sizeModal.trueToSize.body": "The best guide for sizing your new Freet shoes is to start with your usual shoe size. Think about whether you always take this size or whether you sometimes need to go smaller or larger.\n\nCustomer feedback is that this style fits true to size; so order your normal size.\n\nThe lengths shown are the Insole lengths (the actual shoe length will be 2 or 3 mm longer). The widths are measured across the flex point of the insole — the actual width of the shoe will be 2–4mm greater at each side.",
+  "sizeModal.adult": "Adult",
+  "sizeModal.kids": "Kids",
+  "sizeModal.insoleLength": "Insole Length",
+  "sizeModal.width": "Width",
+  "sizeModal.howToMeasure": "How to Measure Your Foot",
+  "sizeModal.step1.title": "Stand next to a wall",
+  "sizeModal.step1.body": "Place a piece of paper on the floor against the wall. Place your foot on the paper with your heel just touching the wall.",
+  "sizeModal.step2.title": "Trace the outline",
+  "sizeModal.step2.body": "Get someone to help if you can. Keep the pen vertical and trace the outline of the foot on the paper, starting at the heel.",
+  "sizeModal.step3.title": "Keep the pencil vertical",
+  "sizeModal.step3.body": "The pencil must be at 90 degrees to the paper — straight up, not tilted. Measure both feet and take the larger measurement.",
+  "sizeModal.step4.title": "Measure and add space",
+  "sizeModal.step4.body": "Measure the length in millimetres. Add 5–10mm for a comfortable fit. If you wear thick socks, increase the length accordingly."
 }

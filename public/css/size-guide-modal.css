@@ -1,0 +1,178 @@
+/* ── Size guide modal ────────────────────────────────────────────────────── */
+
+.sg-modal {
+  width: min(660px, 95vw);
+  max-height: 90dvh;
+  border: none;
+  border-radius: var(--radius-lg);
+  padding: 0;
+  overflow: hidden;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.18);
+  background: var(--color-bg);
+}
+
+.sg-modal::backdrop {
+  background: rgba(0,0,0,0.45);
+  backdrop-filter: blur(2px);
+}
+
+.sg-modal__inner {
+  display: flex;
+  flex-direction: column;
+  max-height: 90dvh;
+}
+
+.sg-modal__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--space-4) var(--space-5);
+  border-bottom: 1px solid var(--color-border);
+  position: sticky;
+  top: 0;
+  background: var(--color-bg);
+  z-index: 1;
+}
+
+.sg-modal__title {
+  font-size: var(--fs-base);
+  margin: 0;
+}
+
+.sg-modal__close {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  color: var(--color-muted);
+  transition: color 0.15s, background 0.15s;
+}
+
+.sg-modal__close:hover {
+  color: var(--color-text);
+  background: var(--color-surface);
+}
+
+.sg-modal__body {
+  overflow-y: auto;
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+.sg-modal__section-title {
+  font-size: var(--fs-sm);
+  margin: 0 0 var(--space-3);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-muted);
+}
+
+.sg-modal__text {
+  font-size: var(--fs-sm);
+  line-height: 1.6;
+}
+
+.sg-modal__text p {
+  margin: 0 0 var(--space-3);
+}
+
+.sg-modal__text p:last-child {
+  margin-bottom: 0;
+}
+
+/* ── Tables ── */
+
+.sg-modal__table-wrap {
+  overflow-x: auto;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+}
+
+.sg-modal__table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--fs-sm);
+}
+
+.sg-modal__table thead th {
+  padding: var(--space-2) var(--space-4);
+  text-align: left;
+  font-weight: var(--fw-semibold);
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  white-space: nowrap;
+}
+
+.sg-modal__table tbody td {
+  padding: var(--space-2) var(--space-4);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.sg-modal__table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.sg-modal__eu {
+  font-weight: var(--fw-semibold);
+}
+
+.sg-modal__row--muted td {
+  color: var(--color-muted);
+}
+
+/* ── How to measure steps ── */
+
+.sg-modal__steps {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  counter-reset: step;
+}
+
+.sg-modal__step {
+  display: flex;
+  gap: var(--space-4);
+  align-items: flex-start;
+}
+
+.sg-modal__step-img {
+  flex-shrink: 0;
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+  background: var(--color-img-bg);
+}
+
+.sg-modal__step-text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.sg-modal__step-title {
+  font-size: var(--fs-sm);
+  margin: 0;
+}
+
+.sg-modal__step-body {
+  font-size: var(--fs-sm);
+  margin: 0;
+  line-height: 1.5;
+}
+
+@media (min-width: 480px) {
+  .sg-modal__step-img {
+    width: 100px;
+    height: 100px;
+  }
+}
