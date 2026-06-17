@@ -30,6 +30,14 @@ go run ./cmd/addbrands
 # Load foot-health articles from db/articles.json into the DB (idempotent, upserts translations)
 go run ./cmd/articleimport
 
+# Import products from data/{brand}/products/*.json into the DB (euro source price;
+# MKD derived via site.MKD; gallery/primary image scanned from public/images).
+# DEFAULT IS DRY-RUN (builds each product in a tx, rolls back, prints a summary).
+# Pass -commit to actually write — only AFTER the euro-aware code is deployed,
+# since it sets price_mkd to the euro-derived value that old deployed code reads.
+go run ./cmd/shoeimport          # dry-run / preview
+go run ./cmd/shoeimport -commit  # apply (post-deploy)
+
 # Generate ~500px "-card" WebP variants of primary product images (idempotent;
 # needs ImageMagick). Run after adding a brand's images.
 go run ./cmd/imgvariants
@@ -136,7 +144,7 @@ Both the server and `cmd/` utilities must be run from the project root — `.env
 **Locale strings** (`public/locales/`):
 - Two co-existing layouts, both merged into one flat key namespace at startup (see `locale.go`):
   - **Language-grouped** (preferred): `pages/{page}.json` per page + `common.json` for cross-cutting chrome (nav, footer, cart, search, cta, …). Each key holds all three languages together: `"contact.title": {"mk":…, "sq":…, "en":…}`. Add/remove a page's text in one file.
-  - **Flat** `{mk,sq,en}.json` — the original per-language files, now emptied to `{}`; kept only because the loader still reads them. New strings should go in the grouped files.
+  - **Flat** `{mk,sq,en}.json` — the original per-language files, now **removed**. The loader still loads them *if present* (optional, used by `internal/locale/testdata`), so all live strings come from the grouped files.
 - Rendered via `{{t .Locale "key"}}`; keys stay in one namespace, so which file a key lives in is purely organizational.
 - Missing keys fall back to `mk`, then return the key itself — visible in the UI as a signal to add the translation. `locale_test.go` has a drift guard that fails if a key is missing from any language.
 
@@ -144,6 +152,7 @@ Both the server and `cmd/` utilities must be run from the project root — `.env
 - New SSR page: add handler method on `PageHandler`, embed `PageBase`, call `h.Renderer.Render(w, "template-name", data)`, register route in `internal/routes/routes.go` (wrap in `pc.Wrap` if the page is the same for every visitor), add to sitemap in `sitemap_handler.go`.
 - New Web Component: add `public/components/{name}.js` as a custom element (light DOM, no shadow), server-render its static chrome inside the element, add its `init*` to the array in `public/app.js`, and add matching styles in `public/css/`.
 - New JSON API endpoint: add method on `ProductHandler` (or new `XHandler`), register in `internal/routes/routes.go`. Queries go directly in handlers — no repository layer. Wrap state-changing endpoints in `middleware.WrapCSRF`.
-- New brand: add `public/images/{brand-slug}/` with `brand.json` + per-product `shoe.json`, write `db/{brand-slug}.sql` following `db/freet.sql` as template, run `go run ./cmd/dbimport`, then `go run ./cmd/imgvariants` to generate the product-card image variants.
+- Product data source (Freet): each product lives in `data/{brand}/products/{slug}.json` — **euro `price`** (the source), colours, per-colour stock, specs, activities, highlights, translations. `data/` is **outside `public/`** so it isn't web-served. Edit a price/field there → `go run ./cmd/shoeimport -commit` upserts it into the DB; MKD is derived via `site.MKD`, and the gallery/primary image are scanned from `public/images/{brand}/{slug}/images/{colour}/` (first colour in the JSON = the card image). Brand row + `size_chart` still come from the SQL seed. (`db/freet.sql` is now legacy/seed; `shoeimport` is the live update path.)
+- New brand image assets: add `public/images/{brand-slug}/{product}/images/{colour}/` webp files, then `go run ./cmd/imgvariants` to generate the `-card` variants.
 - New locale string: add it to the relevant `public/locales/pages/{page}.json` (or `common.json` if shared), with all three languages (`{"mk":…, "sq":…, "en":…}`).
 - `db/` SQL files are idempotent (`ON CONFLICT DO NOTHING`) — safe to re-run.

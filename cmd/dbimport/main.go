@@ -37,6 +37,7 @@ func main() {
 	files = append(files,
 		"db/freet.sql",
 		"db/freet-update.sql",
+		"db/price-eur.sql",
 	)
 
 	for _, f := range files {

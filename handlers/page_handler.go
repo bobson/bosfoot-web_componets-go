@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"bosfoot/internal/locale"
+	"bosfoot/internal/site"
 	"bosfoot/internal/tmpl"
 	"bosfoot/logger"
 	"bosfoot/models"
@@ -28,7 +29,7 @@ type rowScanner interface {
 // product query in this file:
 //
 //	p.id, sku, name, slug, brand_id, category_id, gender_id,
-//	price_mkd, original_price_mkd, image_url,
+//	price_eur, original_price_eur, image_url,  (MKD derived via site.MKD)
 //	is_new, is_featured, is_on_sale, discount_pct,
 //	is_active, is_published, sort_order, created_at, updated_at,
 //	b.name, b.slug, g.value
@@ -36,13 +37,14 @@ type rowScanner interface {
 // The three nullable columns are mapped to their pointer fields.
 func scanProduct(s rowScanner) (models.Product, error) {
 	var p models.Product
-	var origPrice sql.NullInt64
+	var priceEUR int
+	var origEUR sql.NullInt64
 	var imageURL sql.NullString
 	var discountPct sql.NullFloat64
 	if err := s.Scan(
 		&p.ID, &p.SKU, &p.Name, &p.Slug,
 		&p.BrandID, &p.CategoryID, &p.GenderID,
-		&p.PriceMKD, &origPrice, &imageURL,
+		&priceEUR, &origEUR, &imageURL,
 		&p.IsNew, &p.IsFeatured, &p.IsOnSale, &discountPct,
 		&p.IsActive, &p.IsPublished, &p.SortOrder,
 		&p.CreatedAt, &p.UpdatedAt,
@@ -50,8 +52,10 @@ func scanProduct(s rowScanner) (models.Product, error) {
 	); err != nil {
 		return p, err
 	}
-	if origPrice.Valid {
-		v := int(origPrice.Int64)
+	// Euro is the stored source; derive denars once here via the shared helper.
+	p.PriceMKD = site.MKD(priceEUR)
+	if origEUR.Valid {
+		v := site.MKD(int(origEUR.Int64))
 		p.OriginalPriceMKD = &v
 	}
 	if imageURL.Valid {
@@ -308,7 +312,7 @@ func (h *PageHandler) Home(w http.ResponseWriter, r *http.Request) {
 	featRows, err := h.DB.QueryContext(ctx, `
 		SELECT p.id, p.sku, p.name, p.slug,
 		       p.brand_id, p.category_id, p.gender_id,
-		       p.price_mkd, p.original_price_mkd, p.image_url,
+		       p.price_eur, p.original_price_eur, p.image_url,
 		       p.is_new, p.is_featured, p.is_on_sale, p.discount_pct,
 		       p.is_active, p.is_published, p.sort_order,
 		       p.created_at, p.updated_at,
@@ -799,7 +803,7 @@ func (h *PageHandler) ProductListing(w http.ResponseWriter, r *http.Request) {
 	rows, err := h.DB.QueryContext(ctx, `
 		SELECT p.id, p.sku, p.name, p.slug,
 		       p.brand_id, p.category_id, p.gender_id,
-		       p.price_mkd, p.original_price_mkd, p.image_url,
+		       p.price_eur, p.original_price_eur, p.image_url,
 		       p.is_new, p.is_featured, p.is_on_sale, p.discount_pct,
 		       p.is_active, p.is_published, p.sort_order,
 		       p.created_at, p.updated_at,
@@ -990,7 +994,7 @@ func (h *PageHandler) ProductDetail(w http.ResponseWriter, r *http.Request) {
 	p, err := scanProduct(h.DB.QueryRowContext(ctx, `
 		SELECT p.id, p.sku, p.name, p.slug,
 		       p.brand_id, p.category_id, p.gender_id,
-		       p.price_mkd, p.original_price_mkd, p.image_url,
+		       p.price_eur, p.original_price_eur, p.image_url,
 		       p.is_new, p.is_featured, p.is_on_sale, p.discount_pct,
 		       p.is_active, p.is_published, p.sort_order,
 		       p.created_at, p.updated_at,
@@ -1204,7 +1208,7 @@ func (h *PageHandler) ProductDetail(w http.ResponseWriter, r *http.Request) {
 		rows, err := h.DB.QueryContext(gctx, `
 			SELECT p.id, p.sku, p.name, p.slug,
 			       p.brand_id, p.category_id, p.gender_id,
-			       p.price_mkd, p.original_price_mkd, p.image_url,
+			       p.price_eur, p.original_price_eur, p.image_url,
 			       p.is_new, p.is_featured, p.is_on_sale, p.discount_pct,
 			       p.is_active, p.is_published, p.sort_order,
 			       p.created_at, p.updated_at,

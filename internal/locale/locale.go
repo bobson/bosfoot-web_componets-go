@@ -36,9 +36,15 @@ type UI struct {
 func LoadUI(dir string) (*UI, error) {
 	ui := &UI{strings: make(map[string]map[string]string)}
 	for _, loc := range All {
+		ui.strings[loc] = make(map[string]string)
+		// Flat per-locale files are optional (the strings now live in the
+		// grouped common.json + pages/*.json). Load them if present, skip if not.
 		path := fmt.Sprintf("%s/%s.json", dir, loc)
 		data, err := os.ReadFile(path)
 		if err != nil {
+			if os.IsNotExist(err) {
+				continue
+			}
 			return nil, fmt.Errorf("read %s: %w", path, err)
 		}
 		m := make(map[string]string)

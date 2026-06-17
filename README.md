@@ -73,13 +73,14 @@ Open [http://localhost:8080](http://localhost:8080) — it redirects to `/mk/pro
 
 ```
 cmd/            CLI utilities (dbping, dbimport) — not part of the server
+data/           Product source JSON (euro price etc.), per brand — NOT web-served
 db/             SQL files: schema, seed data, per-brand imports
 handlers/       HTTP handlers — one struct per concern
 internal/       Shared packages (database connection, locale, template renderer)
 models/         Go structs matching DB tables
 public/         Static files served directly (images, CSS, locale JSON)
   images/       Product and brand images, organized by brand/product slug
-  locales/      UI strings in mk.json, sq.json, en.json
+  locales/      UI strings: common.json + pages/*.json (key → {mk,sq,en})
 templates/      Server-rendered HTML templates
   partials/     Reusable pieces (nav, footer, product card, head)
   pages/        Full page templates
@@ -89,10 +90,9 @@ templates/      Server-rendered HTML templates
 
 ## Adding a new brand
 
-1. Create `public/images/{brand-slug}/` with the brand and product images
-2. Add a `brand.json` (brand info + size chart) and `shoe.json` per product — follow the Freet files as a reference
-3. Write `db/{brand-slug}.sql` following `db/freet.sql` as a template
-4. Run `go run ./cmd/dbimport`
+1. Add product images under `public/images/{brand-slug}/{product}/images/{colour}/`
+2. Add `data/{brand-slug}/products/{slug}.json` per product (euro `price`, colours, stock, specs, translations) — follow the Freet files as a reference
+3. Run `go run ./cmd/shoeimport -commit` to upsert them into the DB (brand row + size chart still via `db/{brand-slug}.sql` + `go run ./cmd/dbimport`)
 
 ---
 

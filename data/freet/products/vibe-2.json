@@ -37,12 +37,12 @@
   ],
   "colors": [
     {
-      "name": "White",
-      "hex": "#f0f0eb"
-    },
-    {
       "name": "Black",
       "hex": "#1a1a1a"
+    },
+    {
+      "name": "White",
+      "hex": "#f0f0eb"
     }
   ],
   "stock": {

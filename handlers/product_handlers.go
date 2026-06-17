@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"bosfoot/internal/database"
+	"bosfoot/internal/site"
 	"bosfoot/logger"
 	"bosfoot/models"
 	"database/sql"
@@ -99,7 +100,7 @@ func (h *ProductHandler) GetProducts(w http.ResponseWriter, r *http.Request) {
 	query := `
 		SELECT p.id, p.sku, p.name, p.slug,
 		       p.brand_id, p.category_id, p.gender_id,
-		       p.price_mkd, p.original_price_mkd, p.image_url,
+		       p.price_eur, p.original_price_eur, p.image_url,
 		       p.is_new, p.is_featured, p.is_on_sale, p.discount_pct,
 		       p.is_active, p.is_published, p.sort_order,
 		       p.created_at, p.updated_at,
@@ -143,8 +144,9 @@ func (h *ProductHandler) GetProducts(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
+		p.PriceMKD = site.MKD(p.PriceMKD) // scanned euro → derive denars
 		if origPrice.Valid {
-			v := int(origPrice.Int64)
+			v := site.MKD(int(origPrice.Int64))
 			p.OriginalPriceMKD = &v
 		}
 		if imageURL.Valid {
@@ -229,7 +231,7 @@ func (h *ProductHandler) GetProductByID(w http.ResponseWriter, r *http.Request) 
 	err = h.DB.QueryRowContext(ctx, `
 		SELECT p.id, p.sku, p.name, p.slug,
 		       p.brand_id, p.category_id, p.gender_id,
-		       p.price_mkd, p.original_price_mkd, p.image_url,
+		       p.price_eur, p.original_price_eur, p.image_url,
 		       p.is_new, p.is_featured, p.is_on_sale, p.discount_pct,
 		       p.is_active, p.is_published, p.sort_order,
 		       p.created_at, p.updated_at,
@@ -255,8 +257,9 @@ func (h *ProductHandler) GetProductByID(w http.ResponseWriter, r *http.Request) 
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		return
 	}
+	p.PriceMKD = site.MKD(p.PriceMKD) // scanned euro → derive denars
 	if origPrice.Valid {
-		v := int(origPrice.Int64)
+		v := site.MKD(int(origPrice.Int64))
 		p.OriginalPriceMKD = &v
 	}
 	if imageURL.Valid {

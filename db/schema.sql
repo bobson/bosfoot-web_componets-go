@@ -68,8 +68,10 @@ CREATE TABLE products (
     brand_id           INTEGER NOT NULL REFERENCES brands(id),
     category_id        INTEGER NOT NULL REFERENCES categories(id),
     gender_id          INTEGER NOT NULL REFERENCES genders(id),
-    price_mkd          INTEGER NOT NULL,        -- whole MKD, no decimals
+    price_mkd          INTEGER NOT NULL,        -- legacy/derived MKD (kept during euro-source transition)
     original_price_mkd INTEGER,                 -- strikethrough price, whole MKD
+    price_eur          INTEGER,                 -- euro source price; MKD derived at render via site.MKD
+    original_price_eur INTEGER,                 -- strikethrough euro source price
     image_url          TEXT,
     is_new             BOOLEAN NOT NULL DEFAULT FALSE,
     is_featured        BOOLEAN NOT NULL DEFAULT FALSE,

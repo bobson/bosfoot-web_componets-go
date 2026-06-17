@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"bosfoot/internal/notify"
+	"bosfoot/internal/site"
 	"bosfoot/logger"
 	"bosfoot/models"
 	"database/sql"
@@ -115,7 +116,7 @@ func (h *OrderHandler) CreateOrder(w http.ResponseWriter, r *http.Request) {
 	}
 
 	priceRows, err := h.DB.QueryContext(r.Context(), `
-		SELECT id, name, price_mkd
+		SELECT id, name, price_eur
 		FROM products
 		WHERE id = ANY($1) AND is_active = TRUE AND is_published = TRUE
 	`, pq.Array(ids))
@@ -126,19 +127,20 @@ func (h *OrderHandler) CreateOrder(w http.ResponseWriter, r *http.Request) {
 	}
 	type prodInfo struct {
 		name  string
-		price int
+		price int // denars, derived from the euro source via site.MKD
 	}
 	prodByID := make(map[int]prodInfo)
 	for priceRows.Next() {
-		var id, price int
+		var id, priceEUR int
 		var name string
-		if err := priceRows.Scan(&id, &name, &price); err != nil {
+		if err := priceRows.Scan(&id, &name, &priceEUR); err != nil {
 			priceRows.Close()
 			h.Logger.Error("CreateOrder: price scan failed", err)
 			writeJSONError(w, http.StatusInternalServerError, "internal error")
 			return
 		}
-		prodByID[id] = prodInfo{name: name, price: price}
+		// Charge the same denar figure the customer sees (one conversion).
+		prodByID[id] = prodInfo{name: name, price: site.MKD(priceEUR)}
 	}
 	priceRows.Close()
 
