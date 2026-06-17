@@ -417,3 +417,24 @@ details.filter-group[open] .filter-group__arrow {
 
 .product-card__badge--new  { background: var(--color-accent); color: var(--color-white); }
 .product-card__badge--sale { background: var(--color-sale);   color: var(--color-white); }
+
+/* ── Pre-launch reservation strip ─────────────────────── */
+.reserve-banner {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-8);
+  padding: var(--space-4) var(--space-5);
+  background: var(--color-accent-light);
+  border: 1px solid color-mix(in oklch, var(--color-accent), transparent 80%);
+  border-radius: var(--radius-md);
+  color: var(--color-accent);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-normal);
+}
+
+.reserve-banner__icon {
+  display: flex;
+  flex-shrink: 0;
+  color: var(--color-accent);
+}

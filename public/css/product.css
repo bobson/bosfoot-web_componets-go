@@ -243,6 +243,13 @@ body.page-product {
   margin-bottom: var(--space-5);
 }
 
+/* Colour option lives under the gallery, so give it room above + a touch more
+   breathing space below the swatches' selection ring. */
+.product__option--colors {
+  margin-top: var(--space-6);
+  margin-bottom: 0;
+}
+
 .product__option-header {
   display: flex;
   align-items: baseline;
@@ -268,16 +275,16 @@ body.page-product {
 .product__colors {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-2);
+  gap: var(--space-4);
 }
 
 .product__color-btn {
   width: var(--swatch-lg);
   height: var(--swatch-lg);
   border-radius: 50%;
-  border: 2px solid transparent;
+  border: none;
   cursor: pointer;
-  transition: border-color 0.15s ease, transform 0.15s ease;
+  transition: box-shadow 0.15s ease, transform 0.15s ease;
   box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.12);
 }
 
@@ -285,9 +292,14 @@ body.page-product {
   transform: scale(1.1);
 }
 
+/* Selected: a ring offset from the swatch by a page-coloured gap, so it reads
+   clearly as "selected" without the accent border touching the fill. */
 .product__color-btn--active {
-  border-color: var(--color-accent);
   transform: scale(1.08);
+  box-shadow:
+    inset 0 0 0 1px rgba(0, 0, 0, 0.12),
+    0 0 0 3px var(--color-bg),
+    0 0 0 5px var(--color-accent);
 }
 
 /* Size grid */
@@ -554,4 +566,9 @@ details.product__tab[open] .product__tab-arrow {
   font-size: var(--fs-2xl);
   letter-spacing: -0.02em;
   margin-bottom: var(--space-8);
+}
+/* Pre-launch free-reservation note under the buy button. */
+.product__reserve-note {
+  margin-top: var(--space-3);
+  line-height: var(--lh-normal);
 }

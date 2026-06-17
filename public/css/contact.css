@@ -1,0 +1,101 @@
+/* ── Contact page ────────────────────────────────────── */
+
+.contact {
+  padding-block: var(--space-16) var(--space-20);
+}
+
+.contact__inner {
+  max-width: 640px;
+}
+
+.contact__header {
+  margin-bottom: var(--space-12);
+}
+
+.contact__title {
+  font-size: var(--fs-2xl);
+  letter-spacing: -0.02em;
+  line-height: var(--lh-tight);
+  margin-bottom: var(--space-4);
+}
+
+.contact__lead {
+  font-size: var(--fs-md);
+  line-height: var(--lh-normal);
+  max-width: 48ch;
+}
+
+.contact__group {
+  margin-bottom: var(--space-12);
+}
+
+.contact__group-title {
+  font-size: var(--fs-2xs);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-4);
+}
+
+.contact__channels {
+  display: grid;
+  gap: var(--space-3);
+}
+
+@media (min-width: 540px) {
+  .contact__channels {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.contact__note {
+  margin-top: var(--space-4);
+}
+
+/* ── Channel card ──────────────────────────────────── */
+.contact-channel {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-4) var(--space-5);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  color: var(--color-text);
+  transition: border-color 0.15s ease, background-color 0.15s ease, transform 0.15s ease;
+}
+
+.contact-channel:hover {
+  border-color: var(--color-accent);
+  background-color: var(--color-cream);
+  transform: translateY(-1px);
+}
+
+.contact-channel__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-img-bg);
+  color: var(--color-text);
+}
+
+/* Brand tints for the social/messaging channels. */
+.contact-channel__icon--whatsapp  { background-color: hsl(142 70% 49% / 0.12); color: hsl(142 63% 35%); }
+.contact-channel__icon--viber     { background-color: hsl(265 60% 56% / 0.12); color: hsl(265 56% 47%); }
+.contact-channel__icon--instagram { background-color: hsl(340 75% 54% / 0.10); color: hsl(340 65% 47%); }
+.contact-channel__icon--facebook  { background-color: hsl(214 89% 52% / 0.12); color: hsl(214 78% 45%); }
+
+.contact-channel__text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.contact-channel__value {
+  font-size: var(--fs-base);
+  letter-spacing: -0.01em;
+}

@@ -121,13 +121,24 @@ export function initProductDetail() {
   function applyColorFilter(color) {
     if (!multiColor) return; // single-colour: nothing to filter
     const key = color.toLowerCase().replace(/\s+/g, '-');
+
+    // Guard: if no slide's path matches this colour (e.g. a data gap where the
+    // colour is declared but its gallery rows were never seeded), filtering
+    // would hide every slide and leave a blank carousel. Fall back to showing
+    // all images so the gallery degrades to "shows something" instead of empty.
+    const anyMatch = slides.some(slide => {
+      const img = slide.querySelector('img');
+      const folder = colorFolder(img ? (img.getAttribute('src') || '') : '');
+      return folder === key;
+    });
+
     let firstIdx = -1;
     slides.forEach((slide, i) => {
       const img = slide.querySelector('img');
       const src = img ? (img.getAttribute('src') || '') : '';
       const folder = colorFolder(src);
-      const show = !folder || folder === key;
-      
+      const show = !anyMatch || !folder || folder === key;
+
       if (show) {
         slide.removeAttribute('hidden');
         if (thumbs[i]) thumbs[i].removeAttribute('hidden');

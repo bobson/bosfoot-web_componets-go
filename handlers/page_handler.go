@@ -506,6 +506,22 @@ func (h *PageHandler) About(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
+// Contact handles GET /{locale}/contact. Static page — no DB queries. Lists the
+// shop's direct channels (phone, WhatsApp, Viber, email) and social profiles.
+func (h *PageHandler) Contact(w http.ResponseWriter, r *http.Request) {
+	if !locale.IsValid(r.PathValue("locale")) {
+		http.Redirect(w, r, "/"+locale.Default+"/contact", http.StatusFound)
+		return
+	}
+	loc := locale.FromPath(r.PathValue("locale"))
+	h.Renderer.Render(w, "contact", PageBase{
+		Locale:          loc,
+		CurrentPath:     "/contact",
+		SiteURL:         h.baseURL(r),
+		MetaDescription: h.UI.T(loc, "seo.contact"),
+	})
+}
+
 // Checkout handles GET /{locale}/checkout. The page is static chrome — the
 // order summary is rendered client-side from the localStorage cart by the
 // <checkout-form> component, so no DB query is needed here.

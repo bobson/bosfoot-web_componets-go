@@ -18,6 +18,17 @@
       </p>
     </div>
 
+    {{/* Pre-launch reservation strip: every pair is reservable for free, no
+         payment upfront. Mirrors the hero promise on the page where people act. */}}
+    <div class="container">
+      <p class="reserve-banner" role="note">
+        <span class="reserve-banner__icon" aria-hidden="true">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41 13.42 20.58a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+        </span>
+        <span>{{t .Locale "reservation.freeNote"}}</span>
+      </p>
+    </div>
+
     <div class="listing__layout container">
 
       {{/* ── Filter sidebar / mobile drawer ────────────── */}}

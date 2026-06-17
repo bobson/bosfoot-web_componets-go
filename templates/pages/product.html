@@ -68,6 +68,27 @@
           </button>
           {{end}}
         </div>
+
+        {{/* Color selector — sits directly below the gallery because choosing a
+             colour filters the images above it. */}}
+        {{if .Product.Colors}}
+        <div class="product__option product__option--colors">
+          <div class="product__option-header">
+            <p class="product__option-label text-xs font-semibold">{{t .Locale "detail.color"}}</p>
+            <span class="product__color-name text-xs text-muted" id="color-name">{{(index .Product.Colors 0).Color}}</span>
+          </div>
+          <div class="product__colors" id="color-select">
+            {{range .Product.Colors}}
+            <button class="product__color-btn"
+              data-color="{{.Color}}"
+              title="{{.Color}}"
+              aria-label="{{.Color}}"
+              aria-pressed="false"
+              {{if .Hex}}style="background:{{.Hex}}"{{end}}></button>
+            {{end}}
+          </div>
+        </div>
+        {{end}}
       </div>
 
       {{/* ── Details ──────────────────────────────────── */}}
@@ -90,26 +111,6 @@
 
         {{if .Translation.Description}}
         <p class="product__desc text-muted">{{.Translation.Description}}</p>
-        {{end}}
-
-        {{/* Color selector */}}
-        {{if .Product.Colors}}
-        <div class="product__option">
-          <div class="product__option-header">
-            <p class="product__option-label text-xs font-semibold">{{t .Locale "detail.color"}}</p>
-            <span class="product__color-name text-xs text-muted" id="color-name">{{(index .Product.Colors 0).Color}}</span>
-          </div>
-          <div class="product__colors" id="color-select">
-            {{range .Product.Colors}}
-            <button class="product__color-btn"
-              data-color="{{.Color}}"
-              title="{{.Color}}"
-              aria-label="{{.Color}}"
-              aria-pressed="false"
-              {{if .Hex}}style="background:{{.Hex}}"{{end}}></button>
-            {{end}}
-          </div>
-        </div>
         {{end}}
 
         {{/* Size selector */}}
@@ -146,6 +147,9 @@
             data-label-add="{{t .Locale "cta.addToCart"}}">
             {{t .Locale "detail.selectSize"}}
           </button>
+
+          {{/* Pre-launch: free reservation, no payment upfront. */}}
+          <p class="product__reserve-note text-xs text-muted">{{t .Locale "reservation.freeNote"}}</p>
         </div>
 
         {{/* Stock data for JS */}}

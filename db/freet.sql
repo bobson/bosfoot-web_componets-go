@@ -194,6 +194,14 @@ VALUES
     ((SELECT id FROM products WHERE sku = 'FREET-VIBE-2'), '/images/freet/vibe-2/images/black/vibe-2-8.webp',  5),
     ((SELECT id FROM products WHERE sku = 'FREET-VIBE-2'), '/images/freet/vibe-2/images/black/vibe-2-9.webp',  6),
     ((SELECT id FROM products WHERE sku = 'FREET-VIBE-2'), '/images/freet/vibe-2/images/black/vibe-2-10.webp', 7),
+    -- Vibe 2 — White colourway (filtered client-side by the /white/ folder in the path)
+    ((SELECT id FROM products WHERE sku = 'FREET-VIBE-2'), '/images/freet/vibe-2/images/white/vibe-2-1.webp', 8),
+    ((SELECT id FROM products WHERE sku = 'FREET-VIBE-2'), '/images/freet/vibe-2/images/white/vibe-2-2.webp', 9),
+    ((SELECT id FROM products WHERE sku = 'FREET-VIBE-2'), '/images/freet/vibe-2/images/white/vibe-2-3.webp', 10),
+    ((SELECT id FROM products WHERE sku = 'FREET-VIBE-2'), '/images/freet/vibe-2/images/white/vibe-2-4.webp', 11),
+    ((SELECT id FROM products WHERE sku = 'FREET-VIBE-2'), '/images/freet/vibe-2/images/white/vibe-2-5.webp', 12),
+    ((SELECT id FROM products WHERE sku = 'FREET-VIBE-2'), '/images/freet/vibe-2/images/white/vibe-2-6.webp', 13),
+    ((SELECT id FROM products WHERE sku = 'FREET-VIBE-2'), '/images/freet/vibe-2/images/white/vibe-2-7.webp', 14),
     -- York 2
     ((SELECT id FROM products WHERE sku = 'FREET-YORK-2'), '/images/freet/york-2/images/black/york-2-2.webp',  1),
     ((SELECT id FROM products WHERE sku = 'FREET-YORK-2'), '/images/freet/york-2/images/black/york-2-5.webp',  2),

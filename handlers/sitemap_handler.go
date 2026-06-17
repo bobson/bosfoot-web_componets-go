@@ -76,6 +76,9 @@ func (h *PageHandler) Sitemap(w http.ResponseWriter, r *http.Request) {
 		writeURL("/"+loc+"/about", "monthly", "0.5")
 	}
 	for _, loc := range locales {
+		writeURL("/"+loc+"/contact", "yearly", "0.4")
+	}
+	for _, loc := range locales {
 		writeURL("/"+loc+"/size-guide", "monthly", "0.6")
 	}
 	for _, loc := range locales {
