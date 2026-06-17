@@ -273,12 +273,22 @@ func importProduct(db *sql.DB, brandID, catID int, slug, path string, commit boo
 		}
 	}
 
-	// Gallery: scan each colour folder (primary first), numbered files only.
+	// Gallery: scan each colour folder (primary first). The primary colour's bare
+	// hero is the page lead image (products.image_url), so it's not repeated here;
+	// every OTHER colour leads with its own bare hero ({slug}.webp) so that hero
+	// shows when the colour is selected, followed by its numbered shots.
 	sortOrder := 0
-	for _, c := range p.Colors {
+	for i, c := range p.Colors {
 		folder := colorFolder(c.Name)
 		dir := filepath.Join("public/images/freet", slug, "images", folder)
-		for _, name := range galleryFiles(dir, slug) {
+		var names []string
+		if i > 0 {
+			if _, err := os.Stat(filepath.Join(dir, slug+".webp")); err == nil {
+				names = append(names, slug+".webp")
+			}
+		}
+		names = append(names, galleryFiles(dir, slug)...)
+		for _, name := range names {
 			sortOrder++
 			url := fmt.Sprintf("/images/freet/%s/images/%s/%s", slug, folder, name)
 			if _, err := tx.Exec(`INSERT INTO product_gallery (product_id, image_url, sort_order) VALUES ($1,$2,$3)`,
