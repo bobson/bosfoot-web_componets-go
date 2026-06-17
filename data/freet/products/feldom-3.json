@@ -1,0 +1,115 @@
+{
+  "name": "Feldom 3",
+  "price": 100,
+  "gender": "unisex",
+  "status": {
+    "active": true,
+    "published": true,
+    "featured": true
+  },
+  "sortOrder": 1,
+  "activities": [
+    "hiking",
+    "running"
+  ],
+  "highlights": [
+    {
+      "en": "QUICK-DRY",
+      "mk": "Брзо сушење",
+      "sq": "Tharje e shpejtë"
+    },
+    {
+      "en": "BREATHABLE",
+      "mk": "Дишливо",
+      "sq": "I ajrosur"
+    },
+    {
+      "en": "TOUGH",
+      "mk": "Цврсто",
+      "sq": "I fortë"
+    },
+    {
+      "en": "TRAIL GRIP",
+      "mk": "Патека грип",
+      "sq": "Grip shtegu"
+    }
+  ],
+  "colors": [
+    {
+      "name": "Olive Green",
+      "hex": "#606b40"
+    }
+  ],
+  "stock": {
+    "Olive Green": {
+      "36": 0,
+      "37": 0,
+      "38": 0,
+      "39": 0,
+      "40": 0,
+      "41": 0,
+      "42": 0,
+      "43": 0,
+      "44": 0,
+      "45": 0,
+      "46": 0
+    }
+  },
+  "specs": [
+    {
+      "key": "Upper",
+      "value": "BottleYarn breathable mesh (recycled plastic)"
+    },
+    {
+      "key": "Lining",
+      "value": "Breathable moisture-moving lining"
+    },
+    {
+      "key": "Insole",
+      "value": "ReBound 4mm"
+    },
+    {
+      "key": "Midsole",
+      "value": "SoftFlex"
+    },
+    {
+      "key": "Outsole",
+      "value": "HillGrip 4.0mm"
+    },
+    {
+      "key": "Weight",
+      "value": "522g per pair (size 42)"
+    },
+    {
+      "key": "Stack Height",
+      "value": "10.5mm with insole / 7.5mm without"
+    },
+    {
+      "key": "Drop",
+      "value": "Zero drop"
+    }
+  ],
+  "translations": {
+    "en": {
+      "about": "Minimal running and hiking shoe suitable for both on and off the trail with new design and stronger, more breathable and comfortable upper mesh.\n\nStitched HillGrip outsole with a deeper 4mm lug pattern for better grip on softer trails.\n\nEven more durable with stitched overlay across high wear areas.",
+      "description": "Grippy, durable performance for running and hiking across a wide range of trail surfaces.",
+      "productInfo": "Upper\nBottleYarn: breathable, durable, moisture moving mesh, made from recycled plastic bottles.\nStitched overlay on high impact and wear areas.\nFlat lace — green with lime fleck.\n\nLining\nBreathable, moisture moving lining.\n\nInsole\nReBound 4 mm: energy return with ground connectivity to allow full natural movement. Ideal for performance on harder surfaces and longer distances.\n\nMidsole\nSoftFlex: fully flexible for maximum foot movement.\n\nOutsole\nHillGrip: 4.0 mm tread gives good traction on hard and muddy trail surfaces.\n\nWaterproofness\nNot waterproof, highly breathable. Use a waterproof sock for cold / wet conditions.\n\nWeight\n522 grams per size 42.\n\nStack Height\n10.5 mm with insole; 7.5 mm without insole.\n\nCare\nHand wash with luke warm water and mild detergent. Air dry.\nWe do not recommend putting your Freets in the washing machine or dryer.",
+      "sizeAndFit": "Customers say it fits true to size — you may stay at your usual size.",
+      "sustainability": "Upper: 60% recycled (BottleYarn)\nOutsole: 60% natural rubber\nLining: 65% recycled (BottleYarn)\nLace: 70% recycled (BottleYarn)\nInsole: 60% recycled\nPackaging: box/wrapping recycled and recyclable card \u0026 paper\nOuter packaging: recycled and recyclable plastic or card/paper packet"
+    },
+    "mk": {
+      "about": "Минимална патика за трчање и планинарење погодна за патеки и надвор од нив со нов дизајн и посилна, подишлива и поудобна горна мрежа.\n\nПришиена HillGrip ѓон со подлабок шаблон од 4мм за подобар грип на помеки патеки.\n\nДури и поиздржлива со прошиено засилување на местата со голема истроеност.",
+      "description": "Грипована, издржлива перформанс патика за трчање и планинарење на широк спектар на патечки површини.",
+      "productInfo": "Горен дел\nBottleYarn: дишлива, издржлива, мрежа што ја носи влагата, направена од рециклирани пластични шишиња.\nПрошиено засилување на места со голема истроеност.\nРамни врвки — зелени со лимено мрснило.\n\nОбвивка\nДишлива, мрежа која ја носи влагата.\n\nВлошка\nReBound 4 мм: енергетски одѕив со осет за подлогата за целосно природно движење. Идеално за подобри перформанси на потврди подлоги и подолги растојанија.\n\nСредна потпетица\nSoftFlex: целосно флексибилна за максимално движење на стапалото.\n\nГон\nHillGrip: 4,0 мм газен профил обезбедува добра тракција на тврди и кални патечки површини.\n\nВодоотпорност\nНе е водоотпорно, високо дишливо. Користете водоотпорни чорапи за студени/влажни услови.\n\nТежина\n522 грама на пар во големина 42.\n\nВисина на ѓонот\n10,5 мм со влошка; 7,5 мм без влошка.\n\nНега\nРачно перете со млака вода и благ детергент. Сушете на воздух.\nНе препорачуваме ставање на вашите Freet патики во машина за перење или сушара.",
+      "sizeAndFit": "Купувачите велат дека одговара точно по големината — можете да ја носите вашата вообичаена големина.",
+      "sustainability": "Горен дел: 60% рециклирано (BottleYarn)\nГон: 60% природен каучук\nОбвивка: 65% рециклирано (BottleYarn)\nВрвки: 70% рециклирано (BottleYarn)\nВлошка: 60% рециклирано\nПакување: кутија/обвивка од рециклирани и рециклабилни картон и хартија\nНадворешно пакување: рециклирана и рециклабилна пластика или картон/хартиен пакет"
+    },
+    "sq": {
+      "about": "Këpucë minimale vrapimi dhe ecjeje malore e përshtatshme për shtigje dhe jashtë tyre me dizajn të ri dhe rrjetë të sipërme më të fortë, më të ajrosur dhe komode.\n\nSolla e jashtme HillGrip e qepur me model 4mm më të thellë për grip më të mirë në shtigje më të buta.\n\nEdhe më e qëndrueshme me mbulues të qepur në zonat e konsumimit të lartë.",
+      "description": "Këpucë performante me grip të mirë dhe të qëndrueshme për vrapim dhe hiking në sipërfaqe të ndryshme shtegjesh.",
+      "productInfo": "Pjesa e sipërme\nBottleYarn: rrjetë e ajrosur, e qëndrueshme, që largon lagështinë, prej shisheve plastike të ricikluara.\nMbulues i qepur në zonat e konsumimit të lartë.\nLidhëse të sheshta — të gjelbra me refleks gëlqeror.\n\nVeshja\nVeshje e ajrosur, që largon lagështinë.\n\nSole e brendshme\nReBound 4 mm: kthim energjie me ndjesi të tokës për lëvizje natyrale. Ideale për performancë në sipërfaqe më të forta dhe distanca më të gjata.\n\nMidsole\nSoftFlex: plotësisht fleksibël për lëvizje maksimale të këmbës.\n\nSolla e jashtme\nHillGrip: 4.0 mm gjurmë jep trakcion të mirë në sipërfaqe shtegjesh të forta dhe me baltë.\n\nPapërshkueshmëria nga uji\nNuk është i papërshkueshëm nga uji, shumë i ajrosur. Përdor çorape të papërshkueshme për kushte të ftohta / të lagështa.\n\nPesha\n522 gramë çift në madhësinë 42.\n\nLartësia e solës\n10.5 mm me sole; 7.5 mm pa sole.\n\nKujdesi\nLani me dorë me ujë të vakët dhe detergjent të butë. Thajeni në ajër.\nNuk rekomandojmë vendosjen e Freet-eve tuaj në lavatriçe ose tharëse.",
+      "sizeAndFit": "Klientët thonë se përshtatet sipas madhësisë — mund të mbani madhësinë tuaj të zakonshme.",
+      "sustainability": "Pjesa e sipërme: 60% e ricikluar (BottleYarn)\nSolla e jashtme: 60% gomë natyrale\nVeshja: 65% e ricikluar (BottleYarn)\nLidhëset: 70% të ricikluara (BottleYarn)\nSolla e brendshme: 60% e ricikluar\nPaketimi: kuti/mbështjellje nga karton dhe letër të ricikluara dhe të riciklueshme\nPaketimi i jashtëm: plastikë ose karton/letër i ricikluar dhe i riciklueshëm"
+    }
+  }
+}

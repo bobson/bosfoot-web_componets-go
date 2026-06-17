@@ -4,14 +4,21 @@
 // styles it normally because there's no shadow boundary.
 
 const CART_KEY = 'bosfoot_cart';
-const MKD_TO_EUR = 61.5; // matches the server-side eur() template function
+// Default rate; overridden at connect from the data-eur-rate attribute, which
+// the server injects from internal/site (the single source of truth).
+let MKD_TO_EUR = 61;
 
+function floorDenar(n) {
+  // round down to the nearest 10 so prices end in 0 — mirrors site.FloorDenar.
+  return Math.floor(n / 10) * 10;
+}
 function fmtMKD(n) {
   // space thousands separator, mirrors formatMKD on the server: 6200 -> "6 200"
-  return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+  return String(floorDenar(n)).replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
 }
 function fmtEUR(n) {
-  return (Math.round((n / MKD_TO_EUR) * 100) / 100).toFixed(2);
+  // whole number — EUR is the round source price, MKD is the converted value
+  return String(Math.round(floorDenar(n) / MKD_TO_EUR));
 }
 function esc(s) {
   const d = document.createElement('div');
@@ -23,6 +30,7 @@ class CartDrawer extends HTMLElement {
   connectedCallback() {
     this.currency = this.dataset.currency || 'MKD';
     this.showEur = this.dataset.showEur === '1';
+    MKD_TO_EUR = parseFloat(this.dataset.eurRate) || MKD_TO_EUR;
     this.labels = {
       size: this.dataset.labelSize || 'Size',
       remove: this.dataset.labelRemove || 'Remove',

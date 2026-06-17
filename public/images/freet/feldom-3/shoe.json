@@ -1,6 +1,6 @@
 {
   "name": { "mk": "Feldom 3", "sq": "Feldom 3", "en": "Feldom 3" },
-  "price": 6200,
+  "price": 100,
   "status": "active",
   "gender": "unisex",
   "activities": ["running", "hiking"],

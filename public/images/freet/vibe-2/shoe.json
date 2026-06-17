@@ -1,6 +1,6 @@
 {
   "name": { "mk": "Vibe 2", "sq": "Vibe 2", "en": "Vibe 2" },
-  "price": 6200,
+  "price": 100,
   "status": "active",
   "gender": "unisex",
   "activities": ["training", "casual", "running"],

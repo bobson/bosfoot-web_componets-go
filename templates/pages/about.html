@@ -4,10 +4,7 @@
 <head>
   {{template "head" .}}
   <link rel="stylesheet" href="{{asset "/css/about.css"}}">
-  <title>
-    {{if eq .Locale "mk"}}За нас{{else if eq .Locale "sq"}}Rreth Nesh{{else}}About{{end}}
-    — Bosfoot
-  </title>
+  <title>{{t .Locale "about.metaTitle"}} — Bosfoot</title>
 </head>
 <body>
   {{template "nav" .}}
@@ -17,21 +14,11 @@
     {{/* ── Hero ─────────────────────────────────────────── */}}
     <header class="section section--hero about-hero">
       <div class="container about-hero__inner">
-        <p class="about-eyebrow" data-reveal>
-          {{if eq .Locale "mk"}}Нашата приказна{{else if eq .Locale "sq"}}Historia jonë{{else}}Our story{{end}}
-        </p>
+        <p class="about-eyebrow" data-reveal>{{t .Locale "about.hero.eyebrow"}}</p>
         <h1 class="about-hero__title" data-reveal>
-          {{if eq .Locale "mk"}}Боси чевли за<br>нашиот регион{{else if eq .Locale "sq"}}Këpucë barefoot<br>për rajonin tonë{{else}}Barefoot shoes<br>for this region{{end}}
+          {{t .Locale "about.hero.titleA"}}<br>{{t .Locale "about.hero.titleB"}}
         </h1>
-        <p class="about-hero__lead text-muted" data-reveal>
-          {{if eq .Locale "mk"}}
-            Босфут е продавница за боси чевли направена за Балканот. Македонски по основа, со поддршка на албански и англиски.
-          {{else if eq .Locale "sq"}}
-            Bosfoot është një dyqan këpucësh barefoot i bërë për Ballkanin. Maqedonisht bazë, me mbështetje shqip dhe anglisht.
-          {{else}}
-            Bosfoot is a barefoot shoe shop built for the Balkans. Macedonian by default, with Albanian and English too.
-          {{end}}
-        </p>
+        <p class="about-hero__lead text-muted" data-reveal>{{t .Locale "about.hero.lead"}}</p>
       </div>
     </header>
 
@@ -40,21 +27,15 @@
       <div class="container about-stats__row" data-reveal>
         <div class="about-stat">
           <span class="about-stat__num" data-count="24">24</span>
-          <span class="about-stat__label">
-            {{if eq .Locale "mk"}}часа до испраќање{{else if eq .Locale "sq"}}orë deri në dërgesë{{else}}hours to dispatch{{end}}
-          </span>
+          <span class="about-stat__label">{{t .Locale "about.stats.dispatch"}}</span>
         </div>
         <div class="about-stat">
           <span class="about-stat__num" data-count="14">14</span>
-          <span class="about-stat__label">
-            {{if eq .Locale "mk"}}дена за враќање{{else if eq .Locale "sq"}}ditë për kthim{{else}}days to return{{end}}
-          </span>
+          <span class="about-stat__label">{{t .Locale "about.stats.return"}}</span>
         </div>
         <div class="about-stat">
           <span class="about-stat__num" data-count="100" data-count-suffix="%">100%</span>
-          <span class="about-stat__label">
-            {{if eq .Locale "mk"}}оригинални производи{{else if eq .Locale "sq"}}produkte origjinale{{else}}original products{{end}}
-          </span>
+          <span class="about-stat__label">{{t .Locale "about.stats.original"}}</span>
         </div>
       </div>
     </section>
@@ -63,30 +44,10 @@
     <section class="section about-story">
       <div class="container about-story__inner">
         <div class="about-story__copy" data-reveal>
-          <p class="about-eyebrow">
-            {{if eq .Locale "mk"}}Зошто постои Bosfoot{{else if eq .Locale "sq"}}Pse ekziston Bosfoot{{else}}Why Bosfoot exists{{end}}
-          </p>
-          <h2 class="about-story__heading">
-            {{if eq .Locale "mk"}}Нарачувањето од странство не беше решение{{else if eq .Locale "sq"}}Porositja nga jashtë nuk ishte zgjidhje{{else}}Ordering from abroad wasn't the answer{{end}}
-          </h2>
-          <p class="text-muted">
-            {{if eq .Locale "mk"}}
-              Да најдеш квалитетни боси чевли во Македонија и Албанија значеше да нарачуваш од странство, да плаќаш непредвидлива поштарина и да се надеваш дека мерките ќе бидат точни кога ќе стигнат. Ако нешто не одговарало, враќањето беше скапо и бавно.
-            {{else if eq .Locale "sq"}}
-              Të gjesh këpucë të mira barefoot në Maqedoni dhe Shqipëri nënkuptonte të porositje nga jashtë, të paguaje tarifa transporti të paparashikueshme dhe të shpresoje që masat të ishin të sakta. Nëse diçka nuk shkonte, kthimi ishte i kushtueshëm dhe i ngadaltë.
-            {{else}}
-              Finding quality barefoot shoes in Macedonia and Albania meant ordering from abroad, paying unpredictable shipping costs, and hoping the sizing was right when it arrived. If something didn't fit, returning it was expensive and slow.
-            {{end}}
-          </p>
-          <p class="text-muted">
-            {{if eq .Locale "mk"}}
-              Босфут е одговорот — продавница во твојот регион, со некој кој навистина ги носи чевлите што ги продава и може да ти одговори на реални прашања за нив.
-            {{else if eq .Locale "sq"}}
-              Bosfoot është përgjigja — një dyqan në rajonin tënd, me dikë që i vesh vetë këpucët që shet dhe mund t'u përgjigjet pyetjeve reale rreth tyre.
-            {{else}}
-              Bosfoot is the answer — a shop in your region, with someone who actually wears the shoes they sell and can answer real questions about them.
-            {{end}}
-          </p>
+          <p class="about-eyebrow">{{t .Locale "about.why.eyebrow"}}</p>
+          <h2 class="about-story__heading">{{t .Locale "about.why.heading"}}</h2>
+          <p class="text-muted">{{t .Locale "about.why.p1"}}</p>
+          <p class="text-muted">{{t .Locale "about.why.p2"}}</p>
         </div>
       </div>
     </section>
@@ -94,12 +55,8 @@
     {{/* ── What barefoot shoes are ──────────────────────── */}}
     <section class="section section--sage about-what">
       <div class="container">
-        <p class="about-eyebrow" data-reveal>
-          {{if eq .Locale "mk"}}Што се боси чевли{{else if eq .Locale "sq"}}Çfarë janë këpucët barefoot{{else}}What barefoot shoes are{{end}}
-        </p>
-        <h2 class="about-what__heading" data-reveal>
-          {{if eq .Locale "mk"}}Направени за стапалото, не за калапот{{else if eq .Locale "sq"}}Të bëra për këmbën, jo për kallëpin{{else}}Built around the foot, not the mould{{end}}
-        </h2>
+        <p class="about-eyebrow" data-reveal>{{t .Locale "about.what.eyebrow"}}</p>
+        <h2 class="about-what__heading" data-reveal>{{t .Locale "about.what.heading"}}</h2>
         <div class="about-what__grid">
           <div class="about-feature" data-reveal>
             <span class="about-feature__icon" aria-hidden="true">
@@ -109,10 +66,8 @@
                 <line x1="16" y1="8" x2="16" y2="28"/>
               </svg>
             </span>
-            <h3>{{if eq .Locale "mk"}}Широка кутија за прсти{{else if eq .Locale "sq"}}Hapësirë e gjerë për gishta{{else}}Wide toe box{{end}}</h3>
-            <p class="text-muted">
-              {{if eq .Locale "mk"}}Прстите се шират природно наместо да бидат стиснати. Подобрена рамнотежа, помалку болки.{{else if eq .Locale "sq"}}Gishtat shpërndahen natyralisht në vend që të shtrëngohen. Ekuilibër më i mirë, më pak dhimbje.{{else}}Toes spread naturally instead of being squeezed together. Better balance, less pain.{{end}}
-            </p>
+            <h3>{{t .Locale "about.what.f1.title"}}</h3>
+            <p class="text-muted">{{t .Locale "about.what.f1.body"}}</p>
           </div>
           <div class="about-feature" data-reveal>
             <span class="about-feature__icon" aria-hidden="true">
@@ -122,10 +77,8 @@
                 <line x1="4" y1="26" x2="28" y2="26" stroke-dasharray="2 3"/>
               </svg>
             </span>
-            <h3>{{if eq .Locale "mk"}}Тенок ѓон{{else if eq .Locale "sq"}}Taban i hollë{{else}}Thin sole{{end}}</h3>
-            <p class="text-muted">
-              {{if eq .Locale "mk"}}Стапалата го чувствуваат теренот. Тоа ги активира малите мускули кои конвенционалните чевли ги деактивираат.{{else if eq .Locale "sq"}}Këmbët ndiejnë terrenin. Kjo aktivizon muskujt e vegjël që këpucët konvencionale i çaktivizojnë.{{else}}Feet can feel the ground. This activates the small muscles that conventional shoes switch off.{{end}}
-            </p>
+            <h3>{{t .Locale "about.what.f2.title"}}</h3>
+            <p class="text-muted">{{t .Locale "about.what.f2.body"}}</p>
           </div>
           <div class="about-feature" data-reveal>
             <span class="about-feature__icon" aria-hidden="true">
@@ -135,20 +88,12 @@
                 <path d="M28 10l-4 6 4 6"/>
               </svg>
             </span>
-            <h3>{{if eq .Locale "mk"}}Нулта висина на петата{{else if eq .Locale "sq"}}Zero ngritje e tabanit{{else}}Zero heel drop{{end}}</h3>
-            <p class="text-muted">
-              {{if eq .Locale "mk"}}Петата и прстите се на исто ниво. Природна положба, помалку притисок на зглобовите.{{else if eq .Locale "sq"}}Thembra dhe gishtat janë në të njëjtin nivel. Qëndrim natyral, më pak presion në nyje.{{else}}Heel and toes at the same level. Natural posture, less joint strain.{{end}}
-            </p>
+            <h3>{{t .Locale "about.what.f3.title"}}</h3>
+            <p class="text-muted">{{t .Locale "about.what.f3.body"}}</p>
           </div>
         </div>
         <p class="about-what__note text-muted" data-reveal>
-          {{if eq .Locale "mk"}}
-            Кога ќе почнеш да ги носиш, обичните чевли се чувствуваат како кафез. Повеќе за здравјето на стапалата на <a href="/{{.Locale}}/foot-health">нашата страна за здравје</a>.
-          {{else if eq .Locale "sq"}}
-            Pasi të fillosh t'i veshësh, këpucët normale ndjehen si kafaz. Më shumë rreth shëndetit të këmbëve në <a href="/{{.Locale}}/foot-health">faqen tonë të shëndetit</a>.
-          {{else}}
-            Once you start wearing them, regular shoes feel like a cage. More about foot health on <a href="/{{.Locale}}/foot-health">our foot health page</a>.
-          {{end}}
+          {{t .Locale "about.what.notePre"}} <a href="/{{.Locale}}/foot-health">{{t .Locale "about.what.noteLink"}}</a>.
         </p>
       </div>
     </section>
@@ -157,41 +102,23 @@
     <section class="section about-sizing">
       <div class="container">
         <div class="about-sizing__head" data-reveal>
-          <p class="about-eyebrow">
-            {{if eq .Locale "mk"}}Без погодување{{else if eq .Locale "sq"}}Pa hamendje{{else}}No guesswork{{end}}
-          </p>
-          <h2 class="about-sizing__heading">
-            {{if eq .Locale "mk"}}Дилемата со големините — решена{{else if eq .Locale "sq"}}Dilema e masave — e zgjidhur{{else}}The sizing dilemma, solved{{end}}
-          </h2>
-          <p class="text-muted about-sizing__lead">
-            {{if eq .Locale "mk"}}
-              Прашање број еден при нарачка на чевли онлајн: дали ќе ми одговараат? Еве како го отстранивме погодувањето.
-            {{else if eq .Locale "sq"}}
-              Pyetja numër një kur porosit këpucë online: a do të më rrinë mirë? Ja si e hoqëm hamendjen.
-            {{else}}
-              The number one question when ordering shoes online: will they fit? Here's how we removed the guesswork.
-            {{end}}
-          </p>
+          <p class="about-eyebrow">{{t .Locale "about.sizing.eyebrow"}}</p>
+          <h2 class="about-sizing__heading">{{t .Locale "about.sizing.heading"}}</h2>
+          <p class="text-muted about-sizing__lead">{{t .Locale "about.sizing.lead"}}</p>
         </div>
         <div class="about-sizing__grid">
           <div class="about-sizing__steps">
             <article class="about-sizestep" data-reveal>
-              <h3>{{if eq .Locale "mk"}}Мери во милиметри{{else if eq .Locale "sq"}}Mat në milimetra{{else}}Measure in millimeters{{end}}</h3>
-              <p class="text-muted">
-                {{if eq .Locale "mk"}}Заборави ги EU броевите. Измери ја должината на стапалото во милиметри — нашиот водич покажува како, за две минути, со лист хартија и ѕид.{{else if eq .Locale "sq"}}Harro numrat EU. Mat gjatësinë e këmbës në milimetra — udhëzuesi ynë tregon si, për dy minuta, me një fletë letre dhe një mur.{{else}}Forget EU sizes. Measure your foot length in millimeters — our guide shows you how in two minutes, with a sheet of paper and a wall.{{end}}
-              </p>
+              <h3>{{t .Locale "about.sizing.s1.title"}}</h3>
+              <p class="text-muted">{{t .Locale "about.sizing.s1.body"}}</p>
             </article>
             <article class="about-sizestep" data-reveal>
-              <h3>{{if eq .Locale "mk"}}Внатрешна должина на секој производ{{else if eq .Locale "sq"}}Gjatësia e brendshme në çdo produkt{{else}}Internal length on every product{{end}}</h3>
-              <p class="text-muted">
-                {{if eq .Locale "mk"}}Секој чевел ја има наведено реалната внатрешна должина во мм, за секоја големина. Спореди со твоето стапало плус 5–12 мм простор — и знаеш пред да нарачаш.{{else if eq .Locale "sq"}}Çdo këpucë ka të shënuar gjatësinë reale të brendshme në mm, për çdo masë. Krahaso me këmbën tënde plus 5–12 mm hapësirë — dhe e di para se të porositësh.{{else}}Every shoe lists its real internal length in mm, for every size. Match it to your foot plus 5–12 mm of space — and you know before you order.{{end}}
-              </p>
+              <h3>{{t .Locale "about.sizing.s2.title"}}</h3>
+              <p class="text-muted">{{t .Locale "about.sizing.s2.body"}}</p>
             </article>
             <article class="about-sizestep" data-reveal>
-              <h3>{{if eq .Locale "mk"}}Бесплатна замена на големина{{else if eq .Locale "sq"}}Ndërrim falas i masës{{else}}Free size exchange{{end}}</h3>
-              <p class="text-muted">
-                {{if eq .Locale "mk"}}Сепак згреши? Замената е бесплатна и едноставна. Чевлите треба да ти одговараат тебе — не обратно.{{else if eq .Locale "sq"}}Gabove gjithsesi? Ndërrimi është falas dhe i thjeshtë. Këpucët duhet të të rrinë ty — jo e kundërta.{{else}}Got it wrong anyway? Exchanges are free and easy. The shoes should fit you — not the other way around.{{end}}
-              </p>
+              <h3>{{t .Locale "about.sizing.s3.title"}}</h3>
+              <p class="text-muted">{{t .Locale "about.sizing.s3.body"}}</p>
             </article>
           </div>
           <div class="about-sizing__art" aria-hidden="true" data-reveal>
@@ -215,32 +142,12 @@
     {{/* ── Brands ───────────────────────────────────────── */}}
     <section class="section section--sage about-brands">
       <div class="container about-brands__inner" data-reveal>
-        <p class="about-eyebrow">
-          {{if eq .Locale "mk"}}Нашите брендови{{else if eq .Locale "sq"}}Markat tona{{else}}Our brands{{end}}
-        </p>
-        <h2 class="about-brands__heading">
-          {{if eq .Locale "mk"}}Малку брендови, добро избрани{{else if eq .Locale "sq"}}Pak marka, të zgjedhura mirë{{else}}Few brands, chosen well{{end}}
-        </h2>
-        <p class="text-muted">
-          {{if eq .Locale "mk"}}
-            Не се обидуваме да понудиме сè. Избираме брендови кои градат чевли со вистински принципи на боси чевли — не само маркетиншка ознака — и кои би ги носеле самите. Секој бренд го тестираме пред да го додадеме.
-          {{else if eq .Locale "sq"}}
-            Ne nuk përpiqemi të ofrojmë gjithçka. Zgjedhim marka që ndërtojnë këpucë me parime të vërteta barefoot — jo vetëm një etiketë marketingu — dhe që do i vinim vetë. Çdo markë testohet para se të shtohet.
-          {{else}}
-            We don't try to stock everything. We pick brands that build shoes with real barefoot principles — not just a marketing label — and that we'd wear ourselves. Every brand gets tested before it gets listed.
-          {{end}}
-        </p>
-        <p class="text-muted">
-          {{if eq .Locale "mk"}}
-            Прв е Freet, од Велика Британија — широк модел, одличен квалитет. Следат уште европски брендови.
-          {{else if eq .Locale "sq"}}
-            I pari është Freet, nga Mbretëria e Bashkuar — model i gjerë, cilësi e shkëlqyer. Po vijnë edhe marka të tjera europiane.
-          {{else}}
-            First is Freet, from the UK — wide fit, excellent build quality. More European brands are coming.
-          {{end}}
-        </p>
+        <p class="about-eyebrow">{{t .Locale "about.brands.eyebrow"}}</p>
+        <h2 class="about-brands__heading">{{t .Locale "about.brands.heading"}}</h2>
+        <p class="text-muted">{{t .Locale "about.brands.p1"}}</p>
+        <p class="text-muted">{{t .Locale "about.brands.p2"}}</p>
         <a class="btn btn--brand about-brands__cta" href="/{{.Locale}}/products">
-          {{if eq .Locale "mk"}}Погледни ги чевлите{{else if eq .Locale "sq"}}Shiko këpucët{{else}}Browse the shoes{{end}} <span class="about-arr" aria-hidden="true">→</span>
+          {{t .Locale "about.brands.cta"}} <span class="about-arr" aria-hidden="true">→</span>
         </a>
       </div>
     </section>
@@ -248,30 +155,10 @@
     {{/* ── Who + Contact ────────────────────────────────── */}}
     <section class="section section--deep about-contact">
       <div class="container about-contact__inner" data-reveal>
-        <p class="about-eyebrow about-eyebrow--on-dark">
-          {{if eq .Locale "mk"}}Зад Bosfoot{{else if eq .Locale "sq"}}Pas Bosfoot{{else}}Behind Bosfoot{{end}}
-        </p>
-        <h2 class="about-contact__heading">
-          {{if eq .Locale "mk"}}Реален човек, реален одговор{{else if eq .Locale "sq"}}Njeri real, përgjigje reale{{else}}A real person, a real answer{{end}}
-        </h2>
-        <p>
-          {{if eq .Locale "mk"}}
-            Слободан Маркоски го основа Bosfoot затоа што и самиот се замори од истиот проблем. Базиран во Скопје. Носи Freet. Сам одговара на своите пораки.
-          {{else if eq .Locale "sq"}}
-            Slobodan Markoski themeloi Bosfoot sepse u lodh vetë me të njëjtin problem. Bazuar në Shkup. Vesh Freet. I përgjigjet vetë mesazheve të tij.
-          {{else}}
-            Slobodan Markoski started Bosfoot because he got tired of the same problem himself. Based in Skopje. Wears Freet. Answers his own messages.
-          {{end}}
-        </p>
-        <p>
-          {{if eq .Locale "mk"}}
-            Прашање за мерки? Не знаеш кој модел да избереш? Само напиши.
-          {{else if eq .Locale "sq"}}
-            Pyetje rreth masave? Nuk di cilin model të zgjedhësh? Thjesht shkruaj.
-          {{else}}
-            Question about sizing? Not sure which model to pick? Just get in touch.
-          {{end}}
-        </p>
+        <p class="about-eyebrow about-eyebrow--on-dark">{{t .Locale "about.who.eyebrow"}}</p>
+        <h2 class="about-contact__heading">{{t .Locale "about.who.heading"}}</h2>
+        <p>{{t .Locale "about.who.p1"}}</p>
+        <p>{{t .Locale "about.who.p2"}}</p>
         <div class="about-contact__links">
           <a class="about-contact__link" href="mailto:{{(contact).Email}}">{{(contact).Email}}</a>
           <a class="about-contact__link" href="{{(contact).PhoneHref}}">{{(contact).Phone}}</a>

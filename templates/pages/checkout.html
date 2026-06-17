@@ -20,6 +20,7 @@
       data-locale="{{.Locale}}"
       data-currency="{{t .Locale "currency.MKD"}}"
       data-show-eur="{{if showEUR .Locale}}1{{end}}"
+      data-eur-rate="{{eurRate}}"
       data-label-size="{{t .Locale "cart.size"}}"
       data-label-email-sent="{{t .Locale "checkout.confirmEmailSent"}}"
       data-label-spam-note="{{t .Locale "checkout.confirmSpamNote"}}">

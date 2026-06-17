@@ -77,7 +77,7 @@ Both the server and `cmd/` utilities must be run from the project root — `.env
   - `PageHandler{DB, Logger, Renderer, UI, SiteURL}` — SSR page handlers + sitemap
 - `models/` — plain Go structs with JSON tags, one file per resource. Nullable DB columns use pointer fields (`*string`, `*int`, `*float64`) for clean `omitempty` JSON. `PasswordHash` is deliberately absent from `User`. `Order.Validate()` validates guest-checkout submissions.
 - `internal/database/connect.go` — shared Aiven connection (upgrades `sslmode=require` → `verify-ca` using `ca.pem`). Used by server and `cmd/` utilities.
-- `internal/locale/locale.go` — loads `public/locales/{mk,sq,en}.json` at startup. Provides `T(locale, key)` for template translations and `FromPath(segment)` / `IsValid(loc)` for URL parsing. Covered by `locale_test.go`.
+- `internal/locale/locale.go` — at startup loads the flat `public/locales/{mk,sq,en}.json` plus the language-grouped `public/locales/common.json` and `pages/*.json`, merging all into one key namespace. Provides `T(locale, key)` for template translations and `FromPath(segment)` / `IsValid(loc)` for URL parsing. Covered by `locale_test.go` (incl. a key-parity drift guard).
 - `internal/routes/routes.go` — `Register(...)` wires every route onto the default `http.ServeMux` (see Routing below). Decoupled from `main.go`.
 - `internal/middleware/csrf.go` — CSRF protection for state-changing API endpoints via the double-submit cookie pattern. `WithCSRFCookie` issues a random `_csrf` cookie on the checkout page GET (applied *outside* the page cache so both cache HIT and MISS set it); `WrapCSRF` rejects any POST/PUT/DELETE whose `X-CSRF-Token` header doesn't match the cookie. The checkout JS reads the cookie and sends it as the header.
 - `internal/tmpl/renderer.go` — parses `templates/partials/*.html` then `templates/pages/*.html` at startup. `Render` executes into a buffer first so a template error becomes a clean 500 instead of a half-written 200. Template functions: `t` (translation), `mkd` (MKD price formatter), `eur` (EUR converter), `showEUR`, `deref` (*string → string), `derefF` (*float64 → trimmed string), `lower`, `json` (marshal for `<script type="application/json">`), `nl2p` (double-newline text → `<p>`/`<br>`), `dict` (build map for sub-template data passing).
@@ -91,7 +91,7 @@ Both the server and `cmd/` utilities must be run from the project root — `.env
 
 **Database** (Aiven PostgreSQL, Frankfurt region):
 - Schema in `db/schema.sql` — run `db/seed.sql` then `db/freet.sql` after.
-- Prices stored as INTEGER MKD (no decimals). EUR = `price_mkd / 61.5`, shown with 2 decimals on `sq`/`en` locales only, hidden on `mk`.
+- Pricing: the **euro price is the source** (round numbers, e.g. €135); MKD is derived and stored as INTEGER `price_mkd = floor(EUR × 61 / 10) × 10` (ends in 0). Rate is `site.MKDtoEUR` (= 61) in `internal/site` — the single source. EUR is shown back as a **whole number** (`round(price_mkd / 61)`, recovers the source €) on `sq`/`en` only, hidden on `mk`. MKD floor helper: `site.FloorDenar` (e.g. 5994 → 5990).
 - Product `slug` is bare form (`vibe-2`), unique per brand via `UNIQUE(brand_id, slug)`. URL scheme: `/{locale}/products/{brand-slug}/{product-slug}`.
 - Translated text lives in `_translations` tables keyed by `lang_code` enum (`mk`, `sq`, `en`). Product name/SKU, brand name/SKU, colors, specs, activities always EN.
 - Stock tracked per `(product_id, size_id, color_id)` in `product_stock`.
@@ -130,18 +130,20 @@ Both the server and `cmd/` utilities must be run from the project root — `.env
 **Frontend** (`public/`, no build step — files served as-is):
 - Interactivity is built as **HTML Web Components** (custom elements, light DOM, no shadow root) in `public/components/`: `cart-drawer`, `checkout-form`, `listing-filter`, `nav-drawer`, `nav-locale`, `nav-search`, `product-detail`, `scroll-reveal`. The static chrome is server-rendered inside each element; the JS class only adds behaviour. Because there's no shadow boundary, global CSS styles them normally and SSR HTML stays crawlable.
 - `public/app.js` is the single entry point (ES module): it imports and runs each component's `init*` and maintains the cart badge. Each `init*` is page-guarded, so loading them all everywhere is safe — do **not** also add per-component `<script>` tags in templates (they'd be redundant; the module cache means they wouldn't re-run anyway).
-- Cart state lives in `localStorage` under `bosfoot_cart`. Client-side price formatting mirrors the server: `MKD_TO_EUR = 61.5`, space thousands separator — keep these in sync with `tmpl` helpers (`eur`, `formatMKD`) and the schema's EUR rule if the rate ever changes.
+- Cart state lives in `localStorage` under `bosfoot_cart`. Client-side price formatting mirrors the server: the EUR rate is **not** hardcoded in JS — it's injected via the `data-eur-rate` attribute (from `site.MKDtoEUR`); the cart/checkout JS also floors to the nearest 10 like `site.FloorDenar`. To change the rate, edit `internal/site` only.
 - CSS is split per feature in `public/css/` (`global.css` holds the design-token `:root`, plus `nav`, `home`, `listing`, `product`, `cart`, `search`, `footer`). Use design tokens for all values; only define tokens that are actually used.
 
-**Locale strings** (`public/locales/{mk,sq,en}.json`):
-- Loaded server-side for template rendering via `{{t .Locale "key"}}`.
-- Also served statically at `/locales/mk.json` etc. for future CSR use (cart, filters).
-- Missing keys fall back to `mk`, then return the key itself — visible in the UI as a signal to add the translation.
+**Locale strings** (`public/locales/`):
+- Two co-existing layouts, both merged into one flat key namespace at startup (see `locale.go`):
+  - **Language-grouped** (preferred): `pages/{page}.json` per page + `common.json` for cross-cutting chrome (nav, footer, cart, search, cta, …). Each key holds all three languages together: `"contact.title": {"mk":…, "sq":…, "en":…}`. Add/remove a page's text in one file.
+  - **Flat** `{mk,sq,en}.json` — the original per-language files, now emptied to `{}`; kept only because the loader still reads them. New strings should go in the grouped files.
+- Rendered via `{{t .Locale "key"}}`; keys stay in one namespace, so which file a key lives in is purely organizational.
+- Missing keys fall back to `mk`, then return the key itself — visible in the UI as a signal to add the translation. `locale_test.go` has a drift guard that fails if a key is missing from any language.
 
 **Conventions**:
 - New SSR page: add handler method on `PageHandler`, embed `PageBase`, call `h.Renderer.Render(w, "template-name", data)`, register route in `internal/routes/routes.go` (wrap in `pc.Wrap` if the page is the same for every visitor), add to sitemap in `sitemap_handler.go`.
 - New Web Component: add `public/components/{name}.js` as a custom element (light DOM, no shadow), server-render its static chrome inside the element, add its `init*` to the array in `public/app.js`, and add matching styles in `public/css/`.
 - New JSON API endpoint: add method on `ProductHandler` (or new `XHandler`), register in `internal/routes/routes.go`. Queries go directly in handlers — no repository layer. Wrap state-changing endpoints in `middleware.WrapCSRF`.
 - New brand: add `public/images/{brand-slug}/` with `brand.json` + per-product `shoe.json`, write `db/{brand-slug}.sql` following `db/freet.sql` as template, run `go run ./cmd/dbimport`, then `go run ./cmd/imgvariants` to generate the product-card image variants.
-- New locale string: add to all three `public/locales/*.json` files.
+- New locale string: add it to the relevant `public/locales/pages/{page}.json` (or `common.json` if shared), with all three languages (`{"mk":…, "sq":…, "en":…}`).
 - `db/` SQL files are idempotent (`ON CONFLICT DO NOTHING`) — safe to re-run.

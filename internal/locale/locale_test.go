@@ -1,8 +1,43 @@
 package locale
 
 import (
+	"os"
 	"testing"
 )
+
+// TestPublicLocalesInSync loads the real locale files (flat + per-page) and
+// fails if any key is missing from a language — the drift guard for the mixed
+// flat/grouped layout. Skips if run somewhere the files aren't reachable.
+func TestPublicLocalesInSync(t *testing.T) {
+	const dir = "../../public/locales"
+	if _, err := os.Stat(dir); err != nil {
+		t.Skip("public locales not reachable from here")
+	}
+	ui, err := LoadUI(dir)
+	if err != nil {
+		t.Fatalf("LoadUI(%s) failed: %v", dir, err)
+	}
+
+	// Collect every key seen in any locale, then assert each locale has it.
+	allKeys := map[string]bool{}
+	for _, loc := range All {
+		for k := range ui.strings[loc] {
+			allKeys[k] = true
+		}
+	}
+	for key := range allKeys {
+		for _, loc := range All {
+			if _, ok := ui.strings[loc][key]; !ok {
+				t.Errorf("key %q missing for locale %q", key, loc)
+			}
+		}
+	}
+
+	// Sanity: a key that now lives in pages/contact.json resolves per-locale.
+	if got := ui.T("en", "contact.title"); got == "contact.title" || got == "" {
+		t.Errorf("grouped key contact.title did not load (got %q)", got)
+	}
+}
 
 func TestFromPath(t *testing.T) {
 	tests := []struct {

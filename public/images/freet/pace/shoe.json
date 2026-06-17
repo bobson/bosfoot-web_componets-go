@@ -1,6 +1,6 @@
 {
   "name": { "mk": "Pace", "sq": "Pace", "en": "Pace" },
-  "price": 6500,
+  "price": 105,
   "status": "active",
   "gender": "unisex",
   "activities": ["running", "hiking", "training", "casual"],

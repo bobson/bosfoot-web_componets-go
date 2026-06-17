@@ -1,0 +1,10 @@
+{
+  "terms.1.body": { "mk": "Сите цени се во MKD и ги вклучуваат сите даноци. Плаќањето е при испорака или со банкарски трансфер.", "sq": "Të gjitha çmimet janë në MKD dhe përfshijnë të gjitha tatimet. Pagesa bëhet me dorëzim ose transfertë bankare.", "en": "All prices are in MKD and include all taxes. Payment is on delivery or by bank transfer." },
+  "terms.1.title": { "mk": "Цени и плаќање", "sq": "Çmimet dhe pagesa", "en": "Prices and payment" },
+  "terms.2.body": { "mk": "Производите се на залиха додека трае. Доколку производ не е достапен по нарачка, веднаш те контактираме.", "sq": "Produktet janë në stok derisa vazhdojnë. Nëse produkti nuk është i disponueshëm pas porosisë, ju kontaktojmë menjëherë.", "en": "Products are available while supplies last. If a product is unavailable after an order, we contact you immediately." },
+  "terms.2.title": { "mk": "Достапност", "sq": "Disponueshmëria", "en": "Availability" },
+  "terms.3.body": { "mk": "Договорот за продажба се склучува кога ќе ја потврдиме нарачката по електронска пошта.", "sq": "Kontrata e shitjes lidhet kur konfirmojmë porosinë me e-mail.", "en": "The sales contract is concluded when we confirm the order by email." },
+  "terms.3.title": { "mk": "Договор", "sq": "Kontrata", "en": "Contract" },
+  "terms.lead": { "mk": "Условите според кои ги продаваме нашите производи.", "sq": "Kushtet sipas të cilave shesim produktet tona.", "en": "The conditions under which we sell our products." },
+  "terms.title": { "mk": "Услови на продажба", "sq": "Kushtet e shitjes", "en": "Terms of sale" }
+}

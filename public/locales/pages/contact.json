@@ -1,0 +1,52 @@
+{
+  "seo.contact": {
+    "mk": "Контактирајте го Bosfoot — телефон, WhatsApp, Viber, е-пошта и социјални мрежи. Тука сме за сите ваши прашања за боси чевли.",
+    "sq": "Kontaktoni Bosfoot — telefon, WhatsApp, Viber, email dhe rrjete sociale. Jemi këtu për çdo pyetje rreth këpucëve barefoot.",
+    "en": "Contact Bosfoot — phone, WhatsApp, Viber, email and social media. We're here for any question about barefoot shoes."
+  },
+  "contact.title": {
+    "mk": "Контактирајте нè",
+    "sq": "Na kontaktoni",
+    "en": "Get in touch"
+  },
+  "contact.lead": {
+    "mk": "Имате прашање за големина, нарачка или било што друго? Јавете се — тука сме да помогнеме.",
+    "sq": "Keni një pyetje për madhësinë, porosinë apo diçka tjetër? Na shkruani — jemi këtu për t'ju ndihmuar.",
+    "en": "A question about sizing, an order, or anything else? Reach out — we're happy to help."
+  },
+  "contact.directTitle": {
+    "mk": "Стапете во контакт",
+    "sq": "Lidhuni me ne",
+    "en": "Reach us"
+  },
+  "contact.socialTitle": {
+    "mk": "Следете нè",
+    "sq": "Na ndiqni",
+    "en": "Follow us"
+  },
+  "contact.phoneLabel": {
+    "mk": "Јавете се",
+    "sq": "Na telefononi",
+    "en": "Call us"
+  },
+  "contact.emailLabel": {
+    "mk": "Е-пошта",
+    "sq": "Email",
+    "en": "Email"
+  },
+  "contact.whatsappLabel": {
+    "mk": "Пишете на WhatsApp",
+    "sq": "Shkruani në WhatsApp",
+    "en": "Chat on WhatsApp"
+  },
+  "contact.viberLabel": {
+    "mk": "Пишете на Viber",
+    "sq": "Shkruani në Viber",
+    "en": "Chat on Viber"
+  },
+  "contact.responseNote": {
+    "mk": "Обично одговараме во рок од еден ден.",
+    "sq": "Zakonisht përgjigjemi brenda një dite.",
+    "en": "We usually reply within a day."
+  }
+}

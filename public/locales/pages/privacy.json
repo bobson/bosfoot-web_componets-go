@@ -1,0 +1,10 @@
+{
+  "privacy.1.body": { "mk": "Кога нарачуваш, собираме име, адреса, е-пошта, телефон. При посета — анонимни статистики (без cookies за рекламирање).", "sq": "Kur porositni, mbledhim emrin, adresën, e-mailin, telefonin. Gjatë vizitës — statistika anonime (pa cookies reklamuese).", "en": "When you order, we collect name, address, email, phone. During visits — anonymous statistics (no advertising cookies)." },
+  "privacy.1.title": { "mk": "Кои податоци ги собираме", "sq": "Çfarë të dhënash mbledhim", "en": "What data we collect" },
+  "privacy.2.body": { "mk": "Само за исполнување на нарачката и одговори на прашања. Не продаваме податоци на трети лица.", "sq": "Vetëm për përmbushjen e porosisë dhe përgjigje pyetjeve. Nuk u shesim të dhëna palëve të treta.", "en": "Only to fulfil orders and answer questions. We do not sell data to third parties." },
+  "privacy.2.title": { "mk": "Како ги користиме", "sq": "Si i përdorim", "en": "How we use it" },
+  "privacy.3.body": { "mk": "Можеш да побараш увид, исправка или бришење на твоите податоци во кое било време.", "sq": "Mund të kërkoni shqyrtim, korrigjim ose fshirje të të dhënave tuaja në çdo kohë.", "en": "You can request access, correction, or deletion of your data at any time." },
+  "privacy.3.title": { "mk": "Твоите права", "sq": "Të drejtat tuaja", "en": "Your rights" },
+  "privacy.lead": { "mk": "Како ги собираме, користиме и заштитуваме твоите лични податоци.", "sq": "Si i mbledhim, përdorim dhe mbrojmë të dhënat tuaja personale.", "en": "How we collect, use, and protect your personal data." },
+  "privacy.title": { "mk": "Политика на приватност", "sq": "Politika e privatësisë", "en": "Privacy policy" }
+}

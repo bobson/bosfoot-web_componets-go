@@ -1,0 +1,10 @@
+{
+  "shipping.1.body": { "mk": "Македонија: 1-3 работни дена. Албанија, Косово, Србија: 3-5 дена. Останат Балкан: 4-7 дена.", "sq": "Maqedonia: 1-3 ditë pune. Shqipëri, Kosovë, Serbi: 3-5 ditë. Ballkani tjetër: 4-7 ditë.", "en": "Macedonia: 1-3 working days. Albania, Kosovo, Serbia: 3-5 days. Rest of Balkans: 4-7 days." },
+  "shipping.1.title": { "mk": "Време на испорака", "sq": "Koha e dorëzimit", "en": "Delivery time" },
+  "shipping.2.body": { "mk": "Бесплатна испорака за нарачки над 3000 MKD во рамките на Македонија.", "sq": "Dërgim falas për porosi mbi 3000 MKD brenda Maqedonisë.", "en": "Free shipping on orders over 3000 MKD within Macedonia." },
+  "shipping.2.title": { "mk": "Цени", "sq": "Çmimet", "en": "Prices" },
+  "shipping.3.body": { "mk": "По нарачката добиваш потврда со tracking број.", "sq": "Pas porosisë merrni konfirmim me numër gjurmimi.", "en": "After your order you receive a confirmation with a tracking number." },
+  "shipping.3.title": { "mk": "Следење", "sq": "Gjurmimi", "en": "Tracking" },
+  "shipping.lead": { "mk": "Брза испорака низ Балканот со проверени курири.", "sq": "Dërgim i shpejtë nëpër Ballkan me kurierë të provuar.", "en": "Fast delivery across the Balkans with trusted couriers." },
+  "shipping.title": { "mk": "Достава", "sq": "Dërgesa", "en": "Shipping" }
+}

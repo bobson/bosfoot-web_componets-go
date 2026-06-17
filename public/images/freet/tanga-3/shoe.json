@@ -1,6 +1,6 @@
 {
   "name": { "mk": "Tanga 3", "sq": "Tanga 3", "en": "Tanga 3" },
-  "price": 6200,
+  "price": 100,
   "status": "active",
   "gender": "unisex",
   "activities": ["casual", "training", "office"],

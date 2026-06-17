@@ -1,0 +1,19 @@
+{
+  "brand.foundedIn": { "mk": "Основан во", "sq": "Themeluar në", "en": "Founded in" },
+  "brand.from": { "mk": "Потекло", "sq": "Origjina", "en": "Origin" },
+  "brand.officialSite": { "mk": "Официјална страница", "sq": "Faqja zyrtare", "en": "Official website" },
+  "brand.sizeChart": { "mk": "Табела на големини", "sq": "Tabela e madhësive", "en": "Size chart" },
+  "brand.sizeChart.measureFoot": { "mk": "Должина на стапалото", "sq": "Gjatësia e këmbës", "en": "Foot length" },
+  "brand.sizeChart.measureInsole": { "mk": "Должина на влошката", "sq": "Gjatësia e fushës", "en": "Insole length" },
+  "brands.comingSoon": { "mk": "Наскоро", "sq": "Së shpejti", "en": "Coming soon" },
+  "brands.groundies": { "mk": "Groundies", "sq": "Groundies", "en": "Groundies" },
+  "brands.lead": { "mk": "Внимателно избрана колекција од европски мајстори за боси патики. Секој бренд има своја филозофија — заедничко им е длабокото почитување на анатомијата на стапалото.", "sq": "Një koleksion i zgjedhur me kujdes nga zejtarët europianë të këpucëve barefoot. Çdo markë ka filozofinë e vet — e përbashkët është respekti i thellë ndaj anatomisë së këmbës.", "en": "A carefully curated collection of European barefoot shoe artisans. Each brand has its own philosophy — what they share is a deep respect for foot anatomy." },
+  "brands.productCount.many": { "mk": "производи", "sq": "produkte", "en": "products" },
+  "brands.productCount.one": { "mk": "производ", "sq": "produkt", "en": "product" },
+  "brands.title": { "mk": "Брендови", "sq": "Markat", "en": "Brands" },
+  "brands.viewProducts": { "mk": "Види производи →", "sq": "Shiko produktet →", "en": "View products →" },
+  "brands.vivobarefoot": { "mk": "Vivobarefoot", "sq": "Vivobarefoot", "en": "Vivobarefoot" },
+  "brands.xeroShoes": { "mk": "Xero Shoes", "sq": "Xero Shoes", "en": "Xero Shoes" },
+  "seo.brands": { "mk": "Барефут брендови на Bosfoot: %s. Минималистички патики со широк простор за прсти и нула дропа за природно одење.", "sq": "Marka barefoot te Bosfoot: %s. Këpucë minimaliste me hapësirë të gjerë për gishtat dhe zero drop për ecje natyrale.", "en": "Barefoot brands at Bosfoot: %s. Minimalist shoes with a wide toe box and zero drop for natural walking." },
+  "seo.title.brands": { "mk": "Барефут брендови", "sq": "Marka barefoot", "en": "Barefoot brands" }
+}

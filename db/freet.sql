@@ -66,7 +66,7 @@ VALUES
         (SELECT id FROM brands WHERE sku = 'FREET'),
         (SELECT id FROM categories WHERE slug = 'shoes'),
         (SELECT id FROM genders WHERE value = 'unisex'),
-        12900,
+        12810,
         '/images/freet/chamois/images/brown-black/chamois.webp',
         TRUE, TRUE, 1
     ),
@@ -75,7 +75,7 @@ VALUES
         (SELECT id FROM brands WHERE sku = 'FREET'),
         (SELECT id FROM categories WHERE slug = 'shoes'),
         (SELECT id FROM genders WHERE value = 'unisex'),
-        5500,
+        5490,
         '/images/freet/keld-3/images/olive/keld-3.webp',
         TRUE, TRUE, 2
     ),
@@ -84,7 +84,7 @@ VALUES
         (SELECT id FROM brands WHERE sku = 'FREET'),
         (SELECT id FROM categories WHERE slug = 'shoes'),
         (SELECT id FROM genders WHERE value = 'unisex'),
-        8600,
+        8540,
         '/images/freet/richmond-2/images/brown-black/richmond-2.webp',
         TRUE, TRUE, 3
     ),
@@ -93,7 +93,7 @@ VALUES
         (SELECT id FROM brands WHERE sku = 'FREET'),
         (SELECT id FROM categories WHERE slug = 'shoes'),
         (SELECT id FROM genders WHERE value = 'unisex'),
-        6200,
+        6100,
         '/images/freet/vibe-2/images/black/vibe-2.webp',
         TRUE, TRUE, 4
     ),
@@ -102,7 +102,7 @@ VALUES
         (SELECT id FROM brands WHERE sku = 'FREET'),
         (SELECT id FROM categories WHERE slug = 'shoes'),
         (SELECT id FROM genders WHERE value = 'unisex'),
-        8300,
+        8230,
         '/images/freet/york-2/images/black/york-2.webp',
         TRUE, TRUE, 5
     )

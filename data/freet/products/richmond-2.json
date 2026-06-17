@@ -1,0 +1,115 @@
+{
+  "name": "Richmond 2",
+  "price": 140,
+  "gender": "unisex",
+  "status": {
+    "active": true,
+    "published": true,
+    "featured": false
+  },
+  "sortOrder": 6,
+  "activities": [
+    "casual",
+    "office"
+  ],
+  "highlights": [
+    {
+      "en": "URBAN",
+      "mk": "Урбано",
+      "sq": "Urban"
+    },
+    {
+      "en": "RELAXED COMFORT",
+      "mk": "Опуштена удобност",
+      "sq": "Komfort i qetë"
+    },
+    {
+      "en": "WATER RESISTANT",
+      "mk": "Отпорно на вода",
+      "sq": "Rezistent ndaj ujit"
+    },
+    {
+      "en": "DURABLE",
+      "mk": "Издржливо",
+      "sq": "I qëndrueshëm"
+    }
+  ],
+  "colors": [
+    {
+      "name": "Brown Black",
+      "hex": "#5a3825"
+    }
+  ],
+  "stock": {
+    "Brown Black": {
+      "36": 0,
+      "37": 0,
+      "38": 0,
+      "39": 0,
+      "40": 3,
+      "41": 5,
+      "42": 5,
+      "43": 4,
+      "44": 3,
+      "45": 0,
+      "46": 0
+    }
+  },
+  "specs": [
+    {
+      "key": "Upper",
+      "value": "Premium full grain leather"
+    },
+    {
+      "key": "Lining",
+      "value": "Breathable moisture-moving lining"
+    },
+    {
+      "key": "Insole",
+      "value": "Flexile 3.0mm"
+    },
+    {
+      "key": "Midsole",
+      "value": "SoftFlex"
+    },
+    {
+      "key": "Outsole",
+      "value": "UrbanGrip 3.0mm"
+    },
+    {
+      "key": "Weight",
+      "value": "640g per pair (size 42)"
+    },
+    {
+      "key": "Stack Height",
+      "value": "9.5mm with insole / 6.5mm without"
+    },
+    {
+      "key": "Drop",
+      "value": "Zero drop"
+    }
+  ],
+  "translations": {
+    "en": {
+      "about": "All the benefits of barefoot everyday. Now updated for more comfort and durability.\n\nOur premium leather is soft, breathable, water resistant, giving all day comfort.\n\nTimeless good looks in a shoe suitable for town and country.",
+      "description": "A classic desert boot for smarter days at the office or casual relaxing with friends.",
+      "productInfo": "Upper\nLeather: premium, full grain leather.\nConventional lace — brown.\n\nLining\nBreathable, moisture moving lining.\n\nInsole\nFlexile: 3.0 mm some shock absorption with excellent ground connectivity.\n\nMidsole\nSoftFlex: fully flexible for maximum foot movement.\n\nOutsole\nUrbanGrip: 3.0 mm wide-area tread for optimum grip on urban surfaces.\n\nWaterproofness\nWater resistant upper when treated regularly.\n\nWeight\n640 grams per pair size 42.\n\nStack Height\n9.5 mm with insole; 6.5 mm without insole, zero drop.",
+      "sizeAndFit": "Customers say it fits true to size — you may stay at your usual size.",
+      "sustainability": "Laces: 70% BottleYarn\nBacker/micro lining: 70% BottleYarn\nInsole: 60% BottleYarn\nOutsole: 60% natural rubber tapped from sustainable forestry\nPackaging: box/wrapping recycled and recyclable card \u0026 paper\nDWR: Durable water repellency treatment. No use of PFCs"
+    },
+    "mk": {
+      "about": "Сите придобивки на барефоот, секој ден. Сега ажурирана за поголема удобност и издржливост.\n\nНашата премиум кожа е мека, дишлива, отпорна на вода — обезбедувајќи целодневна удобност.\n\nБезвременски убав изглед во чевел погоден за град и природа.",
+      "description": "Класична desert чизма за поделовни денови во канцеларија или за опуштено дружење со пријатели.",
+      "productInfo": "Горен дел\nКожа: премиум, целозрнеста кожа.\nКонвенционални врвки — кафеави.\n\nОбвивка\nДишлива обвивка што ја носи влагата.\n\nВлошка\nFlexile: 3,0 мм со одредена амортизација и одличен осет за подлогата.\n\nСредна потпетица\nSoftFlex: целосно флексибилна.\n\nГон\nUrbanGrip: 3,0 мм газен профил за урбани површини.\n\nВодоотпорност\nОтпорен на вода кога редовно се третира.\n\nТежина\n640 грама на пар во големина 42.\n\nВисина на ѓонот\n9,5 мм со влошка; 6,5 мм без влошка. Нула надолен пад.",
+      "sizeAndFit": "Купувачите велат дека одговара точно по големината — можете да ја носите вашата вообичаена големина.",
+      "sustainability": "Врвки: 70% BottleYarn\nЗадник/микро обвивка: 70% BottleYarn\nВлошка: 60% BottleYarn\nГон: 60% природен каучук од одржливо шумарство\nПакување: кутија/обвивка од рециклирани и рециклабилни картон и хартија\nDWR: издржлив третман со водоодбивност. Без употреба на PFC"
+    },
+    "sq": {
+      "about": "Të gjitha përfitimet e barefoot çdo ditë. Tani e përditësuar për më shumë komfort dhe qëndrueshmëri.\n\nLëkura jonë premium është e butë, e ajrosur, rezistente ndaj ujit, duke dhënë komfort gjatë gjithë ditës.\n\nPamje e bukur pa kohë në një këpucë të përshtatshme për qytet dhe fshat.",
+      "description": "Çizme klasike desert për ditë më të zyrtarizuara në zyrë ose për relaksim me miqtë.",
+      "productInfo": "Pjesa e sipërme\nLëkurë: premium, lëkurë e plotë.\nLidhëse konvencionale — kafe.\n\nVeshja\nVeshje e ajrosur që largon lagështinë.\n\nSole e brendshme\nFlexile: 3,0 mm me njëfarë amortizimi dhe ndjesi të shkëlqyer të tokës.\n\nMidsole\nSoftFlex: plotësisht fleksibël.\n\nSolla e jashtme\nUrbanGrip: 3,0 mm gjurmë për sipërfaqe urbane.\n\nPapërshkueshmëria nga uji\nRezistente ndaj ujit kur trajtohet rregullisht.\n\nPesha\n640 gramë çift në madhësinë 42.\n\nLartësia e solës\n9,5 mm me sole; 6,5 mm pa sole. Zero drop.",
+      "sizeAndFit": "Klientët thonë se përshtatet sipas madhësisë — mund të mbani madhësinë tuaj të zakonshme.",
+      "sustainability": "Lidhëset: 70% BottleYarn\nMbështetje/mikro-veshje: 70% BottleYarn\nSolla e brendshme: 60% BottleYarn\nSolla e jashtme: 60% gomë natyrale e marrë nga pylltari e qëndrueshme\nPaketimi: kuti/mbështjellje nga karton dhe letër të ricikluara dhe të riciklueshme\nDWR: trajtim i qëndrueshëm i papërshkueshmërisë nga uji. Pa përdorim PFC-sh"
+    }
+  }
+}

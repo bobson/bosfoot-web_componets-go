@@ -1,0 +1,111 @@
+{
+  "name": "Keld 3",
+  "price": 90,
+  "gender": "unisex",
+  "status": {
+    "active": true,
+    "published": true,
+    "featured": false
+  },
+  "sortOrder": 5,
+  "activities": [
+    "hiking",
+    "running",
+    "training"
+  ],
+  "highlights": [
+    {
+      "en": "QUICK-DRY",
+      "mk": "Брзо сушење",
+      "sq": "Tharje e shpejtë"
+    },
+    {
+      "en": "BREATHABLE",
+      "mk": "Дишливо",
+      "sq": "I ajrosur"
+    },
+    {
+      "en": "TRAIL",
+      "mk": "Патека",
+      "sq": "Shteg"
+    }
+  ],
+  "colors": [
+    {
+      "name": "Olive",
+      "hex": "#5e6b3f"
+    }
+  ],
+  "stock": {
+    "Olive": {
+      "36": 0,
+      "37": 0,
+      "38": 0,
+      "39": 0,
+      "40": 0,
+      "41": 4,
+      "42": 5,
+      "43": 4,
+      "44": 1,
+      "45": 0,
+      "46": 0
+    }
+  },
+  "specs": [
+    {
+      "key": "Upper",
+      "value": "BottleYarn breathable mesh (recycled plastic)"
+    },
+    {
+      "key": "Lining",
+      "value": "Unlined"
+    },
+    {
+      "key": "Insole",
+      "value": "ReBound 4mm"
+    },
+    {
+      "key": "Midsole",
+      "value": "SoftFlex"
+    },
+    {
+      "key": "Outsole",
+      "value": "TrailGrip 3.0mm"
+    },
+    {
+      "key": "Weight",
+      "value": "435g per pair (size 42)"
+    },
+    {
+      "key": "Stack Height",
+      "value": "10.5mm with insole / 7.5mm without"
+    },
+    {
+      "key": "Drop",
+      "value": "Zero drop"
+    }
+  ],
+  "translations": {
+    "en": {
+      "about": "Ultra-minimal versatile travel and adventure shoe suitable for both on and off the trail with improved design.\n\nEnjoy the coolness of a sandal whilst keeping trail debris out.\n\nProtection combined with flexibility, light weight and barefoot comfort.",
+      "description": "The ultimate performance shoe for adventures in warm weather.",
+      "productInfo": "Upper\nBottleYarn: breathable, durable, moisture moving mesh, made from recycled plastic bottles.\nConventional lace — light olive with blue fleck.\n\nLining\nUnlined for complete breathability.\n\nInsole\nReBound 4 mm: energy return with ground connectivity to allow full natural movement.\n\nMidsole\nSoftFlex: fully flexible for maximum foot movement.\n\nOutsole\nTrailGrip: 3.0 mm tread gives good grip and durability on a variety of trail surfaces.\n\nWaterproofness\nNot waterproof, highly breathable. Use a waterproof sock for cold / wet conditions.\n\nWeight\n435 grams per pair size 42.\n\nStack Height\n10.5 mm with insole; 7.5 mm without insole.",
+      "sizeAndFit": "Customers say it fits true to size — you may stay at your usual size.",
+      "sustainability": "Upper: 60% recycled (BottleYarn)\nOutsole: 60% natural rubber\nLining: 65% recycled (BottleYarn)\nLace: 70% recycled (BottleYarn)\nInsole: 60% recycled\nPackaging: box/wrapping recycled and recyclable card \u0026 paper"
+    },
+    "mk": {
+      "about": "Ултра-минимална сестрана патика за патувања и авантури, погодна за патеки и надвор од нив, со подобрен дизајн.\n\nУживајте во свежината како кај сандала, а истовремено држете ги отпадоците од патеката надвор.\n\nЗаштита комбинирана со флексибилност, мала тежина и барефоот удобност.",
+      "description": "Врвна патика за активности во топло време — лесна, минималистичка и сестрана за патеки и патувања.",
+      "productInfo": "Горен дел\nBottleYarn: дишлива, издржлива мрежа направена од рециклирани пластични шишиња.\nКонвенционални врвки — светло маслинести со сини точки.\n\nОбвивка\nБез обвивка за целосна дишливост.\n\nВлошка\nReBound 4 мм: енергетски одѕив со осет за подлогата.\n\nСредна потпетица\nSoftFlex: целосно флексибилна.\n\nГон\nTrailGrip: 3,0 мм газен профил.\n\nВодоотпорност\nНе е водоотпорно. Користете водоотпорни чорапи за студени/влажни услови.\n\nТежина\n435 грама на пар во големина 42.\n\nВисина на ѓонот\n10,5 мм со влошка; 7,5 мм без влошка.",
+      "sizeAndFit": "Купувачите велат дека одговара точно по големината — можете да ја носите вашата вообичаена големина.",
+      "sustainability": "Горен дел: 60% рециклиран (BottleYarn)\nГон: 60% природен каучук\nОбвивка: 65% рециклирано (BottleYarn)\nВрвки: 70% рециклирано (BottleYarn)\nВлошка: 60% рециклирано\nПакување: кутија/обвивка од рециклирани и рециклабилни картон и хартија"
+    },
+    "sq": {
+      "about": "Këpucë ultra-minimale, e gjithanshme për udhëtime dhe aventura, e përshtatshme për shtegje dhe jashtë tyre.\n\nShijoni freskinë e një sandali ndërkohë që mbani jashtë mbeturinat e shtegut.\n\nMbrojtje e kombinuar me fleksibilitet, peshë të lehtë dhe komfort barefoot.",
+      "description": "Këpucë maksimale për aventurat në mot të ngrohtë — e lehtë, minimaliste dhe e gjithanshme për shtigje dhe udhëtime.",
+      "productInfo": "Pjesa e sipërme\nBottleYarn: rrjetë e ajrosur, e qëndrueshme, prej shisheve plastike të ricikluara.\nLidhëse konvencionale — ulli i çelët me njolla blu.\n\nVeshja\nPa veshje për ajrosje të plotë.\n\nSole e brendshme\nReBound 4 mm: kthim energjie me ndjesi të tokës.\n\nMidsole\nSoftFlex: plotësisht fleksibël.\n\nSolla e jashtme\nTrailGrip: 3,0 mm gjurmë.\n\nPapërshkueshmëria nga uji\nNuk është i papërshkueshëm nga uji. Përdor çorape të papërshkueshme për kushte të ftohta.\n\nPesha\n435 gramë çift në madhësinë 42.\n\nLartësia e solës\n10,5 mm me sole; 7,5 mm pa sole.",
+      "sizeAndFit": "Klientët thonë se përshtatet sipas madhësisë — mund të mbani madhësinë tuaj të zakonshme.",
+      "sustainability": "Pjesa e sipërme: 60% e ricikluar (BottleYarn)\nSolla e jashtme: 60% gomë natyrale\nVeshja: 65% e ricikluar (BottleYarn)\nLidhëset: 70% të ricikluara (BottleYarn)\nSolla e brendshme: 60% e ricikluar\nPaketimi: kuti/mbështjellje nga karton dhe letër të ricikluara dhe të riciklueshme"
+    }
+  }
+}

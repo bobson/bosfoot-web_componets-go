@@ -1,6 +1,6 @@
 {
   "name": { "mk": "Chamois", "sq": "Chamois", "en": "Chamois" },
-  "price": 12900,
+  "price": 210,
   "status": "active",
   "gender": "unisex",
   "activities": ["hiking"],

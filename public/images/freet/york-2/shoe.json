@@ -1,6 +1,6 @@
 {
   "name": { "mk": "York 2", "sq": "York 2", "en": "York 2" },
-  "price": 8300,
+  "price": 135,
   "status": "active",
   "gender": "unisex",
   "activities": ["casual", "office"],

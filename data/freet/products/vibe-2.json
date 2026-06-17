@@ -1,0 +1,133 @@
+{
+  "name": "Vibe 2",
+  "price": 100,
+  "gender": "unisex",
+  "status": {
+    "active": true,
+    "published": true,
+    "featured": true
+  },
+  "sortOrder": 2,
+  "activities": [
+    "casual",
+    "running",
+    "training"
+  ],
+  "highlights": [
+    {
+      "en": "SUSTAINABLE",
+      "mk": "Одржливо",
+      "sq": "I qëndrueshëm"
+    },
+    {
+      "en": "LIGHTWEIGHT",
+      "mk": "Лесно",
+      "sq": "I lehtë"
+    },
+    {
+      "en": "BREATHABLE",
+      "mk": "Дишливо",
+      "sq": "I ajrosur"
+    },
+    {
+      "en": "DURABLE",
+      "mk": "Издржливо",
+      "sq": "I qëndrueshëm"
+    }
+  ],
+  "colors": [
+    {
+      "name": "White",
+      "hex": "#f0f0eb"
+    },
+    {
+      "name": "Black",
+      "hex": "#1a1a1a"
+    }
+  ],
+  "stock": {
+    "Black": {
+      "36": 0,
+      "37": 0,
+      "38": 0,
+      "39": 0,
+      "40": 1,
+      "41": 5,
+      "42": 4,
+      "43": 4,
+      "44": 3,
+      "45": 0,
+      "46": 0
+    },
+    "White": {
+      "36": 0,
+      "37": 0,
+      "38": 0,
+      "39": 0,
+      "40": 0,
+      "41": 0,
+      "42": 0,
+      "43": 0,
+      "44": 0,
+      "45": 0,
+      "46": 0
+    }
+  },
+  "specs": [
+    {
+      "key": "Upper",
+      "value": "BottleYarn breathable mesh (recycled plastic)"
+    },
+    {
+      "key": "Lining",
+      "value": "Unlined"
+    },
+    {
+      "key": "Insole",
+      "value": "ReBound 4mm"
+    },
+    {
+      "key": "Midsole",
+      "value": "SoftFlex"
+    },
+    {
+      "key": "Outsole",
+      "value": "UrbanGrip 3.0mm"
+    },
+    {
+      "key": "Weight",
+      "value": "585g per pair (size 42)"
+    },
+    {
+      "key": "Stack Height",
+      "value": "10.5mm with insole / 6.5mm without"
+    },
+    {
+      "key": "Drop",
+      "value": "Zero drop"
+    }
+  ],
+  "translations": {
+    "en": {
+      "about": "Flyknit upper with comfy lining for all day comfort with or without socks.\n\nReBound energy return insole plus UrbanGrip outsole gives excellent ground feel with shock absorption.\n\nHighly breathable for when the tempo speeds up.",
+      "description": "Designed for demanding activity but completely at ease with wearing casually everyday.",
+      "productInfo": "Upper\nBottleYarn: breathable, durable, moisture moving mesh, made from recycled plastic bottles.\nConventional lace — black.\n\nLining\nUnlined for complete breathability.\n\nInsole\nReBound 4 mm: energy return with ground connectivity to allow full natural movement.\n\nMidsole\nSoftFlex: fully flexible for maximum foot movement.\n\nOutsole\nUrbanGrip: 3.0 mm wide-area tread for optimum grip and durability on urban surfaces.\n\nWaterproofness\nNot waterproof, highly breathable. Use a waterproof sock for cold / wet conditions.\n\nWeight\n585 grams per pair size 42.\n\nStack Height\n10.5 mm with insole; 6.5 mm without insole, zero drop.",
+      "sizeAndFit": "Customers say it fits true to size — you may stay at your usual size.",
+      "sustainability": "Upper: 30% recycled (BottleYarn)\nOutsole: 60% natural rubber\nLining: 65% recycled (BottleYarn)\nLace: 70% recycled (BottleYarn)\nInsole: 60% recycled\nPackaging: box/wrapping recycled and recyclable card \u0026 paper"
+    },
+    "mk": {
+      "about": "Flyknit горен дел со удобна обвивка за целодневна удобност со или без чорапи.\n\nВлошка ReBound со енергетски одѕив плус UrbanGrip ѓон даваат одличен осет за подлогата со амортизација.\n\nВисоко дишливо за моменти кога темпото се забрзува.",
+      "description": "Дизајнирано за заморни активности, но целосно опуштено за секојдневно носење.",
+      "productInfo": "Горен дел\nBottleYarn: дишлива, издржлива мрежа од рециклирани пластични шишиња.\nКонвенционални врвки — црни.\n\nОбвивка\nБез обвивка за целосна дишливост.\n\nВлошка\nReBound 4 мм: енергетски одѕив со осет за подлогата.\n\nСредна потпетица\nSoftFlex: целосно флексибилна.\n\nГон\nUrbanGrip: 3,0 мм газен профил за урбани површини.\n\nВодоотпорност\nНе е водоотпорно. Користете водоотпорни чорапи за студени/влажни услови.\n\nТежина\n585 грама на пар во големина 42.\n\nВисина на ѓонот\n10,5 мм со влошка; 6,5 мм без влошка. Нула надолен пад.",
+      "sizeAndFit": "Купувачите велат дека одговара точно по големината — можете да ја носите вашата вообичаена големина.",
+      "sustainability": "Горен дел: 30% рециклирано (BottleYarn)\nГон: 60% природен каучук\nОбвивка: 65% рециклирано (BottleYarn)\nВрвки: 70% рециклирано (BottleYarn)\nВлошка: 60% рециклирано\nПакување: кутија/обвивка од рециклирани и рециклабилни картон и хартија"
+    },
+    "sq": {
+      "about": "Pjesa e sipërme Flyknit me veshje komode për komfort gjatë gjithë ditës me ose pa çorape.\n\nSolla e brendshme ReBound me kthim energjie plus solla e jashtme UrbanGrip japin ndjesi të shkëlqyer të tokës me amortizim.\n\nShumë e ajrosur për kur ritmi shpejtohet.",
+      "description": "E dizajnuar për aktivitete kërkuese, por plotësisht e qetë për përdorim të përditshëm.",
+      "productInfo": "Pjesa e sipërme\nBottleYarn: rrjetë e ajrosur, e qëndrueshme, prej shisheve plastike të ricikluara.\nLidhëse konvencionale — të zeza.\n\nVeshja\nPa veshje për ajrosje të plotë.\n\nSole e brendshme\nReBound 4 mm: kthim energjie me ndjesi të tokës.\n\nMidsole\nSoftFlex: plotësisht fleksibël.\n\nSolla e jashtme\nUrbanGrip: 3,0 mm gjurmë për sipërfaqe urbane.\n\nPapërshkueshmëria nga uji\nNuk është i papërshkueshëm nga uji. Përdor çorape të papërshkueshme.\n\nPesha\n585 gramë çift në madhësinë 42.\n\nLartësia e solës\n10,5 mm me sole; 6,5 mm pa sole. Zero drop.",
+      "sizeAndFit": "Klientët thonë se përshtatet sipas madhësisë — mund të mbani madhësinë tuaj të zakonshme.",
+      "sustainability": "Pjesa e sipërme: 30% e ricikluar (BottleYarn)\nSolla e jashtme: 60% gomë natyrale\nVeshja: 65% e ricikluar (BottleYarn)\nLidhëset: 70% të ricikluara (BottleYarn)\nSolla e brendshme: 60% e ricikluar\nPaketimi: kuti/mbështjellje nga karton dhe letër të ricikluara dhe të riciklueshme"
+    }
+  }
+}

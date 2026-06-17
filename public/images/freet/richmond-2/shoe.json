@@ -1,6 +1,6 @@
 {
   "name": { "mk": "Richmond 2", "sq": "Richmond 2", "en": "Richmond 2" },
-  "price": 8600,
+  "price": 140,
   "status": "active",
   "gender": "unisex",
   "activities": ["casual", "office"],

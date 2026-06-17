@@ -68,7 +68,7 @@ VALUES
         (SELECT id FROM brands WHERE sku = 'FREET'),
         (SELECT id FROM categories WHERE slug = 'shoes'),
         (SELECT id FROM genders WHERE value = 'unisex'),
-        6200,
+        6100,
         '/images/freet/feldom-3/images/olive-green/feldom-3.webp',
         TRUE, TRUE, TRUE, 1
     ),
@@ -77,7 +77,7 @@ VALUES
         (SELECT id FROM brands WHERE sku = 'FREET'),
         (SELECT id FROM categories WHERE slug = 'shoes'),
         (SELECT id FROM genders WHERE value = 'unisex'),
-        6200,
+        6100,
         '/images/freet/tanga-3/images/blue/tanga-3.webp',
         TRUE, TRUE, TRUE, 3
     ),
@@ -86,7 +86,7 @@ VALUES
         (SELECT id FROM brands WHERE sku = 'FREET'),
         (SELECT id FROM categories WHERE slug = 'shoes'),
         (SELECT id FROM genders WHERE value = 'unisex'),
-        6500,
+        6400,
         '/images/freet/pace/images/black/pace.webp',
         TRUE, TRUE, FALSE, 7
     )

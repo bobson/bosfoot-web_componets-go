@@ -5,8 +5,7 @@
   {{template "head" .}}
   <link rel="stylesheet" href="{{asset "/css/contact.css"}}">
   <title>
-    {{if eq .Locale "mk"}}Контакт{{else if eq .Locale "sq"}}Kontakti{{else}}Contact{{end}}
-    — Bosfoot
+    {{t .Locale "nav.contact"}} — Bosfoot
   </title>
 </head>
 <body>

@@ -20,6 +20,7 @@ import (
 	"sync"
 
 	"bosfoot/internal/locale"
+	"bosfoot/internal/site"
 )
 
 // Renderer parses all templates at startup and caches them.
@@ -67,11 +68,16 @@ func NewRenderer(dir string, ui *locale.UI) (*Renderer, error) {
 		"t": ui.T,
 
 		// mkd formats an integer MKD price with space thousands separator: 6200 → "6 200"
-		"mkd": formatMKD,
+		"mkd": func(amount int) string { return formatMKD(site.FloorDenar(amount)) },
+
+		// eurRate exposes the MKD→EUR rate for the client cart/checkout JS to read
+		// from a data attribute, so the rate lives only in internal/site.
+		"eurRate": site.EURRateString,
 
 		// eur converts MKD to EUR and formats with 2 decimals: 6200 → "100.81"
 		"eur": func(amount int) string {
-			return fmt.Sprintf("%.2f", math.Round(float64(amount)/61.5*100)/100)
+			mkd := site.FloorDenar(amount)
+			return fmt.Sprintf("%.0f", math.Round(float64(mkd)/site.MKDtoEUR))
 		},
 
 		// showEUR returns true for locales that display EUR alongside MKD.

@@ -1,6 +1,6 @@
 {
   "name": { "mk": "Keld 3", "sq": "Keld 3", "en": "Keld 3" },
-  "price": 5500,
+  "price": 90,
   "status": "active",
   "gender": "unisex",
   "activities": ["hiking", "running", "training"],

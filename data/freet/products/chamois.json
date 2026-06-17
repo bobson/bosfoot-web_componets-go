@@ -1,0 +1,114 @@
+{
+  "name": "Chamois",
+  "price": 210,
+  "gender": "unisex",
+  "status": {
+    "active": true,
+    "published": false,
+    "featured": false
+  },
+  "sortOrder": 8,
+  "activities": [
+    "hiking"
+  ],
+  "highlights": [
+    {
+      "en": "WATERPROOF",
+      "mk": "Водоотпорно",
+      "sq": "I papërshkueshëm nga uji"
+    },
+    {
+      "en": "GRIPPY",
+      "mk": "Силен грип",
+      "sq": "Grip i fortë"
+    },
+    {
+      "en": "LIGHTWEIGHT",
+      "mk": "Лесно",
+      "sq": "I lehtë"
+    },
+    {
+      "en": "TOUGH",
+      "mk": "Издржливо",
+      "sq": "I qëndrueshëm"
+    }
+  ],
+  "colors": [
+    {
+      "name": "Brown Black",
+      "hex": "#4a2c1a"
+    }
+  ],
+  "stock": {
+    "Brown Black": {
+      "36": 0,
+      "37": 0,
+      "38": 0,
+      "39": 0,
+      "40": 3,
+      "41": 5,
+      "42": 5,
+      "43": 4,
+      "44": 1,
+      "45": 0,
+      "46": 0
+    }
+  },
+  "specs": [
+    {
+      "key": "Upper",
+      "value": "Premium full grain leather"
+    },
+    {
+      "key": "Lining",
+      "value": "Full waterproof breathable bootee lining"
+    },
+    {
+      "key": "Insole",
+      "value": "Flexile Nano 3mm"
+    },
+    {
+      "key": "Midsole",
+      "value": "FirmFlex"
+    },
+    {
+      "key": "Outsole",
+      "value": "MountainGrip 6.0mm"
+    },
+    {
+      "key": "Weight",
+      "value": "860g per pair (size 42)"
+    },
+    {
+      "key": "Stack Height",
+      "value": "12.5mm with insole / 10mm without"
+    },
+    {
+      "key": "Drop",
+      "value": "Zero drop"
+    }
+  ],
+  "translations": {
+    "en": {
+      "about": "Combines comfort, lightness and toughness.\n\n6mm MountainGrip lugs provide superb grip for steep muddy trails.\n\nPremium, smooth leather upper and full waterproof, breathable lining completes the highest level of protection.",
+      "description": "Premium leather, barefoot boot designed to take on the toughest mountain challenges, whilst being wonderfully comfortable and extremely lightweight.",
+      "productInfo": "Upper\nLeather: premium, full grain leather.\nConventional lace — brown.\n\nLining\nFull waterproof, breathable bootee lining.\n\nInsole\nFlexile Nano: a lighter, thinner version of our 3mm Flexile insole, which gives a little more ground feel and breathability.\n\nMidsole\nFirmFlex: flexibility with some protection on more arduous, rocky terrain.\n\nOutsole\nMountainGrip: 6.0 mm tread for tougher, wetter trails and off track.\n\nWeight\n860 grams per pair size 42.\n\nStack Height\n12.5 mm with insole; 10 mm without insole.\n\nCare\nWipe with a damp cloth. Air dry. Treat with a conditioner/waterproofer suitable for premium leather.",
+      "sizeAndFit": "Customers say it fits true to size — you may stay at your usual size.",
+      "sustainability": "Upper: Premium full grain leather Gold Certificated by the Leather Working Group\nLaces: 70% recycled (BottleYarn)\nMidsole: 70% recycled (BottleYarn)\nInsole: 60% recycled\nOutsole: 60% natural rubber\nPackaging: box/wrapping recycled and recyclable card \u0026 paper"
+    },
+    "mk": {
+      "about": "Комбинира удобност, леснотија и издржливост.\n\n6мм MountainGrip ножеви обезбедуваат одличен грип на стрмни кални патеки.\n\nПремиум, мазен кожен горен дел и целосна водоотпорна, дишлива обвивка ја заокружуваат највисоката заштита.",
+      "description": "Премиум кожен барефоот чизми дизајниран за најтешките планински предизвици, при тоа прекрасно удобни и исклучително лесни.",
+      "productInfo": "Горен дел\nКожа: премиум, целозрнеста кожа.\nКонвенционални врвки — кафеави.\n\nОбвивка\nЦелосна водоотпорна, дишлива обвивка.\n\nВлошка\nFlexile Nano: полесна, потенка верзија на нашата 3мм Flexile влошка, која дава малку повеќе осет за подлогата и дишливост.\n\nСредна потпетица\nFirmFlex: флексибилност со одредена заштита на потешки, карпести терени.\n\nГон\nMountainGrip: 6,0 мм газен профил за потешки, повлажни патеки и теренот без патека.\n\nВодоотпорност\nВодоотпорна обвивка и водоотпорен горен дел даваат добро ниво на водоотпорност.\n\nТежина\n860 грама на пар во големина 42.\n\nВисина на ѓонот\n12,5 мм со влошка; 10 мм без влошка.\n\nНега\nИзбришете со влажна крпа. Сушете на воздух. Третирајте со кондиционер/водоодбивач погоден за премиум кожа.\n\nНе препорачуваме ставање на вашите Freet патики во машина за перење или сушара.",
+      "sizeAndFit": "Купувачите велат дека одговара точно по големината — можете да ја носите вашата вообичаена големина.",
+      "sustainability": "Горен дел: премиум целозрнеста кожа со Gold сертификат од Leather Working Group\nВрвки: 70% рециклирано (BottleYarn)\nСредна потпетица: 70% рециклирано (BottleYarn)\nВлошка: 60% рециклирано\nГон: 60% природен каучук\nПакување: кутија/обвивка од рециклирани и рециклабилни картон и хартија"
+    },
+    "sq": {
+      "about": "Kombinon komoditetin, lehtësinë dhe qëndrueshmërinë.\n\nThumbat MountainGrip 6mm sigurojnë grip të shkëlqyer në shtigje të pjerrëta dhe me baltë.\n\nLëkurë premium, e lëmuar në pjesën e sipërme dhe veshje plotësisht e papërshkueshme nga uji dhe e ajrosur e plotësojnë nivelin më të lartë të mbrojtjes.",
+      "description": "Çizme barefoot prej lëkure premium, e dizajnuar për sfidat më të vështira malore, e komode dhe jashtëzakonisht e lehtë në të njëjtën kohë.",
+      "productInfo": "Pjesa e sipërme\nLëkurë: premium, lëkurë e plotë.\nLidhëse konvencionale — kafe.\n\nVeshja\nVeshje e plotë e papërshkueshme nga uji, e ajrosur.\n\nSole e brendshme\nFlexile Nano: një version më i lehtë, më i hollë i solës sonë Flexile prej 3mm.\n\nMidsole\nFirmFlex: fleksibilitet me njëfarë mbrojtjeje në terrene më të vështira, me gurë.\n\nSolla e jashtme\nMountainGrip: 6,0 mm gjurmë për shtigje më të vështira, më të lagështa.\n\nPesha\n860 gramë çift në madhësinë 42.\n\nLartësia e solës\n12,5 mm me sole të brendshme; 10 mm pa sole të brendshme.\n\nKujdesi\nFshijeni me një copë të lagësht. Thajeni në ajër. Trajtojeni me një kondicioner të përshtatshëm për lëkurë premium.",
+      "sizeAndFit": "Klientët thonë se përshtatet sipas madhësisë — mund të mbani madhësinë tuaj të zakonshme.",
+      "sustainability": "Pjesa e sipërme: lëkurë premium me certifikim Gold nga Leather Working Group\nLidhëset: 70% të ricikluara (BottleYarn)\nMidsole: 70% e ricikluar (BottleYarn)\nSolla e brendshme: 60% e ricikluar\nSolla e jashtme: 60% gomë natyrale\nPaketimi: kuti/mbështjellje nga karton dhe letër të ricikluara dhe të riciklueshme"
+    }
+  }
+}
