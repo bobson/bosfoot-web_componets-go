@@ -188,6 +188,11 @@ func NewRenderer(dir string, ui *locale.UI) (*Renderer, error) {
 			}
 			return m, nil
 		},
+
+		// contact exposes the shop's contact details (phone, email, socials)
+		// from one source so the contact page, footer, and nav drawer stay in
+		// sync: {{with contact}}<a href="{{.FacebookHref}}">…</a>{{end}}
+		"contact": func() ContactInfo { return SiteContact },
 	}
 
 	tmpl := template.New("").Funcs(funcMap)

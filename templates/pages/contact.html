@@ -27,52 +27,52 @@
         <ul class="contact__channels">
           {{/* Phone — tap to call */}}
           <li>
-            <a class="contact-channel" href="tel:+38970255906">
+            <a class="contact-channel" href="{{(contact).PhoneHref}}">
               <span class="contact-channel__icon" aria-hidden="true">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
               </span>
               <span class="contact-channel__text">
                 <span class="contact-channel__label text-xs text-muted">{{t .Locale "contact.phoneLabel"}}</span>
-                <span class="contact-channel__value font-medium">+389 70 255 906</span>
+                <span class="contact-channel__value font-medium">{{(contact).Phone}}</span>
               </span>
             </a>
           </li>
 
           {{/* WhatsApp */}}
           <li>
-            <a class="contact-channel" href="https://wa.me/38970255906" target="_blank" rel="noopener">
+            <a class="contact-channel" href="{{(contact).WhatsAppHref}}" target="_blank" rel="noopener">
               <span class="contact-channel__icon contact-channel__icon--whatsapp" aria-hidden="true">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.95 1.17-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.67-1.62-.92-2.22-.24-.58-.49-.5-.67-.51-.17-.01-.37-.01-.57-.01-.2 0-.52.07-.8.37-.27.3-1.05 1.02-1.05 2.5 0 1.47 1.08 2.9 1.23 3.1.15.2 2.12 3.24 5.14 4.54.72.31 1.28.5 1.71.64.72.23 1.38.2 1.9.12.58-.09 1.76-.72 2.01-1.41.25-.7.25-1.29.17-1.42-.07-.13-.27-.2-.57-.35zM12.04 21.5h-.01a9.5 9.5 0 0 1-4.83-1.32l-.35-.2-3.59.94.96-3.5-.23-.36a9.49 9.49 0 0 1-1.46-5.05c0-5.24 4.27-9.5 9.51-9.5 2.54 0 4.93.99 6.72 2.78a9.43 9.43 0 0 1 2.78 6.73c0 5.24-4.27 9.5-9.5 9.5zm8.08-17.58A11.43 11.43 0 0 0 12.04.5C5.74.5.6 5.64.6 11.94c0 2.1.55 4.16 1.6 5.97L.5 24l5.25-1.38a11.4 11.4 0 0 0 5.29 1.35h.01c6.3 0 11.43-5.14 11.44-11.44a11.36 11.36 0 0 0-3.36-8.1z"/></svg>
               </span>
               <span class="contact-channel__text">
                 <span class="contact-channel__label text-xs text-muted">{{t .Locale "contact.whatsappLabel"}}</span>
-                <span class="contact-channel__value font-medium">+389 70 255 906</span>
+                <span class="contact-channel__value font-medium">{{(contact).Phone}}</span>
               </span>
             </a>
           </li>
 
           {{/* Viber */}}
           <li>
-            <a class="contact-channel" href="viber://add?number=38970255906">
+            <a class="contact-channel" href="{{(contact).ViberHref}}">
               <span class="contact-channel__icon contact-channel__icon--viber" aria-hidden="true">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M11.4.8C9.5.85 5.34 1.16 3.02 3.3 1.29 5 .68 7.5.61 10.6c-.06 3.1-.14 8.9 5.45 10.48v2.4s-.04.97.6 1.17c.78.24 1.23-.5 1.97-1.3l1.39-1.57c3.82.32 6.76-.42 7.1-.53.77-.25 5.12-.81 5.83-6.58.73-5.95-.36-9.7-2.32-11.4l-.01-.01c-.6-.55-3-2.3-8.37-2.32 0 0-.4-.03-1.13-.01zm.08 1.7c.62-.01.95.02.95.02 4.54.02 6.55 1.48 7.06 1.94 1.66 1.42 2.5 4.8 1.89 9.77-.6 4.8-4.12 5.1-4.77 5.31-.28.09-2.86.73-6.12.51 0 0-2.43 2.93-3.19 3.69-.12.12-.26.16-.35.14-.13-.03-.16-.18-.16-.4l.02-4.02c-4.74-1.32-4.46-6.25-4.41-8.84.06-2.6.55-4.66 2.02-6.11 1.96-1.78 5.5-2.02 7.1-2.07l.96-.01zm.74 2.43a.3.3 0 0 0-.3.3.3.3 0 0 0 .3.3 4.97 4.97 0 0 1 3.62 1.4c.92.94 1.37 2.2 1.39 3.85a.3.3 0 0 0 .3.3.3.3 0 0 0 .3-.3 5.81 5.81 0 0 0-1.55-4.27 5.57 5.57 0 0 0-4.06-1.58zm-3.4.86a.86.86 0 0 0-.5.07h-.02c-.36.21-.69.48-.97.83-.24.3-.36.6-.4.88-.02.17-.01.34.05.5l.02.01c.17.47.58 1.24 1.47 2.85.5.92 1.03 1.69 1.5 2.32.46.63.75.97.8 1.02l.02.02.02.02c.05.05.39.34 1.02.8.63.47 1.4 1 2.32 1.5 1.61.89 2.38 1.3 2.85 1.47l.01.02c.16.06.33.07.5.05.28-.04.58-.16.88-.4.35-.28.62-.61.83-.97v-.02a.86.86 0 0 0 .06-.5c-.04-.2-.16-.36-.34-.5-.27-.23-1.4-.94-1.83-1.16-.4-.2-.7-.13-.94.13 0 0-.5.6-.62.73-.1.1-.27.34-.65.16-.46-.21-1.32-.66-2.1-1.43-.78-.78-1.22-1.65-1.43-2.1-.18-.39.06-.55.16-.65.13-.13.73-.62.73-.62.26-.24.33-.54.13-.94-.22-.43-.93-1.56-1.16-1.83-.13-.16-.28-.27-.46-.32zm3.07.56a.3.3 0 0 0-.05.6 2.6 2.6 0 0 1 1.76.8c.4.45.6 1 .58 1.74a.3.3 0 0 0 .3.3.3.3 0 0 0 .3-.3c.02-.85-.23-1.57-.74-2.13a3.2 3.2 0 0 0-2.15-1l-.06-.01zm.13 1.27a.3.3 0 0 0-.07.6c.56.1.81.37.9.94a.3.3 0 1 0 .6-.1c-.13-.84-.6-1.32-1.4-1.44h-.03z"/></svg>
               </span>
               <span class="contact-channel__text">
                 <span class="contact-channel__label text-xs text-muted">{{t .Locale "contact.viberLabel"}}</span>
-                <span class="contact-channel__value font-medium">+389 70 255 906</span>
+                <span class="contact-channel__value font-medium">{{(contact).Phone}}</span>
               </span>
             </a>
           </li>
 
           {{/* Email */}}
           <li>
-            <a class="contact-channel" href="mailto:info@bosfoot.com">
+            <a class="contact-channel" href="mailto:{{(contact).Email}}">
               <span class="contact-channel__icon" aria-hidden="true">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
               </span>
               <span class="contact-channel__text">
                 <span class="contact-channel__label text-xs text-muted">{{t .Locale "contact.emailLabel"}}</span>
-                <span class="contact-channel__value font-medium">info@bosfoot.com</span>
+                <span class="contact-channel__value font-medium">{{(contact).Email}}</span>
               </span>
             </a>
           </li>
@@ -86,26 +86,26 @@
         <ul class="contact__channels">
           {{/* Instagram */}}
           <li>
-            <a class="contact-channel" href="https://www.instagram.com/bosfoot_store" target="_blank" rel="noopener">
+            <a class="contact-channel" href="{{(contact).InstagramHref}}" target="_blank" rel="noopener">
               <span class="contact-channel__icon contact-channel__icon--instagram" aria-hidden="true">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
               </span>
               <span class="contact-channel__text">
                 <span class="contact-channel__label text-xs text-muted">Instagram</span>
-                <span class="contact-channel__value font-medium">@bosfoot_store</span>
+                <span class="contact-channel__value font-medium">{{(contact).Instagram}}</span>
               </span>
             </a>
           </li>
 
           {{/* Facebook */}}
           <li>
-            <a class="contact-channel" href="https://www.facebook.com/Bosfoot" target="_blank" rel="noopener">
+            <a class="contact-channel" href="{{(contact).FacebookHref}}" target="_blank" rel="noopener">
               <span class="contact-channel__icon contact-channel__icon--facebook" aria-hidden="true">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.07C24 5.4 18.63 0 12 0S0 5.4 0 12.07C0 18.1 4.39 23.1 10.13 24v-8.44H7.08v-3.49h3.05V9.41c0-3.02 1.79-4.69 4.53-4.69 1.31 0 2.68.24 2.68.24v2.97h-1.51c-1.49 0-1.96.93-1.96 1.89v2.25h3.33l-.53 3.49h-2.8V24C19.61 23.1 24 18.1 24 12.07z"/></svg>
               </span>
               <span class="contact-channel__text">
                 <span class="contact-channel__label text-xs text-muted">Facebook</span>
-                <span class="contact-channel__value font-medium">@Bosfoot</span>
+                <span class="contact-channel__value font-medium">{{(contact).Facebook}}</span>
               </span>
             </a>
           </li>

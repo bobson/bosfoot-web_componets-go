@@ -99,8 +99,8 @@
         <h2 class="sg-help__title">{{t .Locale "sizeGuide.help.title"}}</h2>
         <p>{{t .Locale "sizeGuide.help.body"}}</p>
         <div class="sg-help__links">
-          <a class="sg-help__link" href="mailto:info@bosfoot.com">info@bosfoot.com</a>
-          <a class="sg-help__link" href="tel:+38970255906">+389 70 255 906</a>
+          <a class="sg-help__link" href="mailto:{{(contact).Email}}">{{(contact).Email}}</a>
+          <a class="sg-help__link" href="{{(contact).PhoneHref}}">{{(contact).Phone}}</a>
         </div>
       </div>
     </section>

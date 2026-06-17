@@ -43,6 +43,10 @@ go run ./cmd/imgvariants -force
 # contact) and prints a "to order" summary. Used during the reservation phase.
 go run ./cmd/reservations
 
+# Read orders to the terminal, newest first, with contact + line items.
+# -status <s> filters by status, -limit N shows only the N most recent.
+go run ./cmd/orders
+
 # Run tests (internal/locale, models, internal/middleware)
 go test ./...
 

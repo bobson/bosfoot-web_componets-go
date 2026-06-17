@@ -14,3 +14,6 @@ bosfoot
 reservations_to_order.csv
 reservations_contacts.csv
 
+
+# Built test binary from `go build ./cmd/orders`
+/orders
