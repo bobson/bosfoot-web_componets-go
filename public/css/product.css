@@ -572,3 +572,10 @@ details.product__tab[open] .product__tab-arrow {
   margin-top: var(--space-3);
   line-height: var(--lh-normal);
 }
+
+/* The returns line reads as a positive reassurance, not a muted footnote. */
+.product__reserve-note--returns {
+  margin-top: var(--space-2);
+  color: var(--color-accent);
+  font-weight: var(--fw-medium);
+}

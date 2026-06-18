@@ -3,6 +3,7 @@ package models
 import (
 	"errors"
 	"net/mail"
+	"strings"
 	"time"
 )
 
@@ -31,15 +32,23 @@ type Order struct {
 }
 
 // Validate checks if the order data is structurally valid.
+//
+// Reservation mode (pre-launch): a reservation only needs a way to reach the
+// customer, so we require name + phone and treat email/address/city as
+// optional (email is validated only when supplied). To restore full checkout at
+// launch, bring back the mandatory email and address/city checks and drop the
+// phone requirement.
 func (o *Order) Validate() error {
-	if _, err := mail.ParseAddress(o.Email); err != nil {
-		return errors.New("invalid email address")
+	if o.FirstName == "" {
+		return errors.New("name is required")
 	}
-	if o.FirstName == "" || o.LastName == "" {
-		return errors.New("first name and last name are required")
+	if o.Phone == nil || strings.TrimSpace(*o.Phone) == "" {
+		return errors.New("phone is required")
 	}
-	if o.Address == "" || o.City == "" {
-		return errors.New("address and city are required")
+	if o.Email != "" {
+		if _, err := mail.ParseAddress(o.Email); err != nil {
+			return errors.New("invalid email address")
+		}
 	}
 	if o.PaymentMethod != "cod" && o.PaymentMethod != "bank_transfer" {
 		return errors.New("invalid payment method")

@@ -77,6 +77,10 @@ func (h *OrderHandler) CreateOrder(w http.ResponseWriter, r *http.Request) {
 	if req.Locale != "mk" && req.Locale != "sq" && req.Locale != "en" {
 		req.Locale = "mk" // default
 	}
+	// Reservation mode: the form no longer offers a payment choice, so default it.
+	if req.PaymentMethod == "" {
+		req.PaymentMethod = "cod"
+	}
 
 	// Map request to model for validation
 	order := models.Order{

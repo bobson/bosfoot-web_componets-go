@@ -148,8 +148,11 @@
             {{t .Locale "detail.selectSize"}}
           </button>
 
-          {{/* Pre-launch: free reservation, no payment upfront. */}}
+          {{/* Pre-launch: free reservation, no payment upfront. The returns line
+               addresses the "I want to try first" hesitation that keeps MK buyers
+               from ordering barefoot shoes online. */}}
           <p class="product__reserve-note text-xs text-muted">{{t .Locale "reservation.freeNote"}}</p>
+          <p class="product__reserve-note product__reserve-note--returns text-xs">{{t .Locale "reservation.returns"}}</p>
         </div>
 
         {{/* Stock data for JS */}}
