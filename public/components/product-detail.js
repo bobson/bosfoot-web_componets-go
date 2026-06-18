@@ -1,8 +1,16 @@
+import { track } from '../analytics.js';
+
 export function initProductDetail() {
   // ── Stock data ────────────────────────────────────────
   // Build {color: {size: qty}} map from the embedded JSON.
   const stockEl = document.getElementById('stock-data');
   if (!stockEl) return;
+
+  // Funnel: a product page was viewed (pixel-only; first-party already has the
+  // GET in the access log).
+  track('ViewContent', {
+    product_id: Number(document.getElementById('add-to-cart')?.dataset.productId) || 0,
+  });
   const rawStock = JSON.parse(stockEl.textContent || '[]');
   const stockMap = {};
   rawStock.forEach(({ eu_size, color, qty }) => {
@@ -266,6 +274,10 @@ export function initProductDetail() {
     localStorage.setItem('bosfoot_cart', JSON.stringify(cart));
     window.dispatchEvent(new Event('cart:updated')); // refresh nav badge + cart drawer
     window.dispatchEvent(new Event('cart:open'));     // slide the drawer in with the new item
+
+    // Funnel: the only step with no server request, so this beacon is what makes
+    // add-to-cart visible (plus the Meta AddToCart event when the pixel is on).
+    track('AddToCart', { product_id: parseInt(d.productId, 10) });
 
     // Brief confirmation on both buttons, then restore the live state.
     buyBtns.forEach(b => {

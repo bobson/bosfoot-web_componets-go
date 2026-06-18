@@ -4,8 +4,18 @@ package site
 
 import (
 	"math"
+	"os"
 	"strconv"
+	"strings"
 )
+
+// MetaPixelID returns the configured Meta (Facebook/Instagram) Pixel ID, or ""
+// when unset. The analytics partial emits the pixel only when this is non-empty,
+// so the pixel stays off until META_PIXEL_ID is added to .env — no code change
+// needed to turn it on. Read per-call (cheap) so a restart isn't required.
+func MetaPixelID() string {
+	return strings.TrimSpace(os.Getenv("META_PIXEL_ID"))
+}
 
 // MKDtoEUR is the denar→euro conversion rate for the secondary EUR price shown
 // on the sq/en locales. Single source of truth: the client JS reads it from a

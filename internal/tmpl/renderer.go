@@ -74,6 +74,10 @@ func NewRenderer(dir string, ui *locale.UI) (*Renderer, error) {
 		// from a data attribute, so the rate lives only in internal/site.
 		"eurRate": site.EURRateString,
 
+		// pixelID emits the Meta Pixel ID (empty unless META_PIXEL_ID is set); the
+		// head partial only renders the pixel when it's non-empty.
+		"pixelID": site.MetaPixelID,
+
 		// eur converts MKD to EUR and formats with 2 decimals: 6200 → "100.81"
 		"eur": func(amount int) string {
 			mkd := site.FloorDenar(amount)

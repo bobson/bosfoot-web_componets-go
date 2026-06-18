@@ -51,6 +51,7 @@ func main() {
 
 	productHandler := &handlers.ProductHandler{DB: db, Logger: logInstance}
 	orderHandler := &handlers.OrderHandler{DB: db, Logger: logInstance, Notifier: notifier}
+	trackHandler := &handlers.TrackHandler{Logger: logInstance}
 
 	siteURL := os.Getenv("SITE_URL")
 	if siteURL == "" {
@@ -68,7 +69,7 @@ func main() {
 	pc := cache.New(60 * time.Second)
 
 	// Register all routes
-	routes.Register(productHandler, orderHandler, pageHandler, pc)
+	routes.Register(productHandler, orderHandler, pageHandler, trackHandler, pc)
 
 	port := os.Getenv("PORT")
 	if port == "" {

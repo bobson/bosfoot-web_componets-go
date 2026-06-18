@@ -115,6 +115,14 @@ a:hover .about-arr {
     margin-top: var(--space-4);
 }
 
+/* Founder signature — sets the personal sign-off apart from the body copy. */
+.about-story__sign {
+    margin-top: var(--space-6);
+    font-weight: var(--fw-semibold);
+    font-style: italic;
+    color: var(--color-text);
+}
+
 /* ── What is barefoot ─────────────────────────────────── */
 .about-what .about-eyebrow {
     margin-bottom: var(--space-4);

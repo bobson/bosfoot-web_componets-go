@@ -3,6 +3,8 @@
 // POSTs to /api/orders (which re-prices server-side), then swaps in the
 // confirmation panel. Global CSS (checkout.css) styles it normally.
 
+import { track } from '../analytics.js';
+
 const CART_KEY = 'bosfoot_cart';
 // Default rate; overridden at connect from the data-eur-rate attribute, which
 // the server injects from internal/site (the single source of truth).
@@ -56,6 +58,10 @@ class CheckoutForm extends HTMLElement {
     });
 
     this.renderSummary();
+
+    // Funnel: reached checkout with items (pixel-only; the GET is in the access
+    // log). Skip when the cart is empty or the confirmation panel is showing.
+    if (this.confirmEl.hidden && this.read().length) track('InitiateCheckout');
   }
 
   read() {
@@ -184,6 +190,10 @@ class CheckoutForm extends HTMLElement {
   }
 
   onSuccess(data) {
+    // Funnel: reservation submitted (the order POST is already logged server-side;
+    // this fires the Meta Lead event for ad optimisation/retargeting).
+    track('Lead', { order_id: data.id, value: data.total_mkd, currency: 'MKD' });
+
     // Clear the cart and let the nav badge + drawer reset to empty.
     localStorage.removeItem(CART_KEY);
     window.dispatchEvent(new Event('cart:updated'));

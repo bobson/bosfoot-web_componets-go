@@ -12,6 +12,7 @@ func Register(
 	productHandler *handlers.ProductHandler,
 	orderHandler *handlers.OrderHandler,
 	pageHandler *handlers.PageHandler,
+	trackHandler *handlers.TrackHandler,
 	pc *cache.Cache,
 ) {
 	// API handlers (JSON, CSR)
@@ -20,6 +21,10 @@ func Register(
 	http.HandleFunc("/api/products/{id}", productHandler.GetProductByID)
 
 	http.HandleFunc("/api/orders", middleware.WrapCSRF(orderHandler.CreateOrder))
+
+	// Funnel beacon for add-to-cart (the only client-side-only funnel step).
+	// Not CSRF-wrapped: it changes no state — it only appends to the log.
+	http.HandleFunc("/api/track", trackHandler.Track)
 
 	// Page handlers (HTML, SSR)
 	for _, loc := range []string{"mk", "sq", "en"} {

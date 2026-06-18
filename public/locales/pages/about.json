@@ -36,24 +36,34 @@
     "en": "original products"
   },
   "about.why.eyebrow": {
-    "mk": "Зошто постои Bosfoot",
-    "sq": "Pse ekziston Bosfoot",
-    "en": "Why Bosfoot exists"
+    "mk": "Нашата приказна",
+    "sq": "Historia jonë",
+    "en": "Our story"
   },
   "about.why.heading": {
-    "mk": "Нарачувањето од странство не беше решение",
-    "sq": "Porositja nga jashtë nuk ishte zgjidhje",
-    "en": "Ordering from abroad wasn't the answer"
+    "mk": "Отидов дури до Грција за еден пар чевли",
+    "sq": "Shkova deri në Greqi për një palë këpucë",
+    "en": "I drove to Greece for a pair of shoes"
   },
   "about.why.p1": {
-    "mk": "Да најдеш квалитетни боси чевли во Македонија и Албанија значеше да нарачуваш од странство, да плаќаш непредвидлива поштарина и да се надеваш дека мерките ќе бидат точни кога ќе стигнат. Ако нешто не одговарало, враќањето беше скапо и бавно.",
-    "sq": "Të gjesh këpucë të mira barefoot në Maqedoni dhe Shqipëri nënkuptonte të porositje nga jashtë, të paguaje tarifa transporti të paparashikueshme dhe të shpresoje që masat të ishin të sakta. Nëse diçka nuk shkonte, kthimi ishte i kushtueshëm dhe i ngadaltë.",
-    "en": "Finding quality barefoot shoes in Macedonia and Albania meant ordering from abroad, paying unpredictable shipping costs, and hoping the sizing was right when it arrived. If something didn't fit, returning it was expensive and slow."
+    "mk": "Се викам Слободан и носам боси чевли. Проблемот беше што кај нас тешко се наоѓаа — па отидов дури до Грција за мојот прв вистински пар. Нарачувањето од странство значеше да ја погодувам мерката, да плаќам поштарина двојно и да се надевам дека ќе ми одговараат кога конечно ќе пристигнат.",
+    "sq": "Quhem Slobodan dhe vesh këpucë barefoot. Problemi ishte se te ne vështirë gjendeshin — kështu që shkova deri në Greqi për palën time të parë të vërtetë. Porositja nga jashtë do të thoshte të hamendësoja masën, të paguaja transportin dyfish dhe të shpresoja që të më rrinin kur më në fund të mbërrinin.",
+    "en": "My name is Slobodan, and I wear barefoot shoes. The trouble was you couldn't really buy them here — so I drove all the way to Greece for my first proper pair. Ordering from abroad meant guessing my size, paying to ship twice, and hoping they'd fit by the time the box finally arrived."
   },
   "about.why.p2": {
-    "mk": "Босфут е одговорот — продавница во твојот регион, со некој кој навистина ги носи чевлите што ги продава и може да ти одговори на реални прашања за нив.",
-    "sq": "Bosfoot është përgjigja — një dyqan në rajonin tënd, me dikë që i vesh vetë këpucët që shet dhe mund t'u përgjigjet pyetjeve reale rreth tyre.",
-    "en": "Bosfoot is the answer — a shop in your region, with someone who actually wears the shoes they sell and can answer real questions about them."
+    "mk": "Си помислив дека сигурно не сум единствениот во Македонија што сака да чекори вака, без да минува граница за тоа. Затоа го основав Bosfoot — продавницата што самиот ја барав: вистински боси чевли, тука, од некој што навистина ги носи и ќе ти ја каже вистината за мерката.",
+    "sq": "Mendova se sigurisht nuk isha i vetmi në Maqedoni që do të ecte kështu, pa kaluar kufi për këtë. Prandaj themelova Bosfoot — dyqani që vetë e kërkoja: këpucë barefoot të vërteta, këtu, nga dikush që vërtet i vesh dhe do të të thotë të vërtetën për masën.",
+    "en": "I figured I couldn't be the only one in Macedonia who wanted to walk this way without crossing a border to do it. So I started Bosfoot — the shop I'd been looking for myself: real barefoot shoes, here, from someone who actually wears them and will tell you the truth about fit."
+  },
+  "about.why.p3": {
+    "mk": "Го избрав Freet да го донесам прв затоа што е британски бренд со широк простор за прстите и вистинска изработка — и искрено, едвај чекам и јас да ги обујам. Ако те интересираат боси чевли ама не знаеш од каде да почнеш, само пиши ми. Јас лично ќе ти одговорам.",
+    "sq": "E zgjodha Freet ta sjell të parin sepse është markë britanike me hapësirë të gjerë për gishtat dhe punim të vërtetë — dhe sinqerisht, mezi pres t'i vesh edhe vetë. Nëse të intereson barefoot por nuk di nga të fillosh, thjesht shkruamë. Do të të përgjigjem vetë.",
+    "en": "I chose to bring Freet first because it's a British brand with a proper wide toe box and real craftsmanship — and honestly, I can't wait to wear mine. If you're curious about barefoot but not sure where to start, just message me. I'll answer you myself."
+  },
+  "about.why.sign": {
+    "mk": "— Слободан, Охрид",
+    "sq": "— Slobodan, Oher",
+    "en": "— Slobodan, Ohrid"
   },
   "about.what.eyebrow": {
     "mk": "Што се боси чевли",
@@ -186,9 +196,9 @@
     "en": "A real person, a real answer"
   },
   "about.who.p1": {
-    "mk": "Слободан Маркоски го основа Bosfoot затоа што и самиот се замори од истиот проблем. Базиран во Охрид. Носи Freet. Сам одговара на своите пораки.",
-    "sq": "Slobodan Markoski themeloi Bosfoot sepse u lodh vetë me të njëjtin problem. Bazuar në Oher. Vesh Freet. I përgjigjet vetë mesazheve të tij.",
-    "en": "Slobodan Markoski started Bosfoot because he got tired of the same problem himself. Based in Ohrid. Wears Freet. Answers his own messages."
+    "mk": "Базиран во Охрид. Носи боси чевли секој ден. Сам одговара на своите пораки — па прашај што сакаш.",
+    "sq": "Bazuar në Oher. Vesh këpucë barefoot çdo ditë. I përgjigjet vetë mesazheve — prandaj pyet çfarë të duash.",
+    "en": "Based in Ohrid. Wears barefoot shoes every day. Answers his own messages — so ask him anything."
   },
   "about.who.p2": {
     "mk": "Прашање за мерки? Не знаеш кој модел да избереш? Само напиши.",

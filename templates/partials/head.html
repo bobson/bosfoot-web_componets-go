@@ -3,6 +3,22 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 {{if .MetaDescription}}<meta name="description" content="{{.MetaDescription}}">{{end}}
 
+{{/* Meta (Facebook/Instagram) Pixel — only when META_PIXEL_ID is configured.
+     Base code fires PageView; ViewContent/AddToCart/InitiateCheckout/Lead are
+     fired from analytics.js. Note: enabling this needs a cookie-consent banner. */}}
+{{if pixelID}}
+<script>
+  !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+  n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+  document,'script','https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init','{{pixelID}}');fbq('track','PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+  src="https://www.facebook.com/tr?id={{pixelID}}&ev=PageView&noscript=1" alt=""/></noscript>
+{{end}}
+
 {{/* Social Meta (OpenGraph / Twitter) */}}
 {{$title := .MetaTitle}}{{if not $title}}{{$title = t .Locale "hero.heading"}}{{end}}
 <meta property="og:title" content="{{$title}} — Bosfoot">
