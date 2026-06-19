@@ -61,6 +61,13 @@ go test ./...
 # Syntax-check all browser JS modules (run before pushing; CI gates deploy on it).
 # Catches a broken import/parse error that would kill app.js and all interactivity.
 bash scripts/check-js.sh
+
+# Traffic report from Caddy's JSON access log (run ON the droplet; needs sudo + jq).
+# Shows total requests, unique real visitors (Cloudflare Cf-Connecting-Ip, minus the
+# facebookexternalhit crawler), top pages, views/hour, and visitors by country.
+# Optional arg is any journalctl --since value (default "24 hours ago").
+sudo bash scripts/traffic.sh            # last 24h
+sudo bash scripts/traffic.sh "today"    # since midnight
 ```
 
 ## Environment
