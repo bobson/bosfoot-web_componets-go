@@ -51,7 +51,14 @@ printf '%s\n' "$LOG" \
   | sort | uniq -c
 
 echo
-echo "---- Visitors by country (Cloudflare geo) ----"
+echo "---- Requests by country (Cloudflare geo, incl. bots) ----"
 printf '%s\n' "$LOG" \
   | jq -r '.request.headers."Cf-Ipcountry"[0] // "?"' \
   | sort | uniq -c | sort -rn | head -15
+
+echo
+echo "---- Unique visitors by country (real, excl. bots/crawlers) ----"
+printf '%s\n' "$LOG" \
+  | jq -r 'select(((.request.headers."User-Agent"[0]) // "") | test("facebookexternalhit|bot|crawl|spider|scan")|not)
+           | [(.request.headers."Cf-Ipcountry"[0] // "?"), (.request.headers."Cf-Connecting-Ip"[0] // "?")] | @tsv' \
+  | sort -u | cut -f1 | sort | uniq -c | sort -rn | head -15
