@@ -75,6 +75,13 @@ npm run lint       # lint only
 # Optional arg is any journalctl --since value (default "24 hours ago").
 sudo bash scripts/traffic.sh            # last 24h
 sudo bash scripts/traffic.sh "today"    # since midnight
+
+# Funnel snapshot (run ON the droplet; needs sudo + jq). Real-customer view of
+# visitors → product views → add-to-cart → checkout → reservations, with bots AND
+# the owner's test device/email filtered out (tweak the filters atop the script).
+# Caddy log = page traffic; bosfoot log = add-to-cart beacons + placed orders.
+sudo bash scripts/funnel.sh             # last 24h
+sudo bash scripts/funnel.sh "7 days ago"
 ```
 
 ## Environment
