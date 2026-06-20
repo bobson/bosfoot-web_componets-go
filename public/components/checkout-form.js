@@ -149,7 +149,7 @@ class CheckoutForm extends HTMLElement {
     const payload = {
       email: (fd.get('email') || '').trim(),
       phone: (fd.get('phone') || '').trim(),
-      first_name: (fd.get('name') || '').trim(),
+      first_name: (fd.get('name') || fd.get('first_name') || '').trim(),
       last_name: '',
       address: '',
       city: '',
