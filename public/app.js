@@ -4,15 +4,15 @@
 // import + try/catch contains a failure to that single component (logged), and a
 // finished module just lights up — no edits here needed.
 const components = [
-  ["./components/nav-drawer.js", "initNavDrawer"],
-  ["./components/cart-drawer.js", "initCartDrawer"],
-  ["./components/nav-locale.js", "initNavLocale"],
-  ["./components/nav-search.js", "initNavSearch"],
-  ["./components/checkout-form.js", "initCheckoutForm"],
-  ["./components/listing-filter.js", "initListingFilter"],
-  ["./components/product-detail.js", "initProductDetail"],
-  ["./components/size-guide-modal.js", "initSizeGuideModal"],
-  ["./components/scroll-reveal.js", "initScrollReveal"],
+  ['./components/nav-drawer.js', 'initNavDrawer'],
+  ['./components/cart-drawer.js', 'initCartDrawer'],
+  ['./components/nav-locale.js', 'initNavLocale'],
+  ['./components/nav-search.js', 'initNavSearch'],
+  ['./components/checkout-form.js', 'initCheckoutForm'],
+  ['./components/listing-filter.js', 'initListingFilter'],
+  ['./components/product-detail.js', 'initProductDetail'],
+  ['./components/size-guide-modal.js', 'initSizeGuideModal'],
+  ['./components/scroll-reveal.js', 'initScrollReveal'],
 ];
 
 // Cache-bust component imports with app.js's own asset version (its ?v=hash).
@@ -32,7 +32,7 @@ for (const [path, fn] of components) {
 // Cart badge — runs synchronously, independent of the components above.
 function getCartCount() {
   try {
-    const cart = JSON.parse(localStorage.getItem("bosfoot_cart") || "[]");
+    const cart = JSON.parse(localStorage.getItem('bosfoot_cart') || '[]');
     return cart.reduce((n, item) => n + (item.qty || 0), 0);
   } catch {
     return 0;
@@ -40,14 +40,14 @@ function getCartCount() {
 }
 
 function updateCartBadge() {
-  const btn = document.getElementById("cart-btn");
+  const btn = document.getElementById('cart-btn');
   if (!btn) return;
 
-  let badge = btn.querySelector(".cart-badge");
+  let badge = btn.querySelector('.cart-badge');
   if (!badge) {
-    badge = document.createElement("span");
-    badge.className = "cart-badge";
-    badge.setAttribute("aria-hidden", "true");
+    badge = document.createElement('span');
+    badge.className = 'cart-badge';
+    badge.setAttribute('aria-hidden', 'true');
     btn.appendChild(badge);
   }
 
@@ -58,7 +58,7 @@ function updateCartBadge() {
 
 updateCartBadge();
 
-window.addEventListener("storage", (e) => {
-  if (e.key === "bosfoot_cart") updateCartBadge();
+window.addEventListener('storage', (e) => {
+  if (e.key === 'bosfoot_cart') updateCartBadge();
 });
-window.addEventListener("cart:updated", updateCartBadge);
+window.addEventListener('cart:updated', updateCartBadge);

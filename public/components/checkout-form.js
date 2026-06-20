@@ -69,7 +69,7 @@ class CheckoutForm extends HTMLElement {
       const cart = JSON.parse(localStorage.getItem(CART_KEY) || '[]');
       // Self-healing: fix any old URLs with spaces that were broken by the cleanup
       let changed = false;
-      cart.forEach(item => {
+      cart.forEach((item) => {
         if (item.imageUrl && item.imageUrl.includes(' ')) {
           item.imageUrl = item.imageUrl.replace(/\s+/g, '-');
           changed = true;

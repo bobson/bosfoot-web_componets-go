@@ -58,9 +58,16 @@ go run ./cmd/orders
 # Run tests (internal/locale, models, internal/middleware)
 go test ./...
 
-# Syntax-check all browser JS modules (run before pushing; CI gates deploy on it).
-# Catches a broken import/parse error that would kill app.js and all interactivity.
-bash scripts/check-js.sh
+# Lint + format browser JS with Biome (the only JS toolchain; no build step).
+# Lint is scoped to a narrow rule set (use-before-declaration, redeclare) that
+# catches RUNTIME-fatal mistakes a parse check can't see — e.g. a local var
+# shadowing an import (TDZ). Biome also parses each module, so it subsumes the
+# old scripts/check-js.sh syntax gate (now removed). CI gates deploy on `check`.
+# Config in biome.json; widen lint rules / formatter scope there if wanted.
+npm ci             # first time / in CI, installs the pinned Biome
+npm run check      # lint + verify formatting (what CI runs); read-only
+npm run format     # apply formatting in place
+npm run lint       # lint only
 
 # Traffic report from Caddy's JSON access log (run ON the droplet; needs sudo + jq).
 # Shows total requests, unique real visitors (Cloudflare Cf-Connecting-Ip, minus the

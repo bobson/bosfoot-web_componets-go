@@ -1,39 +1,39 @@
 function getEls() {
   return {
     dropdown: document.getElementById('search-dropdown'),
-    btn:      document.getElementById('search-btn'),
-    input:    document.getElementById('search-input'),
-  }
+    btn: document.getElementById('search-btn'),
+    input: document.getElementById('search-input'),
+  };
 }
 
 export function openSearch() {
-  const { dropdown, btn, input } = getEls()
-  if (!dropdown) return 
-  dropdown.setAttribute('aria-hidden', 'false')
-  btn.setAttribute('aria-expanded', 'true')
-  input?.focus()
+  const { dropdown, btn, input } = getEls();
+  if (!dropdown) return;
+  dropdown.setAttribute('aria-hidden', 'false');
+  btn.setAttribute('aria-expanded', 'true');
+  input?.focus();
 }
 
 export function closeSearch() {
-  const { dropdown, btn } = getEls()
-  if (!dropdown || dropdown.getAttribute('aria-hidden') === 'true') return
-  dropdown.setAttribute('aria-hidden', 'true')
-  btn.setAttribute('aria-expanded', 'false')
-  btn?.focus()
+  const { dropdown, btn } = getEls();
+  if (!dropdown || dropdown.getAttribute('aria-hidden') === 'true') return;
+  dropdown.setAttribute('aria-hidden', 'true');
+  btn.setAttribute('aria-expanded', 'false');
+  btn?.focus();
 }
 
 export function initNavSearch() {
-  document.addEventListener('click', e => {
+  document.addEventListener('click', (e) => {
     if (e.target.closest('#search-btn')) {
-      openSearch()
+      openSearch();
     } else if (e.target.closest('#search-close')) {
-      closeSearch()
+      closeSearch();
     } else if (!e.target.closest('#search-dropdown')) {
-      closeSearch()
+      closeSearch();
     }
-  })
+  });
 
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') closeSearch()
-  })
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeSearch();
+  });
 }

@@ -19,20 +19,20 @@ export function initProductDetail() {
   });
 
   let selectedColor = null;
-  let selectedSize  = null;
+  let selectedSize = null;
 
   // ── Buy buttons (in-page + floating) ──────────────────
   const realBtn = document.getElementById('add-to-cart');
   const floatBtn = document.getElementById('add-to-cart-floating');
   const buyBtns = [realBtn, floatBtn].filter(Boolean);
   const labelPick = realBtn?.dataset.labelPick || 'Select size';
-  const labelAdd  = realBtn?.dataset.labelAdd  || 'Add to cart';
+  const labelAdd = realBtn?.dataset.labelAdd || 'Add to cart';
 
   // Reflect selection state on both buttons: "Select size" until a size is
   // chosen (colour is always pre-selected), then "Add to cart".
   function refreshBuyState() {
     const ready = selectedSize != null;
-    buyBtns.forEach(b => {
+    buyBtns.forEach((b) => {
       b.textContent = ready ? labelAdd : labelPick;
       b.classList.toggle('product__add-to-cart--pick', !ready);
     });
@@ -57,14 +57,14 @@ export function initProductDetail() {
     const path = src.split('?')[0]; // strip ?v=...
     const parts = path.split('/');
     const idx = parts.lastIndexOf('images');
-    return (idx !== -1 && idx + 2 < parts.length)
+    return idx !== -1 && idx + 2 < parts.length
       ? parts[idx + 1].toLowerCase().replace(/\s+/g, '-')
       : null;
   }
 
   // Returns only the slides currently visible (not hidden by colour filter).
   function visibleSlides() {
-    return slides.filter(s => !s.hasAttribute('hidden'));
+    return slides.filter((s) => !s.hasAttribute('hidden'));
   }
 
   let current = 0;
@@ -105,14 +105,17 @@ export function initProductDetail() {
     nextBtn?.addEventListener('click', () => handleNav(1));
     thumbs.forEach((t, i) => t.addEventListener('click', () => goToSlide(i)));
 
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach((e) => {
-        if (e.isIntersecting && e.intersectionRatio >= 0.6) {
-          const i = slides.indexOf(e.target);
-          if (i !== -1) setCurrent(i);
-        }
-      });
-    }, { root: galleryTrack, threshold: 0.6 });
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting && e.intersectionRatio >= 0.6) {
+            const i = slides.indexOf(e.target);
+            if (i !== -1) setCurrent(i);
+          }
+        });
+      },
+      { root: galleryTrack, threshold: 0.6 },
+    );
     slides.forEach((s) => io.observe(s));
 
     setCurrent(0);
@@ -134,16 +137,16 @@ export function initProductDetail() {
     // colour is declared but its gallery rows were never seeded), filtering
     // would hide every slide and leave a blank carousel. Fall back to showing
     // all images so the gallery degrades to "shows something" instead of empty.
-    const anyMatch = slides.some(slide => {
+    const anyMatch = slides.some((slide) => {
       const img = slide.querySelector('img');
-      const folder = colorFolder(img ? (img.getAttribute('src') || '') : '');
+      const folder = colorFolder(img ? img.getAttribute('src') || '' : '');
       return folder === key;
     });
 
     let firstIdx = -1;
     slides.forEach((slide, i) => {
       const img = slide.querySelector('img');
-      const src = img ? (img.getAttribute('src') || '') : '';
+      const src = img ? img.getAttribute('src') || '' : '';
       const folder = colorFolder(src);
       const show = !anyMatch || !folder || folder === key;
 
@@ -169,9 +172,9 @@ export function initProductDetail() {
   function selectColor(color) {
     if (!color) return;
     selectedColor = color;
-    selectedSize  = null;
+    selectedSize = null;
 
-    colorBtns.forEach(b => {
+    colorBtns.forEach((b) => {
       const active = b.dataset.color === color;
       b.classList.toggle('product__color-btn--active', active);
       b.setAttribute('aria-pressed', String(active));
@@ -191,7 +194,7 @@ export function initProductDetail() {
     }
   }
 
-  colorBtns.forEach(btn => {
+  colorBtns.forEach((btn) => {
     // Use both click and touchstart for better mobile response
     const handler = (e) => {
       e.preventDefault();
@@ -205,7 +208,7 @@ export function initProductDetail() {
 
   function updateSizes() {
     // Deselect current size when colour changes.
-    sizeBtns.forEach(b => {
+    sizeBtns.forEach((b) => {
       b.classList.remove('product__size-btn--active');
       b.setAttribute('aria-pressed', 'false');
     });
@@ -213,7 +216,7 @@ export function initProductDetail() {
     // Reservation mode (pre-launch): every size is reservable regardless of
     // stock, so we never disable a size here. Restore the per-size OOS check
     // (using stockMap[selectedColor]) when switching back to real selling.
-    sizeBtns.forEach(btn => {
+    sizeBtns.forEach((btn) => {
       btn.disabled = false;
       btn.classList.remove('product__size-btn--oos');
       btn.setAttribute('aria-disabled', 'false');
@@ -222,11 +225,11 @@ export function initProductDetail() {
     refreshBuyState();
   }
 
-  sizeBtns.forEach(btn => {
+  sizeBtns.forEach((btn) => {
     btn.addEventListener('click', () => {
       if (btn.disabled) return;
       selectedSize = parseFloat(btn.dataset.size);
-      sizeBtns.forEach(b => {
+      sizeBtns.forEach((b) => {
         const active = parseFloat(b.dataset.size) === selectedSize;
         b.classList.toggle('product__size-btn--active', active);
         b.setAttribute('aria-pressed', String(active));
@@ -254,53 +257,56 @@ export function initProductDetail() {
 
     const d = realBtn.dataset;
     const cart = JSON.parse(localStorage.getItem('bosfoot_cart') || '[]');
-    const key  = `${d.productId}-${selectedSize}-${selectedColor}`;
-    const existing = cart.find(i => i.key === key);
+    const key = `${d.productId}-${selectedSize}-${selectedColor}`;
+    const existing = cart.find((i) => i.key === key);
     if (existing) {
       existing.qty++;
     } else {
       cart.push({
         key,
-        productId:   parseInt(d.productId, 10),
+        productId: parseInt(d.productId, 10),
         productName: d.productName,
-        brandName:   d.brandName,
-        imageUrl:    d.imageUrl,
-        size:        selectedSize,
-        color:       selectedColor,
-        price:       parseInt(d.price, 10),
-        qty:         1,
+        brandName: d.brandName,
+        imageUrl: d.imageUrl,
+        size: selectedSize,
+        color: selectedColor,
+        price: parseInt(d.price, 10),
+        qty: 1,
       });
     }
     localStorage.setItem('bosfoot_cart', JSON.stringify(cart));
     window.dispatchEvent(new Event('cart:updated')); // refresh nav badge + cart drawer
-    window.dispatchEvent(new Event('cart:open'));     // slide the drawer in with the new item
+    window.dispatchEvent(new Event('cart:open')); // slide the drawer in with the new item
 
     // Funnel: the only step with no server request, so this beacon is what makes
     // add-to-cart visible (plus the Meta AddToCart event when the pixel is on).
     track('AddToCart', { product_id: parseInt(d.productId, 10) });
 
     // Brief confirmation on both buttons, then restore the live state.
-    buyBtns.forEach(b => {
+    buyBtns.forEach((b) => {
       b.textContent = '✓';
       b.classList.remove('product__add-to-cart--pick');
       b.classList.add('product__add-to-cart--added');
     });
     setTimeout(() => {
-      buyBtns.forEach(b => b.classList.remove('product__add-to-cart--added'));
+      buyBtns.forEach((b) => b.classList.remove('product__add-to-cart--added'));
       refreshBuyState();
     }, 1600);
   }
 
-  buyBtns.forEach(b => b.addEventListener('click', addToCart));
+  buyBtns.forEach((b) => b.addEventListener('click', addToCart));
 
   // ── Floating bar visibility ───────────────────────────
   // Show the floating bar only while the in-page button is off-screen.
   const floatBar = document.getElementById('floating-buy');
   if (floatBar && realBtn && 'IntersectionObserver' in window) {
-    const obs = new IntersectionObserver(([entry]) => {
-      floatBar.classList.toggle('product__floating--visible', !entry.isIntersecting);
-      floatBar.setAttribute('aria-hidden', String(entry.isIntersecting));
-    }, { threshold: 0 });
+    const obs = new IntersectionObserver(
+      ([entry]) => {
+        floatBar.classList.toggle('product__floating--visible', !entry.isIntersecting);
+        floatBar.setAttribute('aria-hidden', String(entry.isIntersecting));
+      },
+      { threshold: 0 },
+    );
     obs.observe(realBtn);
   }
 }

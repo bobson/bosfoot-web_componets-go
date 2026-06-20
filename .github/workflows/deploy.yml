@@ -20,8 +20,12 @@ jobs:
           go-version-file: go.mod
       - run: go build ./...
       - run: go test ./...
-      - name: JS syntax check
-        run: bash scripts/check-js.sh
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm ci
+      - name: JS lint + format (Biome)
+        run: npm run check
 
   deploy:
     needs: check

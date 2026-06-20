@@ -1,0 +1,15 @@
+{
+  "name": "bosfoot-web",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Lint config for the browser JS modules. The app has no build step; Biome is used only as a linter to catch runtime-fatal mistakes (e.g. use-before-declaration) that node --check can't see.",
+  "scripts": {
+    "lint": "biome lint public",
+    "format": "biome format --write public",
+    "check": "biome check public"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.5.0"
+  }
+}
