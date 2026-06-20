@@ -1002,7 +1002,7 @@ func (h *PageHandler) ProductDetail(w http.ResponseWriter, r *http.Request) {
 		FROM products p
 		JOIN brands b ON b.id = p.brand_id
 		JOIN genders g ON g.id = p.gender_id
-		WHERE b.slug = $1 AND p.slug = $2 AND p.is_active = TRUE
+		WHERE b.slug = $1 AND p.slug = $2 AND p.is_active = TRUE AND p.is_published = TRUE
 	`, brandSlug, productSlug))
 	if err == sql.ErrNoRows {
 		http.NotFound(w, r)

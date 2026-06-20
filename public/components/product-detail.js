@@ -43,8 +43,8 @@ export function initProductDetail() {
   // IntersectionObserver and navigates with scrollIntoView. When a colour is
   // selected, slides whose image URL does not contain that colour's folder are
   // hidden (display:none), so the carousel only shows the chosen colour.
-  const track = document.getElementById('gallery-track');
-  const slides = track ? Array.from(track.querySelectorAll('.product__slide')) : [];
+  const galleryTrack = document.getElementById('gallery-track');
+  const slides = galleryTrack ? Array.from(galleryTrack.querySelectorAll('.product__slide')) : [];
   const thumbs = Array.from(document.querySelectorAll('.product__thumb'));
   const prevBtn = document.getElementById('gallery-prev');
   const nextBtn = document.getElementById('gallery-next');
@@ -112,7 +112,7 @@ export function initProductDetail() {
           if (i !== -1) setCurrent(i);
         }
       });
-    }, { root: track, threshold: 0.6 });
+    }, { root: galleryTrack, threshold: 0.6 });
     slides.forEach((s) => io.observe(s));
 
     setCurrent(0);

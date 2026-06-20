@@ -60,6 +60,7 @@ func (h *OrderHandler) CreateOrder(w http.ResponseWriter, r *http.Request) {
 
 	var req orderReq
 	if err := json.NewDecoder(http.MaxBytesReader(w, r.Body, 64<<10)).Decode(&req); err != nil {
+		h.Logger.Info("order rejected", "reason", "invalid request body", "err", err.Error(), "ua", r.UserAgent())
 		writeJSONError(w, http.StatusBadRequest, "invalid request body")
 		return
 	}
@@ -103,6 +104,7 @@ func (h *OrderHandler) CreateOrder(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err := order.Validate(); err != nil {
+		h.Logger.Info("order rejected", "reason", err.Error(), "items", len(order.Items), "ua", r.UserAgent())
 		writeJSONError(w, http.StatusBadRequest, err.Error())
 		return
 	}
@@ -113,6 +115,7 @@ func (h *OrderHandler) CreateOrder(w http.ResponseWriter, r *http.Request) {
 	ids := make([]int, 0, len(req.Items))
 	for _, it := range req.Items {
 		if it.Qty <= 0 {
+			h.Logger.Info("order rejected", "reason", "invalid quantity", "product_id", it.ProductID, "items", len(req.Items))
 			writeJSONError(w, http.StatusBadRequest, "invalid quantity")
 			return
 		}
@@ -152,6 +155,7 @@ func (h *OrderHandler) CreateOrder(w http.ResponseWriter, r *http.Request) {
 	for _, it := range req.Items {
 		p, ok := prodByID[it.ProductID]
 		if !ok {
+			h.Logger.Info("order rejected", "reason", "product unavailable", "product_id", it.ProductID, "items", len(req.Items))
 			writeJSONError(w, http.StatusBadRequest, "product unavailable")
 			return
 		}
