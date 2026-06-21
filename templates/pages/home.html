@@ -31,7 +31,34 @@
         </div>
       </section>
 
-      {{/* ── Brands ───────────────────────────────────────── */}} 
+      {{/* ── Trust band ───────────────────────────────────── */}}
+      {{/* Risk-removers up front: the funnel shows visitors reaching products
+           but not reserving, so the no-commitment / pay-on-delivery / free-returns
+           promise leads the page. Mirrors the product-page trust block. */}}
+      <section class="trust-bar">
+        <div class="container">
+          <h2 class="trust-bar__heading font-semibold text-center">{{t .Locale "trust.heading"}}</h2>
+          <ul class="trust-bar__grid">
+            <li class="trust-bar__item">
+              <svg class="trust-bar__icon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+              <h3 class="trust-bar__title font-semibold">{{t .Locale "trust.reserve.title"}}</h3>
+              <p class="trust-bar__body text-muted text-sm">{{t .Locale "trust.reserve.body"}}</p>
+            </li>
+            <li class="trust-bar__item">
+              <svg class="trust-bar__icon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+              <h3 class="trust-bar__title font-semibold">{{t .Locale "trust.cod.title"}}</h3>
+              <p class="trust-bar__body text-muted text-sm">{{t .Locale "trust.cod.body"}}</p>
+            </li>
+            <li class="trust-bar__item">
+              <svg class="trust-bar__icon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+              <h3 class="trust-bar__title font-semibold">{{t .Locale "trust.returns.title"}}</h3>
+              <p class="trust-bar__body text-muted text-sm">{{t .Locale "trust.returns.body"}}</p>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      {{/* ── Brands ───────────────────────────────────────── */}}
       {{if .Brands}}
       <section class="brands section section--sage">
         <div class="container">

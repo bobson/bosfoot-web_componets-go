@@ -446,6 +446,15 @@ body.page-product {
   text-overflow: ellipsis;
 }
 
+/* Reassurance at the moment of tap — the offer follows the button on mobile. */
+.product__floating-trust {
+  color: var(--color-accent);
+  font-weight: var(--fw-medium);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .product__floating .product__add-to-cart {
   flex: 1;
   width: auto;
@@ -567,15 +576,37 @@ details.product__tab[open] .product__tab-arrow {
   letter-spacing: -0.02em;
   margin-bottom: var(--space-8);
 }
-/* Pre-launch free-reservation note under the buy button. */
-.product__reserve-note {
-  margin-top: var(--space-3);
-  line-height: var(--lh-normal);
+/* Pre-launch trust block under the buy button — the risk-removers that turn a
+   "looking" visitor into a reservation. High-contrast on a tinted card so it
+   reads as a promise, not a footnote. */
+.product__trust {
+  list-style: none;
+  margin-top: var(--space-5);
+  padding: var(--space-4) var(--space-5);
+  display: grid;
+  gap: var(--space-3);
+  background: var(--color-accent-light);
+  border: 1px solid color-mix(in oklch, var(--color-accent), transparent 80%);
+  border-radius: var(--radius-md);
 }
 
-/* The returns line reads as a positive reassurance, not a muted footnote. */
-.product__reserve-note--returns {
-  margin-top: var(--space-2);
+.product__trust-item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  line-height: var(--lh-snug);
+}
+
+.product__trust-icon {
+  flex-shrink: 0;
+  margin-top: 2px;
   color: var(--color-accent);
-  font-weight: var(--fw-medium);
+}
+
+.product__trust-title {
+  color: var(--color-text);
+}
+
+.product__trust-body {
+  font-size: var(--fs-sm);
 }

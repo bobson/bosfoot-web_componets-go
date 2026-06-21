@@ -265,3 +265,54 @@
   font-size: var(--fs-sm);
   line-height: var(--lh-normal);
 }
+
+/* ── Trust band ─────────────────────────────────────
+   Sits right under the hero. Leads with the risk-removers
+   (no commitment / pay on delivery / free returns) because the
+   funnel shows visitors reaching products but hesitating to reserve. */
+.trust-bar {
+  background: var(--color-img-bg);
+  padding-block: var(--space-12);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.trust-bar__heading {
+  font-size: var(--fs-lg);
+  letter-spacing: -0.01em;
+  margin-bottom: var(--space-8);
+}
+
+.trust-bar__grid {
+  list-style: none;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-8);
+}
+
+@media (min-width: 768px) {
+  .trust-bar__grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-10);
+  }
+}
+
+.trust-bar__item {
+  text-align: center;
+}
+
+.trust-bar__icon {
+  color: var(--color-accent);
+  margin-bottom: var(--space-3);
+}
+
+.trust-bar__title {
+  font-size: var(--fs-base);
+  letter-spacing: -0.01em;
+  margin-bottom: var(--space-2);
+}
+
+.trust-bar__body {
+  line-height: var(--lh-normal);
+  max-width: 22rem;
+  margin-inline: auto;
+}

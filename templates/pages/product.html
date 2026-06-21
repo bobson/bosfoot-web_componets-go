@@ -148,11 +148,25 @@
             {{t .Locale "detail.selectSize"}}
           </button>
 
-          {{/* Pre-launch: free reservation, no payment upfront. The returns line
-               addresses the "I want to try first" hesitation that keeps MK buyers
-               from ordering barefoot shoes online. */}}
-          <p class="product__reserve-note text-xs text-muted">{{t .Locale "reservation.freeNote"}}</p>
-          <p class="product__reserve-note product__reserve-note--returns text-xs">{{t .Locale "reservation.returns"}}</p>
+          {{/* Pre-launch trust block. These three points (reserve with no
+               commitment → pay on delivery → free returns) are the single
+               biggest lever on conversion for risk-averse MK buyers, so they
+               sit high-contrast right under the button — not as muted notes.
+               COD wording matches the checkout's payment.cod term. */}}
+          <ul class="product__trust">
+            <li class="product__trust-item">
+              <svg class="product__trust-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+              <span><span class="product__trust-title font-semibold">{{t .Locale "trust.reserve.title"}}</span> <span class="product__trust-body text-muted">{{t .Locale "trust.reserve.body"}}</span></span>
+            </li>
+            <li class="product__trust-item">
+              <svg class="product__trust-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+              <span><span class="product__trust-title font-semibold">{{t .Locale "trust.cod.title"}}</span> <span class="product__trust-body text-muted">{{t .Locale "trust.cod.body"}}</span></span>
+            </li>
+            <li class="product__trust-item">
+              <svg class="product__trust-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+              <span><span class="product__trust-title font-semibold">{{t .Locale "trust.returns.title"}}</span> <span class="product__trust-body text-muted">{{t .Locale "trust.returns.body"}}</span></span>
+            </li>
+          </ul>
         </div>
 
         {{/* Stock data for JS */}}
@@ -275,6 +289,7 @@
       <div class="product__floating-info">
         <span class="product__floating-name font-semibold">{{.Product.Name}}</span>
         <span class="product__floating-price text-muted text-sm">{{mkd .Product.PriceMKD}} {{t .Locale "currency.MKD"}}{{if showEUR .Locale}} · {{eur .Product.PriceMKD}} €{{end}}</span>
+        <span class="product__floating-trust text-xs">{{t .Locale "trust.cod.title"}} · {{t .Locale "trust.returns.title"}}</span>
       </div>
       <button class="product__add-to-cart" id="add-to-cart-floating"
         data-label-pick="{{t .Locale "detail.selectSize"}}"
