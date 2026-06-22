@@ -64,13 +64,20 @@ func Register(
 // setStaticCacheHeaders applies a Cache-Control tier based on the request:
 //   - fingerprinted URLs (the asset helper adds ?v=<content-hash>) are immutable
 //     and cached for a year — the URL changes whenever the content does;
+//   - un-fingerprinted .js (the component ES modules imported by app.js) uses
+//     no-store: the Facebook in-app browser ignores no-cache and serves stale
+//     JS, which silently breaks the ad audience after a JS-only deploy (the
+//     imported modules never bump app.js's hash). no-store forbids storing it,
+//     so the fix reaches every visitor immediately. These files are tiny.
 //   - images/fonts rarely change and aren't fingerprinted, so cache for a week;
-//   - everything else (JS modules, JSON, HTML) uses no-cache, meaning it is
-//     still stored but revalidated (cheap 304s) so updates are picked up at once.
+//   - everything else (JSON, HTML) uses no-cache, meaning it is still stored
+//     but revalidated (cheap 304s) so updates are picked up at once.
 func setStaticCacheHeaders(w http.ResponseWriter, r *http.Request) {
 	switch {
 	case r.URL.Query().Has("v"):
 		w.Header().Set("Cache-Control", "public, max-age=31536000, immutable")
+	case strings.HasSuffix(r.URL.Path, ".js"):
+		w.Header().Set("Cache-Control", "no-store")
 	case isLongLivedAsset(r.URL.Path):
 		w.Header().Set("Cache-Control", "public, max-age=604800")
 	default:
