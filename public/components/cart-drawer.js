@@ -99,7 +99,11 @@ class CartDrawer extends HTMLElement {
   open() {
     this.classList.add('cart--open');
     this.panel.setAttribute('aria-hidden', 'false');
-    this.panel.inert = false; // restore focusability for screen readers / Tab
+    // Use the attribute, not the .inert IDL property: some in-app webviews
+    // (e.g. the Facebook browser) honour the `inert` content attribute but
+    // don't reflect `.inert = false`, leaving the panel inert so taps fall
+    // through to the overlay behind it and the drawer just closes.
+    this.panel.removeAttribute('inert'); // restore focus/interaction
     this.overlay.setAttribute('aria-hidden', 'false');
     document.body.classList.add('cart-open');
   }
@@ -107,7 +111,7 @@ class CartDrawer extends HTMLElement {
   close() {
     this.classList.remove('cart--open');
     this.panel.setAttribute('aria-hidden', 'true');
-    this.panel.inert = true; // take descendants out of the tab order while hidden
+    this.panel.setAttribute('inert', ''); // take descendants out of the tab order while hidden
     this.overlay.setAttribute('aria-hidden', 'true');
     document.body.classList.remove('cart-open');
   }

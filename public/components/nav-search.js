@@ -44,7 +44,8 @@ export function openSearch() {
   const { dropdown, btn, input } = getEls();
   if (!dropdown) return;
   dropdown.setAttribute('aria-hidden', 'false');
-  dropdown.inert = false; // restore focusability for screen readers / Tab
+  dropdown.removeAttribute('inert'); // restore focus/interaction (attribute, not the
+  // .inert property, which some in-app webviews don't reflect — see cart-drawer.js)
   btn.setAttribute('aria-expanded', 'true');
   input?.focus();
 }
@@ -53,7 +54,7 @@ export function closeSearch() {
   const { dropdown, btn } = getEls();
   if (!dropdown || dropdown.getAttribute('aria-hidden') === 'true') return;
   dropdown.setAttribute('aria-hidden', 'true');
-  dropdown.inert = true; // take descendants out of the tab order while hidden
+  dropdown.setAttribute('inert', ''); // take descendants out of the tab order while hidden
   btn.setAttribute('aria-expanded', 'false');
   btn?.focus();
 }

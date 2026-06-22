@@ -31,7 +31,8 @@ export function openDrawer() {
   const { drawer, openBtn, closeBtn } = getEls();
   if (!drawer) return; // Guard against SSR missing chrome
   drawer.setAttribute('aria-hidden', 'false');
-  drawer.inert = false; // restore focusability for screen readers / Tab
+  drawer.removeAttribute('inert'); // restore focus/interaction (attribute, not the
+  // .inert property, which some in-app webviews don't reflect — see cart-drawer.js)
   openBtn.setAttribute('aria-expanded', 'true');
   document.body.classList.add('nav-open');
   drawer.addEventListener('keydown', trapFocus);
@@ -42,7 +43,7 @@ export function closeDrawer() {
   const { drawer, openBtn } = getEls();
   if (!drawer || drawer.getAttribute('aria-hidden') === 'true') return;
   drawer.setAttribute('aria-hidden', 'true');
-  drawer.inert = true; // take descendants out of the tab order while hidden
+  drawer.setAttribute('inert', ''); // take descendants out of the tab order while hidden
   openBtn.setAttribute('aria-expanded', 'false');
   document.body.classList.remove('nav-open');
   drawer.removeEventListener('keydown', trapFocus);
