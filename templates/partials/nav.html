@@ -63,7 +63,7 @@
 </header>
 
 {{/* Search dropdown — fixed below nav, full width */}}
-<div class="search-dropdown" id="search-dropdown" role="search" aria-hidden="true" aria-label="{{t .Locale "nav.search"}}">
+<div class="search-dropdown" id="search-dropdown" role="search" aria-hidden="true" inert aria-label="{{t .Locale "nav.search"}}">
   <div class="search-dropdown__inner">
     <div class="search-dropdown__bar">
       <svg class="search-dropdown__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true" focusable="false">
@@ -79,6 +79,18 @@
         </svg>
       </button>
     </div>
+
+    {{/* Results rendered client-side by <nav-search> from /api/products.
+         Static strings are passed as data-* so the JS stays locale-agnostic. */}}
+    <div class="search-dropdown__results" id="search-results" role="listbox"
+         aria-label="{{t .Locale "search.title"}}"
+         data-currency="{{t .Locale "currency.MKD"}}"
+         data-show-eur="{{if showEUR .Locale}}1{{end}}"
+         data-eur-rate="{{eurRate}}"
+         data-msg-hint="{{t .Locale "search.hint"}}"
+         data-msg-empty="{{t .Locale "search.empty"}}"
+         data-msg-loading="{{t .Locale "search.loading"}}">
+    </div>
   </div>
 </div>
 
@@ -90,7 +102,7 @@
 <div class="nav__drawer" id="nav-drawer"
      role="dialog" aria-modal="true"
      aria-label="Navigation menu"
-     aria-hidden="true">
+     aria-hidden="true" inert>
 
   <button class="nav__close" id="nav-close" aria-label="Close menu">
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false">
@@ -165,7 +177,7 @@
   <div class="cart__overlay" data-cart-overlay aria-hidden="true"></div>
 
   <aside class="cart__panel" role="dialog" aria-modal="true"
-         aria-label="{{t .Locale "cart.title"}}" aria-hidden="true">
+         aria-label="{{t .Locale "cart.title"}}" aria-hidden="true" inert>
 
     <header class="cart__header">
       <h2 class="cart__title font-semibold">{{t .Locale "cart.title"}}</h2>

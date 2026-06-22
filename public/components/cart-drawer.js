@@ -99,6 +99,7 @@ class CartDrawer extends HTMLElement {
   open() {
     this.classList.add('cart--open');
     this.panel.setAttribute('aria-hidden', 'false');
+    this.panel.inert = false; // restore focusability for screen readers / Tab
     this.overlay.setAttribute('aria-hidden', 'false');
     document.body.classList.add('cart-open');
   }
@@ -106,6 +107,7 @@ class CartDrawer extends HTMLElement {
   close() {
     this.classList.remove('cart--open');
     this.panel.setAttribute('aria-hidden', 'true');
+    this.panel.inert = true; // take descendants out of the tab order while hidden
     this.overlay.setAttribute('aria-hidden', 'true');
     document.body.classList.remove('cart-open');
   }
