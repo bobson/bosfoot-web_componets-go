@@ -62,18 +62,56 @@ func productStructuredData(siteURL, productURL, desc string, p models.Product) m
 		"description": desc,
 		"brand":       map[string]any{"@type": "Brand", "name": p.BrandName},
 		"offers": map[string]any{
-			"@type":         "Offer",
-			"url":           productURL,
-			"priceCurrency": "MKD",
-			"price":         strconv.Itoa(p.PriceMKD),
-			"availability":  availability,
-			"itemCondition": "https://schema.org/NewCondition",
+			"@type":                   "Offer",
+			"url":                     productURL,
+			"priceCurrency":           "MKD",
+			"price":                   strconv.Itoa(p.PriceMKD),
+			"availability":            availability,
+			"itemCondition":           "https://schema.org/NewCondition",
+			"shippingDetails":         shippingDetailsLD(),
+			"hasMerchantReturnPolicy": merchantReturnPolicyLD(),
 		},
 	}
 	if p.ImageURL != nil {
 		product["image"] = absURL(siteURL, *p.ImageURL)
 	}
 	return product
+}
+
+// shippingDetailsLD describes the Macedonia shipping offer for Google Merchant
+// listings. Mirrors the real policy in public/locales/pages/shipping.json:
+// free within MK (every product is well above the 3000 MKD free threshold),
+// 1-3 working days. Only MK is modelled — rates elsewhere are "calculated at
+// delivery" and can't be expressed as a fixed rate. Keep in sync if the policy
+// or threshold changes.
+func shippingDetailsLD() map[string]any {
+	return map[string]any{
+		"@type":        "OfferShippingDetails",
+		"shippingRate": map[string]any{"@type": "MonetaryAmount", "value": "0", "currency": "MKD"},
+		"shippingDestination": map[string]any{
+			"@type":          "DefinedRegion",
+			"addressCountry": "MK",
+		},
+		"deliveryTime": map[string]any{
+			"@type":        "ShippingDeliveryTime",
+			"handlingTime": map[string]any{"@type": "QuantitativeValue", "minValue": 0, "maxValue": 1, "unitCode": "DAY"},
+			"transitTime":  map[string]any{"@type": "QuantitativeValue", "minValue": 1, "maxValue": 3, "unitCode": "DAY"},
+		},
+	}
+}
+
+// merchantReturnPolicyLD describes the return policy for Google Merchant
+// listings. Mirrors public/locales/pages/returns.json: 30-day free returns by
+// mail, Macedonia. Keep in sync if the policy changes.
+func merchantReturnPolicyLD() map[string]any {
+	return map[string]any{
+		"@type":                "MerchantReturnPolicy",
+		"applicableCountry":    "MK",
+		"returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+		"merchantReturnDays":   30,
+		"returnMethod":         "https://schema.org/ReturnByMail",
+		"returnFees":           "https://schema.org/FreeReturn",
+	}
 }
 
 // articleStructuredData returns a schema.org Article for an article detail page.
