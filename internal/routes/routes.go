@@ -38,6 +38,12 @@ func Register(
 	http.HandleFunc("/{locale}/contact", pc.Wrap(pageHandler.Contact))
 	http.HandleFunc("/{locale}/checkout", middleware.WithCSRFCookie(pc.Wrap(pageHandler.Checkout)))
 	http.HandleFunc("/{locale}/foot-health", pc.Wrap(pageHandler.FootHealth))
+	http.HandleFunc("/{locale}/what-are-barefoot-shoes", pc.Wrap(pageHandler.WhatAreBarefootShoes))
+	// Three flat barefoot-trait detail pages, all served by BarefootArticle
+	// (it picks the article from the path segment after the locale).
+	http.HandleFunc("/{locale}/wide-toe-box", pc.Wrap(pageHandler.BarefootArticle))
+	http.HandleFunc("/{locale}/zero-drop", pc.Wrap(pageHandler.BarefootArticle))
+	http.HandleFunc("/{locale}/thin-flexible-sole", pc.Wrap(pageHandler.BarefootArticle))
 	http.HandleFunc("/{locale}/articles", pc.Wrap(pageHandler.ArticlesListing))
 	http.HandleFunc("/{locale}/articles/{slug}", pc.Wrap(pageHandler.ArticleDetail))
 	http.HandleFunc("/{locale}/privacy", pc.Wrap(pageHandler.Privacy))

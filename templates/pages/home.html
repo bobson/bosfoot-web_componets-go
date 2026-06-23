@@ -120,7 +120,38 @@
       </section>
       {{end}}
 
-      {{/* ── Why barefoot ─────────────────────────────────── */}}
+      {{/* ── New to barefoot? — full-bleed banner ─────────── */}}
+      <section class="bf-banner">
+        <picture class="bf-banner__media">
+          {{/* Larger crop on desktop, lighter file on mobile. */}}
+          <source
+            media="(min-width: 768px)"
+            srcset="{{asset "/images/NewToBarefoot-desc.webp"}}"
+          >
+          <img
+            class="bf-banner__img"
+            src="{{asset "/images/NewToBarefoot.webp"}}"
+            alt=""
+            width="1400"
+            height="577"
+            loading="lazy"
+            decoding="async"
+          >
+        </picture>
+        <div class="bf-banner__overlay">
+          <div class="bf-banner__inner" data-reveal>
+            <h2 class="bf-banner__title">{{t .Locale "home.newToBarefoot.title"}}</h2>
+            <a class="btn bf-banner__cta" href="/{{.Locale}}/what-are-barefoot-shoes">
+              {{t .Locale "wab.hero.title"}}
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {{/* ── Why barefoot ── disabled: now covered by the banner
+           above + the /what-are-barefoot-shoes page. Kept here
+           (not deleted) in case we want it back. ──────────── */}}
+      {{if false}}
       <section class="why-barefoot section">
         <div class="container">
           <header class="why-barefoot__header" data-reveal>
@@ -157,6 +188,9 @@
               <p class="why-barefoot__card-body text-muted">
                 {{t .Locale "home.whyBarefoot.1.body"}}
               </p>
+              <a class="why-barefoot__card-link text-accent font-semibold" href="/{{.Locale}}/wide-toe-box">
+                {{t .Locale "wab.readMore"}} →
+              </a>
             </article>
 
             <article class="why-barefoot__card" data-reveal>
@@ -189,6 +223,9 @@
               <p class="why-barefoot__card-body text-muted">
                 {{t .Locale "home.whyBarefoot.2.body"}}
               </p>
+              <a class="why-barefoot__card-link text-accent font-semibold" href="/{{.Locale}}/zero-drop">
+                {{t .Locale "wab.readMore"}} →
+              </a>
             </article>
 
             <article class="why-barefoot__card" data-reveal>
@@ -220,16 +257,23 @@
               <p class="why-barefoot__card-body text-muted">
                 {{t .Locale "home.whyBarefoot.3.body"}}
               </p>
+              <a class="why-barefoot__card-link text-accent font-semibold" href="/{{.Locale}}/thin-flexible-sole">
+                {{t .Locale "wab.readMore"}} →
+              </a>
             </article>
           </div>
 
-          <div class="text-center" style="margin-top: var(--space-12)" data-reveal>
+          <div class="why-barefoot__links" style="margin-top: var(--space-12)" data-reveal>
+            <a href="/{{.Locale}}/what-are-barefoot-shoes" class="text-accent font-semibold">
+              {{t .Locale "wab.hero.title"}} →
+            </a>
             <a href="/{{.Locale}}/foot-health" class="text-accent font-semibold" aria-label="{{t .Locale "home.whyBarefoot.learnMore"}}">
               {{t .Locale "home.whyBarefoot.learnMore"}} →
             </a>
           </div>
         </div>
       </section>
+      {{end}}
 
       {{/* ── Why us ───────────────────────────────────────── */}}
       <section class="why-us section">

@@ -1,0 +1,59 @@
+{{define "barefoot-article"}}
+<!doctype html>
+<html lang="{{.Locale}}">
+  <head>
+    {{template "head" .}}
+    <link rel="stylesheet" href="{{asset "/css/barefoot.css"}}">
+    <title>{{t .Locale (printf "%s.metaTitle" .Article.KeyPrefix)}} — Bosfoot</title>
+  </head>
+  <body>
+    {{template "nav" .}}
+
+    <main class="wab wab-article">
+      {{$prefix := .Article.KeyPrefix}}
+
+      {{/* ── Header ────────────────────────────────────────── */}}
+      <header class="section section--hero wab-article__hero">
+        <div class="container wab-article__hero-inner" data-reveal>
+          <a class="wab-article__back text-accent" href="/{{.Locale}}/what-are-barefoot-shoes">
+            ← {{t .Locale "wab.backToOverview"}}
+          </a>
+          <h1 class="wab-article__title">{{t .Locale (printf "%s.title" $prefix)}}</h1>
+          <p class="wab-article__lead text-muted">{{t .Locale (printf "%s.lead" $prefix)}}</p>
+        </div>
+      </header>
+
+      {{/* ── Alternating image/text blocks ─────────────────── */}}
+      <div class="section container wab-blocks">
+        {{range .Article.Blocks}}
+        <article class="wab-row wab-row--{{.Side}}" data-reveal>
+          <figure class="wab-row__media">
+            <img
+              src="{{asset .Image}}"
+              alt="{{t $.Locale .AltKey}}"
+              width="{{.Width}}" height="{{.Height}}"
+              loading="lazy" decoding="async"
+            >
+            {{if .Caption}}<figcaption class="wab-row__caption">{{.Caption}}</figcaption>{{end}}
+          </figure>
+          <div class="wab-row__copy wab-prose">
+            {{nl2p (t $.Locale .BodyKey)}}
+          </div>
+        </article>
+        {{end}}
+      </div>
+
+      {{/* ── CTA ───────────────────────────────────────────── */}}
+      <section class="section section--sage wab-cta">
+        <div class="container wab-cta__inner" data-reveal>
+          <h2 class="wab-cta__title">{{t .Locale "wab.cta.title"}}</h2>
+          <p class="text-muted">{{t .Locale "wab.cta.body"}}</p>
+          <a class="btn btn--brand" href="/{{.Locale}}/products">{{t .Locale "cta.shopNow"}} →</a>
+        </div>
+      </section>
+    </main>
+
+    {{template "footer" .}}
+  </body>
+</html>
+{{end}}

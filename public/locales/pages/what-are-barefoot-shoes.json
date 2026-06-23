@@ -1,0 +1,236 @@
+{
+  "wab.metaTitle": {
+    "mk": "Што се боси чевли?",
+    "sq": "Çfarë janë këpucët barefoot?",
+    "en": "What are barefoot shoes?"
+  },
+  "wab.metaDescription": {
+    "mk": "Боси чевли: широк простор за прстите, рамен ѓон (zero drop) и тенок, флексибилен ѓон. Дознајте што ги прави поинакви и зошто им годат на стапалата.",
+    "sq": "Këpucë barefoot: hapësirë e gjerë për gishtat, shollë e sheshtë (zero drop) dhe shollë e hollë e fleksibël. Mësoni çfarë i bën të ndryshme dhe pse i bëjnë mirë këmbës.",
+    "en": "Barefoot shoes: a wide toe box, a zero-drop sole and a thin, flexible sole. Learn what makes them different and why they're good for your feet."
+  },
+
+  "wab.hero.eyebrow": {
+    "mk": "Основи на босите чевли",
+    "sq": "Bazat barefoot",
+    "en": "Barefoot basics"
+  },
+  "wab.hero.title": {
+    "mk": "Што се боси чевли?",
+    "sq": "Çfarë janë këpucët barefoot?",
+    "en": "What are barefoot shoes?"
+  },
+  "wab.hero.lead": {
+    "mk": "Босите чевли му дозволуваат на стапалото да се движи како да сте боси, а сепак го штитат од остри предмети, топлина и студ. Ја следат природната форма на стапалото, а тенкиот, флексибилен ѓон му дозволува природно да се одвива.",
+    "sq": "Këpucët barefoot e lejojnë këmbën të lëvizë sikur të ishit zbathur, duke e mbrojtur njëkohësisht nga objektet e mprehta, nxehtësia dhe të ftohtit. Ndjekin formën natyrale të këmbës, dhe sholla e hollë e fleksibël e lejon atë të mbështillet natyrshëm.",
+    "en": "Barefoot shoes let your feet move as if you were barefoot, while still protecting them from sharp objects, heat and cold. They follow the natural shape of your foot, and their thin, flexible sole lets it roll the way it was built to."
+  },
+  "wab.intro.title": {
+    "mk": "Трите особини на босата чевла",
+    "sq": "Tri tiparet e një këpuce barefoot",
+    "en": "The three traits of a barefoot shoe"
+  },
+  "wab.readMore": {
+    "mk": "Прочитај повеќе",
+    "sq": "Lexo më shumë",
+    "en": "Read more"
+  },
+  "wab.backToOverview": {
+    "mk": "Назад кон основите на босите чевли",
+    "sq": "Kthehu te bazat barefoot",
+    "en": "Back to barefoot basics"
+  },
+  "wab.cta.title": {
+    "mk": "Подготвени да ја почувствувате разликата?",
+    "sq": "Gati të ndieni ndryshimin?",
+    "en": "Ready to feel the difference?"
+  },
+  "wab.cta.body": {
+    "mk": "Разгледајте боси чевли направени според природната форма на вашето стапало.",
+    "sq": "Shfletoni këpucë barefoot të bëra sipas formës natyrale të këmbës suaj.",
+    "en": "Browse barefoot shoes built around the natural shape of your foot."
+  },
+
+  "wab.toe.title": {
+    "mk": "Широк простор за прстите",
+    "sq": "Hapësirë e gjerë për gishtat",
+    "en": "Wide toe box"
+  },
+  "wab.toe.blurb": {
+    "mk": "Здравото стапало е најшироко кај прстите. Босата чевла се шири кон напред за прстите да можат да се рашират со секој чекор — наместо да бидат стиснати заедно.",
+    "sq": "Këmba e shëndetshme është më e gjerë te gishtat. Këpuca barefoot zgjerohet nga përpara që gishtat të mund të hapen me çdo hap — në vend që të shtrëngohen bashkë.",
+    "en": "Healthy feet are widest at the toes. A barefoot shoe widens toward the front so your toes can spread with every step — instead of being squeezed together."
+  },
+  "wab.toe.teaserAlt": {
+    "mk": "Боса чевла со широк простор за прстите",
+    "sq": "Këpucë barefoot me hapësirë të gjerë për gishtat",
+    "en": "A barefoot shoe with a wide toe box"
+  },
+  "wab.toe.metaTitle": {
+    "mk": "Широк простор за прстите",
+    "sq": "Hapësira e gjerë për gishtat",
+    "en": "The wide toe box"
+  },
+  "wab.toe.metaDescription": {
+    "mk": "Зошто босите чевли се шират напред за прстите да имаат простор — и како тесните чевли го деформираат стапалото.",
+    "sq": "Pse këpucët barefoot zgjerohen përpara për t'u dhënë gishtave hapësirë — dhe si këpucët e ngushta e deformojnë këmbën.",
+    "en": "Why barefoot shoes widen at the front to give your toes room — and how narrow shoes deform the foot."
+  },
+  "wab.toe.lead": {
+    "mk": "За разлика од обичните чевли, босите чевли имаат широк простор за прстите, па прстите никогаш не се стиснати заедно.",
+    "sq": "Ndryshe nga këpucët konvencionale, këpucët barefoot kanë hapësirë të gjerë për gishtat, kështu që gishtat nuk shtrëngohen kurrë bashkë.",
+    "en": "Unlike conventional shoes, barefoot shoes have a wide toe box, so your toes are never squeezed together."
+  },
+  "wab.toe.b1.alt": {
+    "mk": "Природната V-форма на бебешки стапала, најширока кај прстите",
+    "sq": "Forma natyrale në V e këmbëve të një foshnje, më e gjerë te gishtat",
+    "en": "The natural V-shape of a baby's feet, widest at the toes"
+  },
+  "wab.toe.b1.body": {
+    "mk": "Околу 98% од сите деца се раѓаат со здрави стапала. Погледнете го стапалото на новороденче и јасно ќе ја видите природната V-форма: најшироката точка е преку прстите, а палецот оди право во продолжение на првата метатарзална коска.",
+    "sq": "Rreth 98% e të gjithë fëmijëve lindin me këmbë të shëndetshme. Shikoni këmbën e një të porsalinduri dhe e shihni qartë formën natyrale në V: pika më e gjerë është përgjatë gishtave, dhe gishti i madh vazhdon drejt nga kocka e parë metatarsale.",
+    "en": "About 98% of all children are born with healthy feet. Look at a newborn's foot and you can see the natural V-shape clearly: the widest point is across the toes, and the big toe runs straight on from the first metatarsal bone."
+  },
+  "wab.toe.b2.alt": {
+    "mk": "Природно обликувано стапало до стапало стеснето од обични чевли",
+    "sq": "Një këmbë me formë natyrale pranë një këmbe të ngushtuar nga këpucët konvencionale",
+    "en": "A naturally shaped foot beside a foot narrowed by conventional shoes"
+  },
+  "wab.toe.b2.body": {
+    "mk": "Кај возрасните, стапалата често стануваат потесни кон прстите. Палецот се свиткува во зглобот и се навалува нанадвор, кон другите четири прсти. Оваа форма е толку честа што се смета за нормална — но тоа не е природната форма на стапалото; всушност е деформитет (hallux valgus). Главната причина е носењето обични чевли што се стеснуваат кон напред. Не се среќава кај народите што го минуваат најголемиот дел од животот боси.",
+    "sq": "Te të rriturit, këmbët shpesh ngushtohen drejt gishtave. Gishti i madh përkulet te kyçi dhe anon nga jashtë, drejt katër gishtave të tjerë. Kjo formë është aq e zakonshme sa trajtohet si normale — por nuk është forma natyrale e këmbës; në fakt është një deformim (hallux valgus). Shkaku kryesor është mbajtja e këpucëve konvencionale që ngushtohen përpara. Nuk e sheh te popujt që e kalojnë pjesën më të madhe të jetës zbathur.",
+    "en": "In adults, feet often grow narrower toward the toes. The big toe bends at its joint and tips outward, toward the other four toes. This shape is so common that it's treated as normal — but it isn't the foot's natural shape; it's actually a deformity (hallux valgus). The main cause is wearing conventional shoes that taper toward the front. You don't see it in peoples who spend most of their lives barefoot."
+  },
+  "wab.toe.b3.alt": {
+    "mk": "Боса чевла со широк простор за прстите во форма на стапало",
+    "sq": "Një këpucë barefoot me hapësirë të gjerë për gishtat në formën e këmbës",
+    "en": "A barefoot shoe with a wide, foot-shaped toe box"
+  },
+  "wab.toe.b3.body": {
+    "mk": "Босата чевла е обликувана обратно: пошироко е кај прстите и, во зависност од моделот, едвај се стеснува — или воопшто не се стеснува. Палецот никогаш не се турка навнатре, па дури и во чевла стапалото може да остане во својата природна положба.",
+    "sq": "Një këpucë barefoot është e formuar në mënyrë të kundërt: është më e gjerë te gishtat dhe, varësisht nga modeli, mezi ngushtohet — ose nuk ngushtohet fare. Gishti i madh nuk shtyhet kurrë nga brenda, kështu që edhe brenda një këpuce këmba mund të qëndrojë në pozicionin e saj natyral.",
+    "en": "A barefoot shoe is shaped the other way around: it's wider at the toes and, depending on the model, barely tapers — or doesn't taper at all. The big toe is never pushed inward, so even inside a shoe your foot can stay in its natural position."
+  },
+
+  "wab.drop.title": {
+    "mk": "Рамен ѓон — zero drop",
+    "sq": "Pa thembër — zero drop",
+    "en": "Zero drop"
+  },
+  "wab.drop.blurb": {
+    "mk": "Петицата е на иста висина со предниот дел на стапалото. И најмала подигната петица ги навалува глуждовите, колената, колковите и кичмата; рамниот ѓон го држи целото тело во неговата природна линија.",
+    "sq": "Thembra qëndron në të njëjtën lartësi me pjesën e përparme të këmbës. Edhe një thembër pak e ngritur i prish kyçet, gjunjët, ijet dhe shtyllën kurrizore; një shollë e sheshtë e mban gjithë trupin në vijën e tij natyrale.",
+    "en": "The heel sits at exactly the same height as the forefoot. Even a small raised heel tilts your ankles, knees, hips and spine; a flat sole keeps your whole body in its natural line."
+  },
+  "wab.drop.teaserAlt": {
+    "mk": "Држење на тело со рамен ѓон споредено со подигната петица",
+    "sq": "Qëndrimi i trupit me shollë të sheshtë krahasuar me thembër të ngritur",
+    "en": "Posture over a flat barefoot sole compared with a raised heel"
+  },
+  "wab.drop.metaTitle": {
+    "mk": "Што е zero drop",
+    "sq": "Çfarë është zero drop",
+    "en": "Zero drop explained"
+  },
+  "wab.drop.metaDescription": {
+    "mk": "Зошто рамниот ѓон без разлика во висина ги држи зглобовите и кичмата во природна положба.",
+    "sq": "Pse një shollë e sheshtë, zero drop, i mban kyçet dhe shtyllën kurrizore në pozicionin e tyre natyral.",
+    "en": "Why a flat, zero-drop sole keeps your joints and spine in their natural position."
+  },
+  "wab.drop.lead": {
+    "mk": "Босата чевла има zero drop: петицата е на иста висина со предниот дел на стапалото, без подигната петица.",
+    "sq": "Një këpucë barefoot ka zero drop: thembra qëndron në të njëjtën lartësi me pjesën e përparme të këmbës, pa thembër të ngritur.",
+    "en": "A barefoot shoe has zero drop: the heel sits at the same height as the forefoot, with no raised heel."
+  },
+  "wab.drop.b1.alt": {
+    "mk": "Боса чевла со целосно рамен ѓон",
+    "sq": "Një këpucë barefoot me shollë krejtësisht të sheshtë",
+    "en": "A barefoot shoe with a completely flat, level sole"
+  },
+  "wab.drop.b1.body": {
+    "mk": "Кога стоите боси на рамна површина, предниот дел на стапалото и петицата се на исто ниво, а телото природно се порамнува — стапала, колена, колкови, рамења и глава во една права линија.\n\nСтавете клин под петиците и тоа се менува: телото мора да го компензира навалувањето преку зглобовите, мускулите и тетивите за да не паднете напред. Бидејќи телото го забележува и најмалото поместување, ова се случува не само со високи потпетици, туку со секоја подигната петица.",
+    "sq": "Kur qëndroni zbathur në një sipërfaqe të sheshtë, pjesa e përparme e këmbës dhe thembra janë në të njëjtin nivel, dhe trupi rreshtohet natyrshëm — këmbët, gjunjët, ijet, supet dhe koka në një vijë të drejtë.\n\nVendosni një pykë nën thembra dhe kjo ndryshon: trupi duhet ta kompensojë pjerrësinë përmes kyçeve, muskujve dhe tendinave që të mos bini përpara. Meqë trupi e vëren edhe zhvendosjen më të vogël, kjo ndodh jo vetëm me taka të larta, por me çdo thembër të ngritur.",
+    "en": "When you stand barefoot on a flat surface, your forefoot and heel are level, and your body lines up naturally — feet, knees, hips, shoulders and head in one straight column.\n\nSlip a wedge under your heels and that changes: your body has to compensate for the tilt through its joints, muscles and tendons so you don't fall forward. Because your body notices even the smallest shift, this happens not only with tall high heels but with any raised heel at all."
+  },
+  "wab.drop.b2.alt": {
+    "mk": "Обична чевла со подигната петица",
+    "sq": "Një këpucë konvencionale me thembër të ngritur",
+    "en": "A conventional shoe with a raised heel"
+  },
+  "wab.drop.b2.body": {
+    "mk": "Повеќето обични чевли имаат подигната петица. Без разлика дали се елегантни машки чевли, планинарски, спортски модели или секојдневни патики, петицата речиси секогаш е повисока од предниот дел на стапалото. Особено е тешко да се најдат рамни женски чевли — дури и влечките често имаат забележлива петица.",
+    "sq": "Shumica e këpucëve konvencionale kanë thembër të ngritur. Qofshin këpucë elegante burrash, çizme malesh, modele sportive apo atlete të përditshme, thembra gati gjithmonë qëndron më lart se pjesa e përparme. Këpucët e sheshta për gra janë veçanërisht të vështira për t'u gjetur — edhe pantoflat shpesh kanë thembër të dukshme.",
+    "en": "Most conventional shoes have a raised heel. Whether they're smart men's shoes, hiking boots, running models or everyday sneakers, the heel almost always sits higher than the forefoot. Flat women's shoes are especially hard to find — even slippers often have a noticeable heel."
+  },
+  "wab.drop.b3.alt": {
+    "mk": "Рамна боса чевла со петица на исто ниво со предниот дел на стапалото",
+    "sq": "Një këpucë barefoot e sheshtë me thembrën në nivel me pjesën e përparme të këmbës",
+    "en": "A flat barefoot shoe with the heel level to the forefoot"
+  },
+  "wab.drop.b3.body": {
+    "mk": "Босата чевла нема такво подигнување. Петицата останува на исто ниво со остатокот од стапалото, па зглобовите можат да се одморат во својата вистинска неутрална положба. Тоа им користи на самите зглобови, но и на мускулите и тетивите — а со време може да ги ублажи болките во грбот, болките во зглобовите и скратувањето на мускулите и тетивите.",
+    "sq": "Një këpucë barefoot nuk e ka këtë ngritje. Thembra qëndron saktësisht në nivel me pjesën tjetër të këmbës, kështu që kyçet mund të prehen në pozicionin e tyre të vërtetë neutral. Kjo u bën mirë vetë kyçeve, por edhe muskujve dhe tendinave — dhe me kohë mund të lehtësojë dhimbjet e shpinës, të kyçeve dhe shkurtimin e muskujve dhe tendinave.",
+    "en": "A barefoot shoe has none of that lift. The heel stays exactly level with the rest of the foot, so your joints can rest in their true neutral position. That benefits the joints themselves, but also the muscles and tendons — and over time it can ease back pain, joint pain and the shortening of muscles and tendons."
+  },
+
+  "wab.sole.title": {
+    "mk": "Тенок, флексибилен ѓон",
+    "sq": "Shollë e hollë, fleksibël",
+    "en": "Thin, flexible sole"
+  },
+  "wab.sole.blurb": {
+    "mk": "Тенок, свитлив ѓон му дозволува на стапалото природно да се одвива и да го чувствува тлото. Мускулите во стапалото мора да работат — па стануваат посилни, како што би биле боси.",
+    "sq": "Një shollë e hollë dhe e përkulshme e lejon këmbën të mbështillet natyrshëm dhe të ndiejë tokën. Muskujt e këmbës duhet të punojnë — kështu forcohen, ashtu siç do të ishin zbathur.",
+    "en": "A thin, bendable sole lets the foot roll naturally and feel the ground. The muscles in the foot have to work — so they get stronger, the way they would barefoot."
+  },
+  "wab.sole.teaserAlt": {
+    "mk": "Рамен бос ѓон споредено со подигната петица",
+    "sq": "Një shollë barefoot e sheshtë krahasuar me një thembër të ngritur",
+    "en": "A flat barefoot sole compared with an elevated heel"
+  },
+  "wab.sole.metaTitle": {
+    "mk": "Тенок, флексибилен ѓон",
+    "sq": "Shollë e hollë, fleksibël",
+    "en": "The thin, flexible sole"
+  },
+  "wab.sole.metaDescription": {
+    "mk": "Како тенкиот, флексибилен ѓон му дозволува на стапалото да се одвива, да го чувствува тлото и да зајакнува — кај возрасни и кај деца.",
+    "sq": "Si një shollë e hollë dhe fleksibël e lejon këmbën të mbështillet, të ndiejë tokën dhe të forcohet — për të rritur dhe fëmijë njësoj.",
+    "en": "How a thin, flexible sole lets the foot roll, feel the ground and grow stronger — for adults and children alike."
+  },
+  "wab.sole.lead": {
+    "mk": "Босите чевли имаат тенок, флексибилен ѓон што му дозволува на стапалото природно да се одвива.",
+    "sq": "Këpucët barefoot kanë shollë të hollë dhe fleksibël që e lejon këmbën të mbështillet natyrshëm.",
+    "en": "Barefoot shoes have a thin, flexible sole that lets the foot roll off naturally."
+  },
+  "wab.sole.b1.alt": {
+    "mk": "Рака која свиткува тенка боса чевла за да покаже колку е флексибилен ѓонот",
+    "sq": "Një dorë që përkul një këpucë barefoot të hollë për të treguar sa fleksibël është shollla",
+    "en": "A hand bending a thin barefoot shoe to show how flexible the sole is"
+  },
+  "wab.sole.b1.body": {
+    "mk": "Секое стапало има 33 зглобови, 20 мускули и 114 лигаменти — Леонардо да Винчи го нарекол ремек-дело на инженерството. Па зошто да заклучите дел од телото толку подвижен и толку важен за движењето во крута, тесна, дебело наполнета обувка?",
+    "sq": "Çdo këmbë ka 33 kyçe, 20 muskuj dhe 114 ligamente — Leonardo da Vinçi e quajti një kryevepër inxhinierie. Atëherë pse ta mbyllësh një pjesë trupi kaq të lëvizshme dhe kaq qendrore për lëvizjen tonë brenda një këpuce të ngurtë, të ngushtë e të mbushur trashë?",
+    "en": "Each foot has 33 joints, 20 muscles and 114 ligaments — Leonardo da Vinci called it a masterpiece of engineering. So why lock a body part this mobile, this central to how we move, inside stiff, tight, heavily padded footwear?"
+  },
+  "wab.sole.b2.alt": {
+    "mk": "Тенок, флексибилен ѓон на боса чевла",
+    "sq": "Shollë e hollë dhe fleksibël e një këpuce barefoot",
+    "en": "The thin, flexible sole of a barefoot shoe"
+  },
+  "wab.sole.b2.body": {
+    "mk": "Ѓонот на босата чевла е многу тенок, без изградено лежиште за стапало и без крута поддршка за сводот. Тоа му дозволува на стапалото да ја задржи природната форма наместо да биде втиснато во однапред зададен калап, и да ја врши работата за која е создадено со секој чекор — што ги зајакнува мускулите и тетивите во стапалото и нагоре по ногата.\n\nТенкиот ѓон исто така ви овозможува да го чувствувате тлото. Секој чекор нежно го масира стапалото, ја подобрува циркулацијата и помага против студени стапала.",
+    "sq": "Shollla e një këpuce barefoot është shumë e hollë, pa shtresë të ngritur dhe pa mbështetje të ngurtë për harkun. Kjo e lejon këmbën të ruajë formën e saj natyrale në vend që të detyrohet në një kallëp të paracaktuar, dhe të bëjë punën për të cilën është krijuar me çdo hap — gjë që forcon muskujt dhe tendinat e këmbës dhe lart përgjatë gjymtyrës.\n\nShollla e hollë gjithashtu ju lejon të ndieni tokën. Çdo hap masazhon butësisht shputën, përmirëson qarkullimin dhe ndihmon kundër këmbëve të ftohta.",
+    "en": "The sole of a barefoot shoe is very thin, with no built-up footbed and no rigid arch support. That lets your foot keep its natural shape instead of being forced into a preset mould, and do the work it was designed for with every step — which strengthens the muscles and tendons in the foot and right up the leg.\n\nThe thin sole also lets you feel the ground. Each step gently massages the sole of the foot, improving circulation and helping with cold feet."
+  },
+  "wab.sole.b3.alt": {
+    "mk": "Дете кое оди во флексибилни боси чевли",
+    "sq": "Një fëmijë që ecën me këpucë barefoot fleksibël",
+    "en": "A child walking in flexible barefoot shoes"
+  },
+  "wab.sole.b3.body": {
+    "mk": "Флексибилноста е најважна кај децата. Нивните стапала сè уште растат и постојано се менуваат, особено штом почнат да одат. Крутите чевли со дебели, наполнети ѓонови не му даваат на детското стапало простор да се движи; меките, флексибилни чевли со тенки ѓонови се многу подобри — исто така и за секого што сè уште го развива чувството за рамнотежа.",
+    "sq": "Fleksibiliteti ka rëndësi mbi të gjitha për fëmijët. Këmbët e tyre ende po rriten dhe ndryshojnë vazhdimisht, sidomos kur fillojnë të ecin. Këpucët e ngurta me shollë të trashë e të mbushur nuk i japin këmbës së fëmijës hapësirë për të lëvizur; këpucët e buta, fleksibël me shollë të hollë janë shumë më të mira — edhe për këdo që ende po zhvillon ndjenjën e ekuilibrit.",
+    "en": "Flexibility matters most of all for children. Their feet are still growing and changing constantly, especially once they start to walk. Stiff shoes with thick, padded soles give a child's foot no room to move; soft, flexible shoes with thin soles are far better — also for anyone still developing their sense of balance."
+  }
+}

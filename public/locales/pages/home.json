@@ -9,6 +9,11 @@
   "home.brands": { "mk": "Нашите брендови", "sq": "Brendet tona", "en": "Our brands" },
   "home.featured": { "mk": "Издвоени производи", "sq": "Produkte të zgjedhura", "en": "Featured products" },
   "home.featured.title": { "mk": "Селектирани за тебе", "sq": "Selektuar për ty", "en": "Selected for you" },
+  "home.newToBarefoot.title": {
+    "mk": "Чевли што се прилагодуваат на стапалото. Не обратно.",
+    "sq": "Këpucë që përshtaten me këmbën. Jo e kundërta.",
+    "en": "Shoes that adapt to the foot. Not the other way around."
+  },
   "home.hero.lead": { "mk": "Резервирај го твојот омилен пар бесплатно — те контактираме штом пристигне првата пратка.", "sq": "Rezervo falas palën tënde të preferuar — të kontaktojmë sapo të mbërrijë pakoja e parë.", "en": "Reserve your favorite pair for free — we'll contact you as soon as the first batch arrives." },
   "home.hero.line1": { "mk": "Наскоро: премиум боси чевли во Македонија", "sq": "Së shpejti: këpucë barefoot premium në Maqedoni", "en": "Coming soon: premium barefoot shoes in North Macedonia" },
   "home.hero.line2": { "mk": "од британскиот бренд Freet", "sq": "nga marka britanike Freet", "en": "from the British brand Freet" },

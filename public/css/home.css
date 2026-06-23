@@ -219,6 +219,79 @@
   line-height: var(--lh-normal);
 }
 
+.why-barefoot__card-link {
+  display: inline-block;
+  font-size: var(--fs-sm);
+  margin-top: var(--space-4);
+}
+
+.why-barefoot__links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-4) var(--space-8);
+}
+
+/* ── "New to barefoot" full-bleed banner ─────────────── */
+
+.bf-banner {
+  position: relative;
+  display: grid;
+  width: 100%;
+  /* Shorter on mobile, taller on desktop. */
+  min-height: clamp(240px, 38vw, 520px);
+  isolation: isolate;
+}
+
+.bf-banner__media {
+  display: contents;
+}
+
+.bf-banner__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
+}
+
+.bf-banner__overlay {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: var(--space-12) var(--content-pad);
+  /* Scrim keeps the white title legible over the photo. */
+  background: rgb(0 0 0 / 0.4);
+}
+
+.bf-banner__inner {
+  max-width: var(--prose-max);
+  text-align: center;
+}
+
+.bf-banner__title {
+  color: var(--color-white);
+  font-size: var(--fs-2xl);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-snug);
+  text-transform: uppercase;
+  margin-bottom: var(--space-8);
+}
+
+.bf-banner__cta {
+  background: var(--color-white);
+  color: var(--color-accent);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: var(--fw-semibold);
+}
+
+.bf-banner__cta:hover {
+  background: var(--color-bg);
+}
+
 /* ── Why us ──────────────────────────────────────────── */
 
 .why-us {

@@ -1,0 +1,143 @@
+/* ─────────────────────────────────────────────────────────────
+   What are barefoot shoes — overview + trait detail pages.
+   Alternating image/text rows (img·text, text·img) that stack on
+   mobile and sit side-by-side from tablet up.
+   ───────────────────────────────────────────────────────────── */
+
+/* ── Hero ─────────────────────────────────────────────────── */
+.wab-hero__inner {
+  max-width: var(--prose-max);
+  margin-inline: auto;
+  text-align: center;
+}
+
+.wab-hero__title {
+  font-size: var(--fs-3xl);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-tight);
+  margin: var(--space-3) 0 var(--space-5);
+}
+
+.wab-hero__lead {
+  font-size: var(--fs-md);
+  line-height: var(--lh-normal);
+}
+
+/* ── Rows section ─────────────────────────────────────────── */
+.wab-rows__title {
+  text-align: center;
+  font-size: var(--fs-2xl);
+  font-weight: var(--fw-bold);
+  margin-bottom: var(--space-12);
+}
+
+/* ── Alternating image/text row ───────────────────────────── */
+.wab-row {
+  display: grid;
+  gap: var(--space-6);
+  align-items: center;
+}
+
+.wab-row + .wab-row {
+  margin-top: var(--space-16);
+}
+
+.wab-row__media {
+  display: block;
+  margin: 0;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--color-img-bg);
+}
+
+.wab-row__media img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.wab-row__caption {
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+  padding: var(--space-2) var(--space-1) 0;
+}
+
+.wab-row__heading {
+  font-size: var(--fs-xl);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-snug);
+  margin-bottom: var(--space-4);
+}
+
+.wab-row__more {
+  display: inline-block;
+  margin-top: var(--space-5);
+}
+
+/* ── Prose (detail-page body, rendered via nl2p) ──────────── */
+.wab-prose p {
+  color: var(--color-text-muted);
+  line-height: var(--lh-normal);
+  margin-bottom: var(--space-4);
+}
+
+.wab-prose p:last-child {
+  margin-bottom: 0;
+}
+
+/* ── Detail header ────────────────────────────────────────── */
+.wab-article__hero-inner {
+  max-width: var(--prose-max);
+  margin-inline: auto;
+  text-align: center;
+}
+
+.wab-article__back {
+  display: inline-block;
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  margin-bottom: var(--space-5);
+}
+
+.wab-article__title {
+  font-size: var(--fs-3xl);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-tight);
+  margin-bottom: var(--space-4);
+}
+
+.wab-article__lead {
+  font-size: var(--fs-md);
+  line-height: var(--lh-normal);
+}
+
+/* ── CTA ──────────────────────────────────────────────────── */
+.wab-cta__inner {
+  max-width: var(--prose-max);
+  margin-inline: auto;
+  text-align: center;
+}
+
+.wab-cta__title {
+  font-size: var(--fs-2xl);
+  font-weight: var(--fw-bold);
+  margin-bottom: var(--space-4);
+}
+
+.wab-cta .btn--brand {
+  margin-top: var(--space-6);
+}
+
+/* ── Tablet / desktop: side-by-side, alternating ──────────── */
+@media (min-width: 768px) {
+  .wab-row {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-12);
+  }
+
+  /* Default DOM order is media-then-copy → image on the left. For a
+     "right" row, push the media to the second column. */
+  .wab-row--right .wab-row__media {
+    order: 2;
+  }
+}
