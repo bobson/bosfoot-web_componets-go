@@ -8,7 +8,8 @@ import (
 // validOrder returns an order that passes Validate(); each test case mutates a
 // single field so exactly one rule trips, and asserts which one.
 //
-// Reservation mode: name + phone are required; email/address/city are optional.
+// Real checkout: first+last name, phone and address+city are required; email is
+// optional (validated only when supplied).
 func validOrder() Order {
 	phone := "070123456"
 	return Order{
@@ -33,11 +34,13 @@ func TestOrderValidate(t *testing.T) {
 		{"valid cod", func(o *Order) {}, ""},
 		{"valid bank_transfer", func(o *Order) { o.PaymentMethod = "bank_transfer" }, ""},
 		{"empty email is allowed", func(o *Order) { o.Email = "" }, ""},
-		{"empty address/city allowed", func(o *Order) { o.Address = ""; o.City = ""; o.LastName = "" }, ""},
 		{"malformed email", func(o *Order) { o.Email = "not-an-email" }, "email"},
-		{"missing name", func(o *Order) { o.FirstName = "" }, "name"},
+		{"missing first name", func(o *Order) { o.FirstName = "" }, "first name"},
+		{"missing last name", func(o *Order) { o.LastName = "" }, "last name"},
 		{"missing phone", func(o *Order) { o.Phone = nil }, "phone"},
 		{"blank phone", func(o *Order) { blank := "  "; o.Phone = &blank }, "phone"},
+		{"missing address", func(o *Order) { o.Address = "" }, "address"},
+		{"missing city", func(o *Order) { o.City = "" }, "city"},
 		{"invalid payment method", func(o *Order) { o.PaymentMethod = "paypal" }, "payment method"},
 		{"empty payment method", func(o *Order) { o.PaymentMethod = "" }, "payment method"},
 		{"no items", func(o *Order) { o.Items = nil }, "item"},

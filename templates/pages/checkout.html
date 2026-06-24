@@ -37,17 +37,9 @@
         <form class="checkout__form" data-checkout-form novalidate>
           <h1 class="checkout__title font-bold">{{t .Locale "cart.checkout"}}</h1>
 
-          {{/* Reservation contact — name + phone (required), email optional.
-               Pre-launch we only need to reach the customer; no shipping address
-               or payment is collected. Restore the full Contact/Shipping/Payment
-               sections (git history) when switching back to real selling. */}}
+          {{/* Contact — phone required (COD courier needs it), email optional. */}}
           <section class="checkout__section">
-            <p class="checkout__paynote text-sm text-muted">{{t .Locale "reservation.freeNote"}}</p>
-            <div class="field">
-              <label class="field__label" for="co-name">{{t .Locale "checkout.name"}}</label>
-              <input class="field__input" id="co-name" name="name"
-                     autocomplete="name" required>
-            </div>
+            <h2 class="checkout__legend font-semibold">{{t .Locale "checkout.contact"}}</h2>
             <div class="field">
               <label class="field__label" for="co-phone">{{t .Locale "checkout.phone"}}</label>
               <input class="field__input" id="co-phone" name="phone" type="tel"
@@ -60,6 +52,64 @@
             </div>
           </section>
 
+          {{/* Shipping */}}
+          <section class="checkout__section">
+            <h2 class="checkout__legend font-semibold">{{t .Locale "checkout.shipping"}}</h2>
+            <div class="field-row">
+              <div class="field">
+                <label class="field__label" for="co-first">{{t .Locale "checkout.firstName"}}</label>
+                <input class="field__input" id="co-first" name="first_name"
+                       autocomplete="given-name" required>
+              </div>
+              <div class="field">
+                <label class="field__label" for="co-last">{{t .Locale "checkout.lastName"}}</label>
+                <input class="field__input" id="co-last" name="last_name"
+                       autocomplete="family-name" required>
+              </div>
+            </div>
+            <div class="field">
+              <label class="field__label" for="co-address">{{t .Locale "checkout.address"}}</label>
+              <input class="field__input" id="co-address" name="address"
+                     autocomplete="street-address" required>
+            </div>
+            <div class="field-row">
+              <div class="field">
+                <label class="field__label" for="co-city">{{t .Locale "checkout.city"}}</label>
+                <input class="field__input" id="co-city" name="city"
+                       autocomplete="address-level2" required>
+              </div>
+              <div class="field">
+                <label class="field__label" for="co-postal">{{t .Locale "checkout.postalCode"}}</label>
+                <input class="field__input" id="co-postal" name="postal_code"
+                       autocomplete="postal-code" inputmode="numeric">
+              </div>
+            </div>
+            <div class="field">
+              <label class="field__label" for="co-country">{{t .Locale "checkout.country"}}</label>
+              {{/* Macedonia only for now (AL/XK later); server hardcodes MK. */}}
+              <select class="field__input" id="co-country" disabled>
+                <option>{{t .Locale "country.MK"}}</option>
+              </select>
+            </div>
+            <div class="field">
+              <label class="field__label" for="co-notes">{{t .Locale "checkout.notes"}}</label>
+              <textarea class="field__input field__textarea" id="co-notes" name="notes" rows="3"
+                        placeholder="{{t .Locale "checkout.notesPlaceholder"}}"></textarea>
+            </div>
+          </section>
+
+          {{/* Payment — cash on delivery only for now. */}}
+          <section class="checkout__section">
+            <h2 class="checkout__legend font-semibold">{{t .Locale "checkout.payment"}}</h2>
+            <label class="pay">
+              <input class="pay__radio" type="radio" name="payment_method" value="cod" checked>
+              <span class="pay__body">
+                <span class="pay__name font-medium">{{t .Locale "payment.cod"}}</span>
+                <span class="pay__desc text-xs text-muted">{{t .Locale "payment.codDescription"}}</span>
+              </span>
+            </label>
+          </section>
+
           <p class="checkout__formerror" data-checkout-error hidden></p>
 
           <button class="checkout__submit" type="submit" data-checkout-submit
@@ -67,7 +117,6 @@
                   data-label-placing="{{t .Locale "checkout.placing"}}">
             {{t .Locale "checkout.placeOrder"}}
           </button>
-          <p class="checkout__terms text-xs text-muted">{{t .Locale "reservation.note"}}</p>
           <p class="checkout__terms text-xs text-muted">{{t .Locale "checkout.terms"}}</p>
         </form>
 

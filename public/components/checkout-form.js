@@ -143,19 +143,16 @@ class CheckoutForm extends HTMLElement {
     if (!this.form.reportValidity()) return;
 
     const fd = new FormData(this.form);
-    // Reservation mode: the form collects name + phone (+ optional email) only.
-    // Address/city/payment are left blank — the server defaults payment to cod
-    // and stores the blanks. Restore the full field set when selling for real.
     const payload = {
       email: (fd.get('email') || '').trim(),
       phone: (fd.get('phone') || '').trim(),
-      first_name: (fd.get('name') || fd.get('first_name') || '').trim(),
-      last_name: '',
-      address: '',
-      city: '',
-      postal_code: '',
-      notes: '',
-      payment_method: 'cod',
+      first_name: (fd.get('first_name') || '').trim(),
+      last_name: (fd.get('last_name') || '').trim(),
+      address: (fd.get('address') || '').trim(),
+      city: (fd.get('city') || '').trim(),
+      postal_code: (fd.get('postal_code') || '').trim(),
+      notes: (fd.get('notes') || '').trim(),
+      payment_method: fd.get('payment_method') || 'cod',
       items: cart.map((i) => ({
         product_id: i.productId,
         size: String(i.size),
