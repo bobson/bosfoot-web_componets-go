@@ -1,22 +1,98 @@
 {
-  "sizeGuide.brands.lead": { "mk": "Секој бренд има свои мерки. На страницата на брендот ќе ја најдеш точната табела со должина на влошката или стапалото за секоја големина.", "sq": "Çdo markë ka masat e veta. Në faqen e markës do të gjesh tabelën e saktë me gjatësinë e fushës ose këmbës për çdo madhësi.", "en": "Each brand has its own sizing. On the brand page you'll find the exact chart with insole or foot length for each size." },
-  "sizeGuide.brands.title": { "mk": "Табели за секој бренд", "sq": "Tabela për çdo markë", "en": "Charts for each brand" },
-  "sizeGuide.help.body": { "mk": "Пиши ни — ќе ти помогнеме лично. Имаме секој модел во раце и знаеме како им оди големината.", "sq": "Na shkruaj — do të ndihmojmë personalisht. Kemi çdo model në duar dhe dimë si shkojnë madhësitë.", "en": "Write to us — we'll help personally. We have every model in our hands and know how sizes run." },
-  "sizeGuide.help.title": { "mk": "Сѐ уште не си сигурен?", "sq": "Prapë nuk je i sigurt?", "en": "Still not sure?" },
-  "sizeGuide.lead": { "mk": "Боси патики се мерат поинаку. Прстите имаат потреба од простор, па ширината е исто толку важна како должината. Овој водич ќе ти помогне да го најдеш совршениот пар.", "sq": "Këpucët barefoot maten ndryshe. Gishtërinjtë kanë nevojë për hapësirë, kështu që gjerësia është po aq e rëndësishme sa gjatësia. Ky udhëzues do të ndihmojë të gjesh çiftin e përsosur.", "en": "Barefoot shoes are measured differently. Toes need room, so width is just as important as length. This guide will help you find the perfect pair." },
-  "sizeGuide.step1.body": { "mk": "Најдобриот водич за големина е да почнеш со твојата вообичаена големина на чевли. На страницата на секој производ ќе најдеш конкретни информации за одговарање.", "sq": "Udhëzuesi më i mirë i madhësisë është të fillosh me madhësinë tënde normale të këpucëve. Në faqen e çdo produkti do të gjesh informacion specifik për përshtatshmërinë.", "en": "The best sizing guide is to start with your normal shoe size. On each product page you'll find specific fit information." },
-  "sizeGuide.step1.imgAlt": { "mk": "Постави стапалото на лист хартија и нацртај контура", "sq": "Vendos këmbën mbi letër dhe vizato konturin", "en": "Place your foot on paper and trace the outline" },
-  "sizeGuide.step1.title": { "mk": "Почни со твојата вообичаена големина", "sq": "Fillo me madhësinë tënde të zakonshme", "en": "Start with your usual size" },
-  "sizeGuide.step2.body": { "mk": "Стани покрај ѕид и стави лист хартија на подот до него. Постави го стапалото на хартијата со петицата прислонета на ѕидот. Нацртај ја контурата со молив.", "sq": "Qëndro pranë një muri dhe vendos një fletë letre në dysheme. Vendos këmbën mbi letër me thembër mbi mur. Vizato konturin me laps.", "en": "Stand near a wall and place a piece of paper on the floor. Place your foot on the paper with heel against the wall. Trace the outline with a pencil." },
-  "sizeGuide.step2.imgAlt": { "mk": "Стави го стапалото со петицата до ѕид и нацртај го", "sq": "Këmba me thembër në mur ndërsa vizatohet konturi", "en": "Foot with heel against the wall while tracing" },
-  "sizeGuide.step2.title": { "mk": "Нацртај го стапалото", "sq": "Vizato këmbën", "en": "Trace your foot" },
-  "sizeGuide.step3.body": { "mk": "При цртањето, моливот мора да биде на 90° — право нагоре, не наклонет. Двете нозе ретко се исти — измери ги двете и земи ја поголемата мерка.", "sq": "Gjatë vizatimit, lapsi duhet të jetë 90° — drejt lart, jo i anuar. Të dy këmbët rrallëherë janë njësoj — mati të dyja dhe merr masën më të madhe.", "en": "When tracing, the pencil must be at 90° — straight up, not angled. Both feet are rarely the same — measure both and take the larger measurement." },
-  "sizeGuide.step3.imgAlt": { "mk": "Држете го моливот право додека ја цртате контурата", "sq": "Mbaj lapsin drejt për një matje të saktë", "en": "Hold the pencil vertical while tracing for accuracy" },
-  "sizeGuide.step3.title": { "mk": "Држи го моливот вертикален", "sq": "Mbaje lapsin vertikal", "en": "Keep the pencil vertical" },
-  "sizeGuide.step4.body": { "mk": "Измери ја должината во милиметри. Додај уште 5–10 mm за да не е тесно. Ако носиш дебели чорапи, земи ги предвид.", "sq": "Mat gjatësinë në milimetra. Shto 5–10 mm ekstra. Nëse mban çorape të trasha, merri parasysh.", "en": "Measure the length in millimetres. Add 5–10 mm extra. If you wear thick socks, factor those in." },
-  "sizeGuide.step4.imgAlt": { "mk": "Измери ја должината и додади 5–10 mm простор", "sq": "Mat gjatësinë dhe shto 5–10 mm hapësirë", "en": "Measure the length and add 5–10 mm of extra room" },
-  "sizeGuide.step4.title": { "mk": "Измери и додај простор", "sq": "Mat dhe shto hapësirë", "en": "Measure and add room" },
-  "sizeGuide.tip.body": { "mk": "Мери ги стапалата навечер — се прошируваат во текот на денот. Носи ги чорапите во кои обично одиш со патики кога мериш.", "sq": "Mati këmbët në mbrëmje — ato zgjerohen gjatë ditës. Mbaj çorapet me të cilat do të mbash këpucët kur mat.", "en": "Measure your feet in the evening — they expand throughout the day. Wear the socks you'd normally use when measuring." },
+  "sizeGuide.brands.lead": {
+    "mk": "Секој бренд има свои мерки. На страницата на брендот ќе ја најдеш точната табела со должина на влошката или стапалото за секоја големина.",
+    "sq": "Çdo markë ka masat e veta. Në faqen e markës do të gjesh tabelën e saktë me gjatësinë e fushës ose këmbës për çdo madhësi.",
+    "en": "Each brand has its own sizing. On the brand page you'll find the exact chart with insole or foot length for each size."
+  },
+  "sizeGuide.brands.title": {
+    "mk": "Табели за секој бренд",
+    "sq": "Tabela për çdo markë",
+    "en": "Charts for each brand"
+  },
+  "sizeGuide.help.body": {
+    "mk": "Пиши ни — ќе ти помогнеме лично. Имаме секој модел во раце и знаеме како им оди големината.",
+    "sq": "Na shkruaj — do të ndihmojmë personalisht. Kemi çdo model në duar dhe dimë si shkojnë madhësitë.",
+    "en": "Write to us — we'll help personally. We have every model in our hands and know how sizes run."
+  },
+  "sizeGuide.help.title": {
+    "mk": "Сѐ уште не си сигурен?",
+    "sq": "Prapë nuk je i sigurt?",
+    "en": "Still not sure?"
+  },
+  "sizeGuide.lead": {
+    "mk": "Боси патики се мерат поинаку. Прстите имаат потреба од простор, па ширината е исто толку важна како должината. Овој водич ќе ти помогне да го најдеш совршениот пар.",
+    "sq": "Këpucët barefoot maten ndryshe. Gishtërinjtë kanë nevojë për hapësirë, kështu që gjerësia është po aq e rëndësishme sa gjatësia. Ky udhëzues do të ndihmojë të gjesh çiftin e përsosur.",
+    "en": "Barefoot shoes are measured differently. Toes need room, so width is just as important as length. This guide will help you find the perfect pair."
+  },
+  "sizeGuide.step1.body": {
+    "mk": "Најдобриот водич за големина е да почнеш со твојата вообичаена големина на чевли. На страницата на секој производ ќе најдеш конкретни информации за одговарање.",
+    "sq": "Udhëzuesi më i mirë i madhësisë është të fillosh me madhësinë tënde normale të këpucëve. Në faqen e çdo produkti do të gjesh informacion specifik për përshtatshmërinë.",
+    "en": "The best sizing guide is to start with your normal shoe size. On each product page you'll find specific fit information."
+  },
+  "sizeGuide.step1.imgAlt": {
+    "mk": "Постави стапалото на лист хартија и нацртај контура",
+    "sq": "Vendos këmbën mbi letër dhe vizato konturin",
+    "en": "Place your foot on paper and trace the outline"
+  },
+  "sizeGuide.step1.title": {
+    "mk": "Почни со твојата вообичаена големина",
+    "sq": "Fillo me madhësinë tënde të zakonshme",
+    "en": "Start with your usual size"
+  },
+  "sizeGuide.step2.body": {
+    "mk": "Застани покрај ѕид и стави лист хартија на подот до него. Постави го стапалото на хартијата со петицата прислонета на ѕидот. Нацртај ја контурата со молив.",
+    "sq": "Qëndro pranë një muri dhe vendos një fletë letre në dysheme. Vendos këmbën mbi letër me thembër mbi mur. Vizato konturin me laps.",
+    "en": "Stand near a wall and place a piece of paper on the floor. Place your foot on the paper with heel against the wall. Trace the outline with a pencil."
+  },
+  "sizeGuide.step2.imgAlt": {
+    "mk": "Стави го стапалото со петицата до ѕид и нацртај го",
+    "sq": "Këmba me thembër në mur ndërsa vizatohet konturi",
+    "en": "Foot with heel against the wall while tracing"
+  },
+  "sizeGuide.step2.title": {
+    "mk": "Нацртај го стапалото",
+    "sq": "Vizato këmbën",
+    "en": "Trace your foot"
+  },
+  "sizeGuide.step3.body": {
+    "mk": "При цртањето, моливот мора да биде на 90° — право нагоре, не наклонет. Двете нозе ретко се исти — измери ги двете и земи ја поголемата мерка.",
+    "sq": "Gjatë vizatimit, lapsi duhet të jetë 90° — drejt lart, jo i anuar. Të dy këmbët rrallëherë janë njësoj — mati të dyja dhe merr masën më të madhe.",
+    "en": "When tracing, the pencil must be at 90° — straight up, not angled. Both feet are rarely the same — measure both and take the larger measurement."
+  },
+  "sizeGuide.step3.imgAlt": {
+    "mk": "Држете го моливот право додека ја цртате контурата",
+    "sq": "Mbaj lapsin drejt për një matje të saktë",
+    "en": "Hold the pencil vertical while tracing for accuracy"
+  },
+  "sizeGuide.step3.title": {
+    "mk": "Држи го моливот вертикален",
+    "sq": "Mbaje lapsin vertikal",
+    "en": "Keep the pencil vertical"
+  },
+  "sizeGuide.step4.body": {
+    "mk": "Измери ја должината во милиметри. Додај уште 5–10 mm за да не е тесно. Ако носиш дебели чорапи, земи ги предвид.",
+    "sq": "Mat gjatësinë në milimetra. Shto 5–10 mm ekstra. Nëse mban çorape të trasha, merri parasysh.",
+    "en": "Measure the length in millimetres. Add 5–10 mm extra. If you wear thick socks, factor those in."
+  },
+  "sizeGuide.step4.imgAlt": {
+    "mk": "Измери ја должината и додади 5–10 mm простор",
+    "sq": "Mat gjatësinë dhe shto 5–10 mm hapësirë",
+    "en": "Measure the length and add 5–10 mm of extra room"
+  },
+  "sizeGuide.step4.title": {
+    "mk": "Измери и додај простор",
+    "sq": "Mat dhe shto hapësirë",
+    "en": "Measure and add room"
+  },
+  "sizeGuide.tip.body": {
+    "mk": "Мери ги стапалата навечер — се прошируваат во текот на денот. Носи ги чорапите во кои обично одиш со патики кога мериш.",
+    "sq": "Mati këmbët në mbrëmje — ato zgjerohen gjatë ditës. Mbaj çorapet me të cilat do të mbash këpucët kur mat.",
+    "en": "Measure your feet in the evening — they expand throughout the day. Wear the socks you'd normally use when measuring."
+  },
   "sizeGuide.tip.title": { "mk": "Совет", "sq": "Këshillë", "en": "Tip" },
-  "sizeGuide.title": { "mk": "Водич за големини", "sq": "Udhëzues përmasash", "en": "Size guide" }
+  "sizeGuide.title": {
+    "mk": "Водич за големини",
+    "sq": "Udhëzues përmasash",
+    "en": "Size guide"
+  }
 }
