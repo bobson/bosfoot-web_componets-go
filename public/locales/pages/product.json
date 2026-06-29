@@ -54,7 +54,7 @@
   "sizeModal.insoleLength": { "mk": "Должина на влошката", "sq": "Gjatësia e solës", "en": "Insole Length" },
   "sizeModal.kids": { "mk": "Деца", "sq": "Fëmijë", "en": "Kids" },
   "sizeModal.step1.body": { "mk": "Постави лист хартија на подот. Стави го стапалото со петицата прислонета до ѕидот.", "sq": "Vendosni një fletë letre në dysheme. Vendosni këmbën me thembër pranë murit.", "en": "Place a piece of paper on the floor against the wall. Place your foot on the paper with your heel just touching the wall." },
-  "sizeModal.step1.title": { "mk": "Стани до ѕид", "sq": "Qëndroni pranë murit", "en": "Stand next to a wall" },
+  "sizeModal.step1.title": { "mk": "Застани до ѕид", "sq": "Qëndroni pranë murit", "en": "Stand next to a wall" },
   "sizeModal.step2.body": { "mk": "Побарај помош ако можеш. Постави молив вертикално и нацртај ја контурата на стапалото, почнувај од петицата.", "sq": "Kërkoni ndihmë nëse mundeni. Vendosni lapsin vertikal dhe vizatoni konturin e këmbës duke filluar nga themra.", "en": "Get someone to help if you can. Keep the pen vertical and trace the outline of the foot on the paper, starting at the heel." },
   "sizeModal.step2.title": { "mk": "Нацртај ја контурата", "sq": "Vizatoni konturin", "en": "Trace the outline" },
   "sizeModal.step3.body": { "mk": "Моливот мора да биде на 90° — право нагоре, не наклонет. Измери ги двете нозе и земи ја поголемата.", "sq": "Lapsi duhet të jetë në 90° — drejt lart, jo i anuar. Matni të dyja këmbët dhe merrni të madhën.", "en": "The pencil must be at 90 degrees to the paper — straight up, not tilted. Measure both feet and take the larger measurement." },

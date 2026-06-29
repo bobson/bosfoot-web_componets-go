@@ -1,13 +1,11 @@
 # Bosfoot — Macedonian copy for native proofread
 
-**How to use:** read each English line for intended meaning, then fix the Macedonian on the `MK:` line below it. 
-Keep any HTML tags (e.g. `<strong>`), the brand name *Bosfoot/Freet*, and leave the English untouched — it's only there as reference.
+**How to use:** read each English line for intended meaning, then fix the Macedonian on the `MK:` line below it.
+Keep any HTML tags (e.g. `<strong>`), the brand name _Bosfoot/Freet_, and leave the English untouched — it's only there as reference.
 
-Terms in play across the site: *боси чевли / барефут чевли* (barefoot shoes), *широк простор за прстите* (wide toe box), *рамен ѓон / zero drop*, *флексибилен ѓон* (flexible sole), *плаќање при испорака* (cash on delivery), *нарачка* (order), *кошничка* (cart).
-
+Terms in play across the site: _боси чевли / барефут чевли_ (barefoot shoes), _широк простор за прстите_ (wide toe box), _рамен ѓон / zero drop_, _флексибилен ѓон_ (flexible sole), _плаќање при испорака_ (cash on delivery), _нарачка_ (order), _кошничка_ (cart).
 
 _Total: 477 strings across 15 files. Note: `⏎` marks a line break inside a string — keep it._
-
 
 ---
 
@@ -79,7 +77,7 @@ MK: © 2026 Bosfoot. Сите права задржани.
 
 **`footer.tagline`**  
 EN: Barefoot shoes for freedom and natural movement.  
-MK: Босоноги патики за слобода и природно движење.
+MK: Босоноги патики за слободно и природно движење.
 
 **`legal.contactCta`**  
 EN: Questions? Write to us at  
@@ -91,7 +89,7 @@ MK: Последно ажурирање
 
 **`legal.placeholder`**  
 EN: This text is a placeholder. Replace with final legal version before launch.  
-MK: Овој текст е placeholder. Замени го со финална правна верзија пред lansiranje.
+MK: Овој текст е placeholder. Замени го со финална правна верзија пред лансирање.
 
 **`nav.about`**  
 EN: About  
@@ -143,11 +141,11 @@ MK: Услови на продажба
 
 **`reservation.freeNote`**  
 EN: Pay on delivery, no upfront payment. Free returns & size exchange across Macedonia — try them at home, risk-free.  
-MK: Плаќање при испорака, без претплата. Бесплатно враќање и замена на број во цела Македонија — пробај ги дома, без ризик.
+MK: Плаќање при испорака, без плаќање однапред. Бесплатно враќање и замена на број во цела Македонија — пробај ги дома, без ризик.
 
 **`reservation.note`**  
 EN: No upfront payment — pay on delivery when your order arrives.  
-MK: Без претплата — плаќаш при испорака кога ќе пристигне нарачката.
+MK: Без плаќање однапред — плаќаш при испорака кога ќе пристигне нарачката.
 
 **`reservation.returns`**  
 EN: Easy returns & size exchange anywhere in Macedonia — try them at home, risk-free.  
@@ -220,7 +218,6 @@ MK: Нови модели
 **`section.philosophy`**  
 EN: Why barefoot  
 MK: Зошто боси патики
-
 
 ---
 
@@ -368,7 +365,7 @@ MK: Малку брендови, добро избрани
 
 **`about.brands.p1`**  
 EN: We don't try to stock everything. We pick brands that build shoes with real barefoot principles — not just a marketing label — and that we'd wear ourselves. Every brand gets tested before it gets listed.  
-MK: Не се обидуваме да понудиме сè. Избираме брендови кои градат чевли со вистински принципи на боси чевли — не само маркетиншка ознака — и кои би ги носеле самите. Секој бренд го тестираме пред да го додадеме.
+MK: Не се обидуваме да понудиме сè. Избираме брендови кои градат чевли со вистински принципи на боси чевли — не само маркетиншка ознака — кои би ги носеле и самите. Секој бренд го тестираме пред да го додадеме.
 
 **`about.brands.p2`**  
 EN: First is Freet, from the UK — wide fit, excellent build quality. More European brands are coming.  
@@ -393,7 +390,6 @@ MK: Базиран во Охрид. Носи боси чевли секој де
 **`about.who.p2`**  
 EN: Question about sizing? Not sure which model to pick? Just get in touch.  
 MK: Прашање за мерки? Не знаеш кој модел да избереш? Само напиши.
-
 
 ---
 
@@ -461,12 +457,11 @@ MK: Xero Shoes
 
 **`seo.brands`**  
 EN: Barefoot brands at Bosfoot: %s. Minimalist shoes with a wide toe box and zero drop for natural walking.  
-MK: Барефут брендови на Bosfoot: %s. Минималистички патики со широк простор за прсти и нула дропа за природно одење.
+MK: Барефут брендови на Bosfoot: %s. Минималистички патики со широк простор за прсти и нула пад за природно одење.
 
 **`seo.title.brands`**  
 EN: Barefoot brands  
 MK: Барефут брендови
-
 
 ---
 
@@ -493,8 +488,8 @@ EN: We'll confirm your order and shipping address by phone. You pay on delivery 
 MK: Ќе ве контактираме за да ја потврдиме нарачката и адресата за испорака. Плаќате при испорака — ништо однапред.
 
 **`checkout.confirmEmailSent`**  
-EN: We've sent a confirmation email to   
-MK: Испративме е-пошта за потврда на 
+EN: We've sent a confirmation email to  
+MK: Испративме е-пошта за потврда на
 
 **`checkout.confirmSpamNote`**  
 EN: If you don't see it, please check your <strong>spam folder</strong>.  
@@ -668,7 +663,6 @@ MK: Платете во готово кога ќе ја примите прат�
 EN: Complete your Bosfoot order — barefoot shoes with cash on delivery or bank transfer, plus fast shipping.  
 MK: Завршете ја нарачката на Bosfoot — барефут патики со плаќање при испорака или банкарски трансфер и брза испорака.
 
-
 ---
 
 ## contact.json
@@ -712,7 +706,6 @@ MK: Пишете на Viber
 **`contact.responseNote`**  
 EN: We usually reply within a day.  
 MK: Обично одговараме во рок од еден ден.
-
 
 ---
 
@@ -970,7 +963,6 @@ MK: Обична чевла го обликува стапалото. Боса �
 EN: Three things that make them different  
 MK: Три работи кои ги прават поинакви
 
-
 ---
 
 ## home.json
@@ -1143,7 +1135,6 @@ MK: Премиум барефут и минималистички патики �
 EN: Barefoot & minimalist shoes  
 MK: Барефут и минималистички патики
 
-
 ---
 
 ## listing.json
@@ -1300,7 +1291,6 @@ MK: Цена: висока кон ниска
 EN: Sort  
 MK: Подреди
 
-
 ---
 
 ## privacy.json
@@ -1336,7 +1326,6 @@ MK: Како ги собираме, користиме и заштитуваме
 **`privacy.title`**  
 EN: Privacy policy  
 MK: Политика на приватност
-
 
 ---
 
@@ -1564,7 +1553,7 @@ MK: Постави лист хартија на подот. Стави го ст
 
 **`sizeModal.step1.title`**  
 EN: Stand next to a wall  
-MK: Стани до ѕид
+MK: Застани до ѕид
 
 **`sizeModal.step2.body`**  
 EN: Get someone to help if you can. Keep the pen vertical and trace the outline of the foot on the paper, starting at the heel.  
@@ -1595,8 +1584,8 @@ EN: Size Guide — Freet
 MK: Водич за големини — Freet
 
 **`sizeModal.trueToSize.body`**  
-EN: The best guide for sizing your new Freet shoes is to start with your usual shoe size. Think about whether you always take this size or whether you sometimes need to go smaller or larger. ⏎  ⏎ Customer feedback is that this style fits true to size; so order your normal size. ⏎  ⏎ The lengths shown are the Insole lengths (the actual shoe length will be 2 or 3 mm longer). The widths are measured across the flex point of the insole — the actual width of the shoe will be 2–4mm greater at each side.  
-MK: Најдобар водич за избор на новата Freet патика е да почнете со вашата вообичаена големина. Помислете дали секогаш ја носите оваа или понекогаш земате поголема или помала. ⏎  ⏎ Повратните информации од купувачите се дека овој стил одговара точно по големината — нарачајте ја вашата вообичаена. ⏎  ⏎ Должините прикажани се должини на влошката (вистинската должина на чевлот ќе биде 2–3 мм подолга). Ширините се мерат преку флекс-точката — вистинската ширина на чевлот е 2–4 мм поголема на секоја страна.
+EN: The best guide for sizing your new Freet shoes is to start with your usual shoe size. Think about whether you always take this size or whether you sometimes need to go smaller or larger. ⏎ ⏎ Customer feedback is that this style fits true to size; so order your normal size. ⏎ ⏎ The lengths shown are the Insole lengths (the actual shoe length will be 2 or 3 mm longer). The widths are measured across the flex point of the insole — the actual width of the shoe will be 2–4mm greater at each side.  
+MK: Најдобар водич за избор на новата Freet патика е да почнете со вашата вообичаена големина. Помислете дали секогаш ја носите оваа или понекогаш земате поголема или помала. ⏎ ⏎ Повратните информации од купувачите се дека овој стил одговара точно по големината — нарачајте ја вашата вообичаена. ⏎ ⏎ Должините прикажани се должини на влошката (вистинската должина на чевлот ќе биде 2–3 мм подолга). Ширините се мерат преку флекс-точката — вистинската ширина на чевлот е 2–4 мм поголема на секоја страна.
 
 **`sizeModal.trueToSize.title`**  
 EN: Sizing True to Size  
@@ -1605,7 +1594,6 @@ MK: Одговара на вообичаената големина
 **`sizeModal.width`**  
 EN: Width  
 MK: Ширина
-
 
 ---
 
@@ -1643,7 +1631,6 @@ MK: Не ти одговара? Имаш 30 дена да ги вратиш бе
 EN: Returns & exchanges  
 MK: Враќање и замена
 
-
 ---
 
 ## shipping.json
@@ -1679,7 +1666,6 @@ MK: Брза испорака низ Балканот со проверени к
 **`shipping.title`**  
 EN: Shipping  
 MK: Достава
-
 
 ---
 
@@ -1719,7 +1705,7 @@ MK: Почни со твојата вообичаена големина
 
 **`sizeGuide.step2.body`**  
 EN: Stand near a wall and place a piece of paper on the floor. Place your foot on the paper with heel against the wall. Trace the outline with a pencil.  
-MK: Стани покрај ѕид и стави лист хартија на подот до него. Постави го стапалото на хартијата со петицата прислонета на ѕидот. Нацртај ја контурата со молив.
+MK: Застани покрај ѕид и стави лист хартија на подот до него. Постави го стапалото на хартијата со петицата прислонета на ѕидот. Нацртај ја контурата со молив.
 
 **`sizeGuide.step2.imgAlt`**  
 EN: Foot with heel against the wall while tracing  
@@ -1743,7 +1729,7 @@ MK: Држи го моливот вертикален
 
 **`sizeGuide.step4.body`**  
 EN: Measure the length in millimetres. Add 5–10 mm extra. If you wear thick socks, factor those in.  
-MK: Измери ја должината во милиметри. Додај уште 5–10 mm за да не е тесно. Ако носиш дебели чорапи, земи ги предвид.
+MK: Измери ја должината во милиметри. Додај уште 5–10 mm за да не е тесно. Ако носиш дебели чорапи, земи ги во предвид.
 
 **`sizeGuide.step4.imgAlt`**  
 EN: Measure the length and add 5–10 mm of extra room  
@@ -1765,7 +1751,6 @@ MK: Совет
 EN: Size guide  
 MK: Водич за големини
 
-
 ---
 
 ## terms.json
@@ -1780,7 +1765,7 @@ MK: Цени и плаќање
 
 **`terms.2.body`**  
 EN: Products are available while supplies last. If a product is unavailable after an order, we contact you immediately.  
-MK: Производите се на залиха додека трае. Доколку производ не е достапен по нарачка, веднаш те контактираме.
+MK: Производите се достапни додека трае залихата. Доколку производ не е достапен по нарачка, веднаш ќе те контактираме.
 
 **`terms.2.title`**  
 EN: Availability  
@@ -1801,7 +1786,6 @@ MK: Условите според кои ги продаваме нашите п
 **`terms.title`**  
 EN: Terms of sale  
 MK: Услови на продажба
-
 
 ---
 
@@ -1825,7 +1809,7 @@ MK: Што се боси чевли?
 
 **`wab.hero.lead`**  
 EN: Barefoot shoes let your feet move as if you were barefoot, while still protecting them from sharp objects, heat and cold. They follow the natural shape of your foot, and their thin, flexible sole lets it roll the way it was built to.  
-MK: Босите чевли му дозволуваат на стапалото да се движи како да сте боси, а сепак го штитат од остри предмети, топлина и студ. Ја следат природната форма на стапалото, а тенкиот, флексибилен ѓон му дозволува природно да се одвива.
+MK: Босите чевли му дозволуваат на стапалото да се движи како да сте боси, а сепак го штитат од остри предмети, топлина и студ. Ја следат природната форма на стапалото, а тенкиот, флексибилен ѓон му дозволува природно да се движи.
 
 **`wab.intro.title`**  
 EN: The three traits of a barefoot shoe  
@@ -1841,11 +1825,11 @@ MK: Назад кон основите на босите чевли
 
 **`wab.cta.title`**  
 EN: Ready to feel the difference?  
-MK: Подготвени да ја почувствувате разликата?
+MK: Подготвени сте да ја почувствувате разликата?
 
 **`wab.cta.body`**  
 EN: Browse barefoot shoes built around the natural shape of your foot.  
-MK: Разгледајте боси чевли направени според природната форма на вашето стапало.
+MK: Разгледајте ги босите чевли направени според природната форма на вашето стапало.
 
 **`wab.toe.title`**  
 EN: Wide toe box  
@@ -1924,8 +1908,8 @@ EN: A barefoot shoe with a completely flat, level sole
 MK: Боса чевла со целосно рамен ѓон
 
 **`wab.drop.b1.body`**  
-EN: When you stand barefoot on a flat surface, your forefoot and heel are level, and your body lines up naturally — feet, knees, hips, shoulders and head in one straight column. ⏎  ⏎ Slip a wedge under your heels and that changes: your body has to compensate for the tilt through its joints, muscles and tendons so you don't fall forward. Because your body notices even the smallest shift, this happens not only with tall high heels but with any raised heel at all.  
-MK: Кога стоите боси на рамна површина, предниот дел на стапалото и петицата се на исто ниво, а телото природно се порамнува — стапала, колена, колкови, рамења и глава во една права линија. ⏎  ⏎ Ставете клин под петиците и тоа се менува: телото мора да го компензира навалувањето преку зглобовите, мускулите и тетивите за да не паднете напред. Бидејќи телото го забележува и најмалото поместување, ова се случува не само со високи потпетици, туку со секоја подигната петица.
+EN: When you stand barefoot on a flat surface, your forefoot and heel are level, and your body lines up naturally — feet, knees, hips, shoulders and head in one straight column. ⏎ ⏎ Slip a wedge under your heels and that changes: your body has to compensate for the tilt through its joints, muscles and tendons so you don't fall forward. Because your body notices even the smallest shift, this happens not only with tall high heels but with any raised heel at all.  
+MK: Кога стоите боси на рамна површина, предниот дел на стапалото и петицата се на исто ниво, а телото природно се порамнува — стапала, колена, колкови, рамења и глава во една права линија. ⏎ ⏎ Ставете клин под петиците и тоа се менува: телото мора да го компензира навалувањето преку зглобовите, мускулите и тетивите за да не паднете напред. Бидејќи телото го забележува и најмалото поместување, ова се случува не само со високи потпетици, туку со секоја подигната петица.
 
 **`wab.drop.b2.alt`**  
 EN: A conventional shoe with a raised heel  
@@ -1980,8 +1964,8 @@ EN: The thin, flexible sole of a barefoot shoe
 MK: Тенок, флексибилен ѓон на боса чевла
 
 **`wab.sole.b2.body`**  
-EN: The sole of a barefoot shoe is very thin, with no built-up footbed and no rigid arch support. That lets your foot keep its natural shape instead of being forced into a preset mould, and do the work it was designed for with every step — which strengthens the muscles and tendons in the foot and right up the leg. ⏎  ⏎ The thin sole also lets you feel the ground. Each step gently massages the sole of the foot, improving circulation and helping with cold feet.  
-MK: Ѓонот на босата чевла е многу тенок, без изградено лежиште за стапало и без крута поддршка за сводот. Тоа му дозволува на стапалото да ја задржи природната форма наместо да биде втиснато во однапред зададен калап, и да ја врши работата за која е создадено со секој чекор — што ги зајакнува мускулите и тетивите во стапалото и нагоре по ногата. ⏎  ⏎ Тенкиот ѓон исто така ви овозможува да го чувствувате тлото. Секој чекор нежно го масира стапалото, ја подобрува циркулацијата и помага против студени стапала.
+EN: The sole of a barefoot shoe is very thin, with no built-up footbed and no rigid arch support. That lets your foot keep its natural shape instead of being forced into a preset mould, and do the work it was designed for with every step — which strengthens the muscles and tendons in the foot and right up the leg. ⏎ ⏎ The thin sole also lets you feel the ground. Each step gently massages the sole of the foot, improving circulation and helping with cold feet.  
+MK: Ѓонот на босата чевла е многу тенок, без изградено лежиште за стапало и без крута поддршка за сводот. Тоа му дозволува на стапалото да ја задржи природната форма наместо да биде втиснато во однапред зададен калап, и да ја врши работата за која е создадено со секој чекор — што ги зајакнува мускулите и тетивите во стапалото и нагоре по ногата. ⏎ ⏎ Тенкиот ѓон исто така ви овозможува да го чувствувате тлото. Секој чекор нежно го масира стапалото, ја подобрува циркулацијата и помага против студени стапала.
 
 **`wab.sole.b3.alt`**  
 EN: A child walking in flexible barefoot shoes  
@@ -1991,70 +1975,68 @@ MK: Дете кое оди во флексибилни боси чевли
 EN: Flexibility matters most of all for children. Their feet are still growing and changing constantly, especially once they start to walk. Stiff shoes with thick, padded soles give a child's foot no room to move; soft, flexible shoes with thin soles are far better — also for anyone still developing their sense of balance.  
 MK: Флексибилноста е најважна кај децата. Нивните стапала сè уште растат и постојано се менуваат, особено штом почнат да одат. Крутите чевли со дебели, наполнети ѓонови не му даваат на детското стапало простор да се движи; меките, флексибилни чевли со тенки ѓонови се многу подобри — исто така и за секого што сè уште го развива чувството за рамнотежа.
 
-
 ---
 
 ## Appendix — Macedonian embedded in code
 
 _These live in Go source, not the locale files. Mark any fixes and they'll be applied in code. Each entry shows `file:line`._
 
-
 ### internal/notify/notify.go
 
-- `:265`  Потврда за нарачка #%d — Bosfoot
-- `:266`  Здраво 
-- `:267`  Ви благодариме за вашата нарачка во Bosfoot! Ја примивме и ќе ве контактираме за да ја потврдиме. Плаќате при испорака.
-- `:268`  Детали за нарачката
-- `:269`  Број на нарачка:
-- `:270`  Вкупно:
-- `:271`  Начин на плаќање:
-- `:272`  Адреса за испорака:
-- `:273`  Производи:
-- `:274`  Ако имате било какви прашања, едноставно одговорете на овој е-маил или контактирајте нè на info@bosfoot.com.
-- `:275`  Со почит,
-- `:276`  Тимот на Bosfoot
-- `:337`   (големина: %s, боја: %s)
-- `:358`  Плаќање при преземање
-- `:360`  Банкарски трансфер
+- `:265` Потврда за нарачка #%d — Bosfoot
+- `:266` Здраво
+- `:267` Ви благодариме за вашата нарачка во Bosfoot! Ја примивме и ќе ве контактираме за да ја потврдиме. Плаќате при испорака.
+- `:268` Детали за нарачката
+- `:269` Број на нарачка:
+- `:270` Вкупно:
+- `:271` Начин на плаќање:
+- `:272` Адреса за испорака:
+- `:273` Производи:
+- `:274` Ако имате било какви прашања, едноставно одговорете на овој е-маил или контактирајте нè на info@bosfoot.com.
+- `:275` Со почит,
+- `:276` Тимот на Bosfoot
+- `:337` (големина: %s, боја: %s)
+- `:358` Плаќање при преземање
+- `:360` Банкарски трансфер
 
 ### handlers/page_handler.go
 
-- `:501`  Дознајте ја приказната зад Bosfoot — зошто постоиме и како ги избираме брендовите.
+- `:501` Дознајте ја приказната зад Bosfoot — зошто постоиме и како ги избираме брендовите.
 
 ### handlers/legal_content.go
 
-- `:64`  Политика на приватност
-- `:65`  Како Bosfoot ги собира, користи и штити вашите лични податоци.
-- `:66`  Последно ажурирано: јуни 2026
-- `:67`  Оваа политика објаснува кои лични податоци ги собираме кога купувате на Bosfoot, зошто ги собираме и кои се вашите права. Bosfoot е управуван од [правно лице, ЕМБС], со седиште на [адреса].
-- `:69`  Кои податоци ги собираме | За да ја обработиме вашата нарачка собираме: име и презиме, е-пошта, телефон, адреса за достава и содржина на нарачката. Не чуваме податоци за вашата платежна картичка.
-- `:70`  Како ги користиме податоците | Вашите податоци ги користиме исклучиво за обработка и испорака на нарачката, известувања поврзани со нарачката и поддршка на купувачи. Не ги продаваме на трети страни.
-- `:71`  Споделување со трети страни | Податоците ги споделуваме само со курирската служба за испорака и, при плаќање со картичка, со овластен платежен процесор — единствено за таа намена.
-- `:72`  Колачиња | Користиме само неопходни колачиња за функционирање на кошничката и безбедност (на пр. заштита од CSRF). Не користиме рекламни колачиња.
-- `:73`  Ваши права | Имате право на пристап, исправка и бришење на вашите лични податоци. За барање контактирајте нè на info@bosfoot.com.
-- `:74`  Контакт | За прашања поврзани со приватноста: info@bosfoot.com.
-- `:108`  Услови на продажба
-- `:109`  Услови на продажба за нарачки преку Bosfoot.
-- `:110`  Последно ажурирано: јуни 2026
-- `:111`  Овие услови важат за сите нарачки направени преку bosfoot.com. Со потврдување на нарачката се согласувате со нив.
-- `:113`  Општо | Онлајн продавницата Bosfoot е управувана од [правно лице, ЕМБС], [адреса]. Контакт: info@bosfoot.com.
-- `:114`  Производи и цени | Сите цени се изразени во македонски денари (МКД) и вклучуваат ДДВ. Цените во евра се само информативни. Нарачката се наплаќа по цената во моментот на потврда.
-- `:115`  Нарачки | Нарачката е потврдена кога ќе добиете е-пошта за потврда. Го задржуваме правото да одбиеме или откажеме нарачка во случај на грешка во цена или залиха.
-- `:116`  Плаќање | Прифаќаме плаќање при преземање (поуздина) и плаќање со банкарски трансфер. Деталите за трансфер се прикажани при наплата.
-- `:117`  Достава и враќање | Информации за роковите и трошоците на достава, како и за враќањето на производите, се достапни на соодветните страници.
-- `:149`  Враќање и поврат на средства
-- `:150`  Враќање во рок од 14 дена и поврат на средства за нарачки од Bosfoot.
-- `:151`  Последно ажурирано: јуни 2026
-- `:152`  Сакаме да сте задоволни од вашите барефут патики. Ако нешто не одговара, можете да го вратите.
-- `:154`  Право на откажување | Имате право да ја откажете нарачката во рок од 14 дена од приемот, без да наведете причина, согласно прописите за заштита на потрошувачите.
-- `:155`  Услови за враќање | Производите треба да бидат неносени, во оригинална амбалажа и во состојба погодна за повторна продажба.
-- `:156`  Како да вратите | Контактирајте нè на info@bosfoot.com со бројот на нарачката и ќе ви ги дадеме упатствата за враќање. [Трошоците за враќање ги сноси купувачот, освен при дефект.]
-- `:157`  Поврат на средства | По приемот и проверката на вратениот производ, средствата се враќаат во рок од [14] дена, на истиот начин на плаќање или на ваша банкарска сметка.
-- `:187`  Достава
-- `:188`  Информации за рокови и трошоци на достава на Bosfoot.
-- `:189`  Последно ажурирано: јуни 2026
-- `:190`  Доставуваме низ цела [Северна Македонија] преку [курирска служба].
-- `:192`  Подрачја на достава | Доставуваме на адреси во [Северна Македонија]. За испораки во странство контактирајте нè на info@bosfoot.com.
-- `:193`  Време на достава | Нарачките се обработуваат во рок од [1–2] работни дена. Доставата обично трае [2–4] работни дена.
-- `:194`  Трошоци | Трошокот за достава е [___ МКД]. [Бесплатна достава за нарачки над ___ МКД.]
-- `:195`  Следење | По испраќањето ќе добиете информации за следење на пратката.
+- `:64` Политика на приватност
+- `:65` Како Bosfoot ги собира, користи и штити вашите лични податоци.
+- `:66` Последно ажурирано: јуни 2026
+- `:67` Оваа политика објаснува кои лични податоци ги собираме кога купувате на Bosfoot, зошто ги собираме и кои се вашите права. Bosfoot е управуван од [правно лице, ЕМБС], со седиште на [адреса].
+- `:69` Кои податоци ги собираме | За да ја обработиме вашата нарачка собираме: име и презиме, е-пошта, телефон, адреса за достава и содржина на нарачката. Не чуваме податоци за вашата платежна картичка.
+- `:70` Како ги користиме податоците | Вашите податоци ги користиме исклучиво за обработка и испорака на нарачката, известувања поврзани со нарачката и поддршка на купувачи. Не ги продаваме на трети страни.
+- `:71` Споделување со трети страни | Податоците ги споделуваме само со курирската служба за испорака и, при плаќање со картичка, со овластен платежен процесор — единствено за таа намена.
+- `:72` Колачиња | Користиме само неопходни колачиња за функционирање на кошничката и безбедност (на пр. заштита од CSRF). Не користиме рекламни колачиња.
+- `:73` Ваши права | Имате право на пристап, исправка и бришење на вашите лични податоци. За барање контактирајте нè на info@bosfoot.com.
+- `:74` Контакт | За прашања поврзани со приватноста: info@bosfoot.com.
+- `:108` Услови на продажба
+- `:109` Услови на продажба за нарачки преку Bosfoot.
+- `:110` Последно ажурирано: јуни 2026
+- `:111` Овие услови важат за сите нарачки направени преку bosfoot.com. Со потврдување на нарачката се согласувате со нив.
+- `:113` Општо | Онлајн продавницата Bosfoot е управувана од [правно лице, ЕМБС], [адреса]. Контакт: info@bosfoot.com.
+- `:114` Производи и цени | Сите цени се изразени во македонски денари (МКД) и вклучуваат ДДВ. Цените во евра се само информативни. Нарачката се наплаќа по цената во моментот на потврда.
+- `:115` Нарачки | Нарачката е потврдена кога ќе добиете е-пошта за потврда. Го задржуваме правото да одбиеме или откажеме нарачка во случај на грешка во цена или залиха.
+- `:116` Плаќање | Прифаќаме плаќање при преземање (поуздина) и плаќање со банкарски трансфер. Деталите за трансфер се прикажани при наплата.
+- `:117` Достава и враќање | Информации за роковите и трошоците на достава, како и за враќањето на производите, се достапни на соодветните страници.
+- `:149` Враќање и поврат на средства
+- `:150` Враќање во рок од 14 дена и поврат на средства за нарачки од Bosfoot.
+- `:151` Последно ажурирано: јуни 2026
+- `:152` Сакаме да сте задоволни од вашите барефут патики. Ако нешто не одговара, можете да го вратите.
+- `:154` Право на откажување | Имате право да ја откажете нарачката во рок од 14 дена од приемот, без да наведете причина, согласно прописите за заштита на потрошувачите.
+- `:155` Услови за враќање | Производите треба да бидат неносени, во оригинална амбалажа и во состојба погодна за повторна продажба.
+- `:156` Како да вратите | Контактирајте нè на info@bosfoot.com со бројот на нарачката и ќе ви ги дадеме упатствата за враќање. [Трошоците за враќање ги сноси купувачот, освен при дефект.]
+- `:157` Поврат на средства | По приемот и проверката на вратениот производ, средствата се враќаат во рок од [14] дена, на истиот начин на плаќање или на ваша банкарска сметка.
+- `:187` Достава
+- `:188` Информации за рокови и трошоци на достава на Bosfoot.
+- `:189` Последно ажурирано: јуни 2026
+- `:190` Доставуваме низ цела [Северна Македонија] преку [курирска служба].
+- `:192` Подрачја на достава | Доставуваме на адреси во [Северна Македонија]. За испораки во странство контактирајте нè на info@bosfoot.com.
+- `:193` Време на достава | Нарачките се обработуваат во рок од [1–2] работни дена. Доставата обично трае [2–4] работни дена.
+- `:194` Трошоци | Трошокот за достава е [___ МКД]. [Бесплатна достава за нарачки над ___ МКД.]
+- `:195` Следење | По испраќањето ќе добиете информации за следење на пратката.

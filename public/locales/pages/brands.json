@@ -14,6 +14,6 @@
   "brands.viewProducts": { "mk": "Види производи →", "sq": "Shiko produktet →", "en": "View products →" },
   "brands.vivobarefoot": { "mk": "Vivobarefoot", "sq": "Vivobarefoot", "en": "Vivobarefoot" },
   "brands.xeroShoes": { "mk": "Xero Shoes", "sq": "Xero Shoes", "en": "Xero Shoes" },
-  "seo.brands": { "mk": "Барефут брендови на Bosfoot: %s. Минималистички патики со широк простор за прсти и нула дропа за природно одење.", "sq": "Marka barefoot te Bosfoot: %s. Këpucë minimaliste me hapësirë të gjerë për gishtat dhe zero drop për ecje natyrale.", "en": "Barefoot brands at Bosfoot: %s. Minimalist shoes with a wide toe box and zero drop for natural walking." },
+  "seo.brands": { "mk": "Барефут брендови на Bosfoot: %s. Минималистички патики со широк простор за прсти и нула пад за природно одење.", "sq": "Marka barefoot te Bosfoot: %s. Këpucë minimaliste me hapësirë të gjerë për gishtat dhe zero drop për ecje natyrale.", "en": "Barefoot brands at Bosfoot: %s. Minimalist shoes with a wide toe box and zero drop for natural walking." },
   "seo.title.brands": { "mk": "Барефут брендови", "sq": "Marka barefoot", "en": "Barefoot brands" }
 }
