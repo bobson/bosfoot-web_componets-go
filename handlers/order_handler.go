@@ -7,6 +7,7 @@ import (
 	"bosfoot/models"
 	"database/sql"
 	"encoding/json"
+	"net"
 	"net/http"
 	"strings"
 
@@ -212,7 +213,8 @@ func (h *OrderHandler) CreateOrder(w http.ResponseWriter, r *http.Request) {
 	// even if SMTP is down or unconfigured.
 	h.Logger.Info("Order placed",
 		"order_id", orderID, "total_mkd", total,
-		"email", req.Email, "payment", req.PaymentMethod, "items", len(req.Items))
+		"email", req.Email, "payment", req.PaymentMethod, "items", len(req.Items),
+		"ip", clientIP(r))
 
 	// Best-effort owner notification (async; never blocks or fails the order).
 	if h.Notifier != nil {
@@ -266,4 +268,16 @@ func writeJSONError(w http.ResponseWriter, status int, msg string) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(status)
 	json.NewEncoder(w).Encode(map[string]string{"error": msg})
+}
+
+// clientIP returns the visitor IP from r.RemoteAddr — already rewritten to the
+// Cloudflare CF-Connecting-IP by middleware.RealIP — with the port stripped.
+// IPv6 is returned unbracketed, matching the Caddy access-log Cf-Connecting-Ip
+// format that scripts/funnel.sh + scripts/traffic.sh filter on, so the owner's
+// own add-to-cart/order events can be excluded the same way as page traffic.
+func clientIP(r *http.Request) string {
+	if host, _, err := net.SplitHostPort(r.RemoteAddr); err == nil {
+		return host
+	}
+	return r.RemoteAddr
 }

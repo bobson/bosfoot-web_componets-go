@@ -46,6 +46,7 @@ func (h *TrackHandler) Track(w http.ResponseWriter, r *http.Request) {
 	if req.Locale != "mk" && req.Locale != "sq" && req.Locale != "en" {
 		req.Locale = ""
 	}
-	h.Logger.Info("funnel", "event", req.Event, "product_id", req.ProductID, "locale", req.Locale)
+	h.Logger.Info("funnel", "event", req.Event, "product_id", req.ProductID, "locale", req.Locale,
+		"ip", clientIP(r))
 	w.WriteHeader(http.StatusNoContent)
 }
