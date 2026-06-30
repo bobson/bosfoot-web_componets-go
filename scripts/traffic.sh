@@ -19,8 +19,16 @@
 set -euo pipefail
 
 SINCE="${1:-24 hours ago}"
-ASSET_RE='\.(css|js|ttf|woff2|webp|jpg|jpeg|png|svg|ico|json|webmanifest|txt)$'
+ASSET_RE='\.(css|js|mjs|ttf|woff2?|webp|avif|jpe?g|png|gif|svg|ico|json|webmanifest|txt|map|xml)$'
 OWN_IPS='146.255.75.165 185.100.245.80'   # 146… = home   185… = mobile (A1)
+
+# Bot/test-UA filter (case-insensitive). Mirrors scripts/funnel.sh: named crawlers
+# + programmatic clients + a few notorious spoofed-browser fingerprints, plus the
+# owner's test phone (A142P). Spoofed-UA bots that look like a normal browser are
+# caught instead by the behavioural filter in the VISITORS metric below.
+BOT='bot|crawl|spider|facebookexternalhit|headless|scan|python-requests|go-http|curl|wget|okhttp|libwww|java/|axios|node-fetch|ahrefs|semrush|mj12|dataforseo|iphone os 13_2_3|trident/|chrome/88\.|chrome/19\.'
+TEST_UA='A142P'
+RE="$BOT|$TEST_UA"
 
 if ! command -v jq >/dev/null 2>&1; then
   echo "jq is required: sudo apt install jq" >&2
@@ -37,12 +45,22 @@ echo "================================================================"
 TOTAL=$(printf '%s\n' "$LOG" | grep -c . || true)
 echo "Total requests (incl. assets/bots): $TOTAL"
 
+# Real visitor = an IP that behaved like a browser (loaded HTML *and* at least one
+# static asset, OR viewed ≥2 distinct pages) and is not a bot/test-UA/owner IP.
+# This drops the single-hit, asset-less spray that spoofed-UA bots produce.
 VISITORS=$(printf '%s\n' "$LOG" \
-  | jq -r --arg ips "$OWN_IPS" 'select((((.request.headers."User-Agent"[0]) // "") | test("facebookexternalhit")|not)
-           and (((.request.headers."Cf-Connecting-Ip"[0]) // "") as $ip | (any($ips | split(" ")[]; . as $p | ($p|length)>0 and ($ip | startswith($p))) | not)))
-           | .request.headers."Cf-Connecting-Ip"[0] // "?"' \
-  | sort -u | grep -vc '^?$' || true)
-echo "Unique visitors (real, excl. FB crawler + owner): $VISITORS"
+  | jq -r --arg re "$RE" --arg ips "$OWN_IPS" --arg asset "$ASSET_RE" \
+     'select( ((((.request.headers."User-Agent"[0]) // "") | test($re;"i")) | not)
+        and (((.request.headers."Cf-Connecting-Ip"[0]) // "") as $ip
+              | (any($ips | split(" ")[]; . as $p | ($p|length)>0 and ($ip | startswith($p))) | not)) )
+      | [ (.request.headers."Cf-Connecting-Ip"[0] // ""),
+          ((.request.uri|split("?")[0]) | if test($asset) then "a" else "p" end),
+          (.request.uri|split("?")[0]) ] | @tsv' \
+  | awk -F'\t' '
+      $1=="" { next }
+      { ips[$1]=1; if ($2=="a") a[$1]=1; else { k=$1 SUBSEP $3; if (!(k in sp)) { sp[k]=1; pc[$1]++ } } }
+      END { n=0; for (ip in ips) if (a[ip] || pc[ip]>=2) n++; print n+0 }' || true)
+echo "Unique visitors (real browser: HTML+asset or ≥2 pages; excl. bots/test/owner): $VISITORS"
 
 echo
 echo "---- Top pages (status 200, assets/query-strings stripped) ----"
