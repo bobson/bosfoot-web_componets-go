@@ -38,6 +38,23 @@ fi
 # Pull the access lines once; reuse for every section.
 LOG="$(journalctl -u caddy --since "$SINCE" -o cat | grep '"msg":"handled request"')"
 
+# Emit one TSV row per non-bot, non-owner request:  IP<tab>COUNTRY<tab>(a|p)<tab>page
+# ('a' = static asset, 'p' = page). Pipe through the awk reducers below to keep only
+# real-visitor IPs: an IP that loaded an asset alongside HTML, or viewed ≥2 distinct
+# pages. Used by the headline count, the in-market count, and the country breakdown,
+# so all three share one definition of "real".
+real_rows() {
+  printf '%s\n' "$LOG" \
+    | jq -r --arg re "$RE" --arg ips "$OWN_IPS" --arg asset "$ASSET_RE" \
+       'select( ((((.request.headers."User-Agent"[0]) // "") | test($re;"i")) | not)
+          and (((.request.headers."Cf-Connecting-Ip"[0]) // "") as $ip
+                | (any($ips | split(" ")[]; . as $p | ($p|length)>0 and ($ip | startswith($p))) | not)) )
+        | [ (.request.headers."Cf-Connecting-Ip"[0] // ""),
+            (.request.headers."Cf-Ipcountry"[0] // "?"),
+            ((.request.uri|split("?")[0]) | if test($asset) then "a" else "p" end),
+            (.request.uri|split("?")[0]) ] | @tsv'
+}
+
 echo "================================================================"
 echo " Bosfoot traffic — since: $SINCE"
 echo "================================================================"
@@ -48,19 +65,20 @@ echo "Total requests (incl. assets/bots): $TOTAL"
 # Real visitor = an IP that behaved like a browser (loaded HTML *and* at least one
 # static asset, OR viewed ≥2 distinct pages) and is not a bot/test-UA/owner IP.
 # This drops the single-hit, asset-less spray that spoofed-UA bots produce.
-VISITORS=$(printf '%s\n' "$LOG" \
-  | jq -r --arg re "$RE" --arg ips "$OWN_IPS" --arg asset "$ASSET_RE" \
-     'select( ((((.request.headers."User-Agent"[0]) // "") | test($re;"i")) | not)
-        and (((.request.headers."Cf-Connecting-Ip"[0]) // "") as $ip
-              | (any($ips | split(" ")[]; . as $p | ($p|length)>0 and ($ip | startswith($p))) | not)) )
-      | [ (.request.headers."Cf-Connecting-Ip"[0] // ""),
-          ((.request.uri|split("?")[0]) | if test($asset) then "a" else "p" end),
-          (.request.uri|split("?")[0]) ] | @tsv' \
-  | awk -F'\t' '
-      $1=="" { next }
-      { ips[$1]=1; if ($2=="a") a[$1]=1; else { k=$1 SUBSEP $3; if (!(k in sp)) { sp[k]=1; pc[$1]++ } } }
-      END { n=0; for (ip in ips) if (a[ip] || pc[ip]>=2) n++; print n+0 }' || true)
+VISITORS=$(real_rows | awk -F'\t' '
+    $1=="" { next }
+    { ip=$1; all[ip]=1; if ($3=="a") a[ip]=1; else { k=ip SUBSEP $4; if (!(k in sp)) { sp[k]=1; pc[ip]++ } } }
+    END { n=0; for (ip in all) if (a[ip] || pc[ip]>=2) n++; print n+0 }' || true)
 echo "Unique visitors (real browser: HTML+asset or ≥2 pages; excl. bots/test/owner): $VISITORS"
+
+# Of those, the ones in your actual market (Macedonia / Albania / Kosovo). Foreign
+# traffic to a MK/SQ shoe store is overwhelmingly bots or irrelevant, so this is the
+# number to track against ad spend.
+LOCAL=$(real_rows | awk -F'\t' '
+    $1=="" { next }
+    { ip=$1; all[ip]=1; c[ip]=$2; if ($3=="a") a[ip]=1; else { k=ip SUBSEP $4; if (!(k in sp)) { sp[k]=1; pc[ip]++ } } }
+    END { n=0; for (ip in all) if ((a[ip]||pc[ip]>=2) && (c[ip]=="MK"||c[ip]=="AL"||c[ip]=="XK")) n++; print n+0 }' || true)
+echo "  ↳ in market (MK/AL/XK):                                                   $LOCAL"
 
 echo
 echo "---- Top pages (status 200, assets/query-strings stripped) ----"
@@ -85,9 +103,9 @@ printf '%s\n' "$LOG" \
   | sort | uniq -c | sort -rn | head -15
 
 echo
-echo "---- Unique visitors by country (real, excl. bots/crawlers) ----"
-printf '%s\n' "$LOG" \
-  | jq -r --arg ips "$OWN_IPS" 'select((((.request.headers."User-Agent"[0]) // "") | test("facebookexternalhit|bot|crawl|spider|scan")|not)
-           and (((.request.headers."Cf-Connecting-Ip"[0]) // "") as $ip | (any($ips | split(" ")[]; . as $p | ($p|length)>0 and ($ip | startswith($p))) | not)))
-           | [(.request.headers."Cf-Ipcountry"[0] // "?"), (.request.headers."Cf-Connecting-Ip"[0] // "?")] | @tsv' \
-  | sort -u | cut -f1 | sort | uniq -c | sort -rn | head -15
+echo "---- Unique visitors by country (real browser, same filter as headline) ----"
+real_rows | awk -F'\t' '
+    $1=="" { next }
+    { ip=$1; all[ip]=1; c[ip]=$2; if ($3=="a") a[ip]=1; else { k=ip SUBSEP $4; if (!(k in sp)) { sp[k]=1; pc[ip]++ } } }
+    END { for (ip in all) if (a[ip] || pc[ip]>=2) print c[ip] }' \
+  | sort | uniq -c | sort -rn | head -15
