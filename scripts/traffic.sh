@@ -20,7 +20,11 @@ set -euo pipefail
 
 SINCE="${1:-24 hours ago}"
 ASSET_RE='\.(css|js|mjs|ttf|woff2?|webp|avif|jpe?g|png|gif|svg|ico|json|webmanifest|txt|map|xml)$'
-OWN_IPS='146.255.75.165 185.100.245.80'   # 146… = home   185… = mobile (A1)
+# Matched by PREFIX (startswith), same as funnel.sh. Home broadband rotates its
+# host across 146.255.75.0/24, so it's a /24 prefix (trailing dot) — safe, no real
+# customers share that residential block. Mobile (A1) is kept FULL: A1 is a big
+# shared/CGNAT provider, so a /24 there would risk dropping real MK mobile shoppers.
+OWN_IPS='146.255.75. 185.100.245.80'   # 146…/24 = home   185… = mobile (A1, exact)
 
 # Bot/test-UA filter (case-insensitive). Mirrors scripts/funnel.sh: named crawlers
 # + programmatic clients + a few notorious spoofed-browser fingerprints, plus the

@@ -22,18 +22,26 @@ SINCE="${1:-24 hours ago}"
 #  TEST_UA — the owner's test phone (UA build id) so self-tests don't inflate
 #  TEST_IPS — the owner's own connections, space-separated. Matched by PREFIX, so
 #            a full address is an exact match and a partial one covers a range.
-#            Keep IPv4 entries FULL (A1 is a big provider — a short prefix would
-#            also drop real customers). For the laptop's IPv6, list the /64
-#            prefix ending in ':' (the host bits rotate, so a full v6 won't stick).
-#              146.255.75.165 = home (IPv4)   185.100.245.80 = mobile (A1, IPv4)
-#            If the laptop reaches the site over IPv6, add e.g. 2a02:xxxx:xxxx:xxxx:
+#              146.255.75.  = home broadband. The ISP rotates the host across this
+#                            /24 (seen .165 and .17), so it's listed as a /24 prefix
+#                            (trailing dot). Safe: residential block, no real
+#                            customers share it.
+#              185.100.245.80 = mobile (A1). A1 mobile ALSO rotates across its /24,
+#                            but A1 is a big shared/CGNAT provider, so a /24 prefix
+#                            would risk dropping real MK mobile shoppers — kept FULL
+#                            on purpose. Mobile testing is now rare, and the FB
+#                            in-app browser is already caught by TEST_UA (A142P)
+#                            regardless of IP, so this exact entry is just a backstop
+#                            for the occasional mobile-Firefox check.
+#            For the laptop's IPv6, list the /64 prefix ending in ':' (host bits
+#            rotate, so a full v6 won't stick) e.g. 2a02:xxxx:xxxx:xxxx:
 # Named crawlers + programmatic clients + a few notorious spoofed-browser
 # fingerprints that are never real shoppers. Spoofed-UA bots that look like a
 # normal browser are NOT caught here — the behavioural filter below handles those.
 BOT='bot|crawl|spider|facebookexternalhit|headless|scan|python-requests|go-http|curl|wget|okhttp|libwww|java/|axios|node-fetch|ahrefs|semrush|mj12|dataforseo|iphone os 13_2_3|trident/|chrome/88\.|chrome/19\.'
 TEST_UA='A142P'
 TEST_EMAIL='bmarkoski@gmail.com'
-TEST_IPS='146.255.75.165 185.100.245.80'
+TEST_IPS='146.255.75. 185.100.245.80'
 RE="$BOT|$TEST_UA"
 # Static-asset URIs (query string stripped before matching). Used to tell a real
 # browser (loads HTML *and* assets) from a bot that only grabs the HTML.
