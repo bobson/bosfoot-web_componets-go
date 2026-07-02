@@ -288,6 +288,44 @@ export function initProductDetail() {
 
   // ── Size availability ─────────────────────────────────
   const sizeBtns = Array.from(document.querySelectorAll('.product__size-btn'));
+  const lowStockWarning = document.getElementById('low-stock-warning');
+  const locale = document.documentElement.lang || 'en';
+
+  const lowStockMessages = {
+    en: {
+      one: "Only 1 item left in stock!",
+      few: "Only a few items left in stock!"
+    },
+    mk: {
+      one: "Останато е само уште 1 парче!",
+      few: "Останати се само уште неколку парчиња!"
+    },
+    sq: {
+      one: "Ka mbetur vetëm 1 copë!",
+      few: "Kanë mbetur vetëm edhe pak copë!"
+    }
+  };
+
+  function refreshLowStockWarning() {
+    if (!lowStockWarning) return;
+    if (selectedSize == null || preorderMode) {
+      lowStockWarning.hidden = true;
+      return;
+    }
+
+    const byColor = stockMap[selectedColor] || {};
+    const qty = byColor[selectedSize] || 0;
+
+    if (qty === 1) {
+      lowStockWarning.textContent = lowStockMessages[locale]?.one || lowStockMessages.en.one;
+      lowStockWarning.hidden = false;
+    } else if (qty === 2 || qty === 3) {
+      lowStockWarning.textContent = lowStockMessages[locale]?.few || lowStockMessages.en.few;
+      lowStockWarning.hidden = false;
+    } else {
+      lowStockWarning.hidden = true;
+    }
+  }
 
   function updateSizes() {
     // Keep user's active size selected, or clear it if it is null (like when color changes).
@@ -311,6 +349,7 @@ export function initProductDetail() {
     });
 
     refreshBuyState();
+    refreshLowStockWarning();
   }
 
   sizeBtns.forEach((btn) => {
@@ -324,6 +363,7 @@ export function initProductDetail() {
       });
       document.getElementById('size-select')?.classList.remove('product__sizes--error');
       refreshBuyState();
+      refreshLowStockWarning();
     });
   });
 
