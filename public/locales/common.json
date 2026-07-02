@@ -44,6 +44,31 @@
   },
   "cart.subtotal": { "mk": "Меѓузбир", "sq": "Nëntotali", "en": "Subtotal" },
   "cart.title": { "mk": "Кошничка", "sq": "Shporta", "en": "Cart" },
+  "consent.title": {
+    "mk": "Колачиња",
+    "sq": "Cookies",
+    "en": "Cookies"
+  },
+  "consent.message": {
+    "mk": "Користиме колачиња за да ја измериме успешноста на рекламите и да го подобриме искуството. Ги вклучуваме само ако прифатите.",
+    "sq": "Përdorim cookies për të matur performancën e reklamave dhe për të përmirësuar përvojën. I aktivizojmë vetëm nëse pranoni.",
+    "en": "We use cookies to measure ad performance and improve your experience. We only enable them if you accept."
+  },
+  "consent.learnMore": {
+    "mk": "Дознај повеќе",
+    "sq": "Mëso më shumë",
+    "en": "Learn more"
+  },
+  "consent.accept": {
+    "mk": "Прифати",
+    "sq": "Prano",
+    "en": "Accept"
+  },
+  "consent.decline": {
+    "mk": "Одбиј",
+    "sq": "Refuzo",
+    "en": "Decline"
+  },
   "cta.addToCart": {
     "mk": "Додај во кошничка",
     "sq": "Shto në shportë",

@@ -1,3 +1,12 @@
+import { bootstrapPixel, consentState } from './prefs.js';
+
+// If this visitor accepted the cookie banner on a previous visit, install the
+// Meta Pixel NOW — synchronously, before the dynamic component imports below
+// resolve. The fbq stub queues events, so a ViewContent fired at product-detail
+// init is captured instead of racing an undefined window.fbq. (Newly-accepting
+// visitors are handled in the prefs-ui component.)
+if (consentState() === 'accepted') bootstrapPixel();
+
 // Each component is loaded with a dynamic import and initialised in isolation.
 // Static `import` would force the browser to parse EVERY component before app.js
 // runs, so one broken/unfinished module takes down all interactivity. Dynamic
@@ -13,6 +22,7 @@ const components = [
   ['./components/product-detail.js', 'initProductDetail'],
   ['./components/size-guide-modal.js', 'initSizeGuideModal'],
   ['./components/scroll-reveal.js', 'initScrollReveal'],
+  ['./components/prefs-ui.js', 'initPrefsUI'],
 ];
 
 // Cache-bust component imports with app.js's own asset version (its ?v=hash).

@@ -3,7 +3,7 @@
 // POSTs to /api/orders (which re-prices server-side), then swaps in the
 // confirmation panel. Global CSS (checkout.css) styles it normally.
 
-import { track } from '../analytics.js';
+import { track } from '../funnel.js';
 
 const CART_KEY = 'bosfoot_cart';
 // Default rate; overridden at connect from the data-eur-rate attribute, which

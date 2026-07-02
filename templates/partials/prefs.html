@@ -1,0 +1,20 @@
+{{define "prefs"}}
+{{/* Consent banner. Rendered (hidden) only when a pixel is configured — no
+     pixel, no marketing cookies, no banner. prefs-ui.js unhides it for undecided
+     visitors. Named "prefs" (not "cookie-consent") so ad blockers don't block/
+     hide it — see public/prefs.js. */}}
+{{if pixelID}}
+<aside id="prefs-bar" class="prefs" aria-label="{{t .Locale "consent.title"}}" hidden>
+  <div class="prefs__inner container">
+    <p class="prefs__text">
+      {{t .Locale "consent.message"}}
+      <a class="prefs__link" href="/{{.Locale}}/privacy">{{t .Locale "consent.learnMore"}}</a>
+    </p>
+    <div class="prefs__actions">
+      <button type="button" class="btn btn--secondary prefs__btn" data-prefs="decline">{{t .Locale "consent.decline"}}</button>
+      <button type="button" class="btn btn--brand prefs__btn" data-prefs="accept">{{t .Locale "consent.accept"}}</button>
+    </div>
+  </div>
+</aside>
+{{end}}
+{{end}}

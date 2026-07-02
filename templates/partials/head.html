@@ -3,21 +3,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 {{if .MetaDescription}}<meta name="description" content="{{.MetaDescription}}">{{end}}
 
-{{/* Meta (Facebook/Instagram) Pixel — only when META_PIXEL_ID is configured.
-     Base code fires PageView; ViewContent/AddToCart/InitiateCheckout/Lead are
-     fired from analytics.js. Note: enabling this needs a cookie-consent banner. */}}
-{{if pixelID}}
-<script>
-  !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-  n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
-  n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
-  t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
-  document,'script','https://connect.facebook.net/en_US/fbevents.js');
-  fbq('init','{{pixelID}}');fbq('track','PageView');
-</script>
-<noscript><img height="1" width="1" style="display:none"
-  src="https://www.facebook.com/tr?id={{pixelID}}&ev=PageView&noscript=1" alt=""/></noscript>
-{{end}}
+{{/* Meta (Facebook/Instagram) Pixel — the ID is exposed INERTLY here; the pixel
+     is not loaded until the visitor accepts via the consent banner (see
+     public/prefs.js), which is required under GDPR/ePrivacy. The tag is
+     identical for every visitor, so it stays safe under the shared page cache.
+     No <noscript> pixel: it would fire before consent for no-JS visitors. */}}
+{{if pixelID}}<meta name="meta-pixel-id" content="{{pixelID}}">{{end}}
 
 {{/* Social Meta (OpenGraph / Twitter) */}}
 {{$title := .MetaTitle}}{{if not $title}}{{$title = t .Locale "hero.heading"}}{{end}}
@@ -69,6 +60,7 @@
 <link rel="stylesheet" href="{{asset "/css/search.css"}}">
 <link rel="stylesheet" href="{{asset "/css/cart.css"}}">
 <link rel="stylesheet" href="{{asset "/css/footer.css"}}">
+{{if pixelID}}<link rel="stylesheet" href="{{asset "/css/prefs.css"}}">{{end}}
 <link rel="icon" href="/favicon.ico" sizes="32x32">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">

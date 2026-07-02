@@ -3,6 +3,7 @@ package routes
 import (
 	"bosfoot/handlers"
 	"bosfoot/internal/cache"
+	"bosfoot/internal/locale"
 	"bosfoot/internal/middleware"
 	"net/http"
 	"strings"
@@ -61,12 +62,29 @@ func Register(
 	fileServer := http.FileServer(http.Dir("public"))
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Path == "/" {
-			http.Redirect(w, r, "/mk", http.StatusFound)
+			// Send returning visitors to the language they last viewed (set client-
+			// side in nav-locale.js), defaulting to mk. The destination now varies by
+			// cookie, so forbid any shared cache (Cloudflare/browser) from pinning one
+			// visitor's redirect for everyone.
+			w.Header().Set("Cache-Control", "no-store")
+			w.Header().Set("Vary", "Cookie")
+			http.Redirect(w, r, localeRedirectDest(r), http.StatusFound)
 			return
 		}
 		setStaticCacheHeaders(w, r)
 		fileServer.ServeHTTP(w, r)
 	})
+}
+
+// localeRedirectDest picks where "/" sends a visitor: the language from their
+// bosfoot_locale cookie if it's a valid locale, else the mk default. The
+// IsValid guard is essential — it prevents a tampered cookie from turning the
+// redirect into an open redirect (e.g. "//evil.com").
+func localeRedirectDest(r *http.Request) string {
+	if c, err := r.Cookie("bosfoot_locale"); err == nil && locale.IsValid(c.Value) {
+		return "/" + c.Value
+	}
+	return "/mk"
 }
 
 // setStaticCacheHeaders applies a Cache-Control tier based on the request:

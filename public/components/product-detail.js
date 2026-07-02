@@ -1,4 +1,4 @@
-import { track } from '../analytics.js';
+import { track } from '../funnel.js';
 
 export function initProductDetail() {
   // ── Stock data ────────────────────────────────────────
@@ -23,28 +23,41 @@ export function initProductDetail() {
 
   const productId = Number(document.getElementById('add-to-cart')?.dataset.productId) || 0;
 
-  // Fetch the live stock data immediately to bypass the 60-second SSR page cache.
-  if (productId) {
-    fetch(`/api/products/${productId}/stock`)
+  // Pull the authoritative live stock map, replacing whatever we have (SSR cache
+  // or a pre-reconnect snapshot). Runs on load AND on every (re)connect so a stock
+  // change that happened while the SSE stream was dropped can't leave us stale.
+  function syncLiveStock() {
+    return fetch(`/api/products/${productId}/stock`)
       .then((res) => {
         if (!res.ok) throw new Error('Failed to fetch live stock');
         return res.json();
       })
       .then((liveStock) => {
-        // Clear and rebuild stockMap with live data
         for (const c in stockMap) delete stockMap[c];
         liveStock.forEach(({ eu_size, color, qty }) => {
           if (!stockMap[color]) stockMap[color] = {};
           stockMap[color][eu_size] = qty;
         });
-        // Update the UI sizes
         updateSizes();
       })
       .catch((err) => console.error('Error fetching live stock:', err));
+  }
+
+  // Fetch the live stock data immediately to bypass the 60-second SSR page cache.
+  if (productId) {
+    syncLiveStock();
 
     // Open SSE connection for real-time push updates
     const streamUrl = `/api/products/${productId}/stock/stream`;
     const eventSource = new EventSource(streamUrl);
+
+    // On (re)connect, resync — closes the gap where an update fired while the
+    // stream was down. Skips the very first connect (the load fetch above covers it).
+    let sseConnected = false;
+    eventSource.addEventListener('open', () => {
+      if (sseConnected) syncLiveStock();
+      sseConnected = true;
+    });
 
     eventSource.addEventListener('stock_update', (e) => {
       try {
@@ -64,6 +77,13 @@ export function initProductDetail() {
     eventSource.onerror = (err) => {
       console.error('SSE connection error:', err);
     };
+
+    // A backgrounded tab (esp. mobile) suspends EventSource, so a size can sell
+    // out while we're away. Resync whenever the tab becomes visible again — this
+    // catches the common "opened, switched apps, came back to buy" case.
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') syncLiveStock();
+    });
 
     // Close SSE stream when navigating away
     window.addEventListener('beforeunload', () => {

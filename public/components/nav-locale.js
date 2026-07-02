@@ -1,4 +1,13 @@
 import { closeDrawer } from './nav-drawer.js';
+import { setCookie } from '../prefs.js';
+
+// Remember the language currently being viewed so the "/" redirect (server-side,
+// internal/routes/routes.go) can send a returning visitor straight to it instead
+// of always defaulting to /mk. Non-sensitive, so JS-set (not HttpOnly) is fine.
+function rememberLocale() {
+  const lang = document.documentElement.lang;
+  if (lang) setCookie('bosfoot_locale', lang, 365);
+}
 
 // Persistent SR announcer — lives on body, never inside swapped regions.
 function getAnnouncer() {
@@ -48,6 +57,7 @@ async function navigate(url) {
 
   document.title = doc.title;
   document.documentElement.lang = doc.documentElement.lang;
+  rememberLocale(); // the SPA swap changed the language; persist the new choice
 
   history.pushState({ url }, '', url);
   window.scrollTo(0, 0);
@@ -63,6 +73,8 @@ async function navigate(url) {
 }
 
 export function initNavLocale() {
+  rememberLocale(); // persist the language of the page we landed on
+
   document.addEventListener('click', (e) => {
     const a = e.target.closest('.nav__lang a');
     if (!a) return;

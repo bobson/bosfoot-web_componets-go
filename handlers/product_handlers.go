@@ -555,6 +555,14 @@ func (h *ProductHandler) StreamProductStock(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
+	// The server's global WriteTimeout (main.go) is an absolute deadline measured
+	// from the start of the request — writes do NOT reset it — so it would force-
+	// close this long-lived stream after ~30s. Clear the write deadline for this
+	// handler only; the global timeout still protects every normal route.
+	if err := http.NewResponseController(w).SetWriteDeadline(time.Time{}); err != nil {
+		h.Logger.Error("StreamProductStock: clear write deadline failed", err, "product_id", id)
+	}
+
 	// Set headers for Server-Sent Events (SSE)
 	w.Header().Set("Content-Type", "text/event-stream")
 	w.Header().Set("Cache-Control", "no-cache")
