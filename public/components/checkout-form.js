@@ -33,13 +33,18 @@ class CheckoutForm extends HTMLElement {
     this.showEur = this.dataset.showEur === '1';
     MKD_TO_EUR = parseFloat(this.dataset.eurRate) || MKD_TO_EUR;
     this.labelSize = this.dataset.labelSize || 'Size';
+    this.labelPreorder = this.dataset.labelPreorder || 'Preorder';
     this.labelEmailSent = this.dataset.labelEmailSent || '';
     this.labelSpamNote = this.dataset.labelSpamNote || '';
+    this.errorGeneric = this.dataset.errorGeneric || 'Something went wrong. Please try again.';
+    this.errorStock =
+      this.dataset.errorStock || 'Some items just sold out. Please review your cart.';
 
     this.emptyEl = this.querySelector('[data-checkout-empty]');
     this.gridEl = this.querySelector('[data-checkout-grid]');
     this.form = this.querySelector('[data-checkout-form]');
     this.itemsEl = this.querySelector('[data-summary-items]');
+    this.preorderEl = this.querySelector('[data-summary-preorder]');
     this.subtotalEl = this.querySelector('[data-summary-subtotal]');
     this.totalEl = this.querySelector('[data-summary-total]');
     this.errorEl = this.querySelector('[data-checkout-error]');
@@ -107,6 +112,7 @@ class CheckoutForm extends HTMLElement {
     this.gridEl.hidden = false;
 
     this.itemsEl.innerHTML = cart.map((i) => this.row(i)).join('');
+    if (this.preorderEl) this.preorderEl.hidden = !cart.some((i) => i.preorder);
     const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
     this.subtotalEl.textContent = this.price(subtotal);
     this.totalEl.textContent = this.price(subtotal);
@@ -124,7 +130,11 @@ class CheckoutForm extends HTMLElement {
         </div>
         <div class="checkout-item__info">
           <p class="checkout-item__name font-medium">${esc(i.productName)}</p>
-          <p class="checkout-item__variant text-xs text-muted">${esc(this.labelSize)} ${esc(i.size)} · ${esc(i.color)}</p>
+          <p class="checkout-item__variant text-xs text-muted">${
+            i.preorder
+              ? `<span class="checkout-item__preorder">${esc(this.labelPreorder)}</span> · ${esc(i.color)}`
+              : `${esc(this.labelSize)} ${esc(i.size)} · ${esc(i.color)}`
+          }</p>
         </div>
         <span class="checkout-item__price text-sm">${esc(this.price(i.price * i.qty))}</span>
       </article>`;
@@ -155,7 +165,8 @@ class CheckoutForm extends HTMLElement {
       payment_method: fd.get('payment_method') || 'cod',
       items: cart.map((i) => ({
         product_id: i.productId,
-        size: String(i.size),
+        // Preorder lines carry no size; send "" (server stores NULL) not "null".
+        size: i.size == null ? '' : String(i.size),
         color: i.color,
         qty: i.qty,
       })),
@@ -170,10 +181,18 @@ class CheckoutForm extends HTMLElement {
         headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': csrfToken },
         body: JSON.stringify(payload),
       });
-      if (!res.ok) throw new Error('order failed');
+      if (!res.ok) {
+        // 409 = a line is no longer in stock (server enforces inventory). Tell
+        // the buyer to review their cart rather than showing a generic failure.
+        this.errorEl.textContent = res.status === 409 ? this.errorStock : this.errorGeneric;
+        this.errorEl.hidden = false;
+        this.setBusy(false);
+        return;
+      }
       const data = await res.json();
       this.onSuccess(data);
     } catch {
+      this.errorEl.textContent = this.errorGeneric;
       this.errorEl.hidden = false;
       this.setBusy(false);
     }

@@ -113,7 +113,11 @@
         <p class="product__desc text-muted">{{.Translation.Description}}</p>
         {{end}}
 
-        {{/* Size selector */}}
+        {{/* Size selector — always shown. JS greys the sizes that are out of
+             stock for the selected colour (from the embedded stock data). On a
+             stocked product an out-of-stock size stays clickable and flips the
+             button to "get notified"; on a no-stock product the whole grid is
+             display-only and the button is a standing "preorder now". */}}
         {{if .Product.Sizes}}
         <div class="product__option">
           <div class="product__option-header">
@@ -130,7 +134,8 @@
 
         {{/* Buy: price + add-to-cart. On mobile/tablet this becomes a fixed
              bar pinned to the bottom of the viewport so it's always reachable;
-             on desktop it sits in the sticky details column. */}}
+             on desktop it sits in the sticky details column. The button label is
+             driven by product-detail.js (data-label-* below). */}}
         <div class="product__buy">
           <div class="product__price-row">
             <span class="product__price font-bold">{{mkd .Product.PriceMKD}} {{t .Locale "currency.MKD"}}</span>
@@ -143,16 +148,23 @@
             data-brand-name="{{.Product.BrandName}}"
             data-image-url="{{if .Product.ImageURL}}{{asset (deref .Product.ImageURL)}}{{end}}"
             data-price="{{.Product.PriceMKD}}"
+            data-in-stock="{{if .Product.InStock}}1{{end}}"
             data-label-pick="{{t .Locale "detail.selectSize"}}"
-            data-label-add="{{t .Locale "cta.addToCart"}}">
+            data-label-add="{{t .Locale "cta.addToCart"}}"
+            data-label-notify="{{t .Locale "detail.notifySize"}}"
+            data-label-preorder="{{t .Locale "cta.preorderNow"}}">
             {{t .Locale "detail.selectSize"}}
           </button>
 
-          {{/* Pre-launch trust block. These three points (reserve with no
-               commitment → pay on delivery → free returns) are the single
-               biggest lever on conversion for risk-averse MK buyers, so they
-               sit high-contrast right under the button — not as muted notes.
-               COD wording matches the checkout's payment.cod term. */}}
+          {{/* Static note shown when an out-of-stock size is picked on a stocked
+               product (no capture — points to our channels). */}}
+          <p class="product__notify-note text-sm text-muted" id="notify-note" hidden>{{t .Locale "notify.body"}}</p>
+          {{/* Preorder note — shown by JS for products with no stock at all. */}}
+          <p class="product__preorder-note text-sm text-muted" id="preorder-note" hidden>{{t .Locale "preorder.note"}}</p>
+
+          {{/* Trust block: authentic → pay on delivery → free returns. Biggest
+               conversion lever for risk-averse MK buyers; applies to in-stock and
+               preorder alike (pay on delivery either way). */}}
           <ul class="product__trust">
             <li class="product__trust-item">
               <svg class="product__trust-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
@@ -281,9 +293,8 @@
   </main>
 
   {{/* Floating buy bar — revealed only when the in-page button is scrolled
-       off-screen (IntersectionObserver in product-detail.js). Its label tracks
-       the same state as the real button: "Select size" until a size is picked,
-       then "Add to cart". */}}
+       off-screen (IntersectionObserver in product-detail.js). Its label mirrors
+       the in-page button (Select size / Add to cart / Get notified / Preorder). */}}
   <div class="product__floating" id="floating-buy" aria-hidden="true">
     <div class="product__floating-inner container">
       <div class="product__floating-info">

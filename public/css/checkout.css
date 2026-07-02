@@ -428,3 +428,14 @@ checkout-form { display: block; }
 .checkout__confirm-cta:hover {
   background: var(--color-accent-hover);
 }
+
+/* Preorder banner in the order summary (any no-stock item in the cart). */
+.checkout__preorder-banner {
+  margin: 0 0 var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  background: var(--color-accent-light);
+  color: var(--color-text);
+  font-size: var(--fs-xs);
+  line-height: 1.4;
+}

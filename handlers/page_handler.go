@@ -100,6 +100,35 @@ func (h *PageHandler) fetchColors(ctx context.Context, ids []int) (map[int][]mod
 	return colorMap, rows.Err()
 }
 
+// fetchInStock returns the set of product ids that have at least one variant
+// with qty > 0. Products absent from the map are shown but not orderable
+// ("get notified"). Used by both the listing and the home featured grid.
+func (h *PageHandler) fetchInStock(ctx context.Context, ids []int) (map[int]bool, error) {
+	inStock := make(map[int]bool)
+	if len(ids) == 0 {
+		return inStock, nil
+	}
+	rows, err := h.DB.QueryContext(ctx, `
+		SELECT product_id
+		FROM product_stock
+		WHERE product_id = ANY($1)
+		GROUP BY product_id
+		HAVING SUM(qty) > 0
+	`, pq.Array(ids))
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	for rows.Next() {
+		var productID int
+		if err := rows.Scan(&productID); err != nil {
+			return nil, err
+		}
+		inStock[productID] = true
+	}
+	return inStock, rows.Err()
+}
+
 // PageHandler serves SSR pages. Each method renders a full HTML page.
 type PageHandler struct {
 	DB       *sql.DB
@@ -321,6 +350,7 @@ func (h *PageHandler) Home(w http.ResponseWriter, r *http.Request) {
 		JOIN brands b ON b.id = p.brand_id
 		JOIN genders g ON g.id = p.gender_id
 		WHERE p.is_active = TRUE AND p.is_published = TRUE
+		  AND p.id IN (SELECT product_id FROM product_stock GROUP BY product_id HAVING SUM(qty) > 0)
 		ORDER BY p.sort_order ASC, p.created_at DESC
 		LIMIT 3
 	`)
@@ -353,6 +383,17 @@ func (h *PageHandler) Home(w http.ResponseWriter, r *http.Request) {
 	}
 	for i := range featured {
 		featured[i].Colors = colorMap[featured[i].ID]
+	}
+
+	// In-stock flag so featured cards show "buy" vs "get notified" correctly.
+	inStock, err := h.fetchInStock(ctx, ids)
+	if err != nil {
+		h.Logger.Error("Home: stock query failed", err)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+	for i := range featured {
+		featured[i].InStock = inStock[featured[i].ID]
 	}
 
 	h.Renderer.Render(w, "home", HomePageData{
@@ -910,6 +951,18 @@ func (h *PageHandler) ProductListing(w http.ResponseWriter, r *http.Request) {
 		for i := range products {
 			products[i].Sizes = sizeMap[products[i].ID]
 		}
+
+		// In-stock flag: a product is buyable if any variant has qty > 0.
+		// Products with no stock are still listed but shown as "get notified".
+		inStock, err := h.fetchInStock(ctx, ids)
+		if err != nil {
+			h.Logger.Error("ProductListing: stock query failed", err)
+			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+			return
+		}
+		for i := range products {
+			products[i].InStock = inStock[products[i].ID]
+		}
 	}
 
 	// Collect unique filter options from all products.
@@ -1246,6 +1299,15 @@ func (h *PageHandler) ProductDetail(w http.ResponseWriter, r *http.Request) {
 		for i := range related {
 			related[i].Colors = rcMap[related[i].ID]
 		}
+
+		// In-stock flag so related cards show "buy" vs "get notified" correctly.
+		relStock, err := h.fetchInStock(gctx, relIDs)
+		if err != nil {
+			return err
+		}
+		for i := range related {
+			related[i].InStock = relStock[related[i].ID]
+		}
 		return nil
 	})
 
@@ -1253,6 +1315,14 @@ func (h *PageHandler) ProductDetail(w http.ResponseWriter, r *http.Request) {
 		h.Logger.Error("ProductDetail: data fetch failed", err)
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		return
+	}
+
+	// Buyable if any variant has stock; otherwise the page shows "get notified".
+	for _, s := range p.Stock {
+		if s.Qty > 0 {
+			p.InStock = true
+			break
+		}
 	}
 
 	// Find locale-specific translation; fall back to mk.

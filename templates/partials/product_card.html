@@ -10,8 +10,11 @@
   data-activities="{{range $p.Activities}}{{.}}|{{end}}"
   data-sizes="{{range $p.Sizes}}{{.}}|{{end}}"
   data-colors="{{range $p.Colors}}{{lower .Color}}|{{end}}">
+  {{if not $p.InStock}}<span class="product-card__badge product-card__badge--preorder">{{t $locale "cart.preorder"}}</span>
+  {{else}}
   {{if $p.IsNew}}<span class="product-card__badge product-card__badge--new">{{t $locale "product.new"}}</span>{{end}}
   {{if $p.IsOnSale}}<span class="product-card__badge product-card__badge--sale">{{t $locale "product.sale"}}</span>{{end}}
+  {{end}}
 
   <a class="product-card__link" href="/{{$locale}}/products/{{$p.BrandSlug}}/{{$p.Slug}}">
     <div class="product-card__image-wrap">

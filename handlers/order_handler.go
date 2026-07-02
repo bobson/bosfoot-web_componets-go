@@ -159,6 +159,33 @@ func (h *OrderHandler) CreateOrder(w http.ResponseWriter, r *http.Request) {
 		total += p.price * it.Qty
 	}
 
+	// Which ordered products have any stock at all? A product with zero total
+	// stock is a "preorder" product — orderable without depleting inventory and
+	// with no size required (its size grid is display-only). A product with stock
+	// only sells the specific sizes that are on hand.
+	hasStock := make(map[int]bool)
+	stockRows, err := h.DB.QueryContext(r.Context(), `
+		SELECT product_id FROM product_stock
+		WHERE product_id = ANY($1)
+		GROUP BY product_id HAVING SUM(qty) > 0
+	`, pq.Array(ids))
+	if err != nil {
+		h.Logger.Error("CreateOrder: stock query failed", err)
+		writeJSONError(w, http.StatusInternalServerError, "internal error")
+		return
+	}
+	for stockRows.Next() {
+		var pid int
+		if err := stockRows.Scan(&pid); err != nil {
+			stockRows.Close()
+			h.Logger.Error("CreateOrder: stock scan failed", err)
+			writeJSONError(w, http.StatusInternalServerError, "internal error")
+			return
+		}
+		hasStock[pid] = true
+	}
+	stockRows.Close()
+
 	// Persist the order + items in one transaction.
 	tx, err := h.DB.BeginTx(r.Context(), nil)
 	if err != nil {
@@ -185,13 +212,37 @@ func (h *OrderHandler) CreateOrder(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Reservation mode (pre-launch): we take reservations, not real sales, so we
-	// do NOT validate against or decrement product_stock — every size is
-	// reservable regardless of inventory. Product existence and price are already
-	// validated in the pricing loop above. To switch back to real selling, restore
-	// the SELECT ... FOR UPDATE variant check, the insufficient-stock guard, and
-	// the `UPDATE product_stock SET qty = qty - $1` decrement here.
+	// Three cases per line:
+	//   • preorder product (no stock) → accept as preorder, no decrement, size
+	//     optional (grid is display-only for these).
+	//   • stocked product, size in stock → atomically decrement. The `qty >= $1`
+	//     guard + the row lock the UPDATE takes make concurrent last-pair orders
+	//     safe (the loser matches 0 rows and is rejected).
+	//   • stocked product, size NOT in stock → reject: that size is "notify me",
+	//     not orderable. Rolls the whole order back (defer tx.Rollback).
 	for _, it := range req.Items {
+		if hasStock[it.ProductID] {
+			res, err := tx.ExecContext(r.Context(), `
+				UPDATE product_stock
+				SET qty = qty - $1
+				WHERE product_id = $2
+				  AND size_id  = (SELECT id FROM product_sizes  WHERE product_id = $2 AND eu_size = $3::numeric)
+				  AND color_id = (SELECT id FROM product_colors WHERE product_id = $2 AND color   = $4)
+				  AND qty >= $1
+			`, it.Qty, it.ProductID, it.Size, it.Color)
+			if err != nil {
+				h.Logger.Error("CreateOrder: stock decrement failed", err)
+				writeJSONError(w, http.StatusInternalServerError, "internal error")
+				return
+			}
+			if n, _ := res.RowsAffected(); n != 1 {
+				h.Logger.Info("order rejected", "reason", "size not in stock",
+					"product_id", it.ProductID, "size", it.Size, "color", it.Color, "qty", it.Qty)
+				writeJSONError(w, http.StatusConflict, "out_of_stock")
+				return
+			}
+		}
+
 		if _, err := tx.ExecContext(r.Context(), `
 			INSERT INTO order_items
 				(order_id, product_id, size, color, quantity, unit_price_mkd)

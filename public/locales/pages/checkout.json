@@ -9,6 +9,8 @@
   "checkout.confirmText": { "mk": "Вашата нарачка е примена. Ќе ве контактираме наскоро за потврда.", "sq": "Porosia juaj u pranua. Do t'ju kontaktojmë së shpejti për konfirmim.", "en": "Your order has been received. We'll contact you shortly to confirm." },
   "checkout.confirmTitle": { "mk": "Ви благодариме!", "sq": "Faleminderit!", "en": "Thank you!" },
   "checkout.contact": { "mk": "Контакт", "sq": "Kontakt", "en": "Contact" },
+  "checkout.errorGeneric": { "mk": "Нешто тргна наопаку. Обиди се повторно.", "sq": "Diçka shkoi keq. Provo përsëri.", "en": "Something went wrong. Please try again." },
+  "checkout.errorStock": { "mk": "Некои артикли штотуку се распродадоа. Провери ја кошничката и обиди се повторно.", "sq": "Disa artikuj sapo u shitën. Kontrollo shportën dhe provo përsëri.", "en": "Some items just sold out. Please review your cart and try again." },
   "checkout.country": { "mk": "Држава", "sq": "Vendi", "en": "Country" },
   "checkout.email": { "mk": "Е-пошта", "sq": "E-mail", "en": "Email" },
   "checkout.emailOptional": { "mk": "Е-пошта (опционално)", "sq": "E-mail (opsionale)", "en": "Email (optional)" },

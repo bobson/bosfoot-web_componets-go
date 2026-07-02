@@ -172,7 +172,8 @@
   data-show-eur="{{if showEUR .Locale}}1{{end}}"
   data-eur-rate="{{eurRate}}"
   data-label-size="{{t .Locale "cart.size"}}"
-  data-label-remove="{{t .Locale "cart.remove"}}">
+  data-label-remove="{{t .Locale "cart.remove"}}"
+  data-label-preorder="{{t .Locale "cart.preorder"}}">
 
   <div class="cart__overlay" data-cart-overlay aria-hidden="true"></div>
 
@@ -187,6 +188,9 @@
         </svg>
       </button>
     </header>
+
+    {{/* Shown by cart-drawer.js when the cart contains any preorder item. */}}
+    <p class="cart__preorder-banner" data-cart-preorder hidden>{{t .Locale "cart.preorderBanner"}}</p>
 
     <div class="cart__items" data-cart-items></div>
 

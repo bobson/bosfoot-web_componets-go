@@ -34,11 +34,13 @@ class CartDrawer extends HTMLElement {
     this.labels = {
       size: this.dataset.labelSize || 'Size',
       remove: this.dataset.labelRemove || 'Remove',
+      preorder: this.dataset.labelPreorder || 'Preorder',
     };
 
     this.overlay = this.querySelector('[data-cart-overlay]');
     this.panel = this.querySelector('.cart__panel');
     this.itemsEl = this.querySelector('[data-cart-items]');
+    this.preorderEl = this.querySelector('[data-cart-preorder]');
     this.emptyEl = this.querySelector('[data-cart-empty]');
     this.footerEl = this.querySelector('[data-cart-footer]');
     this.subtotalEl = this.querySelector('[data-cart-subtotal]');
@@ -147,12 +149,15 @@ class CartDrawer extends HTMLElement {
       this.itemsEl.innerHTML = '';
       this.emptyEl.hidden = false;
       this.footerEl.hidden = true;
+      if (this.preorderEl) this.preorderEl.hidden = true;
       return;
     }
 
     this.emptyEl.hidden = true;
     this.footerEl.hidden = false;
     this.itemsEl.innerHTML = cart.map((i) => this.row(i)).join('');
+    // Banner when any line is a preorder (no-stock product, ships with the batch).
+    if (this.preorderEl) this.preorderEl.hidden = !cart.some((i) => i.preorder);
 
     const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
     this.subtotalEl.textContent = this.price(subtotal);
@@ -168,7 +173,11 @@ class CartDrawer extends HTMLElement {
         <div class="cart-item__info">
           <p class="cart-item__brand text-xs text-muted">${esc(i.brandName)}</p>
           <p class="cart-item__name font-medium">${esc(i.productName)}</p>
-          <p class="cart-item__variant text-xs text-muted">${esc(this.labels.size)} ${esc(i.size)} · ${esc(i.color)}</p>
+          <p class="cart-item__variant text-xs text-muted">${
+            i.preorder
+              ? `<span class="cart-item__preorder">${esc(this.labels.preorder)}</span> · ${esc(i.color)}`
+              : `${esc(this.labels.size)} ${esc(i.size)} · ${esc(i.color)}`
+          }</p>
           <div class="cart-item__bottom">
             <div class="cart-item__qty">
               <button type="button" class="cart-item__step" data-action="dec" aria-label="−">−</button>

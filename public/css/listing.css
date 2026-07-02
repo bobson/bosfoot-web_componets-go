@@ -407,6 +407,7 @@ details.filter-group[open] .filter-group__arrow {
   position: absolute;
   top: var(--space-2);
   left: var(--space-2);
+  z-index: 2; /* stay above the image, which creates a stacking context when it scales on hover */
   padding: 2px var(--space-2);
   font-size: var(--fs-xs);
   font-weight: var(--fw-semibold);
@@ -417,6 +418,7 @@ details.filter-group[open] .filter-group__arrow {
 
 .product-card__badge--new  { background: var(--color-accent); color: var(--color-white); }
 .product-card__badge--sale { background: var(--color-sale);   color: var(--color-white); }
+.product-card__badge--preorder { background: var(--color-text); color: var(--color-text-on-dark); }
 
 /* ── Pre-launch reservation strip ─────────────────────── */
 .reserve-banner {

@@ -337,11 +337,29 @@ body.page-product {
   color: var(--color-white);
 }
 
-.product__size-btn--oos,
+/* Out-of-stock size on a STOCKED product: greyed + struck through but still
+   clickable (selecting it flips the button to "get notified"). */
+.product__size-btn--oos {
+  opacity: 0.4;
+  text-decoration: line-through;
+}
+/* Inert size (preorder product — grid is display-only). */
 .product__size-btn:disabled {
-  opacity: 0.35;
+  opacity: 0.4;
   cursor: not-allowed;
   text-decoration: line-through;
+}
+
+/* ── Get-notified / preorder helper notes under the buy button ─────────── */
+
+.product__notify-note,
+.product__preorder-note {
+  margin-top: var(--space-3);
+  padding: var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-accent-light);
+  line-height: 1.5;
 }
 
 /* ── Buy: price + add-to-cart (in-flow, in the details column) ─────────── */

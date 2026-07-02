@@ -23,7 +23,10 @@
       data-eur-rate="{{eurRate}}"
       data-label-size="{{t .Locale "cart.size"}}"
       data-label-email-sent="{{t .Locale "checkout.confirmEmailSent"}}"
-      data-label-spam-note="{{t .Locale "checkout.confirmSpamNote"}}">
+      data-label-spam-note="{{t .Locale "checkout.confirmSpamNote"}}"
+      data-error-generic="{{t .Locale "checkout.errorGeneric"}}"
+      data-error-stock="{{t .Locale "checkout.errorStock"}}"
+      data-label-preorder="{{t .Locale "cart.preorder"}}">
 
       {{/* ── Empty-cart state ─────────────────────────────── */}}
       <div class="checkout__empty" data-checkout-empty hidden>
@@ -123,6 +126,8 @@
         {{/* ── Order summary ──────────────────────────────── */}}
         <aside class="checkout__summary" aria-label="{{t .Locale "checkout.summary"}}">
           <h2 class="checkout__summary-title font-semibold">{{t .Locale "checkout.summary"}}</h2>
+          {{/* Shown by checkout-form.js when the cart contains any preorder item. */}}
+          <p class="checkout__preorder-banner" data-summary-preorder hidden>{{t .Locale "cart.preorderBanner"}}</p>
           <div class="checkout__items" data-summary-items></div>
           <div class="checkout__totals">
             <div class="checkout__row">

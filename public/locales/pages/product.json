@@ -15,6 +15,7 @@
   "detail.prevImage": { "mk": "Претходна слика", "sq": "Imazhi i mëparshëm", "en": "Previous image" },
   "detail.productInfo": { "mk": "Информации за производот", "sq": "Informacion produkti", "en": "Product information" },
   "detail.relatedTitle": { "mk": "Повеќе од", "sq": "Më shumë nga", "en": "More from" },
+  "detail.notifySize": { "mk": "Извести ме за оваа големина", "sq": "Më njofto për këtë masë", "en": "Get notified about this size" },
   "detail.selectSize": { "mk": "Избери големина", "sq": "Zgjedh madhësinë", "en": "Select size" },
   "detail.size": { "mk": "Големина", "sq": "Madhësia", "en": "Size" },
   "detail.sizeAndFit": { "mk": "Големина и форма", "sq": "Madhësia dhe forma", "en": "Size \u0026 fit" },

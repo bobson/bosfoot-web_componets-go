@@ -41,6 +41,12 @@ type Product struct {
 	Stock        []ProductStock       `json:"stock,omitempty"`
 	SizeChart    []SizeChartEntry     `json:"size_chart,omitempty"`
 	Reviews      []Review             `json:"reviews,omitempty"`
+
+	// InStock is true when at least one (size, colour) variant has qty > 0.
+	// Populated for SSR pages (listing + detail) to decide whether a product is
+	// buyable or shows the "get notified when available" state. When false the
+	// product is displayed but not orderable.
+	InStock bool `json:"in_stock"`
 }
 
 type ProductTranslation struct {
