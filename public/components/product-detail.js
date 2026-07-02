@@ -293,17 +293,17 @@ export function initProductDetail() {
 
   const lowStockMessages = {
     en: {
-      one: "Only 1 item left in stock!",
-      few: "Only a few items left in stock!"
+      one: 'Only 1 item left in stock!',
+      few: 'Only a few items left in stock!',
     },
     mk: {
-      one: "Останато е само уште 1 парче!",
-      few: "Останати се само уште неколку парчиња!"
+      one: 'Останато е само уште 1 парче!',
+      few: 'Останати се само уште неколку парчиња!',
     },
     sq: {
-      one: "Ka mbetur vetëm 1 copë!",
-      few: "Kanë mbetur vetëm edhe pak copë!"
-    }
+      one: 'Ka mbetur vetëm 1 copë!',
+      few: 'Kanë mbetur vetëm edhe pak copë!',
+    },
   };
 
   function refreshLowStockWarning() {
