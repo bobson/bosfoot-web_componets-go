@@ -19,6 +19,8 @@ func Register(
 	http.HandleFunc("/api/brands", productHandler.GetBrands)
 	http.HandleFunc("/api/products", productHandler.GetProducts)
 	http.HandleFunc("/api/products/{id}", productHandler.GetProductByID)
+	http.HandleFunc("/api/products/{id}/stock", productHandler.GetProductStock)
+	http.HandleFunc("/api/products/{id}/stock/stream", productHandler.StreamProductStock)
 
 	http.HandleFunc("/api/orders", middleware.WrapCSRF(orderHandler.CreateOrder))
 

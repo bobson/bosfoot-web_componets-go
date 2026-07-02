@@ -21,6 +21,56 @@ export function initProductDetail() {
   let selectedColor = null;
   let selectedSize = null;
 
+  const productId = Number(document.getElementById('add-to-cart')?.dataset.productId) || 0;
+
+  // Fetch the live stock data immediately to bypass the 60-second SSR page cache.
+  if (productId) {
+    fetch(`/api/products/${productId}/stock`)
+      .then((res) => {
+        if (!res.ok) throw new Error('Failed to fetch live stock');
+        return res.json();
+      })
+      .then((liveStock) => {
+        // Clear and rebuild stockMap with live data
+        for (const c in stockMap) delete stockMap[c];
+        liveStock.forEach(({ eu_size, color, qty }) => {
+          if (!stockMap[color]) stockMap[color] = {};
+          stockMap[color][eu_size] = qty;
+        });
+        // Update the UI sizes
+        updateSizes();
+      })
+      .catch((err) => console.error('Error fetching live stock:', err));
+
+    // Open SSE connection for real-time push updates
+    const streamUrl = `/api/products/${productId}/stock/stream`;
+    const eventSource = new EventSource(streamUrl);
+
+    eventSource.addEventListener('stock_update', (e) => {
+      try {
+        const update = JSON.parse(e.data);
+        const { eu_size, color, qty } = update;
+
+        if (!stockMap[color]) stockMap[color] = {};
+        stockMap[color][eu_size] = qty;
+
+        // Refresh UI
+        updateSizes();
+      } catch (err) {
+        console.error('Error parsing SSE stock update:', err);
+      }
+    });
+
+    eventSource.onerror = (err) => {
+      console.error('SSE connection error:', err);
+    };
+
+    // Close SSE stream when navigating away
+    window.addEventListener('beforeunload', () => {
+      eventSource.close();
+    });
+  }
+
   // ── Buy buttons (in-page + floating) ──────────────────
   const realBtn = document.getElementById('add-to-cart');
   const floatBtn = document.getElementById('add-to-cart-floating');
@@ -240,10 +290,11 @@ export function initProductDetail() {
   const sizeBtns = Array.from(document.querySelectorAll('.product__size-btn'));
 
   function updateSizes() {
-    // Deselect current size when colour changes.
+    // Keep user's active size selected, or clear it if it is null (like when color changes).
     sizeBtns.forEach((b) => {
-      b.classList.remove('product__size-btn--active');
-      b.setAttribute('aria-pressed', 'false');
+      const active = selectedSize != null && parseFloat(b.dataset.size) === selectedSize;
+      b.classList.toggle('product__size-btn--active', active);
+      b.setAttribute('aria-pressed', String(active));
     });
 
     // Grey the sizes that are out of stock for the selected colour.

@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"bosfoot/internal/notify"
+	"bosfoot/internal/pubsub"
 	"bosfoot/internal/site"
 	"bosfoot/logger"
 	"bosfoot/models"
@@ -9,6 +10,7 @@ import (
 	"encoding/json"
 	"net"
 	"net/http"
+	"strconv"
 	"strings"
 
 	"github.com/lib/pq"
@@ -220,27 +222,38 @@ func (h *OrderHandler) CreateOrder(w http.ResponseWriter, r *http.Request) {
 	//     safe (the loser matches 0 rows and is rejected).
 	//   • stocked product, size NOT in stock → reject: that size is "notify me",
 	//     not orderable. Rolls the whole order back (defer tx.Rollback).
+	var eventsToBroadcast []pubsub.StockEvent
 	for _, it := range req.Items {
 		if hasStock[it.ProductID] {
-			res, err := tx.ExecContext(r.Context(), `
+			var newQty int
+			err := tx.QueryRowContext(r.Context(), `
 				UPDATE product_stock
 				SET qty = qty - $1
 				WHERE product_id = $2
 				  AND size_id  = (SELECT id FROM product_sizes  WHERE product_id = $2 AND eu_size = $3::numeric)
 				  AND color_id = (SELECT id FROM product_colors WHERE product_id = $2 AND color   = $4)
 				  AND qty >= $1
-			`, it.Qty, it.ProductID, it.Size, it.Color)
-			if err != nil {
-				h.Logger.Error("CreateOrder: stock decrement failed", err)
-				writeJSONError(w, http.StatusInternalServerError, "internal error")
-				return
-			}
-			if n, _ := res.RowsAffected(); n != 1 {
+				RETURNING qty
+			`, it.Qty, it.ProductID, it.Size, it.Color).Scan(&newQty)
+			if err == sql.ErrNoRows {
 				h.Logger.Info("order rejected", "reason", "size not in stock",
 					"product_id", it.ProductID, "size", it.Size, "color", it.Color, "qty", it.Qty)
 				writeJSONError(w, http.StatusConflict, "out_of_stock")
 				return
 			}
+			if err != nil {
+				h.Logger.Error("CreateOrder: stock decrement failed", err)
+				writeJSONError(w, http.StatusInternalServerError, "internal error")
+				return
+			}
+
+			euSize, _ := strconv.ParseFloat(it.Size, 64)
+			eventsToBroadcast = append(eventsToBroadcast, pubsub.StockEvent{
+				ProductID: it.ProductID,
+				EUSize:    euSize,
+				Color:     it.Color,
+				Qty:       newQty,
+			})
 		}
 
 		if _, err := tx.ExecContext(r.Context(), `
@@ -258,6 +271,11 @@ func (h *OrderHandler) CreateOrder(w http.ResponseWriter, r *http.Request) {
 		h.Logger.Error("CreateOrder: commit failed", err)
 		writeJSONError(w, http.StatusInternalServerError, "internal error")
 		return
+	}
+
+	// Broadcast stock updates now that the transaction has successfully committed
+	for _, event := range eventsToBroadcast {
+		pubsub.Hub.Broadcast(event)
 	}
 
 	// Durable record of the sale, independent of email — visible in stdout/journalctl

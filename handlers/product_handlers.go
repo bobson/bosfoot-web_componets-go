@@ -2,13 +2,16 @@ package handlers
 
 import (
 	"bosfoot/internal/database"
+	"bosfoot/internal/pubsub"
 	"bosfoot/internal/site"
 	"bosfoot/logger"
 	"bosfoot/models"
 	"database/sql"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/lib/pq"
 )
@@ -489,3 +492,104 @@ func (h *ProductHandler) GetProductByID(w http.ResponseWriter, r *http.Request) 
 
 	h.writeJSONResponse(w, p)
 }
+
+// GetProductStock returns the current live inventory map for a product as JSON.
+func (h *ProductHandler) GetProductStock(w http.ResponseWriter, r *http.Request) {
+	id, err := strconv.Atoi(r.PathValue("id"))
+	if err != nil {
+		http.Error(w, "Invalid product ID", http.StatusBadRequest)
+		return
+	}
+	ctx := r.Context()
+
+	stRows, err := h.DB.QueryContext(ctx, `
+		SELECT ps.eu_size, pc.color, pst.qty
+		FROM product_stock pst
+		JOIN product_sizes  ps ON ps.id = pst.size_id
+		JOIN product_colors pc ON pc.id = pst.color_id
+		WHERE pst.product_id = $1
+		ORDER BY ps.eu_size, pc.color
+	`, id)
+	if err != nil {
+		h.Logger.Error("GetProductStock: stock query failed", err, "product_id", id)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+	defer stRows.Close()
+
+	var stock []models.ProductStock
+	for stRows.Next() {
+		var s models.ProductStock
+		if err := stRows.Scan(&s.EUSize, &s.Color, &s.Qty); err != nil {
+			h.Logger.Error("GetProductStock: stock scan failed", err)
+			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+			return
+		}
+		stock = append(stock, s)
+	}
+
+	if err := stRows.Err(); err != nil {
+		h.Logger.Error("GetProductStock: rows check failed", err)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+
+	if stock == nil {
+		stock = []models.ProductStock{}
+	}
+
+	h.writeJSONResponse(w, stock)
+}
+
+// StreamProductStock streams real-time inventory updates for a product via Server-Sent Events (SSE).
+func (h *ProductHandler) StreamProductStock(w http.ResponseWriter, r *http.Request) {
+	id, err := strconv.Atoi(r.PathValue("id"))
+	if err != nil {
+		http.Error(w, "Invalid product ID", http.StatusBadRequest)
+		return
+	}
+
+	flusher, ok := w.(http.Flusher)
+	if !ok {
+		http.Error(w, "Streaming unsupported", http.StatusInternalServerError)
+		return
+	}
+
+	// Set headers for Server-Sent Events (SSE)
+	w.Header().Set("Content-Type", "text/event-stream")
+	w.Header().Set("Cache-Control", "no-cache")
+	w.Header().Set("Connection", "keep-alive")
+	w.Header().Set("X-Accel-Buffering", "no") // Prevent Caddy/Nginx buffer caching
+
+	ch := pubsub.Hub.Subscribe()
+	defer pubsub.Hub.Unsubscribe(ch)
+
+	// Send initial connection event
+	fmt.Fprintf(w, "event: ping\ndata: connected\n\n")
+	flusher.Flush()
+
+	ctx := r.Context()
+	ticker := time.NewTicker(30 * time.Second) // SSE keep-alive ping
+	defer ticker.Stop()
+
+	for {
+		select {
+		case <-ctx.Done():
+			return
+		case event := <-ch:
+			if event.ProductID == id {
+				data, err := json.Marshal(event)
+				if err != nil {
+					h.Logger.Error("StreamProductStock: json marshal failed", err)
+					continue
+				}
+				fmt.Fprintf(w, "event: stock_update\ndata: %s\n\n", data)
+				flusher.Flush()
+			}
+		case <-ticker.C:
+			fmt.Fprintf(w, "event: ping\ndata: keep-alive\n\n")
+			flusher.Flush()
+		}
+	}
+}
+
