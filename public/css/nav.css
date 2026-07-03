@@ -21,10 +21,26 @@ body.nav-open {
 
 .nav__logo {
   grid-column: 2;
-  font-size: var(--fs-lg);
-  font-weight: var(--fw-bold);
-  letter-spacing: -0.02em;
-  color: var(--color-text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav__logo img {
+  width: 120px;
+  height: auto;
+  display: block;
+  transition: opacity 0.15s ease;
+}
+
+.nav__logo:hover img {
+  opacity: 0.8;
+}
+
+@media (min-width: 768px) {
+  .nav__logo img {
+    width: 150px;
+  }
 }
 
 /* Hamburger */
@@ -87,7 +103,9 @@ body.nav-open {
   transition: color 0.15s ease;
 }
 
-.nav__btn:hover { color: var(--color-accent); }
+.nav__btn:hover {
+  color: var(--color-accent);
+}
 
 .cart-badge {
   position: absolute;
@@ -278,7 +296,72 @@ body.nav-open .nav__overlay {
 
 /* ── Desktop (≥768px) ────────────────────────────────── */
 
-@media (min-width: 768px) {
+@media (min-width: 768px) and (max-width: 1023px) {
+  .nav {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    padding: 0 var(--content-pad);
+    gap: var(--space-4);
+  }
+
+  .nav__logo {
+    flex: 0 0 auto;
+  }
+
+  .nav__hamburger {
+    display: none;
+  }
+
+  .nav__overlay {
+    display: none !important;
+  }
+
+  .nav__drawer {
+    display: none;
+  }
+
+  .nav__desktop-links {
+    display: flex;
+    flex: 1 1 auto;
+  }
+
+  .nav__desktop-links ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .nav__desktop-links a {
+    display: block;
+    padding: 0 var(--space-2);
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-medium);
+    color: var(--color-text);
+    transition: color 0.15s ease;
+  }
+
+  .nav__desktop-links a:hover,
+  .nav__desktop-links a.nav__link--active {
+    color: var(--color-accent);
+  }
+
+  .nav__right {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+  }
+
+  .nav__lang {
+    display: flex;
+    gap: var(--space-1);
+  }
+}
+
+/* ── Large Desktop (≥1024px) ────────────────────────────────── */
+
+@media (min-width: 1024px) {
   .nav {
     display: grid;
     grid-template-columns: 1fr auto 1fr;

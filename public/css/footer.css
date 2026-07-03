@@ -27,6 +27,24 @@
   letter-spacing: -0.01em;
   color: inherit;
   margin-bottom: var(--space-3);
+  width: fit-content;
+  transition: opacity 0.15s ease;
+}
+
+.footer__logo img {
+  width: 100px;
+  height: auto;
+  display: block;
+}
+
+.footer__logo:hover img {
+  opacity: 0.8;
+}
+
+@media (min-width: 768px) {
+  .footer__logo img {
+    width: 120px;
+  }
 }
 
 .footer__tagline {
@@ -135,4 +153,6 @@
   transition: opacity 0.15s ease;
 }
 
-.footer__legal a:hover { opacity: 1; }
+.footer__legal a:hover {
+  opacity: 1;
+}
