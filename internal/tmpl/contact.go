@@ -37,5 +37,5 @@ var SiteContact = ContactInfo{
 	Instagram:     "@bosfoot_store",
 	InstagramHref: "https://www.instagram.com/bosfoot_store",
 	Facebook:      "@Bosfoot",
-	FacebookHref:  "https://www.facebook.com/profile.php?id=61590703805956",
+	FacebookHref:  "https://www.facebook.com/profile.php?id=61591117667798",
 }
