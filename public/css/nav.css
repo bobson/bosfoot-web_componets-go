@@ -15,7 +15,9 @@ body.nav-open {
   align-items: center;
   height: var(--nav-height);
   padding: 0 var(--content-pad);
-  background: var(--color-bg);
+  /* Same linen texture as the body so the navbar blends into the page. */
+  background: var(--color-bg) url(/images/bg-textile.webp) repeat;
+  background-size: 300px;
   border-bottom: 1px solid var(--color-border);
 }
 
@@ -307,6 +309,12 @@ body.nav-open .nav__overlay {
 
   .nav__logo {
     flex: 0 0 auto;
+  }
+
+  /* Bump the logo on tablet — the base 150px reads small in the wider
+     flex header. Desktop (≥1024px) keeps 150px from the base rule. */
+  .nav__logo img {
+    width: 180px;
   }
 
   .nav__hamburger {

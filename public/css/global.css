@@ -9,13 +9,15 @@
         --color-accent-light: color-mix(in oklch, var(--color-accent), white 88%);
 
         /* ── Colors ──────────────────────────────────────── */
-        --color-bg: hsl(60 9% 98%);
+        /* Warm cream matching bg-textile.webp (#F9F6F2) — the page base
+           everywhere; nav + testimonial layer the actual weave on top. */
+        --color-bg: hsl(34 37% 96%);
         --color-white: hsl(0 0% 100%);
         --color-text: hsl(0 0% 10%);
         --color-text-muted: hsl(0 0% 35%);
         --color-text-on-dark: hsl(60 9% 96%);
-        --color-border: hsl(60 5% 88%);
-        --color-img-bg: hsl(60 5% 95%);
+        --color-border: hsl(34 13% 88%);
+        --color-img-bg: hsl(34 22% 95%);
         --color-overlay: rgb(0 0 0 / 0.4);
         --color-sale: hsl(0 72% 45%);
         --color-sage: hsl(88 14% 92%);
@@ -319,7 +321,11 @@
      Alternate these down the page for scroll rhythm.
      Keep most sections on the plain base background. */
     .section--sage {
-        background: var(--wash-sage);
+        /* Linen weave blended over the sage wash — soft-light keeps the
+           colour and only adds subtle texture (works on light + dark). */
+        background: url(/images/bg-textile.webp) repeat, var(--wash-sage);
+        background-size: 300px, cover;
+        background-blend-mode: soft-light, normal;
     }
 
     .section--deep {

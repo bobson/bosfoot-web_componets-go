@@ -319,6 +319,9 @@ details.filter-group[open] .filter-group__arrow {
   border-radius: var(--radius-md);
   overflow: hidden;
   background: var(--color-white);
+  /* Hairline edge + very soft lift: the tactile "card" read that texture
+     was too faint to give on white. */
+  border: 1px solid var(--color-border);
   box-shadow: var(--shadow-sm);
   transition: box-shadow 0.25s var(--ease-out), transform 0.25s var(--ease-out);
 }

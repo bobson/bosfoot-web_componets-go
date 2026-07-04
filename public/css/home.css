@@ -262,7 +262,16 @@
   justify-content: center;
   width: 100%;
   padding: var(--space-12) var(--content-pad);
-  /* Scrim keeps the white title legible over the photo. */
+}
+
+/* Scrim on a dedicated full-cover layer (not the flex overlay, which only
+   stretched to its content in some renders → a lighter/darker band). Sits
+   between the image (z-index -1) and the text. */
+.bf-banner::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
   background: rgb(0 0 0 / 0.4);
 }
 
@@ -388,4 +397,44 @@
   line-height: var(--lh-normal);
   max-width: 22rem;
   margin-inline: auto;
+}
+
+/* ── Testimonial ─────────────────────────────────────── */
+
+.testimonial {
+  /* The linen texture at its own colour — no sage tint underneath. */
+  background: var(--color-bg) url(/images/bg-textile.webp) repeat;
+  background-size: 300px;
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+  padding-block: var(--space-20);
+}
+
+.testimonial__figure {
+  max-width: 54ch;
+  margin-inline: auto;
+  text-align: center;
+}
+
+.testimonial__mark {
+  display: block;
+  font-size: var(--fs-display);
+  line-height: var(--lh-tight);
+  color: var(--color-accent);
+  margin-bottom: var(--space-2);
+}
+
+.testimonial__quote {
+  font-size: var(--fs-xl);
+  font-weight: var(--fw-light);
+  line-height: var(--lh-normal);
+  letter-spacing: -0.01em;
+  margin-bottom: var(--space-6);
+}
+
+.testimonial__cite {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  font-style: normal;
 }

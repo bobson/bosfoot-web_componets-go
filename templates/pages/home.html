@@ -148,6 +148,25 @@
         </div>
       </section>
 
+      {{/* ── Testimonial ──────────────────────────────────── */}}
+      {{/* Attributed athlete endorsement = social proof against the
+           category risk-aversion. Sits after the "new to barefoot"
+           education prompt: hear someone confirm it works. */}}
+      <section class="testimonial">
+        <div class="container">
+          <figure class="testimonial__figure" data-reveal>
+            <span class="testimonial__mark" aria-hidden="true">&ldquo;</span>
+            <blockquote class="testimonial__quote">
+              {{t .Locale "home.testimonial.text"}}
+            </blockquote>
+            <figcaption class="testimonial__cite">
+              <span class="testimonial__name font-bold">{{t .Locale "home.testimonial.attr"}}</span>
+              <span class="testimonial__role text-muted text-sm">{{t .Locale "home.testimonial.role"}}</span>
+            </figcaption>
+          </figure>
+        </div>
+      </section>
+
       {{/* ── Why barefoot ── disabled: now covered by the banner
            above + the /what-are-barefoot-shoes page. Kept here
            (not deleted) in case we want it back. ──────────── */}}
