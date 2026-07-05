@@ -281,9 +281,9 @@
 
     {{/* ── Related products ────────────────────────────── */}}
     {{if .Related}}
-    <section class="product__related container">
+    <section class="product__related container flush">
       <h2 class="product__related-title font-bold">{{t .Locale "detail.relatedTitle"}} {{.Product.BrandName}}</h2>
-      <div class="listing__grid">
+      <div class="product-grid">
         {{range .Related}}
         {{template "product_card" (dict "Product" . "Locale" $.Locale)}}
         {{end}}

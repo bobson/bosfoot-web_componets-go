@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CTA Color Mockup — Your Brand</title>
+<style>
+  :root {
+    --green: #4A5D23;        /* your dark olive green */
+    --green-dark: #37461A;
+    --cream: #FAF6EC;        /* your background */
+    --ink: #26301F;
+    --muted: #6B7263;
+    --cta: #E07A2F;          /* switchable */
+    --cta-hover: #C9661F;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: Georgia, 'Times New Roman', serif;
+    background: var(--cream);
+    color: var(--ink);
+  }
+  .sans { font-family: 'Segoe UI', -apple-system, Helvetica, Arial, sans-serif; }
+
+  /* ---- Color switcher bar (demo control, not part of the site) ---- */
+  .switcher {
+    position: sticky; top: 0; z-index: 50;
+    background: #26301F; color: #fff;
+    padding: 10px 16px;
+    display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    font-family: 'Segoe UI', sans-serif; font-size: 14px;
+  }
+  .switcher span { opacity: .8; margin-right: 4px; }
+  .swatch {
+    border: 2px solid transparent; border-radius: 20px;
+    color: #fff; padding: 6px 14px; cursor: pointer;
+    font-size: 13px; font-family: inherit;
+  }
+  .swatch.active { border-color: #fff; }
+
+  /* ---- Navbar: green, as on your real site ---- */
+  nav {
+    background: var(--green);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 32px;
+  }
+  nav .logo { color: #fff; font-weight: 700; font-size: 20px; letter-spacing: .5px; }
+  nav ul { display: flex; gap: 24px; list-style: none; }
+  nav a { color: #E9F7EE; text-decoration: none; font-size: 15px; }
+  nav a:hover, nav a:focus-visible { color: #fff; text-decoration: underline; }
+
+  /* ---- Hero ---- */
+  .hero {
+    max-width: 980px; margin: 0 auto;
+    padding: 72px 24px 56px;
+    display: grid; grid-template-columns: 1.1fr .9fr; gap: 40px; align-items: center;
+  }
+  .hero h1 { font-size: 44px; line-height: 1.15; margin-bottom: 16px; }
+  .hero p { font-size: 18px; color: var(--muted); line-height: 1.6; margin-bottom: 28px; }
+  .hero-art {
+    aspect-ratio: 4/3; border-radius: 12px;
+    background:
+      radial-gradient(circle at 30% 30%, #DFF0E3, transparent 60%),
+      linear-gradient(135deg, #EAF5EC, #F3EEDD);
+    border: 1px solid #E3DEC9;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--muted); font-size: 14px; font-family: 'Segoe UI', sans-serif;
+  }
+
+  /* ---- The CTA button: the one loud thing ---- */
+  .btn-cta {
+    display: inline-block;
+    background: var(--cta); color: #fff;
+    font-family: 'Segoe UI', sans-serif; font-weight: 600; font-size: 17px;
+    padding: 15px 34px; border: none; border-radius: 8px;
+    cursor: pointer; transition: background .15s, transform .1s;
+    box-shadow: 0 2px 8px rgba(0,0,0,.12);
+  }
+  .btn-cta:hover { background: var(--cta-hover); }
+  .btn-cta:active { transform: translateY(1px); }
+  .btn-cta:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; }
+  .btn-ghost {
+    display: inline-block; margin-left: 14px;
+    color: var(--ink); font-family: 'Segoe UI', sans-serif; font-size: 16px;
+    text-decoration: underline; background: none; border: none; cursor: pointer;
+  }
+
+  /* ---- Products ---- */
+  .products { max-width: 980px; margin: 0 auto; padding: 8px 24px 72px; }
+  .products h2 { font-size: 26px; margin-bottom: 24px; }
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+  .card {
+    background: #fff; border: 1px solid #E7E2CF; border-radius: 12px;
+    padding: 18px; display: flex; flex-direction: column; gap: 10px;
+  }
+  .card .thumb {
+    aspect-ratio: 1; border-radius: 8px;
+    background: linear-gradient(160deg, #F0EBDA, #E4EFE6);
+  }
+  .card h3 { font-size: 17px; }
+  .card .price { font-family: 'Segoe UI', sans-serif; font-weight: 700; }
+  .card .btn-cta { font-size: 15px; padding: 11px 0; width: 100%; text-align: center; box-shadow: none; }
+
+  /* ---- Footer: green, as on your real site ---- */
+  footer {
+    background: var(--green-dark); color: #DDEFE2;
+    padding: 36px 32px; font-family: 'Segoe UI', sans-serif; font-size: 14px;
+    display: flex; justify-content: space-between; flex-wrap: wrap; gap: 16px;
+  }
+  footer a { color: #fff; text-decoration: none; margin-right: 18px; }
+  footer a:hover { text-decoration: underline; }
+
+  @media (max-width: 760px) {
+    .hero { grid-template-columns: 1fr; padding-top: 48px; }
+    .hero h1 { font-size: 34px; }
+    .grid { grid-template-columns: 1fr; }
+    nav ul { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .btn-cta { transition: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="switcher" role="group" aria-label="Try different buy-button colors">
+  <span>Try a buy-button color:</span>
+  <button class="swatch active" style="background:#E07A2F" data-cta="#E07A2F" data-hover="#C9661F">Burnt orange</button>
+  <button class="swatch" style="background:#FF6B5B" data-cta="#FF6B5B" data-hover="#E5503F">Coral</button>
+  <button class="swatch" style="background:#C9930A" data-cta="#C9930A" data-hover="#A87A06">Amber</button>
+  <button class="swatch" style="background:#4A5D23" data-cta="#4A5D23" data-hover="#37461A">Your green (compare)</button>
+</div>
+
+<nav>
+  <div class="logo">YourBrand</div>
+  <ul class="sans">
+    <li><a href="#">Shop</a></li>
+    <li><a href="#">About</a></li>
+    <li><a href="#">Contact</a></li>
+  </ul>
+</nav>
+
+<section class="hero">
+  <div>
+    <h1>Everything you love, made simple.</h1>
+    <p>This is your cream background with your green navbar and footer. Notice how the buy button below is the only element in its color — your eye goes straight to it.</p>
+    <button class="btn-cta">Shop the collection</button>
+    <button class="btn-ghost">Learn more</button>
+  </div>
+  <div class="hero-art">product photo goes here</div>
+</section>
+
+<section class="products">
+  <h2>Best sellers</h2>
+  <div class="grid">
+    <div class="card">
+      <div class="thumb"></div>
+      <h3>Product One</h3>
+      <div class="price">$29</div>
+      <button class="btn-cta">Add to cart</button>
+    </div>
+    <div class="card">
+      <div class="thumb"></div>
+      <h3>Product Two</h3>
+      <div class="price">$45</div>
+      <button class="btn-cta">Add to cart</button>
+    </div>
+    <div class="card">
+      <div class="thumb"></div>
+      <h3>Product Three</h3>
+      <div class="price">$38</div>
+      <button class="btn-cta">Add to cart</button>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div>© 2026 YourBrand</div>
+  <div>
+    <a href="#">Privacy</a>
+    <a href="#">Terms</a>
+    <a href="#">Support</a>
+  </div>
+</footer>
+
+<script>
+  const root = document.documentElement;
+  document.querySelectorAll('.swatch').forEach(btn => {
+    btn.addEventListener('click', () => {
+      root.style.setProperty('--cta', btn.dataset.cta);
+      root.style.setProperty('--cta-hover', btn.dataset.hover);
+      document.querySelectorAll('.swatch').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    });
+  });
+</script>
+
+</body>
+</html>

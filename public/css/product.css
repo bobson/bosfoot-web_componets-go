@@ -120,9 +120,10 @@ body.page-product {
 .product__thumbs {
   display: flex;
   gap: var(--space-2);
-  margin-top: var(--space-3);
   overflow-x: auto;
-  padding-bottom: var(--space-1);
+  /* Vertical breathing room around the thumbnail row; the carousel above stays
+     flush. Horizontal stays edge-to-edge. */
+  padding-block: var(--space-4);
 }
 
 .product__thumb {
@@ -258,8 +259,12 @@ body.page-product {
 /* Colour option lives under the gallery, so give it room above + a touch more
    breathing space below the swatches' selection ring. */
 .product__option--colors {
-  margin-top: var(--space-6);
   margin-bottom: 0;
+  /* Cream (page colour), not the gallery's white — the white panel ends at the
+     thumbnails so the colour selector reads as part of the page. Inset to the
+     content margin since the gallery column itself is flush. */
+  padding: var(--space-6) var(--content-pad) var(--space-4);
+  background: var(--color-bg);
 }
 
 .product__option-header {
@@ -402,7 +407,7 @@ body.page-product {
   justify-content: center;
   width: 100%;
   padding: var(--space-4) var(--space-6);
-  background: var(--color-accent);
+  background: var(--color-cta);
   color: var(--color-white);
   font-size: var(--fs-sm);
   font-weight: var(--fw-semibold);
@@ -415,11 +420,11 @@ body.page-product {
 }
 
 .product__add-to-cart:hover {
-  background: var(--color-accent-hover);
+  background: var(--color-cta-hover);
 }
 
 .product__add-to-cart--added {
-  background: var(--color-accent-hover);
+  background: var(--color-cta-hover);
 }
 
 /* "Select size" state — not yet ready to add; muted so it reads as a prompt
@@ -602,6 +607,7 @@ details.product__tab[open] .product__tab-arrow {
 }
 
 .product__related-title {
+  padding-inline: var(--content-pad); /* keep the heading aligned to content */
   font-size: var(--fs-2xl);
   letter-spacing: -0.02em;
   margin-bottom: var(--space-8);

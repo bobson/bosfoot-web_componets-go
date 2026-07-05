@@ -113,7 +113,7 @@
             {{t .Locale "cta.viewAll"}} →
           </a>
         </header>
-        <div class="listing__grid">
+        <div class="product-grid">
           {{range .Featured}} {{template "product_card" (dict "Product" .
           "Locale" $.Locale)}} {{end}}
         </div>

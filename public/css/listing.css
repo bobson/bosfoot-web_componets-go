@@ -307,14 +307,14 @@ details.filter-group[open] .filter-group__arrow {
 
 /* ── Product grid ────────────────────────────────────── */
 
-.listing__grid {
+.product-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 0; /* flush cards — seamless white grid */
 }
 
 @media (min-width: 640px) {
-  .listing__grid { grid-template-columns: repeat(3, 1fr); }
+  .product-grid { grid-template-columns: repeat(3, 1fr); }
 }
 
 /* ── Product card ────────────────────────────────────── */

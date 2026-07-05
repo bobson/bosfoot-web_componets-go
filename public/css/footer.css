@@ -3,8 +3,7 @@
 /* Compound selector (0,2,0) so it beats .section--deep's background
    regardless of stylesheet order; the cream text from .section--deep stays. */
 .footer.section--deep {
-  background: var(--color-forest) url(/images/green-textile.webp) repeat;
-  background-size: 300px;
+  background: var(--color-forest);
 }
 
 .footer {
@@ -30,28 +29,19 @@
 
 .footer__logo {
   display: block;
-  font-size: var(--fs-base);
-  letter-spacing: -0.01em;
-  color: inherit;
-  margin-bottom: var(--space-3);
   width: fit-content;
+  margin-bottom: var(--space-3);
+  /* Text wordmark: all-caps, moderate size, medium weight, lightly tracked. */
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-medium);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: inherit;
   transition: opacity 0.15s ease;
 }
 
-.footer__logo img {
-  width: 100px;
-  height: auto;
-  display: block;
-}
-
-.footer__logo:hover img {
+.footer__logo:hover {
   opacity: 0.8;
-}
-
-@media (min-width: 768px) {
-  .footer__logo img {
-    width: 120px;
-  }
 }
 
 .footer__tagline {

@@ -144,7 +144,7 @@ checkout-form { display: block; }
   align-items: center;
   justify-content: center;
   padding: var(--space-4) var(--space-6);
-  background: var(--color-accent);
+  background: var(--color-cta);
   color: var(--color-white);
   font-size: var(--fs-sm);
   font-weight: var(--fw-semibold);
@@ -155,7 +155,7 @@ checkout-form { display: block; }
 }
 
 .checkout__submit:hover {
-  background: var(--color-accent-hover);
+  background: var(--color-cta-hover);
 }
 
 .checkout__submit:disabled {

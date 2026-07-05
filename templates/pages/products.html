@@ -158,7 +158,7 @@
         </div>
 
         {{if .Products}}
-        <div class="listing__grid">
+        <div class="product-grid">
           {{range $i, $p := .Products}}
           {{template "product_card" (dict "Product" $p "Locale" $.Locale "Priority" (eq $i 0))}}
           {{end}}

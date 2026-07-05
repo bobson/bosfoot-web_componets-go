@@ -37,7 +37,7 @@
   display: inline-flex;
   align-items: center;
   padding: var(--space-4) var(--space-10);
-  background: var(--color-accent);
+  background: var(--color-cta);
   color: var(--color-white);
   font-size: var(--fs-sm);
   font-weight: var(--fw-semibold);
@@ -47,7 +47,7 @@
   transition: background 0.2s ease;
 }
 
-.hero__cta:hover { background: var(--color-accent-hover); }
+.hero__cta:hover { background: var(--color-cta-hover); }
 
 .hero__gender {
   display: flex;

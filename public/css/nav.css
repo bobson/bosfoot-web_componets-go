@@ -15,16 +15,10 @@ body.nav-open {
   align-items: center;
   height: var(--nav-height);
   padding: 0 var(--content-pad);
-  /* Dark olive weave. Overriding these tokens on .nav re-themes every
-     top-bar child (logo, links, icons, hamburger, lang) to light text in
-     one place. The drawer + search dropdown are SIBLINGS of .nav, so they
-     don't inherit this and keep their own light-panel styling. */
-  --color-text: var(--color-cream);
-  --color-text-muted: color-mix(in oklch, var(--color-cream), transparent 30%);
-  --color-accent: var(--color-white); /* hover / active highlight */
-  background: var(--color-forest) url(/images/green-textile.webp) repeat;
-  background-size: 300px;
-  border-bottom: 1px solid rgb(255 255 255 / 0.1);
+  /* Light cream nav (matches the page). Dark text/icons via the default
+     tokens; the footer keeps the green. */
+  background: var(--color-bg);
+  border-bottom: 1px solid var(--color-border);
 }
 
 .nav__logo {
@@ -32,23 +26,18 @@ body.nav-open {
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.nav__logo img {
-  width: 120px;
-  height: auto;
-  display: block;
+  /* Text wordmark (replaces the image logo): all-caps, moderate size, medium
+     weight, lightly tracked. Colour inherits the nav's cream --color-text. */
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-medium);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-text);
   transition: opacity 0.15s ease;
 }
 
-.nav__logo:hover img {
+.nav__logo:hover {
   opacity: 0.8;
-}
-
-@media (min-width: 768px) {
-  .nav__logo img {
-    width: 150px;
-  }
 }
 
 /* Hamburger */
@@ -123,11 +112,8 @@ body.nav-open {
   height: var(--space-4);
   padding-inline: var(--space-1);
   border-radius: var(--radius-full);
-  /* On the dark nav .nav overrides --color-accent to white, which would make
-     this bubble white-on-white. --color-accent-hover is declared only on
-     :root, so it stays the real dark green here → cream bubble, green digits. */
-  background: var(--color-cream);
-  color: var(--color-accent-hover);
+  background: var(--color-accent);
+  color: var(--color-white);
   font-size: var(--fs-2xs);
   font-weight: var(--fw-bold);
   line-height: var(--space-4);
@@ -318,12 +304,6 @@ body.nav-open .nav__overlay {
 
   .nav__logo {
     flex: 0 0 auto;
-  }
-
-  /* Bump the logo on tablet — the base 150px reads small in the wider
-     flex header. Desktop (≥1024px) keeps 150px from the base rule. */
-  .nav__logo img {
-    width: 180px;
   }
 
   .nav__hamburger {

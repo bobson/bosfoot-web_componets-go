@@ -8,6 +8,12 @@
         --color-accent-hover: color-mix(in oklch, var(--color-accent), black 25%);
         --color-accent-light: color-mix(in oklch, var(--color-accent), white 88%);
 
+        /* Green CTA — actions ONLY (buy / add-to-cart / checkout / hero), in
+           the mockup olive. White label text clears ~7:1. Reads clearly on the
+           cream/white product surfaces; the footer shares this green. */
+        --color-cta: hsl(79 45% 25%);
+        --color-cta-hover: hsl(79 47% 19%);
+
         /* ── Colors ──────────────────────────────────────── */
         /* Warm cream matching bg-textile.webp (#F9F6F2) — the page base
            everywhere; nav + testimonial layer the actual weave on top. */
@@ -22,10 +28,9 @@
         --color-sale: hsl(0 72% 45%);
         --color-sage: hsl(88 14% 92%);
         --color-cream: hsl(40 33% 94%);
-        /* Dark olive matching green-textile.webp (#364508) — the fallback
-           under the green weave on the nav + footer (keeps light text
-           readable if the image fails to load). */
-        --color-forest: hsl(75 79% 15%);
+        /* Brand olive green — flat fill for the nav + footer (the livelier
+           mockup tone #4A5D23). Carries cream text. */
+        --color-forest: hsl(79 45% 25%);
 
         /* ── Third-party brand colors ────────────────────
        Use only for that brand's logo/badge context,
@@ -319,6 +324,20 @@
         padding-inline: var(--content-pad);
     }
 
+    /* Layout utilities.
+       .flush     — drop a .container's side padding so its content (e.g. a
+                    product grid) runs edge-to-edge. Declared after .container
+                    so it wins when both classes are present.
+       .full-bleed — span the whole viewport, escaping any max-width ancestor. */
+    .flush {
+        padding-inline: 0;
+    }
+
+    .full-bleed {
+        width: 100vw;
+        margin-inline: calc(50% - 50vw);
+    }
+
     /* Section spacing */
     .section {
         padding-block: var(--space-20);
@@ -392,12 +411,12 @@
     }
 
     .btn--brand {
-        background: var(--color-accent);
+        background: var(--color-cta);
         color: var(--color-white);
     }
 
     .btn--brand:hover {
-        background: var(--color-accent-hover);
+        background: var(--color-cta-hover);
     }
 
     .btn--secondary {
