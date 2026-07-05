@@ -142,6 +142,8 @@
 
 .featured {
   padding-block: var(--space-16);
+  /* White product area over the textured page (matches preview.png). */
+  background: var(--color-white);
 }
 
 .featured__header {

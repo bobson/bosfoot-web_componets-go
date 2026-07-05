@@ -5,6 +5,9 @@
   grid-template-columns: 1fr;
   gap: var(--space-8);
   padding-block: var(--space-8);
+  /* Drop the container's side padding so the gallery is flush (no cream
+     around it). The details column re-adds its own padding below. */
+  padding-inline: 0;
 }
 
 /* Two-column only on real desktop widths. Below this the old 768px split left
@@ -27,6 +30,15 @@
    overflow from the image's intrinsic width. */
 .product__gallery {
   min-width: 0;
+  /* White surface for the whole gallery (carousel + thumbs + controls) so no
+     cream page texture shows around or between them. */
+  background: var(--color-white);
+}
+
+/* Re-add the side padding the layout dropped — only the details column needs
+   it (the gallery stays flush). */
+.product__details {
+  padding-inline: var(--content-pad);
 }
 
 /* Reserve space at the page bottom so the floating buy bar (which is shown
@@ -52,7 +64,7 @@ body.page-product {
   overflow-y: hidden;
   scroll-snap-type: x mandatory;
   scroll-behavior: smooth;
-  background: var(--color-img-bg);
+  background: var(--color-white); /* no cream letterbox around the shoe */
   border-radius: var(--radius-md);
   scrollbar-width: none; /* Firefox */
 }
@@ -122,7 +134,7 @@ body.page-product {
   border: 2px solid transparent;
   cursor: pointer;
   transition: border-color 0.15s ease;
-  background: var(--color-img-bg);
+  background: var(--color-white);
 }
 
 .product__thumb img {

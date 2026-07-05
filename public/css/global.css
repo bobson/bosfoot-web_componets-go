@@ -22,6 +22,10 @@
         --color-sale: hsl(0 72% 45%);
         --color-sage: hsl(88 14% 92%);
         --color-cream: hsl(40 33% 94%);
+        /* Dark olive matching green-textile.webp (#364508) — the fallback
+           under the green weave on the nav + footer (keeps light text
+           readable if the image fails to load). */
+        --color-forest: hsl(75 79% 15%);
 
         /* ── Third-party brand colors ────────────────────
        Use only for that brand's logo/badge context,
@@ -171,7 +175,10 @@
 
     body {
         min-height: 100vh;
-        background: var(--color-bg);
+        /* Warm linen texture across the whole page; white product sections
+           (featured / listing) sit on top of it. */
+        background: var(--color-bg) url(/images/bg-textile.webp) repeat;
+        background-size: 300px;
         color: var(--color-text);
         font-family: var(--ff-base);
         font-size: var(--fs-base);

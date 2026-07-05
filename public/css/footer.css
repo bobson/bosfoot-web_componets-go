@@ -1,5 +1,12 @@
 /* ── Footer ──────────────────────────────────────────── */
 
+/* Compound selector (0,2,0) so it beats .section--deep's background
+   regardless of stylesheet order; the cream text from .section--deep stays. */
+.footer.section--deep {
+  background: var(--color-forest) url(/images/green-textile.webp) repeat;
+  background-size: 300px;
+}
+
 .footer {
   border-top: 1px solid var(--color-border);
   padding-top: var(--space-16);
