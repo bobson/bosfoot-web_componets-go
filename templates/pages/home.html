@@ -12,8 +12,24 @@
 
     <main>
       {{/* ── Hero ─────────────────────────────────────────── */}}
-      <section class="hero section--hero">
-        <div class="container">
+      <section class="hero">
+        <picture class="hero__media">
+          {{/* Square crop on mobile, the landscape shot on desktop. */}}
+          <source
+            media="(min-width: 768px)"
+            srcset="{{asset "/images/hero-desktop.webp"}}"
+          >
+          <img
+            class="hero__img"
+            src="{{asset "/images/hero-mobile.webp"}}"
+            alt=""
+            width="1225"
+            height="1225"
+            fetchpriority="high"
+            decoding="async"
+          >
+        </picture>
+        <div class="container hero__inner">
           <h1 class="hero__heading">
             <span class="hero__line--light"
               >{{t .Locale "home.hero.line1"}}</span
@@ -22,14 +38,15 @@
               >{{t .Locale "home.hero.line2"}}</span
             >
           </h1>
-          <p class="hero__lead text-muted">{{t .Locale "home.hero.lead"}}</p>
-          <div class="hero__actions">
-            <a class="hero__cta" href="/{{.Locale}}/products"
-              >{{t .Locale "hero.cta"}}</a
-            >
-          </div>
+        </div>
+        <div class="hero__actions">
+          <a class="hero__cta" href="/{{.Locale}}/products"
+            >{{t .Locale "hero.cta"}}</a
+          >
         </div>
       </section>
+
+    
 
       {{/* ── Trust band ───────────────────────────────────── */}}
       {{/* Risk-removers up front: the funnel shows visitors reaching products

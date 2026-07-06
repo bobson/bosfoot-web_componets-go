@@ -1,29 +1,94 @@
 /* ── Hero ────────────────────────────────────────────── */
 
 .hero {
-  padding-block: var(--space-24);
-  border-bottom: 1px solid var(--color-border);
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  /* Anchor the copy to the bottom so the runner (centred in the photo) stays
+     visible above it. Taller than a standard hero so the headline + CTA sit in
+     the foreground below her shoes rather than over them. align-content:end
+     keeps the two children (heading + CTA) packed together at the bottom
+     instead of the grid stretching them apart onto the shoes. */
+  place-items: end center;
+  align-content: end;
+  min-height: clamp(540px, 86vh, 800px);
+  padding-block: var(--space-10);
   text-align: center;
+  overflow: hidden;
+  /* padding-block: 40px; */
+  /* Dark placeholder (≈ the scrimmed photo) so white text is legible before
+     the image paints; the fixed min-height means no layout shift when it does. */
+  background-color: #3a3c3b;
+}
+
+.hero__media {
+  display: contents;
+}
+
+.hero__img {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* Mobile uses the square crop; the runner sits roughly centred. Nudge the
+   first value to reframe left/right, the second to reframe up/down. */
+@media (max-width: 767px) {
+  .hero {
+    min-height: clamp(480px, 86vh, 680px);
+  }
+
+  .hero__img {
+    object-position: center;
+  }
+}
+
+/* Bottom-weighted scrim: clear at the top (runner stays visible), darkening
+   toward the bottom where the copy sits so the white text stays legible. */
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(rgb(0 0 0 / 0) 20%, rgb(0 0 0 / 0.7) 95%);
 }
 
 .hero__heading {
   display: flex;
   flex-direction: column;
-  font-size: var(--fs-display);
-  letter-spacing: -0.04em;
+  /* Smaller than --fs-display — reads better over an image. */
+  font-size: clamp(2.25rem, 5.5vw, 4rem);
+  letter-spacing: -0.03em;
   line-height: var(--lh-tight);
-  margin-bottom: var(--space-8);
+  color: var(--color-white);
+  margin-bottom: var(--space-6);
 }
 
-.hero__line--light { font-weight: var(--fw-light); }
-.hero__line--bold  { font-weight: var(--fw-bold); }
+.hero__line--light {
+  font-weight: var(--fw-light);
+}
 
-.hero__lead {
+.hero__line--bold {
+  font-weight: var(--fw-bold);
+}
+
+/* Intro band under the hero: lead + primary CTA on cream. */
+.hero-intro {
+  padding-block: var(--space-16);
+  text-align: center;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.hero-intro__lead {
   font-size: var(--fs-md);
   line-height: var(--lh-normal);
   max-width: 46ch;
   margin-inline: auto;
-  margin-bottom: var(--space-10);
+  margin-bottom: var(--space-8);
 }
 
 .hero__actions {
@@ -47,7 +112,9 @@
   transition: background 0.2s ease;
 }
 
-.hero__cta:hover { background: var(--color-cta-hover); }
+.hero__cta:hover {
+  background: var(--color-cta-hover);
+}
 
 .hero__gender {
   display: flex;
@@ -60,7 +127,9 @@
   transition: color 0.15s ease;
 }
 
-.hero__gender a:hover { color: var(--color-accent); }
+.hero__gender a:hover {
+  color: var(--color-accent);
+}
 
 /* ── Brands ──────────────────────────────────────────── */
 
@@ -96,7 +165,9 @@
   transform: translateY(-1px);
 }
 
-.brand-chip--freet { background: var(--color-brand-freet); }
+.brand-chip--freet {
+  background: var(--color-brand-freet);
+}
 
 .brand-chip__logo {
   height: 3rem;
@@ -164,7 +235,9 @@
   transition: color 0.15s ease;
 }
 
-.featured__link:hover { color: var(--color-accent); }
+.featured__link:hover {
+  color: var(--color-accent);
+}
 
 /* ── Why barefoot ────────────────────────────────────── */
 
