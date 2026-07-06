@@ -131,34 +131,34 @@
     /* ── Local Golos Text fonts ──────────────────────── */
     @font-face {
         font-family: "Golos Text";
-        src: url("/fonts/GolosText-Regular.ttf") format("truetype");
+        src: url("/fonts/GolosText-Regular.woff2") format("woff2");
         font-weight: 400;
         font-style: normal;
-        font-display: swap;
+        font-display: optional;
     }
 
     @font-face {
         font-family: "Golos Text";
-        src: url("/fonts/GolosText-Medium.ttf") format("truetype");
+        src: url("/fonts/GolosText-Medium.woff2") format("woff2");
         font-weight: 500;
         font-style: normal;
-        font-display: swap;
+        font-display: optional;
     }
 
     @font-face {
         font-family: "Golos Text";
-        src: url("/fonts/GolosText-SemiBold.ttf") format("truetype");
+        src: url("/fonts/GolosText-SemiBold.woff2") format("woff2");
         font-weight: 600;
         font-style: normal;
-        font-display: swap;
+        font-display: optional;
     }
 
     @font-face {
         font-family: "Golos Text";
-        src: url("/fonts/GolosText-Bold.ttf") format("truetype");
+        src: url("/fonts/GolosText-Bold.woff2") format("woff2");
         font-weight: 700;
         font-style: normal;
-        font-display: swap;
+        font-display: optional;
     }
 }
 

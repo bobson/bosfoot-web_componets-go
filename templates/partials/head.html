@@ -51,6 +51,13 @@
 <link rel="alternate" hreflang="x-default" href="{{.SiteURL}}/mk{{.CurrentPath}}">
 {{end}}
 
+{{/* Preload the above-the-fold font weights (body Regular + hero Bold) so they
+   arrive within font-display:optional's short block window — the branded font
+   then paints on the first frame with no swap/reflow. crossorigin is required:
+   fonts are always fetched in CORS mode, and the preload must match. */}}
+<link rel="preload" href="/fonts/GolosText-Regular.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/GolosText-Bold.woff2" as="font" type="font/woff2" crossorigin>
+
 {{/* Always-on chrome: design tokens/utilities (global), nav, search box, cart
    drawer and footer all appear on every page. Page-specific stylesheets are
    loaded by each page template right after this partial, so a page only pulls
