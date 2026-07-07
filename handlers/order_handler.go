@@ -165,28 +165,33 @@ func (h *OrderHandler) CreateOrder(w http.ResponseWriter, r *http.Request) {
 	// stock is a "preorder" product — orderable without depleting inventory and
 	// with no size required (its size grid is display-only). A product with stock
 	// only sells the specific sizes that are on hand.
+	// Pre-launch (PreorderAll): treat every line as preorder — leave hasStock
+	// empty so nothing decrements inventory, regardless of real stock. Flip the
+	// flag at launch to restore per-variant decrement.
 	hasStock := make(map[int]bool)
-	stockRows, err := h.DB.QueryContext(r.Context(), `
-		SELECT product_id FROM product_stock
-		WHERE product_id = ANY($1)
-		GROUP BY product_id HAVING SUM(qty) > 0
-	`, pq.Array(ids))
-	if err != nil {
-		h.Logger.Error("CreateOrder: stock query failed", err)
-		writeJSONError(w, http.StatusInternalServerError, "internal error")
-		return
-	}
-	for stockRows.Next() {
-		var pid int
-		if err := stockRows.Scan(&pid); err != nil {
-			stockRows.Close()
-			h.Logger.Error("CreateOrder: stock scan failed", err)
+	if !site.PreorderAll {
+		stockRows, err := h.DB.QueryContext(r.Context(), `
+			SELECT product_id FROM product_stock
+			WHERE product_id = ANY($1)
+			GROUP BY product_id HAVING SUM(qty) > 0
+		`, pq.Array(ids))
+		if err != nil {
+			h.Logger.Error("CreateOrder: stock query failed", err)
 			writeJSONError(w, http.StatusInternalServerError, "internal error")
 			return
 		}
-		hasStock[pid] = true
+		for stockRows.Next() {
+			var pid int
+			if err := stockRows.Scan(&pid); err != nil {
+				stockRows.Close()
+				h.Logger.Error("CreateOrder: stock scan failed", err)
+				writeJSONError(w, http.StatusInternalServerError, "internal error")
+				return
+			}
+			hasStock[pid] = true
+		}
+		stockRows.Close()
 	}
-	stockRows.Close()
 
 	// Persist the order + items in one transaction.
 	tx, err := h.DB.BeginTx(r.Context(), nil)

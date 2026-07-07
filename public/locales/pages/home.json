@@ -1,51 +1,216 @@
 {
-  "hero.cta": { "mk": "Погледни ги сите производи", "sq": "Shiko të gjitha produktet", "en": "See all products" },
-  "hero.heading": { "mk": "Слобода во секој чекор", "sq": "Liri në çdo hap", "en": "Freedom in every step" },
-  "hero.sub": { "mk": "Босоноги патики за природно движење", "sq": "Këpucë zbathur për lëvizje natyrore", "en": "Barefoot shoes for natural movement" },
-  "home.articles.lead": { "mk": "Сѐ што треба да знаеш за барефоот стилот на живот.", "sq": "Gjithçka që duhet të dini për stilin e jetës barefoot.", "en": "Everything you need to know about the barefoot lifestyle." },
-  "home.articles.readMore": { "mk": "Прочитај повеќе", "sq": "Lexo më shumë", "en": "Read more" },
-  "home.articles.title": { "mk": "Од нашиот блог", "sq": "Nga blogu ynë", "en": "From our blog" },
-  "home.articles.viewAll": { "mk": "Сите статии", "sq": "Të gjitha artikujt", "en": "All articles" },
-  "home.brands": { "mk": "Нашите брендови", "sq": "Brendet tona", "en": "Our brands" },
-  "home.featured": { "mk": "Издвоени производи", "sq": "Produkte të zgjedhura", "en": "Featured products" },
-  "home.featured.title": { "mk": "Селектирани за тебе", "sq": "Selektuar për ty", "en": "Selected for you" },
+  "hero.cta": {
+    "mk": "Погледни ги сите производи",
+    "sq": "Shiko të gjitha produktet",
+    "en": "See all products"
+  },
+  "hero.heading": {
+    "mk": "Слобода во секој чекор",
+    "sq": "Liri në çdo hap",
+    "en": "Freedom in every step"
+  },
+  "hero.sub": {
+    "mk": "Босоноги патики за природно движење",
+    "sq": "Këpucë zbathur për lëvizje natyrore",
+    "en": "Barefoot shoes for natural movement"
+  },
+  "home.articles.lead": {
+    "mk": "Сѐ што треба да знаеш за барефоот стилот на живот.",
+    "sq": "Gjithçka që duhet të dini për stilin e jetës barefoot.",
+    "en": "Everything you need to know about the barefoot lifestyle."
+  },
+  "home.articles.readMore": {
+    "mk": "Прочитај повеќе",
+    "sq": "Lexo më shumë",
+    "en": "Read more"
+  },
+  "home.articles.title": {
+    "mk": "Од нашиот блог",
+    "sq": "Nga blogu ynë",
+    "en": "From our blog"
+  },
+  "home.articles.viewAll": {
+    "mk": "Сите статии",
+    "sq": "Të gjitha artikujt",
+    "en": "All articles"
+  },
+  "home.brands": {
+    "mk": "Нашите брендови",
+    "sq": "Brendet tona",
+    "en": "Our brands"
+  },
+  "home.featured": {
+    "mk": "Издвоени производи",
+    "sq": "Produkte të zgjedhura",
+    "en": "Featured products"
+  },
+  "home.featured.title": {
+    "mk": "Селектирани за тебе",
+    "sq": "Selektuar për ty",
+    "en": "Selected for you"
+  },
   "home.newToBarefoot.title": {
     "mk": "Чевли што се прилагодуваат на стапалото. Не обратно.",
     "sq": "Këpucë që përshtaten me këmbën. Jo e kundërta.",
     "en": "Shoes that adapt to the foot. Not the other way around."
   },
-  "home.hero.lead": { "mk": "Барефут чевли обликувани за вистински стапала — широк простор за прстите, рамен ѓон, флексибилен ѓон. Плаќање при испорака, бесплатно враќање во цела Македонија.", "sq": "Këpucë barefoot të formuara për këmbë të vërteta — hapësirë e gjerë për gishtat, zero drop, shollë fleksibël. Pagesë me dorëzim, kthim falas në të gjithë Maqedoninë.", "en": "Barefoot shoes shaped for real feet — wide toe box, zero drop, flexible sole. Pay on delivery, free returns across Macedonia." },
-  "home.hero.line1": { "mk": "Премиум боси чевли во Македонија", "sq": "Këpucë barefoot premium në Maqedoni", "en": "Premium barefoot shoes in North Macedonia" },
-  "home.hero.line2": { "mk": "од британскиот бренд Freet", "sq": "nga marka britanike Freet", "en": "from the British brand Freet" },
+  "home.hero.lead": {
+    "mk": "Барефут чевли обликувани за вистински стапала — широк простор за прстите, рамен ѓон, флексибилен ѓон. Плаќање при испорака, бесплатно враќање во цела Македонија.",
+    "sq": "Këpucë barefoot të formuara për këmbë të vërteta — hapësirë e gjerë për gishtat, zero drop, shollë fleksibël. Pagesë me dorëzim, kthim falas në të gjithë Maqedoninë.",
+    "en": "Barefoot shoes shaped for real feet — wide toe box, zero drop, flexible sole. Pay on delivery, free returns across Macedonia."
+  },
+  "home.hero.line1": {
+    "mk": "Премиум боси чевли во Македонија",
+    "sq": "Këpucë barefoot premium në Maqedoni",
+    "en": "Premium barefoot shoes in North Macedonia"
+  },
+  "home.hero.line2": {
+    "mk": "од британскиот бренд Freet",
+    "sq": "nga marka britanike Freet",
+    "en": "from the British brand Freet"
+  },
+  "home.hero.soon": {
+    "mk": "Наскоро",
+    "sq": "Së shpejti",
+    "en": "Coming soon"
+  },
   "home.hero.shopKids": { "mk": "Детски", "sq": "Fëmijë", "en": "Kids" },
   "home.hero.shopMen": { "mk": "Машки", "sq": "Burra", "en": "Men" },
   "home.hero.shopWomen": { "mk": "Женски", "sq": "Gra", "en": "Women" },
-  "home.quote.1.attr": { "mk": "Анатомски факт", "sq": "Fakt anatomik", "en": "Anatomical fact" },
-  "home.quote.1.text": { "mk": "Стапалото е чудо од инженерство — 26 коски, 33 зглобови, над 100 мускули. Дозволи му да работи.", "sq": "Këmba është një mrekulli inxhinierie — 26 kocka, 33 nyje, mbi 100 muskuj. Lëre ta bëjë punën.", "en": "The foot is an engineering marvel — 26 bones, 33 joints, over 100 muscles. Let it do its job." },
-  "home.quote.2.attr": { "mk": "Философија barefoot", "sq": "Filozofia barefoot", "en": "Barefoot philosophy" },
-  "home.quote.2.text": { "mk": "Прстите треба да се распостелат, не да се згрчуваат. Стапалата треба да чувствуваат, не да се изолираат.", "sq": "Gishtërinjtë duhet të hapen, jo të grumbullohen. Këmbët duhet të ndjejnë, jo të izolohen.", "en": "Toes need to splay, not scrunch. Feet need to feel, not be isolated." },
+  "home.quote.1.attr": {
+    "mk": "Анатомски факт",
+    "sq": "Fakt anatomik",
+    "en": "Anatomical fact"
+  },
+  "home.quote.1.text": {
+    "mk": "Стапалото е чудо од инженерство — 26 коски, 33 зглобови, над 100 мускули. Дозволи му да работи.",
+    "sq": "Këmba është një mrekulli inxhinierie — 26 kocka, 33 nyje, mbi 100 muskuj. Lëre ta bëjë punën.",
+    "en": "The foot is an engineering marvel — 26 bones, 33 joints, over 100 muscles. Let it do its job."
+  },
+  "home.quote.2.attr": {
+    "mk": "Философија barefoot",
+    "sq": "Filozofia barefoot",
+    "en": "Barefoot philosophy"
+  },
+  "home.quote.2.text": {
+    "mk": "Прстите треба да се распостелат, не да се згрчуваат. Стапалата треба да чувствуваат, не да се изолираат.",
+    "sq": "Gishtërinjtë duhet të hapen, jo të grumbullohen. Këmbët duhet të ndjejnë, jo të izolohen.",
+    "en": "Toes need to splay, not scrunch. Feet need to feel, not be isolated."
+  },
   "home.quote.3.attr": { "mk": "Bosfoot", "sq": "Bosfoot", "en": "Bosfoot" },
-  "home.quote.3.text": { "mk": "Се родивме без обувки. Барефоот е најблиску до тоа како природата нѐ замислила.", "sq": "Lindëm pa këpucë. Barefoot është më afër asaj si na ka menduar natyra.", "en": "We were born without shoes. Barefoot is closest to how nature intended us to move." },
-  "home.testimonial.attr": { "mk": "Ајзеја Стјуарт", "sq": "Isaiah Stewart", "en": "Isaiah Stewart" },
-  "home.testimonial.role": { "mk": "Кошаркар во НБА (Детроит Пистонс)", "sq": "Basketbollist i NBA-së (Detroit Pistons)", "en": "NBA player (Detroit Pistons)" },
-  "home.testimonial.text": { "mk": "Сфатив дека помалку навистина може да биде повеќе — почнуваш да ги користиш стапалата онака како што се создадени да се движат. Мојот баланс, стабилноста и експлозивноста се подобрија, бидејќи не се борам против чевелот — работам со него.", "sq": "E kuptova se më pak mund të jetë vërtet më shumë — fillon t'i përdorësh këmbët ashtu si janë krijuar të lëvizin. Ekuilibri, stabiliteti dhe eksploziviteti im u përmirësuan, sepse nuk po luftoj kundër këpucës — po punoj me të.", "en": "I realized less can actually be more — you start using your feet the way they're built to move. My balance, stability, and explosiveness got better because I'm not fighting against the shoe — I'm working with it." },
-  "home.whyBarefoot.1.body": { "mk": "Прстите се распостеливаат природно, балансот се подобрува, деформитетите се намалуваат.", "sq": "Gishtërinjtë hapen natyrshëm, ekuilibri përmirësohet, deformitetet zvogëlohen.", "en": "Toes splay naturally, balance improves, deformities decrease." },
-  "home.whyBarefoot.1.title": { "mk": "Широк простор за прстите", "sq": "Hapësirë e gjerë për gishtërinjtë", "en": "Wide toe box" },
-  "home.whyBarefoot.2.body": { "mk": "Петицата и прстите се на исто ниво. Држење на тело како кога одиш бос.", "sq": "Thembra dhe gishtërinjtë janë në të njëjtin nivel. Qëndrimi i trupit si kur ec zbathur.", "en": "Heel and toes at the same level. Posture as if you were walking barefoot." },
-  "home.whyBarefoot.2.title": { "mk": "Нула разлика во висина", "sq": "Zero diferencë në lartësi", "en": "Zero drop" },
-  "home.whyBarefoot.3.body": { "mk": "Чувствуваш што е под тебе. Мускулите се будат. Стапалото станува посилно секој ден.", "sq": "Ndjen atë që ke nën këmbë. Muskujt zgjohen. Këmba bëhet më e fortë çdo ditë.", "en": "You feel what is under you. Muscles wake up. Feet get stronger every day." },
-  "home.whyBarefoot.3.title": { "mk": "Тенок флексибилен ѓон", "sq": "Shollë e hollë fleksibël", "en": "Thin, flexible sole" },
-  "home.whyBarefoot.lead": { "mk": "Три принципи кои го прават барефоот различен од сѐ друго.", "sq": "Tre parime që e bëjnë barefoot të ndryshëm nga gjithçka tjetër.", "en": "Three principles that make barefoot different from everything else." },
-  "home.whyBarefoot.learnMore": { "mk": "Научи повеќе за барефут обувките", "sq": "Mëso më shumë rreth këpucëve barefoot", "en": "Learn more about barefoot shoes" },
-  "home.whyBarefoot.title": { "mk": "Зошто боси патики", "sq": "Pse këpucë barefoot", "en": "Why barefoot" },
-  "home.whyUs.1.body": { "mk": "Само премиум европски брендови. Никаков филер, никакво масовно производство.", "sq": "Vetëm marka premium europiane. Pa mbushës, pa prodhim masiv.", "en": "Only premium European brands. No filler, no mass production." },
-  "home.whyUs.1.title": { "mk": "Внимателно избрана колекција", "sq": "Koleksion i zgjedhur me kujdes", "en": "Carefully curated collection" },
-  "home.whyUs.2.body": { "mk": "Ги имаме сите пара во раце. Прашај нѐ за вистинската големина — одговараме лично.", "sq": "I kemi të gjitha modelet në duar. Na pyet për madhësinë e duhur — përgjigjemi personalisht.", "en": "We have every model in our hands. Ask us about the right size — we reply personally." },
-  "home.whyUs.2.title": { "mk": "Лична совет за големина", "sq": "Këshillë personale për madhësi", "en": "Personal sizing advice" },
-  "home.whyUs.3.body": { "mk": "Брза испорака низ Балканот. Враќање без покривање, без прашања.", "sq": "Dërgim i shpejtë nëpër Ballkan. Kthim pa pagesë, pa pyetje.", "en": "Fast shipping across the Balkans. Free returns, no questions asked." },
-  "home.whyUs.3.title": { "mk": "Регионална испорака", "sq": "Dërgesa rajonale", "en": "Regional delivery" },
-  "home.whyUs.checkUs": { "mk": "Дознај повеќе за нас", "sq": "Mësoni më shumë rreth nesh", "en": "Check us on about page" },
-  "home.whyUs.title": { "mk": "Зошто Bosfoot", "sq": "Pse Bosfoot", "en": "Why Bosfoot" },
-  "seo.home": { "mk": "Премиум барефут и минималистички патики со широк простор за прсти и нула дропа. Боси патики за природно движење — избрани европски брендови.", "sq": "Këpucë barefoot dhe minimaliste premium me hapësirë të gjerë për gishtat dhe zero drop. Këpucë natyrale për lëvizje të lirë nga marka evropiane.", "en": "Premium barefoot and minimalist shoes with a wide toe box and zero drop. Natural-movement shoes from carefully chosen European brands." },
-  "seo.title.home": { "mk": "Барефут и минималистички патики", "sq": "Këpucë barefoot dhe minimaliste", "en": "Barefoot \u0026 minimalist shoes" }
+  "home.quote.3.text": {
+    "mk": "Се родивме без обувки. Барефоот е најблиску до тоа како природата нѐ замислила.",
+    "sq": "Lindëm pa këpucë. Barefoot është më afër asaj si na ka menduar natyra.",
+    "en": "We were born without shoes. Barefoot is closest to how nature intended us to move."
+  },
+  "home.testimonial.attr": {
+    "mk": "Ајзеја Стјуарт",
+    "sq": "Isaiah Stewart",
+    "en": "Isaiah Stewart"
+  },
+  "home.testimonial.role": {
+    "mk": "Кошаркар во НБА (Детроит Пистонс)",
+    "sq": "Basketbollist i NBA-së (Detroit Pistons)",
+    "en": "NBA player (Detroit Pistons)"
+  },
+  "home.testimonial.text": {
+    "mk": "Сфатив дека помалку навистина може да биде повеќе — почнуваш да ги користиш стапалата онака како што се создадени да се движат. Мојот баланс, стабилноста и експлозивноста се подобрија, бидејќи не се борам против чевелот — работам со него.",
+    "sq": "E kuptova se më pak mund të jetë vërtet më shumë — fillon t'i përdorësh këmbët ashtu si janë krijuar të lëvizin. Ekuilibri, stabiliteti dhe eksploziviteti im u përmirësuan, sepse nuk po luftoj kundër këpucës — po punoj me të.",
+    "en": "I realized less can actually be more — you start using your feet the way they're built to move. My balance, stability, and explosiveness got better because I'm not fighting against the shoe — I'm working with it."
+  },
+  "home.whyBarefoot.1.body": {
+    "mk": "Прстите се распостеливаат природно, балансот се подобрува, деформитетите се намалуваат.",
+    "sq": "Gishtërinjtë hapen natyrshëm, ekuilibri përmirësohet, deformitetet zvogëlohen.",
+    "en": "Toes splay naturally, balance improves, deformities decrease."
+  },
+  "home.whyBarefoot.1.title": {
+    "mk": "Широк простор за прстите",
+    "sq": "Hapësirë e gjerë për gishtërinjtë",
+    "en": "Wide toe box"
+  },
+  "home.whyBarefoot.2.body": {
+    "mk": "Петицата и прстите се на исто ниво. Држење на тело како кога одиш бос.",
+    "sq": "Thembra dhe gishtërinjtë janë në të njëjtin nivel. Qëndrimi i trupit si kur ec zbathur.",
+    "en": "Heel and toes at the same level. Posture as if you were walking barefoot."
+  },
+  "home.whyBarefoot.2.title": {
+    "mk": "Нула разлика во висина",
+    "sq": "Zero diferencë në lartësi",
+    "en": "Zero drop"
+  },
+  "home.whyBarefoot.3.body": {
+    "mk": "Чувствуваш што е под тебе. Мускулите се будат. Стапалото станува посилно секој ден.",
+    "sq": "Ndjen atë që ke nën këmbë. Muskujt zgjohen. Këmba bëhet më e fortë çdo ditë.",
+    "en": "You feel what is under you. Muscles wake up. Feet get stronger every day."
+  },
+  "home.whyBarefoot.3.title": {
+    "mk": "Тенок флексибилен ѓон",
+    "sq": "Shollë e hollë fleksibël",
+    "en": "Thin, flexible sole"
+  },
+  "home.whyBarefoot.lead": {
+    "mk": "Три принципи кои го прават барефоот различен од сѐ друго.",
+    "sq": "Tre parime që e bëjnë barefoot të ndryshëm nga gjithçka tjetër.",
+    "en": "Three principles that make barefoot different from everything else."
+  },
+  "home.whyBarefoot.learnMore": {
+    "mk": "Научи повеќе за барефут обувките",
+    "sq": "Mëso më shumë rreth këpucëve barefoot",
+    "en": "Learn more about barefoot shoes"
+  },
+  "home.whyBarefoot.title": {
+    "mk": "Зошто боси патики",
+    "sq": "Pse këpucë barefoot",
+    "en": "Why barefoot"
+  },
+  "home.whyUs.1.body": {
+    "mk": "Само премиум европски брендови. Никаков филер, никакво масовно производство.",
+    "sq": "Vetëm marka premium europiane. Pa mbushës, pa prodhim masiv.",
+    "en": "Only premium European brands. No filler, no mass production."
+  },
+  "home.whyUs.1.title": {
+    "mk": "Внимателно избрана колекција",
+    "sq": "Koleksion i zgjedhur me kujdes",
+    "en": "Carefully curated collection"
+  },
+  "home.whyUs.2.body": {
+    "mk": "Ги имаме сите пара во раце. Прашај нѐ за вистинската големина — одговараме лично.",
+    "sq": "I kemi të gjitha modelet në duar. Na pyet për madhësinë e duhur — përgjigjemi personalisht.",
+    "en": "We have every model in our hands. Ask us about the right size — we reply personally."
+  },
+  "home.whyUs.2.title": {
+    "mk": "Лична совет за големина",
+    "sq": "Këshillë personale për madhësi",
+    "en": "Personal sizing advice"
+  },
+  "home.whyUs.3.body": {
+    "mk": "Брза испорака низ Балканот. Враќање без покривање, без прашања.",
+    "sq": "Dërgim i shpejtë nëpër Ballkan. Kthim pa pagesë, pa pyetje.",
+    "en": "Fast shipping across the Balkans. Free returns, no questions asked."
+  },
+  "home.whyUs.3.title": {
+    "mk": "Регионална испорака",
+    "sq": "Dërgesa rajonale",
+    "en": "Regional delivery"
+  },
+  "home.whyUs.checkUs": {
+    "mk": "Дознај повеќе за нас",
+    "sq": "Mësoni më shumë rreth nesh",
+    "en": "Check us on about page"
+  },
+  "home.whyUs.title": {
+    "mk": "Зошто Bosfoot",
+    "sq": "Pse Bosfoot",
+    "en": "Why Bosfoot"
+  },
+  "seo.home": {
+    "mk": "Премиум барефут и минималистички патики со широк простор за прсти и нула дропа. Боси патики за природно движење — избрани европски брендови.",
+    "sq": "Këpucë barefoot dhe minimaliste premium me hapësirë të gjerë për gishtat dhe zero drop. Këpucë natyrale për lëvizje të lirë nga marka evropiane.",
+    "en": "Premium barefoot and minimalist shoes with a wide toe box and zero drop. Natural-movement shoes from carefully chosen European brands."
+  },
+  "seo.title.home": {
+    "mk": "Барефут и минималистички патики",
+    "sq": "Këpucë barefoot dhe minimaliste",
+    "en": "Barefoot \u0026 minimalist shoes"
+  }
 }

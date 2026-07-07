@@ -17,6 +17,14 @@ func MetaPixelID() string {
 	return strings.TrimSpace(os.Getenv("META_PIXEL_ID"))
 }
 
+// PreorderAll forces the entire catalogue into preorder mode for the pre-launch
+// phase: every product is shown and behaves as "preorder" — orderable without a
+// size, with no inventory decrement — regardless of real stock. This is the
+// temporary launch-soon layer; flip to false at launch to restore per-variant
+// stock behaviour (in-stock = buy/decrement, OOS size = notify). A var (not
+// const) so the guards aren't compiled out and it can be wired to env later.
+var PreorderAll = true
+
 // MKDtoEUR is the denar→euro conversion rate for the secondary EUR price shown
 // on the sq/en locales. Single source of truth: the client JS reads it from a
 // data-eur-rate attribute (injected via the `eurRate` template func) instead of

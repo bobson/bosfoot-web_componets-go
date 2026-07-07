@@ -5,6 +5,7 @@ import (
 	"strconv"
 	"strings"
 
+	"bosfoot/internal/site"
 	"bosfoot/models"
 )
 
@@ -47,10 +48,15 @@ func homeStructuredData(siteURL string) []any {
 // from live stock, so Google can show price/availability rich results.
 func productStructuredData(siteURL, productURL, desc string, p models.Product) map[string]any {
 	availability := "https://schema.org/OutOfStock"
-	for _, s := range p.Stock {
-		if s.Qty > 0 {
-			availability = "https://schema.org/InStock"
-			break
+	if site.PreorderAll {
+		// Pre-launch: the whole catalogue is preorder.
+		availability = "https://schema.org/PreOrder"
+	} else {
+		for _, s := range p.Stock {
+			if s.Qty > 0 {
+				availability = "https://schema.org/InStock"
+				break
+			}
 		}
 	}
 

@@ -105,7 +105,8 @@ func (h *PageHandler) fetchColors(ctx context.Context, ids []int) (map[int][]mod
 // ("get notified"). Used by both the listing and the home featured grid.
 func (h *PageHandler) fetchInStock(ctx context.Context, ids []int) (map[int]bool, error) {
 	inStock := make(map[int]bool)
-	if len(ids) == 0 {
+	// Pre-launch: the whole catalogue is preorder, so nothing is "in stock".
+	if site.PreorderAll || len(ids) == 0 {
 		return inStock, nil
 	}
 	rows, err := h.DB.QueryContext(ctx, `
@@ -1318,10 +1319,13 @@ func (h *PageHandler) ProductDetail(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Buyable if any variant has stock; otherwise the page shows "get notified".
-	for _, s := range p.Stock {
-		if s.Qty > 0 {
-			p.InStock = true
-			break
+	// Pre-launch (PreorderAll) keeps InStock false so every product is preorder.
+	if !site.PreorderAll {
+		for _, s := range p.Stock {
+			if s.Qty > 0 {
+				p.InStock = true
+				break
+			}
 		}
 	}
 
