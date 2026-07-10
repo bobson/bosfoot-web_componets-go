@@ -12,6 +12,7 @@ import (
 	"fmt"
 	"net/http"
 	"sort"
+	"strconv"
 	"strings"
 
 	"github.com/lib/pq"
@@ -147,6 +148,7 @@ type PageBase struct {
 	MetaTitle       string
 	MetaDescription string
 	OGImage         string // Absolute URL to the social sharing image
+	NoIndex         bool   // when true, emit <meta name="robots" content="noindex"> and no hreflang
 
 	// StructuredData, when non-nil, is marshalled into a
 	// <script type="application/ld+json"> block in the page head. Usually a
@@ -232,9 +234,54 @@ type HomePageData struct {
 // ProductDetailData is the template data for /{locale}/products/{brand}/{slug}.
 type ProductDetailData struct {
 	PageBase
-	Product     models.Product
-	Translation models.ProductTranslation
-	Related     []models.Product
+	Product       models.Product
+	Translation   models.ProductTranslation
+	Related       []models.Product
+	Reviews       []models.Review
+	ReviewSummary ReviewSummary
+}
+
+// ReviewSummary is the aggregate shown at the top of a product's reviews block.
+// Average/FitAverage are 0 when there are no (fit) reviews; templates guard on
+// Count/FitCount before showing anything.
+type ReviewSummary struct {
+	Count       int     // number of approved reviews
+	Average     float64 // mean star rating, 1 decimal
+	AverageStr  string  // "4.3" — pre-formatted for display + JSON-LD
+	FillPct     float64 // Average/5*100, for the CSS star-bar width
+	FitCount    int     // how many reviews answered the fit question
+	FitLabelKey string  // locale key: reviews.fit.small | .true | .large ("" if none)
+}
+
+// summariseReviews computes the aggregate from a set of approved reviews.
+func summariseReviews(reviews []models.Review) ReviewSummary {
+	s := ReviewSummary{Count: len(reviews)}
+	if len(reviews) == 0 {
+		return s
+	}
+	sum, fitSum := 0, 0
+	for _, r := range reviews {
+		sum += r.Rating
+		if r.Fit != nil {
+			fitSum += *r.Fit
+			s.FitCount++
+		}
+	}
+	s.Average = float64(sum) / float64(len(reviews))
+	s.AverageStr = strconv.FormatFloat(s.Average, 'f', 1, 64)
+	s.FillPct = s.Average / 5 * 100
+	if s.FitCount > 0 {
+		avgFit := float64(fitSum) / float64(s.FitCount)
+		switch {
+		case avgFit <= -0.5:
+			s.FitLabelKey = "reviews.fit.small"
+		case avgFit >= 0.5:
+			s.FitLabelKey = "reviews.fit.large"
+		default:
+			s.FitLabelKey = "reviews.fit.true"
+		}
+	}
+	return s
 }
 
 // ArticleCard is an article teaser used on the listing grid, the foot-health
@@ -1075,6 +1122,7 @@ func (h *PageHandler) ProductDetail(w http.ResponseWriter, r *http.Request) {
 	// writes a distinct field of p (or the separate `related` slice), so there
 	// is no shared-memory race. errgroup cancels siblings on the first error.
 	var related []models.Product
+	var reviews []models.Review
 	g, gctx := errgroup.WithContext(ctx)
 	// Cap concurrent queries per request so one product page can't claim the
 	// whole connection pool (max 8 on this Aiven plan). 4 still cuts the ~9
@@ -1255,6 +1303,39 @@ func (h *PageHandler) ProductDetail(w http.ResponseWriter, r *http.Request) {
 		return rows.Err()
 	})
 
+	// Approved reviews, newest first. Runs in parallel with the rest; the
+	// aggregate is computed after g.Wait() from this slice.
+	g.Go(func() error {
+		rows, err := h.DB.QueryContext(gctx, `
+			SELECT rating, fit, author_name, COALESCE(body,''), lang_code::text, created_at
+			FROM reviews
+			WHERE product_id = $1 AND status = 'approved'
+			ORDER BY created_at DESC
+			LIMIT 50
+		`, p.ID)
+		if err != nil {
+			return err
+		}
+		defer rows.Close()
+		for rows.Next() {
+			var rv models.Review
+			var fit sql.NullInt64
+			var body string
+			if err := rows.Scan(&rv.Rating, &fit, &rv.AuthorName, &body, &rv.Lang, &rv.CreatedAt); err != nil {
+				return err
+			}
+			if fit.Valid {
+				v := int(fit.Int64)
+				rv.Fit = &v
+			}
+			if body != "" {
+				rv.Body = &body
+			}
+			reviews = append(reviews, rv)
+		}
+		return rows.Err()
+	})
+
 	// Related products from the same brand, plus their colors. These two are
 	// sequential with each other (colors need the related IDs) but run in
 	// parallel with everything above.
@@ -1366,11 +1447,13 @@ func (h *PageHandler) ProductDetail(w http.ResponseWriter, r *http.Request) {
 		ogImage = *p.ImageURL
 	}
 
+	summary := summariseReviews(reviews)
+
 	currentPath := "/products/" + brandSlug + "/" + productSlug
 	siteURL := h.baseURL(r)
 	productURL := siteURL + "/" + loc + currentPath
 	structured := []any{
-		productStructuredData(siteURL, productURL, metaDesc, p),
+		productStructuredData(siteURL, productURL, metaDesc, p, summary),
 		breadcrumbLD(
 			[2]string{"Bosfoot", siteURL + "/" + loc},
 			[2]string{h.UI.T(loc, "listing.title"), siteURL + "/" + loc + "/products"},
@@ -1387,8 +1470,75 @@ func (h *PageHandler) ProductDetail(w http.ResponseWriter, r *http.Request) {
 			OGImage:         ogImage,
 			StructuredData:  structured,
 		},
-		Product:     p,
-		Translation: translation,
-		Related:     related,
+		Product:       p,
+		Translation:   translation,
+		Related:       related,
+		Reviews:       reviews,
+		ReviewSummary: summary,
 	})
+}
+
+// ReviewPage handles GET /{locale}/review/{token} — the private, per-buyer page
+// where a verified buyer leaves a product review. The token (emailed after
+// fulfilment) is looked up here; an invalid or already-used token renders the
+// same page with a friendly notice instead of the form. noindex + never in the
+// sitemap: these URLs are private and per-token.
+func (h *PageHandler) ReviewPage(w http.ResponseWriter, r *http.Request) {
+	if !locale.IsValid(r.PathValue("locale")) {
+		http.NotFound(w, r)
+		return
+	}
+	loc := locale.FromPath(r.PathValue("locale"))
+	token := r.PathValue("token")
+	ctx := r.Context()
+
+	base := PageBase{
+		Locale:          loc,
+		CurrentPath:     "/review/" + token,
+		SiteURL:         h.baseURL(r),
+		MetaDescription: h.UI.T(loc, "reviews.write.lead"),
+		NoIndex:         true,
+	}
+
+	var d ReviewPageData
+	d.PageBase = base
+	d.Token = token
+
+	// Look up the token → the product it's for, and whether it's spent.
+	var usedAt sql.NullTime
+	var imageURL sql.NullString
+	err := h.DB.QueryRowContext(ctx, `
+		SELECT rt.used_at, b.name, p.name, p.image_url
+		FROM review_tokens rt
+		JOIN products p ON p.id = rt.product_id
+		JOIN brands   b ON b.id = p.brand_id
+		WHERE rt.token = $1
+	`, token).Scan(&usedAt, &d.BrandName, &d.ProductName, &imageURL)
+	switch {
+	case err == sql.ErrNoRows:
+		d.State = "invalid"
+	case err != nil:
+		h.Logger.Error("ReviewPage: token lookup failed", err)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	case usedAt.Valid:
+		d.State = "used"
+	default:
+		d.State = "form"
+		if imageURL.Valid {
+			d.ImageURL = imageURL.String
+		}
+	}
+
+	h.Renderer.Render(w, "review", d)
+}
+
+// ReviewPageData is the template data for /{locale}/review/{token}.
+type ReviewPageData struct {
+	PageBase
+	Token       string
+	State       string // "form" | "used" | "invalid"
+	BrandName   string
+	ProductName string
+	ImageURL    string
 }

@@ -14,6 +14,7 @@ func Register(
 	orderHandler *handlers.OrderHandler,
 	pageHandler *handlers.PageHandler,
 	trackHandler *handlers.TrackHandler,
+	reviewHandler *handlers.ReviewHandler,
 	pc *cache.Cache,
 ) {
 	// API handlers (JSON, CSR)
@@ -24,6 +25,7 @@ func Register(
 	http.HandleFunc("/api/products/{id}/stock/stream", productHandler.StreamProductStock)
 
 	http.HandleFunc("/api/orders", middleware.WrapCSRF(orderHandler.CreateOrder))
+	http.HandleFunc("/api/reviews", middleware.WrapCSRF(reviewHandler.CreateReview))
 
 	// Funnel beacon for add-to-cart (the only client-side-only funnel step).
 	// Not CSRF-wrapped: it changes no state — it only appends to the log.
@@ -40,6 +42,9 @@ func Register(
 	http.HandleFunc("/{locale}/about", pc.Wrap(pageHandler.About))
 	http.HandleFunc("/{locale}/contact", pc.Wrap(pageHandler.Contact))
 	http.HandleFunc("/{locale}/checkout", middleware.WithCSRFCookie(pc.Wrap(pageHandler.Checkout)))
+	// Review token page: per-token + shows used/invalid state, so it must NOT be
+	// cached. WithCSRFCookie seeds the _csrf cookie the review form POST needs.
+	http.HandleFunc("/{locale}/review/{token}", middleware.WithCSRFCookie(pageHandler.ReviewPage))
 	http.HandleFunc("/{locale}/foot-health", pc.Wrap(pageHandler.FootHealth))
 	http.HandleFunc("/{locale}/what-are-barefoot-shoes", pc.Wrap(pageHandler.WhatAreBarefootShoes))
 	// Three flat barefoot-trait detail pages, all served by BarefootArticle

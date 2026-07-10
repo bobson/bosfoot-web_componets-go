@@ -38,6 +38,9 @@ func main() {
 		"db/freet.sql",
 		"db/freet-update.sql",
 		"db/price-eur.sql",
+		// Always run: migrates the reviews table to the guest-checkout model and
+		// creates review_tokens. Idempotent, so safe on both fresh and existing DBs.
+		"db/reviews.sql",
 	)
 
 	for _, f := range files {

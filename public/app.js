@@ -18,6 +18,7 @@ const components = [
   ['./components/nav-locale.js', 'initNavLocale'],
   ['./components/nav-search.js', 'initNavSearch'],
   ['./components/checkout-form.js', 'initCheckoutForm'],
+  ['./components/review-form.js', 'initReviewForm'],
   ['./components/listing-filter.js', 'initListingFilter'],
   ['./components/product-detail.js', 'initProductDetail'],
   ['./components/size-guide-modal.js', 'initSizeGuideModal'],

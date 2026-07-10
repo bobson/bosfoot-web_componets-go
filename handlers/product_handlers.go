@@ -463,11 +463,11 @@ func (h *ProductHandler) GetProductByID(w http.ResponseWriter, r *http.Request) 
 		p.SizeChart = append(p.SizeChart, sc)
 	}
 
-	// --- reviews ---
+	// --- reviews (approved only) ---
 	rRows, err := h.DB.QueryContext(ctx, `
-		SELECT id, user_id, rating, body, created_at
+		SELECT id, rating, fit, author_name, body, lang_code::text, created_at
 		FROM reviews
-		WHERE product_id = $1 ORDER BY created_at DESC
+		WHERE product_id = $1 AND status = 'approved' ORDER BY created_at DESC
 	`, id)
 	if err != nil {
 		h.Logger.Error("GetProductByID: reviews query failed", err)
@@ -477,13 +477,19 @@ func (h *ProductHandler) GetProductByID(w http.ResponseWriter, r *http.Request) 
 	defer rRows.Close()
 	for rRows.Next() {
 		var rev models.Review
+		var fit sql.NullInt64
 		var body sql.NullString
-		if err := rRows.Scan(&rev.ID, &rev.UserID, &rev.Rating, &body, &rev.CreatedAt); err != nil {
+		if err := rRows.Scan(&rev.ID, &rev.Rating, &fit, &rev.AuthorName, &body, &rev.Lang, &rev.CreatedAt); err != nil {
 			h.Logger.Error("GetProductByID: review scan failed", err)
 			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 			return
 		}
 		rev.ProductID = id
+		rev.Status = "approved"
+		if fit.Valid {
+			v := int(fit.Int64)
+			rev.Fit = &v
+		}
 		if body.Valid {
 			rev.Body = &body.String
 		}
@@ -600,4 +606,3 @@ func (h *ProductHandler) StreamProductStock(w http.ResponseWriter, r *http.Reque
 		}
 	}
 }
-

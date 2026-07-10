@@ -1,6 +1,7 @@
 {{define "head"}}
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+{{if .NoIndex}}<meta name="robots" content="noindex, nofollow">{{end}}
 {{if .MetaDescription}}<meta name="description" content="{{.MetaDescription}}">{{end}}
 
 {{/* Meta (Facebook/Instagram) Pixel — the ID is exposed INERTLY here; the pixel
@@ -36,8 +37,10 @@
 
   Most pages share one slug across locales, so we prefix-swap CurrentPath.
   Article pages have per-locale slugs and supply explicit .Alternates instead.
+  Private noindex pages (e.g. the review token page) emit neither.
 */}}
-{{if .Alternates}}
+{{if .NoIndex}}
+{{else if .Alternates}}
 <link rel="canonical" href="{{.SiteURL}}{{index .Alternates .Locale}}">
 <link rel="alternate" hreflang="mk" href="{{.SiteURL}}{{index .Alternates "mk"}}">
 <link rel="alternate" hreflang="sq" href="{{.SiteURL}}{{index .Alternates "sq"}}">

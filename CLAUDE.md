@@ -55,6 +55,23 @@ go run ./cmd/reservations
 # -status <s> filters by status, -limit N shows only the N most recent.
 go run ./cmd/orders
 
+# Send post-purchase "leave a review" invites. Each invite carries a single-use
+# token per purchased product — the buyer's proof of purchase on the review page
+# (there are no accounts). Time-based (no fulfilment step exists): an order is
+# eligible once older than -days (default 7) and not yet invited. DEFAULT IS
+# DRY-RUN — prints the links it WOULD send; pass -commit to create tokens + send.
+# Links print even if SMTP is unset, so you can paste them into any mail client.
+go run ./cmd/reviewinvites            # preview eligible orders (dry-run)
+go run ./cmd/reviewinvites -order 42  # just order #42, any age
+go run ./cmd/reviewinvites -commit    # create tokens + send
+
+# Moderate reviews. Reviews land 'pending' and show on the site only once
+# approved; this is the approval path (no admin UI, avoids raw SQL). Approved
+# reviews appear within the 60s page-cache TTL.
+go run ./cmd/reviews                  # list pending reviews
+go run ./cmd/reviews -approve 12      # approve review #12
+go run ./cmd/reviews -reject 12       # reject review #12
+
 # Run tests (internal/locale, models, internal/middleware)
 go test ./...
 
@@ -131,6 +148,8 @@ Both the server and `cmd/` utilities must be run from the project root — `.env
 - `GET /api/products` — JSON listing with colors (bulk `ANY($1)` query, no N+1)
 - `GET /api/products/{id}` — JSON full detail (sequential queries)
 - `POST /api/orders` — guest-checkout order creation (CSRF-protected, validated via `models.Order.Validate()`)
+- `POST /api/reviews` — review submission (CSRF-protected). The reviewed product is read from the review-token row, never the client; the token is consumed atomically (single-use). Reviews land `status='pending'` and show only once approved.
+- `GET /{locale}/review/{token}` — private per-buyer review page (noindex, NOT cached, NOT in sitemap). Renders the review form for a valid unused token, else a used/invalid notice. Wrapped in `WithCSRFCookie`.
 - `GET /{mk,sq,en}` — SSR homepage (registered per-locale, not via `{locale}` wildcard)
 - `GET /{locale}/products` — SSR product listing page (with filter facets)
 - `GET /{locale}/products/{brand}/{slug}` — SSR product detail page
@@ -177,3 +196,5 @@ Both the server and `cmd/` utilities must be run from the project root — `.env
 - New brand image assets: add `public/images/{brand-slug}/{product}/images/{colour}/` webp files, then `go run ./cmd/imgvariants` to generate the `-card` variants.
 - New locale string: add it to the relevant `public/locales/pages/{page}.json` (or `common.json` if shared), with all three languages (`{"mk":…, "sq":…, "en":…}`).
 - `db/` SQL files are idempotent (`ON CONFLICT DO NOTHING`) — safe to re-run.
+- Reviews are guest-checkout friendly: verified by a per-order **review token** (emailed after fulfilment), not a login. `db/reviews.sql` migrates the legacy `reviews` stub (user_id-based) to the order-verified model (`order_id`, `fit`, `author_name`, `lang_code`, `status`) + creates `review_tokens`; it is in `cmd/dbimport`'s **always-run** list (idempotent `ALTER`/`IF NOT EXISTS`), because dbimport skips `schema.sql` once the DB is initialised. Star rating (1–5) is required, fit (runs small…true…large) optional; approved reviews feed the product page + a schema.org `AggregateRating`. Moderate with `cmd/reviews` (`-approve`/`-reject`; no admin UI) — reviews start `pending`, so a submitted review won't show until approved.
+  - **DEPLOY ORDER (migration-first — the REVERSE of the shoeimport rule):** run `go run ./cmd/dbimport` against **prod first**, *then* push/merge the code. The new `ProductDetail`/`/api/products/{id}` queries read the new `reviews` columns + `review_tokens`; if the code ships before `reviews.sql` runs, **every product page 500s**. `reviews.sql` only ADDs (backward-compatible with currently-deployed code), so running it early is safe. GitHub Actions auto-deploys on push to main, so apply the migration before the push lands.

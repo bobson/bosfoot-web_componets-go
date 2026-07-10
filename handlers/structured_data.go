@@ -46,7 +46,7 @@ func homeStructuredData(siteURL string) []any {
 // productStructuredData returns a schema.org Product (with an Offer) for a
 // product detail page. price is emitted as a string and availability is derived
 // from live stock, so Google can show price/availability rich results.
-func productStructuredData(siteURL, productURL, desc string, p models.Product) map[string]any {
+func productStructuredData(siteURL, productURL, desc string, p models.Product, reviews ReviewSummary) map[string]any {
 	availability := "https://schema.org/OutOfStock"
 	if site.PreorderAll {
 		// Pre-launch: the whole catalogue is preorder.
@@ -80,6 +80,17 @@ func productStructuredData(siteURL, productURL, desc string, p models.Product) m
 	}
 	if p.ImageURL != nil {
 		product["image"] = absURL(siteURL, *p.ImageURL)
+	}
+	// aggregateRating drives the ⭐ rich snippet in search results. Only emitted
+	// once there's at least one approved review — Google flags empty/zero ratings.
+	if reviews.Count > 0 {
+		product["aggregateRating"] = map[string]any{
+			"@type":       "AggregateRating",
+			"ratingValue": reviews.AverageStr,
+			"reviewCount": reviews.Count,
+			"bestRating":  "5",
+			"worstRating": "1",
+		}
 	}
 	return product
 }

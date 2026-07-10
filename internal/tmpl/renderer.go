@@ -145,6 +145,10 @@ func NewRenderer(dir string, ui *locale.UI) (*Renderer, error) {
 		//   {{range list "kneePain" "heelPain"}}...{{end}}
 		"list": func(items ...string) []string { return items },
 
+		// mul multiplies two ints — used to turn a 1–5 rating into a CSS star-bar
+		// fill percentage ({{mul .Rating 20}}%).
+		"mul": func(a, b int) int { return a * b },
+
 		// json encodes a value as JSON for use in <script type="application/json"> tags.
 		"json": func(v any) (template.JS, error) {
 			b, err := json.Marshal(v)

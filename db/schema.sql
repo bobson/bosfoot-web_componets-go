@@ -284,6 +284,13 @@ CREATE TABLE article_translations (
 );
 
 -- ---------- Reviews ----------
+--
+-- NOTE: this is the legacy shape only. The live, guest-checkout review model
+-- (order-verified via review_tokens, plus fit/status/author_name columns) is
+-- applied by db/reviews.sql, which runs on EVERY dbimport — on a fresh DB it
+-- migrates this table right after creating it, exactly as it does on prod. Do
+-- not "modernise" this block: keep it as the legacy shape so reviews.sql's
+-- ALTERs have a consistent starting point in both paths.
 
 CREATE TABLE reviews (
     id         SERIAL PRIMARY KEY,

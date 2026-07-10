@@ -135,6 +135,105 @@ func (m *Mailer) CustomerConfirmation(o Order) {
 	}()
 }
 
+// Enabled reports whether SMTP is configured. cmd/reviewinvites uses this to
+// decide whether to actually send or just print the links.
+func (m *Mailer) Enabled() bool { return m != nil && m.on }
+
+// ReviewLink is one product's review URL in an invite email.
+type ReviewLink struct {
+	ProductName string
+	URL         string
+}
+
+// ReviewInviteData is what a post-purchase review invite needs. One email per
+// order, with a link per purchased product.
+type ReviewInviteData struct {
+	OrderID int
+	Email   string
+	Name    string
+	Locale  string // mk | sq | en
+	Links   []ReviewLink
+}
+
+// ReviewInvite sends the post-purchase "how are your shoes? leave a review"
+// email. Unlike OrderPlaced it is synchronous and returns an error, so the batch
+// tool (cmd/reviewinvites) can report per-order success and only mark an order
+// invited when the send actually succeeded.
+func (m *Mailer) ReviewInvite(d ReviewInviteData) error {
+	if !m.Enabled() {
+		return fmt.Errorf("mailer disabled")
+	}
+	if d.Email == "" || len(d.Links) == 0 {
+		return fmt.Errorf("nothing to send")
+	}
+	return m.send([]string{d.Email}, buildReviewInviteMessage(m.from, strings.Join(m.to, ", "), d))
+}
+
+// buildReviewInviteMessage renders the RFC 5322 review-invite email, localised
+// by the order's locale (same approach as buildCustomerMessage).
+func buildReviewInviteMessage(from, replyTo string, d ReviewInviteData) []byte {
+	var b strings.Builder
+	header := func(k, v string) {
+		v = strings.NewReplacer("\r", "", "\n", "").Replace(v)
+		fmt.Fprintf(&b, "%s: %s\r\n", k, v)
+	}
+
+	firstName := strings.Split(d.Name, " ")[0]
+	var subject, hello, intro, cta, footer, regards, team string
+	switch d.Locale {
+	case "mk":
+		subject = "Како се чувствуваат вашите нови патики? — Bosfoot"
+		hello = "Здраво " + firstName + ","
+		intro = "Се надеваме дека уживате во вашите нови барефут патики! Вашето искуство им помага на другите да ја изберат вистинската големина. Ќе ни значи многу ако одвоите минута за да оставите оценка:"
+		cta = "Оцени:"
+		footer = "Ви благодариме што сте дел од Bosfoot."
+		regards = "Со почит,"
+		team = "Тимот на Bosfoot"
+	case "sq":
+		subject = "Si ndihen këpucët tuaja të reja? — Bosfoot"
+		hello = "Përshëndetje " + firstName + ","
+		intro = "Shpresojmë që po i shijoni këpucët tuaja të reja barefoot! Përvoja juaj i ndihmon të tjerët të zgjedhin madhësinë e duhur. Do të na pëlqente shumë nëse lini një vlerësim:"
+		cta = "Vlerëso:"
+		footer = "Faleminderit që jeni pjesë e Bosfoot."
+		regards = "Gjithë të mirat,"
+		team = "Ekipi i Bosfoot"
+	default: // en
+		subject = "How are your new shoes feeling? — Bosfoot"
+		hello = "Hello " + firstName + ","
+		intro = "We hope you're enjoying your new barefoot shoes! Your experience helps others pick the right size. We'd love it if you left a quick review:"
+		cta = "Review:"
+		footer = "Thank you for being part of Bosfoot."
+		regards = "Best regards,"
+		team = "The Bosfoot Team"
+	}
+
+	header("From", from)
+	header("To", d.Email)
+	if replyTo != "" {
+		header("Reply-To", replyTo)
+	}
+	header("Subject", subject)
+	header("MIME-Version", "1.0")
+	header("Content-Type", "text/plain; charset=utf-8")
+	b.WriteString("\r\n")
+
+	line := func(format string, args ...any) { fmt.Fprintf(&b, format+"\r\n", args...) }
+	line(hello)
+	line("")
+	line(intro)
+	line("")
+	for _, l := range d.Links {
+		line("%s %s", cta, l.ProductName)
+		line("  %s", l.URL)
+		line("")
+	}
+	line(footer)
+	line("")
+	line(regards)
+	line(team)
+	return []byte(b.String())
+}
+
 func (m *Mailer) recover(label string, orderID int) {
 	if r := recover(); r != nil {
 		m.log.Error(label+" panicked", fmt.Errorf("%v", r), "order_id", orderID)

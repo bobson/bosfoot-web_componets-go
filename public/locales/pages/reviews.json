@@ -1,0 +1,38 @@
+{
+  "reviews.section.title": { "mk": "Оценки", "sq": "Vlerësime", "en": "Reviews" },
+  "reviews.verified": { "mk": "Потврден купувач", "sq": "Blerës i verifikuar", "en": "Verified buyer" },
+  "reviews.based": { "mk": "врз основа на оценки", "sq": "bazuar në vlerësime", "en": "based on reviews" },
+  "reviews.fit.heading": { "mk": "Одговара на големината", "sq": "Përshtatja e madhësisë", "en": "Fit" },
+  "reviews.fit.small": { "mk": "Мала — земи поголема", "sq": "E vogël — merr më të madhe", "en": "Runs small — size up" },
+  "reviews.fit.true": { "mk": "Точно по големина", "sq": "Sipas madhësisë", "en": "True to size" },
+  "reviews.fit.large": { "mk": "Голема — земи помала", "sq": "E madhe — merr më të vogël", "en": "Runs large — size down" },
+
+  "reviews.write.title": { "mk": "Остави оценка", "sq": "Lër një vlerësim", "en": "Leave a review" },
+  "reviews.write.lead": { "mk": "Твоето искуство им помага на другите да ја изберат вистинската патика и големина.", "sq": "Përvoja jote i ndihmon të tjerët të zgjedhin këpucën dhe madhësinë e duhur.", "en": "Your experience helps others pick the right shoe and size." },
+  "reviews.write.forProduct": { "mk": "Оценуваш", "sq": "Po vlerëson", "en": "You're reviewing" },
+
+  "reviews.rating.label": { "mk": "Твојата оценка", "sq": "Vlerësimi yt", "en": "Your rating" },
+  "reviews.rating.required": { "mk": "Избери оценка со ѕвездички", "sq": "Zgjedh një vlerësim me yje", "en": "Please choose a star rating" },
+
+  "reviews.fit.label": { "mk": "Како ти одговараше големината?", "sq": "Si të erdhi madhësia?", "en": "How did they fit?" },
+  "reviews.fit.optional": { "mk": "(изборно)", "sq": "(opsionale)", "en": "(optional)" },
+
+  "reviews.name.label": { "mk": "Твоето име", "sq": "Emri yt", "en": "Your name" },
+  "reviews.name.placeholder": { "mk": "пр. Марко С.", "sq": "p.sh. Marko S.", "en": "e.g. Marko S." },
+
+  "reviews.body.label": { "mk": "Твојата оценка", "sq": "Vlerësimi yt", "en": "Your review" },
+  "reviews.body.placeholder": { "mk": "Како ти се чинат патиките? Удобност, големина, квалитет…", "sq": "Si të duken këpucët? Rehatia, madhësia, cilësia…", "en": "How do the shoes feel? Comfort, sizing, quality…" },
+
+  "reviews.submit": { "mk": "Испрати оценка", "sq": "Dërgo vlerësimin", "en": "Submit review" },
+  "reviews.submitting": { "mk": "Се испраќа…", "sq": "Po dërgohet…", "en": "Submitting…" },
+  "reviews.error.generic": { "mk": "Нешто тргна наопаку. Обиди се повторно.", "sq": "Diçka shkoi keq. Provo përsëri.", "en": "Something went wrong. Please try again." },
+
+  "reviews.success.title": { "mk": "Ти благодариме!", "sq": "Faleminderit!", "en": "Thank you!" },
+  "reviews.success.body": { "mk": "Твојата оценка е примена и ќе биде објавена по краток преглед.", "sq": "Vlerësimi yt u pranua dhe do të publikohet pas një shqyrtimi të shkurtër.", "en": "Your review has been received and will be published after a quick review." },
+
+  "reviews.used.title": { "mk": "Веќе оценето", "sq": "Tashmë e vlerësuar", "en": "Already reviewed" },
+  "reviews.used.body": { "mk": "Оваа врска за оценка е веќе искористена. Ти благодариме!", "sq": "Ky link vlerësimi është përdorur tashmë. Faleminderit!", "en": "This review link has already been used. Thank you!" },
+
+  "reviews.invalid.title": { "mk": "Неважечка врска", "sq": "Link i pavlefshëm", "en": "Invalid link" },
+  "reviews.invalid.body": { "mk": "Оваа врска за оценка не е важечка или истекла. Провери го е-маилот што ти го пративме.", "sq": "Ky link vlerësimi nuk është i vlefshëm ose ka skaduar. Kontrollo emailin që të dërguam.", "en": "This review link isn't valid or has expired. Please check the email we sent you." }
+}

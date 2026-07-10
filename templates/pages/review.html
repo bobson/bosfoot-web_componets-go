@@ -1,0 +1,110 @@
+{{define "review"}}
+<!DOCTYPE html>
+<html lang="{{.Locale}}">
+<head>
+  {{template "head" .}}
+  <link rel="stylesheet" href="{{asset "/css/reviews.css"}}">
+  <title>{{t .Locale "reviews.write.title"}} — Bosfoot</title>
+</head>
+<body class="page-review">
+  {{template "nav" .}}
+
+  <main class="review-page">
+    <div class="review-page__inner container">
+
+      {{if eq .State "form"}}
+      <header class="review-page__head">
+        <h1 class="review-page__title font-bold">{{t .Locale "reviews.write.title"}}</h1>
+        <p class="review-page__lead text-muted">{{t .Locale "reviews.write.lead"}}</p>
+      </header>
+
+      <div class="review-product">
+        {{if .ImageURL}}<img class="review-product__img" src="{{asset .ImageURL}}" width="80" height="80" alt="{{.ProductName}}">{{end}}
+        <div>
+          <p class="review-product__eyebrow text-xs text-muted">{{t .Locale "reviews.write.forProduct"}}</p>
+          <p class="review-product__name font-medium">{{.BrandName}} {{.ProductName}}</p>
+        </div>
+      </div>
+
+      {{/* The whole form is one component: it wires the star + fit pickers,
+           validates, POSTs to /api/reviews, then swaps in the thank-you panel. */}}
+      <review-form
+        data-token="{{.Token}}"
+        data-label-submit="{{t .Locale "reviews.submit"}}"
+        data-label-submitting="{{t .Locale "reviews.submitting"}}"
+        data-error-rating="{{t .Locale "reviews.rating.required"}}"
+        data-error-generic="{{t .Locale "reviews.error.generic"}}">
+
+        <form data-review-form novalidate>
+          <fieldset class="review-field">
+            <legend class="review-field__label">{{t .Locale "reviews.rating.label"}}</legend>
+            <div class="review-stars" data-stars role="radiogroup" aria-label="{{t .Locale "reviews.rating.label"}}">
+              {{range $idx, $i := list "1" "2" "3" "4" "5"}}
+              <button type="button" class="review-stars__btn" data-star="{{$i}}" role="radio" aria-checked="false" aria-label="{{$i}}">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14l-5-4.87 6.91-1.01L12 2z"/></svg>
+              </button>
+              {{end}}
+            </div>
+            <input type="hidden" name="rating" value="0" data-rating-input>
+          </fieldset>
+
+          <fieldset class="review-field">
+            <legend class="review-field__label">
+              {{t .Locale "reviews.fit.label"}} <span class="text-muted text-xs">{{t .Locale "reviews.fit.optional"}}</span>
+            </legend>
+            <div class="review-fit" data-fit role="radiogroup">
+              <button type="button" class="review-fit__btn" data-fit-value="-1" role="radio" aria-checked="false">{{t .Locale "reviews.fit.small"}}</button>
+              <button type="button" class="review-fit__btn" data-fit-value="0"  role="radio" aria-checked="false">{{t .Locale "reviews.fit.true"}}</button>
+              <button type="button" class="review-fit__btn" data-fit-value="1"  role="radio" aria-checked="false">{{t .Locale "reviews.fit.large"}}</button>
+            </div>
+            <input type="hidden" name="fit" value="" data-fit-input>
+          </fieldset>
+
+          <div class="review-field">
+            <label class="review-field__label" for="review-name">{{t .Locale "reviews.name.label"}}</label>
+            <input class="review-input" id="review-name" name="author_name" type="text" maxlength="80"
+                   required placeholder="{{t .Locale "reviews.name.placeholder"}}">
+          </div>
+
+          <div class="review-field">
+            <label class="review-field__label" for="review-body">{{t .Locale "reviews.body.label"}}</label>
+            <textarea class="review-input" id="review-body" name="body" rows="5" maxlength="2000"
+                      placeholder="{{t .Locale "reviews.body.placeholder"}}"></textarea>
+          </div>
+
+          <p class="review-error" data-review-error hidden></p>
+
+          <button type="submit" class="btn btn--primary review-submit" data-review-submit
+                  data-label-submit="{{t .Locale "reviews.submit"}}"
+                  data-label-submitting="{{t .Locale "reviews.submitting"}}">
+            {{t .Locale "reviews.submit"}}
+          </button>
+        </form>
+
+        <div class="review-thanks" data-review-thanks hidden>
+          <h2 class="review-thanks__title font-bold">{{t .Locale "reviews.success.title"}}</h2>
+          <p class="text-muted">{{t .Locale "reviews.success.body"}}</p>
+          <a class="btn btn--ghost" href="/{{.Locale}}/products">{{t .Locale "reviews.section.title"}}</a>
+        </div>
+      </review-form>
+
+      {{else}}
+      <div class="review-notice">
+        {{if eq .State "used"}}
+        <h1 class="review-notice__title font-bold">{{t .Locale "reviews.used.title"}}</h1>
+        <p class="text-muted">{{t .Locale "reviews.used.body"}}</p>
+        {{else}}
+        <h1 class="review-notice__title font-bold">{{t .Locale "reviews.invalid.title"}}</h1>
+        <p class="text-muted">{{t .Locale "reviews.invalid.body"}}</p>
+        {{end}}
+        <a class="btn btn--primary" href="/{{.Locale}}/products">{{t .Locale "reviews.section.title"}}</a>
+      </div>
+      {{end}}
+
+    </div>
+  </main>
+
+  {{template "footer" .}}
+</body>
+</html>
+{{end}}

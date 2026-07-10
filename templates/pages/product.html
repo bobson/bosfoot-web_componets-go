@@ -6,6 +6,7 @@
   <link rel="stylesheet" href="{{asset "/css/product.css"}}">
   <link rel="stylesheet" href="{{asset "/css/listing.css"}}">
   <link rel="stylesheet" href="{{asset "/css/size-guide-modal.css"}}">
+  <link rel="stylesheet" href="{{asset "/css/reviews.css"}}">
   <title>{{if .Translation.MetaTitle}}{{.Translation.MetaTitle}}{{else}}{{.Product.BrandName}} {{.Product.Name}} — {{t .Locale "seo.title.productTag"}}{{end}} — Bosfoot</title>
 </head>
 <body class="page-product">
@@ -278,6 +279,40 @@
       {{end}}
 
     </div>
+
+    {{/* ── Reviews (only when there are approved reviews) ── */}}
+    {{if gt .ReviewSummary.Count 0}}
+    <section class="reviews container flush" id="reviews">
+      <div class="reviews__head">
+        <h2 class="reviews__title font-bold">{{t .Locale "reviews.section.title"}}</h2>
+        <div class="reviews__aggregate">
+          <span class="review-stars-bar" style="--fill: {{.ReviewSummary.FillPct}}%" aria-hidden="true"></span>
+          <span class="reviews__avg font-medium">{{.ReviewSummary.AverageStr}}</span>
+          <span class="reviews__count text-muted text-sm">{{.ReviewSummary.Count}} · {{t .Locale "reviews.based"}}</span>
+        </div>
+        {{if .ReviewSummary.FitLabelKey}}
+        <p class="reviews__fit text-sm">
+          <span class="text-muted">{{t .Locale "reviews.fit.heading"}}:</span>
+          <strong>{{t .Locale .ReviewSummary.FitLabelKey}}</strong>
+        </p>
+        {{end}}
+      </div>
+
+      <ul class="reviews__list">
+        {{range .Reviews}}
+        <li class="review-item">
+          <div class="review-item__head">
+            <span class="review-stars-bar review-stars-bar--sm" style="--fill: {{mul .Rating 20}}%" aria-hidden="true"></span>
+            <span class="review-item__author font-medium">{{.AuthorName}}</span>
+            <span class="review-item__badge text-xs">{{t $.Locale "reviews.verified"}}</span>
+            <span class="review-item__date text-xs text-muted">{{.CreatedAt.Format "2 Jan 2006"}}</span>
+          </div>
+          {{if deref .Body}}<p class="review-item__body">{{deref .Body}}</p>{{end}}
+        </li>
+        {{end}}
+      </ul>
+    </section>
+    {{end}}
 
     {{/* ── Related products ────────────────────────────── */}}
     {{if .Related}}
