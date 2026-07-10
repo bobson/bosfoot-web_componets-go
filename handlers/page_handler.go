@@ -229,6 +229,16 @@ type HomePageData struct {
 	PageBase
 	Brands   []models.Brand
 	Featured []models.Product
+	Reviews  []HomeReview // approved customer reviews with text, "" if none
+}
+
+// HomeReview is one approved review shown in the homepage "what customers say"
+// section. ProductName is the brand + product it's for (e.g. "Freet Vibe 2").
+type HomeReview struct {
+	Author      string
+	Rating      int
+	Body        string
+	ProductName string
 }
 
 // ProductDetailData is the template data for /{locale}/products/{brand}/{slug}.
@@ -444,6 +454,35 @@ func (h *PageHandler) Home(w http.ResponseWriter, r *http.Request) {
 		featured[i].InStock = inStock[featured[i].ID]
 	}
 
+	// Recent approved reviews with text, for the "what customers say" section.
+	// Only reviews with a body make good testimonials. The section is hidden
+	// (template guards on len) until the first review is approved.
+	var reviews []HomeReview
+	revRows, err := h.DB.QueryContext(ctx, `
+		SELECT r.rating, r.author_name, r.body, b.name || ' ' || p.name
+		FROM reviews r
+		JOIN products p ON p.id = r.product_id
+		JOIN brands   b ON b.id = p.brand_id
+		WHERE r.status = 'approved' AND COALESCE(r.body, '') <> ''
+		ORDER BY r.created_at DESC
+		LIMIT 6
+	`)
+	if err != nil {
+		h.Logger.Error("Home: reviews query failed", err)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+	defer revRows.Close()
+	for revRows.Next() {
+		var hr HomeReview
+		if err := revRows.Scan(&hr.Rating, &hr.Author, &hr.Body, &hr.ProductName); err != nil {
+			h.Logger.Error("Home: review scan failed", err)
+			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+			return
+		}
+		reviews = append(reviews, hr)
+	}
+
 	h.Renderer.Render(w, "home", HomePageData{
 		PageBase: PageBase{
 			Locale:          loc,
@@ -454,6 +493,7 @@ func (h *PageHandler) Home(w http.ResponseWriter, r *http.Request) {
 		},
 		Brands:   brands,
 		Featured: featured,
+		Reviews:  reviews,
 	})
 }
 

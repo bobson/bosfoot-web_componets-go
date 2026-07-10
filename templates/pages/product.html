@@ -114,11 +114,11 @@
         <p class="product__desc text-muted">{{.Translation.Description}}</p>
         {{end}}
 
-        {{/* Size selector — always shown. JS greys the sizes that are out of
-             stock for the selected colour (from the embedded stock data). On a
-             stocked product an out-of-stock size stays clickable and flips the
-             button to "get notified"; on a no-stock product the whole grid is
-             display-only and the button is a standing "preorder now". */}}
+        {{/* Size selector — always shown, sizes always selectable. On a stocked
+             product JS greys out-of-stock sizes (still clickable → "get
+             notified"); on a preorder product no size is greyed — every size is
+             orderable ahead of the batch, and picking one flips the button to
+             "preorder now". Either way a size must be chosen before checkout. */}}
         {{if .Product.Sizes}}
         <div class="product__option">
           <div class="product__option-header">
@@ -282,7 +282,7 @@
 
     {{/* ── Reviews (only when there are approved reviews) ── */}}
     {{if gt .ReviewSummary.Count 0}}
-    <section class="reviews container flush" id="reviews">
+    <section class="reviews container" id="reviews">
       <div class="reviews__head">
         <h2 class="reviews__title font-bold">{{t .Locale "reviews.section.title"}}</h2>
         <div class="reviews__aggregate">

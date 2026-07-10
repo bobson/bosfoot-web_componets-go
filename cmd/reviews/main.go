@@ -5,7 +5,8 @@
 //	go run ./cmd/reviews                  # list pending reviews (newest first)
 //	go run ./cmd/reviews -status approved # list a different status
 //	go run ./cmd/reviews -approve 12      # approve review #12
-//	go run ./cmd/reviews -reject 12       # reject review #12
+//	go run ./cmd/reviews -reject 12       # reject review #12 (hides it, keeps the row)
+//	go run ./cmd/reviews -delete 12       # permanently delete review #12
 //
 // Approved reviews appear on the product page within the 60s page-cache TTL.
 package main
@@ -24,7 +25,8 @@ import (
 func main() {
 	status := flag.String("status", "pending", "list reviews with this status (pending|approved|rejected)")
 	approve := flag.Int("approve", 0, "approve the review with this id")
-	reject := flag.Int("reject", 0, "reject the review with this id")
+	reject := flag.Int("reject", 0, "reject the review with this id (keeps the row)")
+	del := flag.Int("delete", 0, "permanently delete the review with this id")
 	flag.Parse()
 
 	db, err := database.Connect()
@@ -39,6 +41,9 @@ func main() {
 		return
 	case *reject != 0:
 		setStatus(db, *reject, "rejected")
+		return
+	case *del != 0:
+		deleteReview(db, *del)
 		return
 	}
 
@@ -109,6 +114,20 @@ func setStatus(db *sql.DB, id int, status string) {
 		return
 	}
 	fmt.Printf("Review #%d %s.\n", id, status)
+}
+
+// deleteReview permanently removes one review row. Use -reject instead to just
+// hide it while keeping the record.
+func deleteReview(db *sql.DB, id int) {
+	res, err := db.Exec(`DELETE FROM reviews WHERE id = $1`, id)
+	if err != nil {
+		log.Fatal(err)
+	}
+	if n, _ := res.RowsAffected(); n == 0 {
+		fmt.Printf("No review with id %d.\n", id)
+		return
+	}
+	fmt.Printf("Review #%d deleted.\n", id)
 }
 
 // stars renders a 1–5 rating as filled/empty stars.

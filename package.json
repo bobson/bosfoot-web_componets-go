@@ -3,11 +3,24 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "Lint config for the browser JS modules. The app has no build step; Biome is used only as a linter to catch runtime-fatal mistakes (e.g. use-before-declaration) that node --check can't see.",
+  "description": "Lint config for the browser JS modules + convenience wrappers for the Go dev/ops commands. The app has no build step; Biome is used only as a linter to catch runtime-fatal mistakes (e.g. use-before-declaration) that node --check can't see. Run `npm run help` to list every command. Pass flags after `--`, e.g. `npm run reviews -- -approve 12`.",
   "scripts": {
+    "help": "printf '%s\\n' 'Bosfoot commands — pass flags after --, e.g. npm run reviews -- -approve 12' '' 'DEV' '  dev             live-reload server (go tool air)' '  serve           server, no live reload' '  check           Biome lint + format check (what CI runs)' '  lint            Biome lint only' '  format          Biome apply formatting' '' 'CONTENT / DATA' '  db-import       load schema + seed + migrations into the DB (idempotent)' '  stock-import    import products/stock from data/ (DRY-RUN; add -- -commit to apply)' '  add-brands      seed the coming-soon brands + translations' '  article-import  load foot-health articles from db/articles.json' '  img-variants    generate ~500px -card image variants (needs ImageMagick)' '' 'ORDERS / REVIEWS' '  orders          list orders, newest first (-- -status pending, -- -limit 10)' '  reservations    export reservation CSVs (what to order + who to contact)' '  review-invites  send post-purchase review invites (-- -order <id> -commit)' '  reviews         moderate reviews (-- -approve <id> / -- -reject <id> / -- -delete <id>)' '' 'DIAGNOSTICS' '  db-ping         test the database connection'",
+    "dev": "go tool air",
+    "serve": "go run main.go",
     "lint": "biome lint public",
     "format": "biome format --write public",
-    "check": "biome check public"
+    "check": "biome check public",
+    "db-import": "go run ./cmd/dbimport",
+    "stock-import": "go run ./cmd/shoeimport",
+    "add-brands": "go run ./cmd/addbrands",
+    "article-import": "go run ./cmd/articleimport",
+    "img-variants": "go run ./cmd/imgvariants",
+    "orders": "go run ./cmd/orders",
+    "reservations": "go run ./cmd/reservations",
+    "review-invites": "go run ./cmd/reviewinvites",
+    "reviews": "go run ./cmd/reviews",
+    "db-ping": "go run ./cmd/dbping"
   },
   "devDependencies": {
     "@biomejs/biome": "2.5.0"

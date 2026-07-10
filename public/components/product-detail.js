@@ -99,8 +99,10 @@ export function initProductDetail() {
   const labelAdd = realBtn?.dataset.labelAdd || 'Add to cart';
   const labelNotify = realBtn?.dataset.labelNotify || 'Get notified about this size';
   const labelPreorder = realBtn?.dataset.labelPreorder || 'Preorder now';
-  // A product with NO stock at all is a "preorder" product: the size grid is
-  // display-only and the button is a standing "Preorder now" (no size needed).
+  // A product with NO stock at all is a "preorder" product. Its sizes are still
+  // fully selectable (the batch ships later) — the customer picks a size + colour
+  // like normal, but the order never decrements inventory. Only the label/note
+  // and the missing stock/notify behaviour differ from a stocked product.
   const preorderMode = realBtn?.dataset.inStock !== '1';
   const notifyNote = document.getElementById('notify-note');
   const preorderNote = document.getElementById('preorder-note');
@@ -111,8 +113,8 @@ export function initProductDetail() {
   }
 
   // Drive both buttons' label + the helper notes from the current selection:
-  //  • preorder product        → "Preorder now" (always ready), preorder note.
-  //  • stocked, no size yet     → "Select size".
+  //  • no size yet              → "Select size" (both stocked and preorder).
+  //  • preorder, size picked    → "Preorder now" (any size orderable), preorder note.
   //  • stocked, in-stock size   → "Add to cart".
   //  • stocked, out-of-stock    → "Get notified about this size", notify note.
   function refreshBuyState() {
@@ -120,11 +122,13 @@ export function initProductDetail() {
     let pick = true; // muted "not ready to buy" styling
     let showNotify = false;
 
-    if (preorderMode) {
-      label = labelPreorder;
-      pick = false;
-    } else if (selectedSize != null) {
-      if (sizeInStock(selectedSize)) {
+    if (selectedSize != null) {
+      if (preorderMode) {
+        // Preorder: every size is orderable (ships with the batch), no stock
+        // check — picking a size just flips the CTA to "Preorder now".
+        label = labelPreorder;
+        pick = false;
+      } else if (sizeInStock(selectedSize)) {
         label = labelAdd;
         pick = false;
       } else {
@@ -355,17 +359,18 @@ export function initProductDetail() {
       b.setAttribute('aria-pressed', String(active));
     });
 
-    // Grey the sizes that are out of stock for the selected colour.
-    //  • preorder product → every size is greyed AND inert (display-only); the
-    //    button is a standing "Preorder now" that needs no size.
+    // Size availability styling. Idempotent — safe to call repeatedly from
+    // syncLiveStock()/SSE without accumulating state.
+    //  • preorder product → every size is selectable and never greyed (the whole
+    //    batch is orderable ahead of arrival); no stock check applies.
     //  • stocked product  → out-of-stock sizes are greyed but stay clickable, so
     //    selecting one flips the button to "Get notified about this size".
     const byColor = stockMap[selectedColor] || {};
     sizeBtns.forEach((btn) => {
-      const oos = (byColor[parseFloat(btn.dataset.size)] || 0) <= 0;
+      const oos = !preorderMode && (byColor[parseFloat(btn.dataset.size)] || 0) <= 0;
       btn.classList.toggle('product__size-btn--oos', oos);
-      btn.disabled = preorderMode; // inert only for no-stock products
-      btn.setAttribute('aria-disabled', String(preorderMode));
+      btn.disabled = false;
+      btn.removeAttribute('aria-disabled');
     });
 
     refreshBuyState();
@@ -374,7 +379,7 @@ export function initProductDetail() {
 
   sizeBtns.forEach((btn) => {
     btn.addEventListener('click', () => {
-      if (btn.disabled) return; // preorder products: sizes are display-only
+      if (btn.disabled) return;
       selectedSize = parseFloat(btn.dataset.size);
       sizeBtns.forEach((b) => {
         const active = parseFloat(b.dataset.size) === selectedSize;
@@ -393,9 +398,9 @@ export function initProductDetail() {
 
   // ── Add to cart (shared by both buttons) ──────────────
   function addToCart() {
-    // Preorder product: no size needed — add straight away as a preorder line.
-    // Stocked product: a size must be picked first.
-    if (!preorderMode && selectedSize == null) {
+    // A size must be picked first — for stocked AND preorder products (preorder
+    // sizes are selectable; the batch just ships later without touching stock).
+    if (selectedSize == null) {
       const grid = document.getElementById('size-select');
       if (grid) {
         grid.classList.add('product__sizes--error');
@@ -405,8 +410,9 @@ export function initProductDetail() {
     }
 
     // Out-of-stock size on a stocked product = "notify me", not orderable.
-    // Surface the note and bail (no cart mutation).
-    if (!preorderMode && selectedSize != null && !sizeInStock(selectedSize)) {
+    // Surface the note and bail (no cart mutation). Preorder skips this — every
+    // size is orderable ahead of arrival.
+    if (!preorderMode && !sizeInStock(selectedSize)) {
       if (notifyNote) {
         notifyNote.hidden = false;
         notifyNote.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -416,10 +422,11 @@ export function initProductDetail() {
 
     const d = realBtn.dataset;
     const cart = JSON.parse(localStorage.getItem('bosfoot_cart') || '[]');
-    // Preorder lines carry no size; key on color alone so they merge sanely.
-    const size = preorderMode ? null : selectedSize;
+    const size = selectedSize;
+    // Preorder lines keep their own key namespace so they never merge with a
+    // future in-stock line for the same size/colour.
     const key = preorderMode
-      ? `${d.productId}-preorder-${selectedColor}`
+      ? `${d.productId}-preorder-${size}-${selectedColor}`
       : `${d.productId}-${size}-${selectedColor}`;
     const existing = cart.find((i) => i.key === key);
     if (existing) {

@@ -175,7 +175,9 @@ class CartDrawer extends HTMLElement {
           <p class="cart-item__name font-medium">${esc(i.productName)}</p>
           <p class="cart-item__variant text-xs text-muted">${
             i.preorder
-              ? `<span class="cart-item__preorder">${esc(this.labels.preorder)}</span> · ${esc(i.color)}`
+              ? `<span class="cart-item__preorder">${esc(this.labels.preorder)}</span>${
+                  i.size != null ? ` · ${esc(this.labels.size)} ${esc(i.size)}` : ''
+                } · ${esc(i.color)}`
               : `${esc(this.labels.size)} ${esc(i.size)} · ${esc(i.color)}`
           }</p>
           <div class="cart-item__bottom">

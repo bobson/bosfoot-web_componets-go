@@ -360,7 +360,8 @@ body.page-product {
   opacity: 0.4;
   text-decoration: line-through;
 }
-/* Inert size (preorder product — grid is display-only). */
+/* Defensive: a disabled size renders inert. No path sets this today — preorder
+   sizes are fully selectable — but kept so a future disabled state degrades well. */
 .product__size-btn:disabled {
   opacity: 0.4;
   cursor: not-allowed;

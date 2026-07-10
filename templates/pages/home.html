@@ -5,6 +5,7 @@
     {{template "head" .}}
     <link rel="stylesheet" href="{{asset "/css/home.css"}}">
     <link rel="stylesheet" href="{{asset "/css/listing.css"}}">
+    <link rel="stylesheet" href="{{asset "/css/reviews.css"}}">
     <title>{{t .Locale "seo.title.home"}} — Bosfoot</title>
   </head>
   <body>
@@ -180,6 +181,30 @@
           </figure>
         </div>
       </section>
+
+      {{/* ── What customers say (only when there are approved reviews) ── */}}
+      {{if .Reviews}}
+      <section class="home-reviews section section--sage">
+        <div class="container">
+          <header class="home-reviews__header" data-reveal>
+            <h2 class="home-reviews__title font-bold">{{t .Locale "home.reviews.title"}}</h2>
+            <p class="home-reviews__lead text-muted">{{t .Locale "home.reviews.lead"}}</p>
+          </header>
+          <div class="home-reviews__grid">
+            {{range .Reviews}}
+            <figure class="home-review" data-reveal>
+              <span class="review-stars-bar" style="--fill: {{mul .Rating 20}}%" aria-hidden="true"></span>
+              <blockquote class="home-review__body">{{.Body}}</blockquote>
+              <figcaption class="home-review__meta">
+                <span class="home-review__author font-semibold">{{.Author}}</span>
+                <span class="home-review__product text-xs text-muted">{{.ProductName}} · {{t $.Locale "reviews.verified"}}</span>
+              </figcaption>
+            </figure>
+            {{end}}
+          </div>
+        </div>
+      </section>
+      {{end}}
 
       {{/* ── Why barefoot ── disabled: now covered by the banner
            above + the /what-are-barefoot-shoes page. Kept here

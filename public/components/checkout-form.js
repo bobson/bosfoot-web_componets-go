@@ -132,7 +132,9 @@ class CheckoutForm extends HTMLElement {
           <p class="checkout-item__name font-medium">${esc(i.productName)}</p>
           <p class="checkout-item__variant text-xs text-muted">${
             i.preorder
-              ? `<span class="checkout-item__preorder">${esc(this.labelPreorder)}</span> · ${esc(i.color)}`
+              ? `<span class="checkout-item__preorder">${esc(this.labelPreorder)}</span>${
+                  i.size != null ? ` · ${esc(this.labelSize)} ${esc(i.size)}` : ''
+                } · ${esc(i.color)}`
               : `${esc(this.labelSize)} ${esc(i.size)} · ${esc(i.color)}`
           }</p>
         </div>
