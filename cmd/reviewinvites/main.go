@@ -37,16 +37,19 @@ func main() {
 	commit := flag.Bool("commit", false, "actually create tokens and send (default: dry-run)")
 	flag.Parse()
 
-	siteURL := strings.TrimRight(os.Getenv("SITE_URL"), "/")
-	if siteURL == "" {
-		siteURL = "http://localhost:8080"
-	}
-
-	db, err := database.Connect()
+	db, err := database.Connect() // also loads .env (godotenv)
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer db.Close()
+
+	// Read SITE_URL only after Connect() has loaded .env, so the laptop's .env
+	// value is honoured. An inline `SITE_URL=... go run ...` still wins, because
+	// godotenv.Load() never overrides an already-set environment variable.
+	siteURL := strings.TrimRight(os.Getenv("SITE_URL"), "/")
+	if siteURL == "" {
+		siteURL = "http://localhost:8080"
+	}
 
 	lg, err := logger.NewLogger("bosfoot.log")
 	if err != nil {
