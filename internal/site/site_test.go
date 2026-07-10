@@ -8,12 +8,12 @@ func TestMKD(t *testing.T) {
 	cases := []struct {
 		eur, want int
 	}{
-		{100, 6100},  // 100*61 = 6100
-		{90, 5490},   // 90*61  = 5490
-		{135, 8230},  // 135*61 = 8235 → floor to 8230
-		{140, 8540},  // 140*61 = 8540
-		{105, 6400},  // 105*61 = 6405 → floor to 6400
-		{210, 12810}, // 210*61 = 12810
+		{100, 6200},  // 100*62 = 6200
+		{90, 5580},   // 90*62  = 5580
+		{135, 8370},  // 135*62 = 8370
+		{140, 8680},  // 140*62 = 8680
+		{105, 6510},  // 105*62 = 6510
+		{210, 13020}, // 210*62 = 13020
 		{0, 0},
 	}
 	for _, c := range cases {
@@ -26,7 +26,7 @@ func TestMKD(t *testing.T) {
 	}
 }
 
-// TestEURRecovers confirms the displayed euro (round(mkd/61)) recovers the exact
+// TestEURRecovers confirms the displayed euro (round(mkd/62)) recovers the exact
 // source euro, so showing the whole-number EUR matches the price you set.
 func TestEURRecovers(t *testing.T) {
 	for eur := 1; eur <= 500; eur++ {

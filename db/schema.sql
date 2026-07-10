@@ -4,7 +4,7 @@
 --
 -- Conventions:
 --   * Prices stored in MKD only, as whole numbers (no decimals), derived from a
---     round euro source price: price_mkd = floor(EUR * 61 / 10) * 10 (ends in 0).
+--     round euro source price: price_mkd = floor(EUR * 62 / 10) * 10 (ends in 0).
 --     EUR is shown back as a whole number at runtime on sq/en locales.
 --   * Languages: mk, sq, en. Product name / SKU, brand name / SKU,
 --     colors, spec keys/values, activities and size-chart measurements

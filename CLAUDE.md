@@ -137,7 +137,7 @@ Both the server and `cmd/` utilities must be run from the project root — `.env
 
 **Database** (Aiven PostgreSQL, Frankfurt region):
 - Schema in `db/schema.sql` — run `db/seed.sql` then `db/freet.sql` after.
-- Pricing: the **euro price is the source** (round numbers, e.g. €135); MKD is derived and stored as INTEGER `price_mkd = floor(EUR × 61 / 10) × 10` (ends in 0). Rate is `site.MKDtoEUR` (= 61) in `internal/site` — the single source. EUR is shown back as a **whole number** (`round(price_mkd / 61)`, recovers the source €) on `sq`/`en` only, hidden on `mk`. MKD floor helper: `site.FloorDenar` (e.g. 5994 → 5990).
+- Pricing: the **euro price is the source** (round numbers, e.g. €135); MKD is derived and stored as INTEGER `price_mkd = floor(EUR × 62 / 10) × 10` (ends in 0). Rate is `site.MKDtoEUR` (= 62) in `internal/site` — the single source. EUR is shown back as a **whole number** (`round(price_mkd / 62)`, recovers the source €) on `sq`/`en` only, hidden on `mk`. MKD floor helper: `site.FloorDenar` (e.g. 5994 → 5990).
 - Product `slug` is bare form (`vibe-2`), unique per brand via `UNIQUE(brand_id, slug)`. URL scheme: `/{locale}/products/{brand-slug}/{product-slug}`.
 - Translated text lives in `_translations` tables keyed by `lang_code` enum (`mk`, `sq`, `en`). Product name/SKU, brand name/SKU, colors, specs, activities always EN.
 - Stock tracked per `(product_id, size_id, color_id)` in `product_stock`.

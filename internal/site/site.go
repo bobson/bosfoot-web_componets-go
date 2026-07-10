@@ -23,15 +23,16 @@ func MetaPixelID() string {
 // temporary launch-soon layer; flip to false at launch to restore per-variant
 // stock behaviour (in-stock = buy/decrement, OOS size = notify). A var (not
 // const) so the guards aren't compiled out and it can be wired to env later.
-var PreorderAll = true
+var PreorderAll = false
 
 // MKDtoEUR is the denar→euro conversion rate for the secondary EUR price shown
 // on the sq/en locales. Single source of truth: the client JS reads it from a
 // data-eur-rate attribute (injected via the `eurRate` template func) instead of
-// hardcoding its own copy.
-const MKDtoEUR = 61.0
+// hardcoding its own copy. Set to 62 so the denar price also covers inbound
+// shipping (a ~1.6% uplift over the old 61).
+const MKDtoEUR = 62.0
 
-// EURRateString renders the rate for injection into a data attribute (e.g. "61").
+// EURRateString renders the rate for injection into a data attribute (e.g. "62").
 func EURRateString() string {
 	return strconv.FormatFloat(MKDtoEUR, 'f', -1, 64)
 }
@@ -46,7 +47,7 @@ func FloorDenar(n int) int {
 // MKD converts a euro price (the stored source) to denars: euro × rate, floored
 // to the nearest 10. This is the ONE conversion — the template `mkd` helper and
 // the order handler both call it, so the price a customer sees equals the price
-// charged. €135 → 8235 → 8230; €100 → 6100.
+// charged. €135 → 8370; €100 → 6200.
 func MKD(eur int) int {
 	return FloorDenar(int(math.Round(float64(eur) * MKDtoEUR)))
 }
