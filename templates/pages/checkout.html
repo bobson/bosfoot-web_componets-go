@@ -40,7 +40,7 @@
         <form class="checkout__form" data-checkout-form novalidate>
           <h1 class="checkout__title font-bold">{{t .Locale "cart.checkout"}}</h1>
 
-          {{/* Contact — phone required (COD courier needs it), email optional. */}}
+          {{/* Contact — phone (COD courier needs it) and email both required. */}}
           <section class="checkout__section">
             <h2 class="checkout__legend font-semibold">{{t .Locale "checkout.contact"}}</h2>
             <div class="field">
@@ -49,9 +49,9 @@
                      autocomplete="tel" required>
             </div>
             <div class="field">
-              <label class="field__label" for="co-email">{{t .Locale "checkout.emailOptional"}}</label>
+              <label class="field__label" for="co-email">{{t .Locale "checkout.email"}}</label>
               <input class="field__input" id="co-email" name="email" type="email"
-                     autocomplete="email">
+                     autocomplete="email" required>
             </div>
           </section>
 

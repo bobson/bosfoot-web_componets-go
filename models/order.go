@@ -34,8 +34,8 @@ type Order struct {
 // Validate checks if the order data is structurally valid.
 //
 // Real checkout: we require first + last name, a phone (the COD courier needs
-// it), and a shipping address + city. Email is optional but, when supplied,
-// must be a valid address. Payment is cod or bank_transfer.
+// it), a shipping address + city, and a valid email (used for the order
+// confirmation and review invite). Payment is cod or bank_transfer.
 func (o *Order) Validate() error {
 	if o.FirstName == "" || o.LastName == "" {
 		return errors.New("first name and last name are required")
@@ -46,10 +46,11 @@ func (o *Order) Validate() error {
 	if o.Address == "" || o.City == "" {
 		return errors.New("address and city are required")
 	}
-	if o.Email != "" {
-		if _, err := mail.ParseAddress(o.Email); err != nil {
-			return errors.New("invalid email address")
-		}
+	if o.Email == "" {
+		return errors.New("email is required")
+	}
+	if _, err := mail.ParseAddress(o.Email); err != nil {
+		return errors.New("invalid email address")
 	}
 	if o.PaymentMethod != "cod" && o.PaymentMethod != "bank_transfer" {
 		return errors.New("invalid payment method")

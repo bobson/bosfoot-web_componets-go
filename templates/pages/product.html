@@ -20,8 +20,11 @@
            the carousel; the numbered gallery images follow. */}}
       <div class="product__gallery">
         <div class="product__carousel">
-          {{if .Product.IsNew}}<span class="product__badge product__badge--new">{{t .Locale "product.new"}}</span>{{end}}
-          {{if .Product.IsOnSale}}<span class="product__badge product__badge--sale">{{t .Locale "product.sale"}}</span>{{end}}
+          <div class="product__badges">
+            {{if not .Product.InStock}}<span class="product__badge product__badge--preorder">{{t .Locale "cart.preorder"}}</span>{{end}}
+            {{if .Product.IsNew}}<span class="product__badge product__badge--new">{{t .Locale "product.new"}}</span>{{end}}
+            {{if .Product.IsOnSale}}<span class="product__badge product__badge--sale">{{t .Locale "product.sale"}}</span>{{end}}
+          </div>
 
           {{/* Horizontal scroll-snap carousel: the card image (.Product.ImageURL,
                the clean no-overlay shot) leads, the numbered gallery follows.

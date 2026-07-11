@@ -1,3 +1,8 @@
+// Cache-bust marker — the dynamic component imports below are versioned by
+// app.js's OWN content hash (VER = ?v on this file). When you change a component
+// but NOT app.js, its hash won't move and browsers keep the old, immutably
+// cached module. Bump this date on such deploys to force a fresh fetch.
+// Bumped: 2026-07-11
 import { bootstrapPixel, consentState } from './prefs.js';
 
 // If this visitor accepted the cookie banner on a previous visit, install the

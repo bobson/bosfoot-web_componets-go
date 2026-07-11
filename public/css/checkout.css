@@ -85,6 +85,18 @@ checkout-form { display: block; }
   box-shadow: var(--focus-ring);
 }
 
+/* Client-side validation error: JS adds .field--error to the .field wrapper
+   when a required field is missing/invalid, turning its label + input red. */
+.field--error .field__label {
+  color: var(--color-sale);
+}
+.field--error .field__input {
+  border-color: var(--color-sale);
+}
+.field--error .field__input:focus {
+  box-shadow: 0 0 0 3px color-mix(in oklch, var(--color-sale), transparent 70%);
+}
+
 .field__input:disabled {
   background: var(--color-img-bg);
   color: var(--color-text-muted);

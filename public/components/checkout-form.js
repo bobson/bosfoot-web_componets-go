@@ -57,6 +57,13 @@ class CheckoutForm extends HTMLElement {
 
     this.form.addEventListener('submit', (e) => this.onSubmit(e));
 
+    // Clear a field's red error state as soon as the user starts fixing it.
+    this.form.querySelectorAll('[required]').forEach((input) => {
+      input.addEventListener('input', () =>
+        input.closest('.field')?.classList.remove('field--error'),
+      );
+    });
+
     // Re-render if the cart changes in another tab while checkout is open.
     window.addEventListener('storage', (e) => {
       if (e.key === CART_KEY) this.renderSummary();
@@ -142,6 +149,26 @@ class CheckoutForm extends HTMLElement {
       </article>`;
   }
 
+  // validateForm checks every [required] field: non-empty, plus a basic format
+  // check for the email. Missing/invalid fields get .field--error (CSS turns the
+  // label + input red). Returns false and focuses the first bad field.
+  validateForm() {
+    let firstInvalid = null;
+    this.form.querySelectorAll('[required]').forEach((input) => {
+      const val = (input.value || '').trim();
+      let ok = val !== '';
+      if (ok && input.type === 'email') ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val);
+      input.closest('.field')?.classList.toggle('field--error', !ok);
+      if (!ok && !firstInvalid) firstInvalid = input;
+    });
+    if (firstInvalid) {
+      firstInvalid.closest('.field')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      firstInvalid.focus({ preventScroll: true });
+      return false;
+    }
+    return true;
+  }
+
   async onSubmit(e) {
     e.preventDefault();
     this.errorEl.hidden = true;
@@ -151,8 +178,9 @@ class CheckoutForm extends HTMLElement {
       this.renderSummary();
       return;
     }
-    // Let the browser surface native validation messages for required fields.
-    if (!this.form.reportValidity()) return;
+    // Custom validation (no native popups): mark any missing/invalid required
+    // field — input + label — red and jump to the first one.
+    if (!this.validateForm()) return;
 
     const fd = new FormData(this.form);
     const payload = {

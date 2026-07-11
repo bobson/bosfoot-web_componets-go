@@ -8,8 +8,8 @@ import (
 // validOrder returns an order that passes Validate(); each test case mutates a
 // single field so exactly one rule trips, and asserts which one.
 //
-// Real checkout: first+last name, phone and address+city are required; email is
-// optional (validated only when supplied).
+// Real checkout: first+last name, phone, address+city and a valid email are all
+// required.
 func validOrder() Order {
 	phone := "070123456"
 	return Order{
@@ -33,7 +33,7 @@ func TestOrderValidate(t *testing.T) {
 	}{
 		{"valid cod", func(o *Order) {}, ""},
 		{"valid bank_transfer", func(o *Order) { o.PaymentMethod = "bank_transfer" }, ""},
-		{"empty email is allowed", func(o *Order) { o.Email = "" }, ""},
+		{"empty email is rejected", func(o *Order) { o.Email = "" }, "email"},
 		{"malformed email", func(o *Order) { o.Email = "not-an-email" }, "email"},
 		{"missing first name", func(o *Order) { o.FirstName = "" }, "first name"},
 		{"missing last name", func(o *Order) { o.LastName = "" }, "last name"},

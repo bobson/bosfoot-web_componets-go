@@ -94,11 +94,19 @@ body.page-product {
   display: block;
 }
 
-.product__badge {
+/* Badges stack vertically in a corner so preorder/new/sale never overlap. */
+.product__badges {
   position: absolute;
   top: var(--space-3);
   left: var(--space-3);
   z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2);
+}
+
+.product__badge {
   padding: 3px var(--space-2);
   font-size: var(--fs-xs);
   font-weight: var(--fw-semibold);
@@ -115,6 +123,15 @@ body.page-product {
 .product__badge--sale {
   background: var(--color-sale);
   color: var(--color-white);
+}
+
+/* Preorder — a prominent, neutral-dark badge so a visitor sees on landing that
+   the shoe ships with the next batch (distinct from the green "new" badge). */
+.product__badge--preorder {
+  background: var(--color-text);
+  color: var(--color-white);
+  font-size: var(--fs-sm);
+  padding: var(--space-1) var(--space-3);
 }
 
 .product__thumbs {

@@ -1103,6 +1103,12 @@ func (h *PageHandler) ProductListing(w http.ResponseWriter, r *http.Request) {
 	sort.Float64s(filterSizes)
 	sort.Slice(filterColors, func(i, j int) bool { return filterColors[i].Name < filterColors[j].Name })
 
+	// Buyable products first, preorder ones (no stock) after — stable, so the
+	// existing sort_order is preserved within each group.
+	sort.SliceStable(products, func(i, j int) bool {
+		return products[i].InStock && !products[j].InStock
+	})
+
 	h.Renderer.Render(w, "products", ProductListingData{
 		PageBase: PageBase{
 			Locale:          loc,
