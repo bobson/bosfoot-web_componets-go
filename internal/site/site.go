@@ -23,7 +23,7 @@ func MetaPixelID() string {
 // temporary launch-soon layer; flip to false at launch to restore per-variant
 // stock behaviour (in-stock = buy/decrement, OOS size = notify). A var (not
 // const) so the guards aren't compiled out and it can be wired to env later.
-var PreorderAll = false
+var PreorderAll = true
 
 // MKDtoEUR is the denar→euro conversion rate for the secondary EUR price shown
 // on the sq/en locales. Single source of truth: the client JS reads it from a

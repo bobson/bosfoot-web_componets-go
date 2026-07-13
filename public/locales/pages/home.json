@@ -69,6 +69,11 @@
     "sq": "nga marka britanike Freet",
     "en": "from the British brand Freet"
   },
+  "home.hero.soon": {
+    "mk": "Наскоро",
+    "sq": "Së shpejti",
+    "en": "Coming soon"
+  },
   "home.hero.shopKids": { "mk": "Детски", "sq": "Fëmijë", "en": "Kids" },
   "home.reviews.title": { "mk": "Што велат нашите купувачи", "sq": "Çfarë thonë klientët tanë", "en": "What our customers say" },
   "home.reviews.lead": { "mk": "Вистински впечатоци од луѓе што ги носат.", "sq": "Përshtypje të vërteta nga njerëz që i mbajnë.", "en": "Real impressions from people who wear them." },
