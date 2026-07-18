@@ -74,6 +74,76 @@
     "sq": "Së shpejti",
     "en": "Coming soon"
   },
+  "home.marquee.1": {
+    "mk": "Природно движење",
+    "sq": "Lëvizje natyrore",
+    "en": "Natural movement"
+  },
+  "home.marquee.2": {
+    "mk": "Простор за прстите",
+    "sq": "Hapësirë për gishtat",
+    "en": "Room for your toes"
+  },
+  "home.marquee.3": {
+    "mk": "Почувствувај ја подлогата",
+    "sq": "Ndjej tokën",
+    "en": "Feel the ground"
+  },
+  "home.story.eyebrow": {
+    "mk": "Нашиот став",
+    "sq": "Këndvështrimi ynë",
+    "en": "Our point of view"
+  },
+  "home.story.line1": {
+    "mk": "Помалку чевел.",
+    "sq": "Më pak këpucë.",
+    "en": "Less shoe."
+  },
+  "home.story.line2": {
+    "mk": "Повеќе стапало.",
+    "sq": "Më shumë këmbë.",
+    "en": "More foot."
+  },
+  "home.story.p1": {
+    "mk": "Не сме фабрика за чевли. Сме мал тим што трагаше по обувки создадени според тоа како навистина функционираат стапалата — и решивме дека и Македонија треба да ги има.",
+    "sq": "Nuk jemi fabrikë këpucësh. Jemi një ekip i vogël që kërkoi këpucë të ndërtuara sipas mënyrës si funksionojnë vërtet këmbët — dhe vendosëm që edhe Maqedonia t'i ketë.",
+    "en": "We're not a shoe factory. We're a small team that went looking for footwear built around how feet actually work — and decided Macedonia should have it too."
+  },
+  "home.story.p2": {
+    "mk": "Го носиме сето она што го продаваме. Ако некоја обувка не им дава простор на прстите да се рашират, не е рамна од петица до прсти и не ти дозволува да ја почувствуваш подлогата — не завршува на полицата.",
+    "sq": "Mbajmë gjithçka që shesim. Nëse një këpucë nuk u jep gishtave hapësirë për t'u shtrirë, nuk është e sheshtë nga thembra te gishtat dhe nuk të lejon të ndjesh tokën — nuk përfundon në raft.",
+    "en": "We wear everything we stock. If a shoe won't give your toes room to spread, sit level from heel to toe, and let you feel the ground, it doesn't make the shelf."
+  },
+  "home.story.principle1": {
+    "mk": "Простор за секој прст",
+    "sq": "Hapësirë për çdo gisht",
+    "en": "Room for every toe"
+  },
+  "home.story.principle2": {
+    "mk": "Рамно од петица до прсти",
+    "sq": "E sheshtë nga thembra te gishtat",
+    "en": "Level from heel to toe"
+  },
+  "home.story.principle3": {
+    "mk": "Доволно тенко за да чувствуваш",
+    "sq": "Mjaft e hollë për të ndjerë",
+    "en": "Thin enough to feel"
+  },
+  "home.signup.tag": {
+    "mk": "Вистински луѓе, вистински совет",
+    "sq": "Njerëz të vërtetë, këshilla të vërteta",
+    "en": "Real people, real advice"
+  },
+  "home.signup.title": {
+    "mk": "Не знаеш од каде да почнеш?",
+    "sq": "Nuk je i sigurt nga të fillosh?",
+    "en": "Not sure where to start?"
+  },
+  "home.signup.body": {
+    "mk": "Ги имаме сите пара во раце. Кажи ни ја твојата вообичаена големина и за што ќе ги користиш, и ќе ти помогнеме да го погодиш вистинскиот број — без регистрации, само одговор.",
+    "sq": "I mbajmë të gjitha palët në duar. Na trego madhësinë tënde të zakonshme dhe për çfarë do t'i përdorësh, dhe do të të ndihmojmë të gjesh numrin e duhur — pa llogari, thjesht një përgjigje.",
+    "en": "We hold every pair in our hands. Tell us your usual size and how you'll use them, and we'll help you get the fit right — no accounts, just a reply."
+  },
   "home.hero.shopKids": { "mk": "Детски", "sq": "Fëmijë", "en": "Kids" },
   "home.reviews.title": { "mk": "Што велат нашите купувачи", "sq": "Çfarë thonë klientët tanë", "en": "What our customers say" },
   "home.reviews.lead": { "mk": "Вистински впечатоци од луѓе што ги носат.", "sq": "Përshtypje të vërteta nga njerëz që i mbajnë.", "en": "Real impressions from people who wear them." },

@@ -85,6 +85,59 @@
   font-weight: var(--fw-bold);
 }
 
+/* ── Hero decoration: concentric rings + rotating badge ── */
+.hero__deco {
+  position: absolute;
+  top: clamp(var(--space-6), 9vh, var(--space-16));
+  left: 50%;
+  translate: -50% 0;
+  width: clamp(180px, 40vw, 320px);
+  aspect-ratio: 1;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.hero__ring {
+  position: absolute;
+  inset: 0;
+  border: 1px solid rgb(255 255 255 / 0.55);
+  border-radius: var(--radius-full);
+}
+
+.hero__ring--2 {
+  inset: 13%;
+  border-color: rgb(255 255 255 / 0.3);
+}
+
+.hero__badge {
+  position: absolute;
+  inset: 20%;
+  color: var(--color-white);
+  fill: currentColor;
+  animation: hero-badge-spin 26s linear infinite;
+}
+
+.hero__badge text {
+  font-size: 7px;
+  font-weight: var(--fw-semibold);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+@keyframes hero-badge-spin {
+  to {
+    rotate: 360deg;
+  }
+}
+
+/* On the smallest screens the copy needs the whole frame — hide the rings. */
+@media (max-width: 480px) {
+  .hero__deco {
+    display: none;
+  }
+}
+
 /* Intro band under the hero: lead + primary CTA on cream. */
 .hero-intro {
   padding-block: var(--space-16);
@@ -102,15 +155,17 @@
 
 .hero__actions {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: center;
   align-items: center;
-  gap: var(--space-6);
+  gap: var(--space-4);
 }
 
 .hero__cta {
   display: inline-flex;
   align-items: center;
-  padding: var(--space-4) var(--space-10);
+  gap: var(--space-2);
+  padding: var(--space-4) var(--space-8);
   background: var(--color-cta);
   color: var(--color-white);
   font-size: var(--fs-sm);
@@ -118,7 +173,7 @@
   letter-spacing: 0.08em;
   text-transform: uppercase;
   border-radius: var(--radius-sm);
-  transition: background 0.2s ease;
+  transition: background 0.2s ease, border-color 0.2s ease;
 }
 
 .hero__cta:hover {
@@ -138,6 +193,49 @@
 
 .hero__gender a:hover {
   color: var(--color-accent);
+}
+
+/* ── Marquee ─────────────────────────────────────────── */
+
+.marquee {
+  overflow: hidden;
+  background: var(--color-accent);
+  color: var(--color-white);
+  padding-block: var(--space-3);
+}
+
+.marquee__track {
+  display: flex;
+  width: max-content;
+  animation: marquee-scroll 26s linear infinite;
+}
+
+.marquee__group {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: var(--space-6);
+  padding-inline: var(--space-3);
+}
+
+.marquee__item {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.marquee__sep {
+  color: color-mix(in oklch, var(--color-white), transparent 45%);
+}
+
+/* Two identical groups sit side by side; shifting the track left by exactly
+   one group's width loops seamlessly. */
+@keyframes marquee-scroll {
+  to {
+    transform: translateX(-50%);
+  }
 }
 
 /* ── Brands ──────────────────────────────────────────── */
@@ -413,14 +511,6 @@
   }
 }
 
-.why-us__num {
-  font-size: var(--fs-2xl);
-  font-weight: var(--fw-light);
-  color: var(--color-accent);
-  letter-spacing: 0.04em;
-  margin-bottom: var(--space-3);
-}
-
 .why-us__item-title {
   font-size: var(--fs-base);
   letter-spacing: -0.01em;
@@ -521,4 +611,120 @@
   flex-direction: column;
   gap: var(--space-1);
   font-style: normal;
+}
+
+/* ── Story / point of view ───────────────────────────── */
+/* Editorial deep-moss band (adapted from the mockup): a serif monogram, a
+   large headline + lead, and a details column with a compact numbered
+   principles list. This is the page's only numbered list. */
+
+.story {
+  background: var(--color-moss-deep);
+  color: var(--color-text-on-dark);
+  scroll-margin-top: var(--nav-height);
+}
+
+.story__grid {
+  display: grid;
+  gap: var(--space-10);
+}
+
+@media (min-width: 768px) {
+  .story__grid {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+    gap: clamp(var(--space-8), 5vw, var(--space-20));
+    align-items: start;
+  }
+}
+
+.story__eyebrow {
+  color: color-mix(in oklch, var(--color-text-on-dark), transparent 35%);
+  margin-bottom: var(--space-5);
+}
+
+.story__heading {
+  display: flex;
+  flex-direction: column;
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  font-weight: var(--fw-bold);
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+  color: var(--color-cream);
+}
+
+.story__lead {
+  max-width: 42ch;
+  margin-top: var(--space-8);
+  font-size: var(--fs-md);
+  line-height: var(--lh-normal);
+  color: color-mix(in oklch, var(--color-text-on-dark), transparent 22%);
+}
+
+@media (min-width: 768px) {
+  .story__details {
+    padding-top: var(--space-3);
+  }
+}
+
+.story__detail {
+  line-height: var(--lh-normal);
+  color: color-mix(in oklch, var(--color-text-on-dark), transparent 30%);
+}
+
+.story__principles {
+  margin-top: var(--space-10);
+  border-top: 1px solid rgb(255 255 255 / 0.2);
+}
+
+.story__principle {
+  display: grid;
+  grid-template-columns: 2.5rem 1fr;
+  gap: var(--space-2);
+  padding-block: var(--space-4);
+  border-bottom: 1px solid rgb(255 255 255 / 0.2);
+}
+
+.story__num {
+  color: var(--color-moss-soft);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-bold);
+  letter-spacing: 0.08em;
+}
+
+.story__principle-title {
+  margin: 0;
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  color: var(--color-text-on-dark);
+}
+
+/* ── First drop incoming (email capture) ─────────────── */
+
+.signup__inner {
+  max-width: 40rem;
+  margin-inline: auto;
+  text-align: center;
+}
+
+.signup__tag {
+  color: color-mix(in oklch, var(--color-cream), transparent 30%);
+  margin-bottom: var(--space-4);
+}
+
+.signup__title {
+  font-size: var(--fs-2xl);
+  letter-spacing: -0.02em;
+  color: var(--color-white);
+  margin-bottom: var(--space-4);
+}
+
+.signup__body {
+  font-size: var(--fs-md);
+  line-height: var(--lh-normal);
+  color: color-mix(in oklch, var(--color-cream), transparent 12%);
+  margin-bottom: var(--space-8);
+}
+
+.signup__cta {
+  letter-spacing: 0.02em;
 }

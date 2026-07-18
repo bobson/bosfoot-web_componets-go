@@ -33,6 +33,11 @@
            mockup tone #4A5D23). Carries cream text. */
         --color-forest: hsl(79 45% 25%);
 
+        /* Deep moss for the editorial "point of view" band + its soft-olive
+           accent (serif monogram, principle numbers). */
+        --color-moss-deep: hsl(103 31% 17%);
+        --color-moss-soft: hsl(93 21% 45%);
+
         /* ── Third-party brand colors ────────────────────
        Use only for that brand's logo/badge context,
        never as a general accent next to --color-accent. */

@@ -30,6 +30,29 @@
             decoding="async"
           >
         </picture>
+
+        {{/* Concentric ring outlines + a slowly-rotating circular-text badge,
+             kept subtle near the top so they don't fight the bottom-anchored
+             copy. Pure CSS animation — the global reduced-motion reset halts
+             the spin. */}}
+        <div class="hero__deco" aria-hidden="true">
+          <span class="hero__ring hero__ring--1"></span>
+          <span class="hero__ring hero__ring--2"></span>
+          <svg class="hero__badge" viewBox="0 0 100 100">
+            <defs>
+              <path
+                id="heroBadgeArc"
+                d="M50,50 m-34,0 a34,34 0 1,1 68,0 a34,34 0 1,1 -68,0"
+              ></path>
+            </defs>
+            <text>
+              <textPath href="#heroBadgeArc" startOffset="0">
+                BOSFOOT · BAREFOOT · NATURAL MOVEMENT ·
+              </textPath>
+            </text>
+          </svg>
+        </div>
+
         <div class="container hero__inner">
           <p class="hero__eyebrow">{{t .Locale "home.hero.soon"}}</p>
           <h1 class="hero__heading">
@@ -45,7 +68,31 @@
         </div>
       </section>
 
-    
+      {{/* ── Marquee ──────────────────────────────────────── */}}
+      {{/* Brand mantra on the accent green. Two identical groups + a -50%
+           translate = a seamless loop; the second is aria-hidden so a screen
+           reader announces the phrases once. Reduced-motion halts the scroll
+           via the global reset. */}}
+      <div class="marquee">
+        <div class="marquee__track">
+          <div class="marquee__group">
+            <span class="marquee__item">{{t .Locale "home.marquee.1"}}</span>
+            <span class="marquee__sep" aria-hidden="true">✦</span>
+            <span class="marquee__item">{{t .Locale "home.marquee.2"}}</span>
+            <span class="marquee__sep" aria-hidden="true">✦</span>
+            <span class="marquee__item">{{t .Locale "home.marquee.3"}}</span>
+            <span class="marquee__sep" aria-hidden="true">✦</span>
+          </div>
+          <div class="marquee__group" aria-hidden="true">
+            <span class="marquee__item">{{t .Locale "home.marquee.1"}}</span>
+            <span class="marquee__sep">✦</span>
+            <span class="marquee__item">{{t .Locale "home.marquee.2"}}</span>
+            <span class="marquee__sep">✦</span>
+            <span class="marquee__item">{{t .Locale "home.marquee.3"}}</span>
+            <span class="marquee__sep">✦</span>
+          </div>
+        </div>
+      </div>
 
       {{/* ── Trust band ───────────────────────────────────── */}}
       {{/* Risk-removers up front: the funnel shows visitors reaching products
@@ -71,6 +118,49 @@
               <p class="trust-bar__body text-muted text-sm">{{t .Locale "trust.returns.body"}}</p>
             </li>
           </ul>
+        </div>
+      </section>
+
+      {{/* ── Our point of view (story) ────────────────────── */}}
+      {{/* Deep-green narrative band; the hero's "Why BOSFOOT ↓" anchors here.
+           This is the page's only numbered list — the "Why Bosfoot" section
+           below intentionally drops its 01/02/03 so they don't read as a bug. */}}
+      <section class="story section" id="story">
+        <div class="container story__grid">
+          <div class="story__copy" data-reveal>
+            <p class="story__eyebrow label-caps">
+              {{t .Locale "home.story.eyebrow"}}
+            </p>
+            <h2 class="story__heading">
+              <span>{{t .Locale "home.story.line1"}}</span>
+              <span>{{t .Locale "home.story.line2"}}</span>
+            </h2>
+            <p class="story__lead">{{t .Locale "home.story.p1"}}</p>
+          </div>
+
+          <div class="story__details" data-reveal>
+            <p class="story__detail">{{t .Locale "home.story.p2"}}</p>
+            <dl class="story__principles">
+              <div class="story__principle">
+                <dt class="story__num">01</dt>
+                <dd class="story__principle-title">
+                  {{t .Locale "home.story.principle1"}}
+                </dd>
+              </div>
+              <div class="story__principle">
+                <dt class="story__num">02</dt>
+                <dd class="story__principle-title">
+                  {{t .Locale "home.story.principle2"}}
+                </dd>
+              </div>
+              <div class="story__principle">
+                <dt class="story__num">03</dt>
+                <dd class="story__principle-title">
+                  {{t .Locale "home.story.principle3"}}
+                </dd>
+              </div>
+            </dl>
+          </div>
         </div>
       </section>
 
@@ -343,7 +433,6 @@
 
           <div class="why-us__grid">
             <article class="why-us__item" data-reveal>
-              <div class="why-us__num" aria-hidden="true">01</div>
               <h3 class="why-us__item-title font-bold">
                 {{t .Locale "home.whyUs.1.title"}}
               </h3>
@@ -353,7 +442,6 @@
             </article>
 
             <article class="why-us__item" data-reveal>
-              <div class="why-us__num" aria-hidden="true">02</div>
               <h3 class="why-us__item-title font-bold">
                 {{t .Locale "home.whyUs.2.title"}}
               </h3>
@@ -363,7 +451,6 @@
             </article>
 
             <article class="why-us__item" data-reveal>
-              <div class="why-us__num" aria-hidden="true">03</div>
               <h3 class="why-us__item-title font-bold">
                 {{t .Locale "home.whyUs.3.title"}}
               </h3>
@@ -378,6 +465,22 @@
               {{t .Locale "home.whyUs.checkUs"}} →
             </a>
           </div>
+        </div>
+      </section>
+
+      {{/* ── First drop incoming (email capture) ──────────── */}}
+      {{/* No newsletter backend — a plain mailto so early interest lands in the
+           inbox. Closing dark band before the (green) footer. */}}
+      <section class="signup section section--deep">
+        <div class="container signup__inner" data-reveal>
+          <p class="signup__tag label-caps">{{t .Locale "home.signup.tag"}}</p>
+          <h2 class="signup__title">{{t .Locale "home.signup.title"}}</h2>
+          <p class="signup__body">{{t .Locale "home.signup.body"}}</p>
+          <a
+            class="btn btn--on-dark signup__cta"
+            href="mailto:{{(contact).Email}}"
+            >{{(contact).Email}}</a
+          >
         </div>
       </section>
     </main>
