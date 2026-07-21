@@ -312,6 +312,7 @@ type TopicCard struct {
 	ArticleCard
 	CategoryKey string // locale key for the topic label
 	IconName    string // selects the inline SVG in the template
+	Image       string // card header illustration (webp under public/); "" = none
 	Accent      bool
 }
 
@@ -345,12 +346,13 @@ var hubTopics = []struct {
 	ENSlug      string
 	CategoryKey string
 	Icon        string
+	Image       string // webp path under public/images/foot-health/
 	Accent      bool
 }{
-	{"knee-and-back-pain-could-your-shoes-be-the-cause", "footHealth.topic.knees", "knees", true},
-	{"foot-pain-plantar-fasciitis-and-heel-pain", "footHealth.topic.heel", "heel", false},
-	{"veins-circulation-barefoot-and-blood-flow", "footHealth.topic.veins", "veins", false},
-	{"your-first-60-days-in-barefoot-shoes", "footHealth.topic.transition", "transition", false},
+	{"knee-and-back-pain-could-your-shoes-be-the-cause", "footHealth.topic.knees", "knees", "/images/foot-health/knees.webp", true},
+	{"foot-pain-plantar-fasciitis-and-heel-pain", "footHealth.topic.heel", "heel", "/images/foot-health/heel.webp", false},
+	{"veins-circulation-barefoot-and-blood-flow", "footHealth.topic.veins", "veins", "/images/foot-health/veins.webp", false},
+	{"your-first-60-days-in-barefoot-shoes", "footHealth.topic.transition", "transition", "/images/foot-health/transition.webp", false},
 }
 
 // articleDate formats a nullable published_at for display, "" if absent.
@@ -730,6 +732,7 @@ func (h *PageHandler) FootHealth(w http.ResponseWriter, r *http.Request) {
 			ArticleCard: ArticleCard{Slug: c.slug, Title: c.title, Lead: c.lead},
 			CategoryKey: t.CategoryKey,
 			IconName:    t.Icon,
+			Image:       t.Image,
 			Accent:      t.Accent,
 		})
 	}

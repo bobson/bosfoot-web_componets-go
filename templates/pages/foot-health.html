@@ -89,64 +89,17 @@
             data-reveal
           >
             <div class="fh-card__head">
-              <span class="fh-card__icon" aria-hidden="true">
-                {{if eq .IconName "knees"}}
-                <svg
-                  viewBox="0 0 32 32"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="1.6"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                >
-                  <path d="M11 4v9l-4 7a4 4 0 0 0 4 8h8" />
-                  <circle cx="11" cy="15" r="3" />
-                  <path d="M22 28V19l3-6" />
-                </svg>
-                {{else if eq .IconName "heel"}}
-                <svg
-                  viewBox="0 0 32 32"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="1.6"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                >
-                  <path
-                    d="M7 7c-2 5-1 10 0 14 1 5 6 7 11 6 6-1 8-6 7-11-1-6-5-8-5-12"
-                  />
-                  <path d="M7 21c4 2 8 2 12 0" />
-                  <circle cx="9" cy="22" r="1.5" />
-                </svg>
-                {{else if eq .IconName "veins"}}
-                <svg
-                  viewBox="0 0 32 32"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="1.6"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                >
-                  <path d="M16 3v26" />
-                  <path
-                    d="M16 9c-4 0-7 3-7 7M16 14c4 0 7 3 7 7M16 20c-3 0-5 2-5 5"
-                  />
-                </svg>
-                {{else}}
-                <svg
-                  viewBox="0 0 32 32"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="1.6"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                >
-                  <path d="M4 24h18M22 24l-5-5M22 24l-5 5" />
-                  <circle cx="8" cy="11" r="2" />
-                  <circle cx="15" cy="9" r="2" />
-                </svg>
-                {{end}}
-              </span>
+              {{if .Image}}
+              <img
+                class="fh-card__img"
+                src="{{asset .Image}}"
+                alt=""
+                width="880"
+                height="495"
+                loading="lazy"
+                decoding="async"
+              />
+              {{end}}
               <span class="fh-card__cat label-caps"
                 >{{t $.Locale .CategoryKey}}</span
               >
