@@ -92,57 +92,14 @@ a:hover .fh-arr,
     border-color: var(--color-accent);
 }
 
-/* Self-drawing foot line-art */
+/* Foot-sole illustration */
 .fh-hero__art {
-    color: var(--color-accent);
-    opacity: 0.55;
     flex-shrink: 0;
 }
 
-.fh-foot {
-    width: clamp(120px, 18vw, 200px);
+.fh-hero__img {
+    width: clamp(150px, 22vw, 260px);
     height: auto;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-    .fh-foot__line {
-        stroke-dasharray: 1;
-        stroke-dashoffset: 1;
-        animation: fh-draw 2.2s var(--ease-out) 0.3s forwards;
-    }
-
-    .fh-foot__line:nth-of-type(2) {
-        animation-delay: 1s;
-    }
-
-    .fh-foot__dot {
-        opacity: 0;
-        animation: fh-dot 0.5s var(--ease-out) forwards;
-    }
-
-    .fh-foot__dot:nth-of-type(1) {
-        animation-delay: 2s;
-    }
-
-    .fh-foot__dot:nth-of-type(2) {
-        animation-delay: 2.2s;
-    }
-
-    .fh-foot__dot:nth-of-type(3) {
-        animation-delay: 2.4s;
-    }
-}
-
-@keyframes fh-draw {
-    to {
-        stroke-dashoffset: 0;
-    }
-}
-
-@keyframes fh-dot {
-    to {
-        opacity: 1;
-    }
 }
 
 @media (max-width: 640px) {
@@ -451,14 +408,10 @@ a:hover .fh-arr,
     background: var(--color-sage);
 }
 
-.fh-feature__icon {
-    width: 32px;
-    height: 32px;
-}
-
-.fh-feature__icon svg {
+.fh-feature__img {
     width: 100%;
-    height: 100%;
+    height: clamp(140px, 20vw, 180px);
+    object-fit: contain;
 }
 
 .fh-feature__title {
