@@ -6,12 +6,12 @@
 // privacy-conscious visitors it targets — and because app.js STATICALLY imports
 // this, a blocked module would take down all interactivity. Neutral names avoid
 // both. (The Meta Pixel's own connect.facebook.net request is still blocked by
-// such users, which is fine — no consent, no pixel.)
+// such users, which is fine — those visitors simply aren't measured.)
 //
 // Imported statically (no ?v= stamp), but every un-fingerprinted .js is served
 // no-store (internal/routes/routes.go), so this can't go stale in the FB webview.
 
-const CONSENT_COOKIE = 'bosfoot_consent';
+const NOTICE_COOKIE = 'bosfoot_consent';
 
 export function getCookie(name) {
   return document.cookie
@@ -26,14 +26,15 @@ export function setCookie(name, value, days) {
   document.cookie = `${name}=${value}; Path=/; Expires=${expires}; SameSite=Lax${secure}`;
 }
 
-// Returns 'accepted', 'declined', or undefined (no choice made yet).
-export function consentState() {
-  return getCookie(CONSENT_COOKIE);
+// The pixel loads for every visitor (see app.js); the banner is an informational
+// notice, so we only track whether it's been dismissed. Any stored value —
+// including a legacy 'accepted'/'declined' — counts as already seen.
+export function noticeDismissed() {
+  return !!getCookie(NOTICE_COOKIE);
 }
 
-export function storeConsent(accepted) {
-  // 180 days — after that the cookie expires and we re-ask, per ePrivacy guidance.
-  setCookie(CONSENT_COOKIE, accepted ? 'accepted' : 'declined', 180);
+export function dismissNotice() {
+  setCookie(NOTICE_COOKIE, 'seen', 365);
 }
 
 // Install the Meta Pixel: the standard base stub (which QUEUES events until

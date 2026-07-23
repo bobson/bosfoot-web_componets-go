@@ -50,24 +50,19 @@
     "en": "Cookies"
   },
   "consent.message": {
-    "mk": "Користиме колачиња за да ја измериме успешноста на рекламите и да го подобриме искуството. Ги вклучуваме само ако прифатите.",
-    "sq": "Përdorim cookies për të matur performancën e reklamave dhe për të përmirësuar përvojën. I aktivizojmë vetëm nëse pranoni.",
-    "en": "We use cookies to measure ad performance and improve your experience. We only enable them if you accept."
+    "mk": "Користиме колачиња, вклучително за мерење на успешноста на рекламите. Со продолжување на прелистувањето се согласуваш.",
+    "sq": "Përdorim cookies, përfshirë për të matur performancën e reklamave. Duke vazhduar shfletimin, ju pajtoheni.",
+    "en": "We use cookies, including to measure ad performance. By continuing to browse, you agree."
   },
   "consent.learnMore": {
     "mk": "Дознај повеќе",
     "sq": "Mëso më shumë",
     "en": "Learn more"
   },
-  "consent.accept": {
-    "mk": "Прифати",
-    "sq": "Prano",
-    "en": "Accept"
-  },
-  "consent.decline": {
-    "mk": "Одбиј",
-    "sq": "Refuzo",
-    "en": "Decline"
+  "consent.ok": {
+    "mk": "Во ред",
+    "sq": "Në rregull",
+    "en": "Got it"
   },
   "cta.addToCart": {
     "mk": "Додај во кошничка",
