@@ -31,30 +31,7 @@
           >
         </picture>
 
-        {{/* Concentric ring outlines + a slowly-rotating circular-text badge,
-             kept subtle near the top so they don't fight the bottom-anchored
-             copy. Pure CSS animation — the global reduced-motion reset halts
-             the spin. */}}
-        <div class="hero__deco" aria-hidden="true">
-          <span class="hero__ring hero__ring--1"></span>
-          <span class="hero__ring hero__ring--2"></span>
-          <svg class="hero__badge" viewBox="0 0 100 100">
-            <defs>
-              <path
-                id="heroBadgeArc"
-                d="M50,50 m-34,0 a34,34 0 1,1 68,0 a34,34 0 1,1 -68,0"
-              ></path>
-            </defs>
-            <text>
-              <textPath href="#heroBadgeArc" startOffset="0">
-                BOSFOOT · BAREFOOT · NATURAL MOVEMENT ·
-              </textPath>
-            </text>
-          </svg>
-        </div>
-
         <div class="container hero__inner">
-          <p class="hero__eyebrow">{{t .Locale "home.hero.soon"}}</p>
           <h1 class="hero__heading">
             <span class="hero__line--bold"
               >{{t .Locale "home.hero.line1"}}</span

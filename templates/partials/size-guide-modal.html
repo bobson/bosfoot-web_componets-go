@@ -13,6 +13,48 @@
 
     <div class="sg-modal__body">
 
+      {{/* ── Size finder (foot length → recommended size) ─ */}}
+      {{if .Product.SizeChart}}
+      <section class="sg-modal__section sg-calc">
+        <h3 class="sg-modal__section-title font-semibold">{{t .Locale "sizeModal.calc.title"}}</h3>
+        <p class="sg-modal__text text-muted">{{t .Locale "sizeModal.calc.hint"}}</p>
+        <p class="sg-calc__tip">
+          <svg class="sg-calc__tip-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+          <span>{{t .Locale "sizeModal.calc.socksTip"}}</span>
+        </p>
+        <div class="sg-calc__form">
+          <label class="sg-calc__label" for="sg-calc-input"
+            >{{t .Locale "sizeModal.calc.label"}} (mm)</label
+          >
+          <div class="sg-calc__field">
+            <input
+              class="sg-calc__input"
+              id="sg-calc-input"
+              type="text"
+              inputmode="decimal"
+              autocomplete="off"
+              placeholder="{{t .Locale "sizeModal.calc.placeholder"}}"
+            />
+            <button class="sg-calc__btn btn btn--brand" type="button" id="sg-calc-btn">
+              {{t .Locale "sizeModal.calc.button"}}
+            </button>
+          </div>
+        </div>
+        <output
+          class="sg-calc__result"
+          id="sg-calc-result"
+          aria-live="polite"
+          data-recommend="{{t .Locale "sizeModal.calc.recommend"}}"
+          data-working="{{t .Locale "sizeModal.calc.working"}}"
+          data-toobig="{{t .Locale "sizeModal.calc.tooBig"}}"
+          data-toosmall="{{t .Locale "sizeModal.calc.tooSmall"}}"
+          data-invalid="{{t .Locale "sizeModal.calc.invalid"}}"
+          data-fitoffset="{{fitOffsetMM .Product.SKU}}"
+        ></output>
+        <script id="sg-chart-data" type="application/json">{{json .Product.SizeChart}}</script>
+      </section>
+      {{end}}
+
       {{/* ── True to size ──────────────────────────────── */}}
       <section class="sg-modal__section">
         <h3 class="sg-modal__section-title font-semibold">{{t .Locale "sizeModal.trueToSize.title"}}</h3>
@@ -21,7 +63,9 @@
         </div>
       </section>
 
-      {{/* ── Adult size table ──────────────────────────── */}}
+      {{/* ── Adult size table — this model's own chart (single source,
+           shared with the size finder above and the on-page table) ── */}}
+      {{if .Product.SizeChart}}
       <section class="sg-modal__section">
         <h3 class="sg-modal__section-title font-semibold">{{t .Locale "sizeModal.adult"}}</h3>
         <div class="sg-modal__table-wrap">
@@ -34,23 +78,18 @@
               </tr>
             </thead>
             <tbody>
-              <tr><td class="sg-modal__eu">37</td><td>236 mm</td><td>88 mm</td></tr>
-              <tr><td class="sg-modal__eu">38</td><td>242 mm</td><td>89 mm</td></tr>
-              <tr><td class="sg-modal__eu">39</td><td>249 mm</td><td>90 mm</td></tr>
-              <tr><td class="sg-modal__eu">40</td><td>257 mm</td><td>92 mm</td></tr>
-              <tr><td class="sg-modal__eu">41</td><td>262 mm</td><td>93 mm</td></tr>
-              <tr><td class="sg-modal__eu">42</td><td>268 mm</td><td>95 mm</td></tr>
-              <tr><td class="sg-modal__eu">43</td><td>275 mm</td><td>98 mm</td></tr>
-              <tr><td class="sg-modal__eu">44</td><td>284 mm</td><td>100 mm</td></tr>
-              <tr><td class="sg-modal__eu">45</td><td>290 mm</td><td>101 mm</td></tr>
-              <tr><td class="sg-modal__eu">46</td><td>295 mm</td><td>102 mm</td></tr>
-              <tr class="sg-modal__row--muted"><td class="sg-modal__eu">47</td><td>300 mm</td><td>104 mm</td></tr>
-              <tr class="sg-modal__row--muted"><td class="sg-modal__eu">48</td><td>307 mm</td><td>106 mm</td></tr>
-              <tr class="sg-modal__row--muted"><td class="sg-modal__eu">49</td><td>313 mm</td><td>107 mm</td></tr>
+              {{range .Product.SizeChart}}
+              <tr>
+                <td class="sg-modal__eu">{{.EUSize}}</td>
+                <td>{{derefF .FootLengthMM}} mm</td>
+                <td>{{if .FootWidthMM}}{{derefF .FootWidthMM}} mm{{else}}—{{end}}</td>
+              </tr>
+              {{end}}
             </tbody>
           </table>
         </div>
       </section>
+      {{end}}
 
       {{/* ── Kids size table ───────────────────────────── */}}
       <section class="sg-modal__section">

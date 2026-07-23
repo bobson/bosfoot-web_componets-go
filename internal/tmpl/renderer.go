@@ -109,6 +109,18 @@ func NewRenderer(dir string, ui *locale.UI) (*Renderer, error) {
 		// lower lowercases a string: {{lower .Color}}
 		"lower": strings.ToLower,
 
+		// fitOffsetMM returns how many mm a model runs large lengthwise, so the
+		// size finder treats its insoles as that much longer and recommends one
+		// size down. Freet publishes one chart for all models, but Keld fits
+		// ~½ size big in practice. Add SKUs here as fit feedback comes in.
+		"fitOffsetMM": func(sku string) int {
+			switch sku {
+			case "FREET-KELD-3":
+				return 5
+			}
+			return 0
+		},
+
 		// cardImg returns the 500px "-card" variant path for a primary product
 		// image (/a/x.webp → /a/x-card.webp), used in product-card srcset.
 		// If the variant doesn't exist on disk, it returns the original URL.

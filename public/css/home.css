@@ -57,15 +57,6 @@
   background: linear-gradient(rgb(0 0 0 / 0) 20%, rgb(0 0 0 / 0.7) 95%);
 }
 
-.hero__eyebrow {
-  font-size: var(--fs-lg);
-  font-weight: var(--fw-bold);
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--color-white);
-  margin-bottom: var(--space-4);
-}
-
 .hero__heading {
   display: flex;
   flex-direction: column;
@@ -83,59 +74,6 @@
 
 .hero__line--bold {
   font-weight: var(--fw-bold);
-}
-
-/* ── Hero decoration: concentric rings + rotating badge ── */
-.hero__deco {
-  position: absolute;
-  top: clamp(var(--space-6), 9vh, var(--space-16));
-  left: 50%;
-  translate: -50% 0;
-  width: clamp(180px, 40vw, 320px);
-  aspect-ratio: 1;
-  z-index: 0;
-  pointer-events: none;
-  opacity: 0.5;
-}
-
-.hero__ring {
-  position: absolute;
-  inset: 0;
-  border: 1px solid rgb(255 255 255 / 0.55);
-  border-radius: var(--radius-full);
-}
-
-.hero__ring--2 {
-  inset: 13%;
-  border-color: rgb(255 255 255 / 0.3);
-}
-
-.hero__badge {
-  position: absolute;
-  inset: 20%;
-  color: var(--color-white);
-  fill: currentColor;
-  animation: hero-badge-spin 26s linear infinite;
-}
-
-.hero__badge text {
-  font-size: 7px;
-  font-weight: var(--fw-semibold);
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-}
-
-@keyframes hero-badge-spin {
-  to {
-    rotate: 360deg;
-  }
-}
-
-/* On the smallest screens the copy needs the whole frame — hide the rings. */
-@media (max-width: 480px) {
-  .hero__deco {
-    display: none;
-  }
 }
 
 /* Intro band under the hero: lead + primary CTA on cream. */

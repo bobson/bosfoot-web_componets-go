@@ -41,6 +41,9 @@ func main() {
 		// Always run: migrates the reviews table to the guest-checkout model and
 		// creates review_tokens. Idempotent, so safe on both fresh and existing DBs.
 		"db/reviews.sql",
+		// Always run (after the freet* seeds): replaces the placeholder size_chart
+		// with Freet's official insole/width chart. Idempotent (DELETE + INSERT).
+		"db/freet-sizechart.sql",
 	)
 
 	for _, f := range files {
