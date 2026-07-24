@@ -2,7 +2,7 @@
 // app.js's OWN content hash (VER = ?v on this file). When you change a component
 // but NOT app.js, its hash won't move and browsers keep the old, immutably
 // cached module. Bump this date on such deploys to force a fresh fetch.
-// Bumped: 2026-07-23
+// Bumped: 2026-07-24
 import { bootstrapPixel } from './prefs.js';
 
 // Install the Meta Pixel for every visitor, synchronously, before the dynamic

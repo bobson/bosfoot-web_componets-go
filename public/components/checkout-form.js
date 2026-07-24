@@ -73,7 +73,12 @@ class CheckoutForm extends HTMLElement {
 
     // Funnel: reached checkout with items (pixel-only; the GET is in the access
     // log). Skip when the cart is empty or the confirmation panel is showing.
-    if (this.confirmEl.hidden && this.read().length) track('InitiateCheckout');
+    // value is the cart total in MKD denars (a plain number), currency MKD.
+    const cart = this.read();
+    if (this.confirmEl.hidden && cart.length) {
+      const value = cart.reduce((s, i) => s + Number(i.price) * i.qty, 0);
+      track('InitiateCheckout', { value, currency: 'MKD' });
+    }
   }
 
   read() {
@@ -236,9 +241,11 @@ class CheckoutForm extends HTMLElement {
   }
 
   onSuccess(data) {
-    // Funnel: reservation submitted (the order POST is already logged server-side;
-    // this fires the Meta Lead event for ad optimisation/retargeting).
-    track('Lead', { order_id: data.id, value: data.total_mkd, currency: 'MKD' });
+    // Funnel: order placed — fire the Meta Purchase event for ad optimisation /
+    // retargeting. value is the server-repriced order total in MKD denars (the
+    // amount charged) as a plain number; currency is MKD. Only reached on a
+    // successful order, right before the confirmation panel renders below.
+    track('Purchase', { value: Number(data.total_mkd) || 0, currency: 'MKD' });
 
     // Clear the cart and let the nav badge + drawer reset to empty.
     localStorage.removeItem(CART_KEY);

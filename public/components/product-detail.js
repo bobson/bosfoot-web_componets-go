@@ -7,9 +7,13 @@ export function initProductDetail() {
   if (!stockEl) return;
 
   // Funnel: a product page was viewed (pixel-only; first-party already has the
-  // GET in the access log).
+  // GET in the access log). value is the product price in MKD denars (a plain
+  // number, from data-price), currency MKD — consistent with the other events.
+  const addBtn = document.getElementById('add-to-cart');
   track('ViewContent', {
-    product_id: Number(document.getElementById('add-to-cart')?.dataset.productId) || 0,
+    product_id: Number(addBtn?.dataset.productId) || 0,
+    value: Number(addBtn?.dataset.price) || 0,
+    currency: 'MKD',
   });
   const rawStock = JSON.parse(stockEl.textContent || '[]');
   const stockMap = {};
