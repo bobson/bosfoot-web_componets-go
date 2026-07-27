@@ -33,14 +33,14 @@
   },
   "cart.size": { "mk": "Големина", "sq": "Madhësia", "en": "Size" },
   "cart.preorder": {
-    "mk": "Пред-нарачка",
-    "sq": "Porosi paraprake",
-    "en": "Preorder"
+    "mk": "Резервација",
+    "sq": "Rezervim",
+    "en": "Reserved"
   },
   "cart.preorderBanner": {
-    "mk": "Некои производи во кошничката се на пред-нарачка — се плаќаат при испорака и се испорачуваат кога ќе пристигне следната нарачка.",
-    "sq": "Disa produkte në shportë janë me porosi paraprake — paguhen me dorëzim dhe dërgohen kur të mbërrijë malli i radhës.",
-    "en": "Some items in your cart are preorders — pay on delivery, shipped when the next batch arrives."
+    "mk": "Некои производи во кошничката се резервација — се плаќаат при испорака и се испорачуваат кога ќе пристигне следната нарачка.",
+    "sq": "Disa produkte në shportë janë me rezervim — paguhen me dorëzim dhe dërgohen kur të mbërrijë malli i radhës.",
+    "en": "Some items in your cart are reservations — pay on delivery, shipped when the next batch arrives."
   },
   "cart.subtotal": { "mk": "Меѓузбир", "sq": "Nëntotali", "en": "Subtotal" },
   "cart.title": { "mk": "Кошничка", "sq": "Shporta", "en": "Cart" },
@@ -70,9 +70,9 @@
     "en": "Add to cart"
   },
   "cta.preorderNow": {
-    "mk": "Нарачај однапред сега",
-    "sq": "Porosit paraprakisht",
-    "en": "Preorder now"
+    "mk": "Резервирај",
+    "sq": "Rezervo",
+    "en": "Reserve"
   },
   "cta.shopNow": { "mk": "Купи сега", "sq": "Bli tani", "en": "Shop now" },
   "cta.viewAll": {
@@ -140,9 +140,9 @@
     "en": "This size is currently out of stock. Message us or follow us on Instagram and we'll let you know when it's back."
   },
   "preorder.note": {
-    "mk": "Овој модел моментално не е на залиха. Нарачај однапред сега — плаќаш при испорака, се испорачува кога ќе пристигне следната нарачка.",
-    "sq": "Ky model nuk është aktualisht në stok. Porosit paraprakisht — paguan me dorëzim, dërgohet kur të mbërrijë malli i radhës.",
-    "en": "This model is currently out of stock. Preorder now — pay on delivery, shipped when the next batch arrives."
+    "mk": "Овој модел моментално не е на залиха. Резервирај сега — плаќаш при испорака, се испорачува кога ќе пристигне следната нарачка.",
+    "sq": "Ky model nuk është aktualisht në stok. Rezervo tani — paguan me dorëzim, dërgohet kur të mbërrijë malli i radhës.",
+    "en": "This model is currently out of stock. Reserve now — pay on delivery, shipped when the next batch arrives."
   },
   "reservation.freeNote": {
     "mk": "Плаќање при испорака, без плаќање однапред. Бесплатно враќање и замена на број во цела Македонија — пробај ги дома, без ризик.",
