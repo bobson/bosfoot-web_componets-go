@@ -118,16 +118,16 @@ func shippingDetailsLD() map[string]any {
 }
 
 // merchantReturnPolicyLD describes the return policy for Google Merchant
-// listings. Mirrors public/locales/pages/returns.json: 30-day free returns by
-// mail, Macedonia. Keep in sync if the policy changes.
+// listings. Mirrors the returns page in legal_content.go: 14-day returns by
+// mail, Macedonia, customer pays return shipping. Keep in sync if it changes.
 func merchantReturnPolicyLD() map[string]any {
 	return map[string]any{
 		"@type":                "MerchantReturnPolicy",
 		"applicableCountry":    "MK",
 		"returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
-		"merchantReturnDays":   30,
+		"merchantReturnDays":   14,
 		"returnMethod":         "https://schema.org/ReturnByMail",
-		"returnFees":           "https://schema.org/FreeReturn",
+		"returnFees":           "https://schema.org/ReturnShippingFees",
 	}
 }
 

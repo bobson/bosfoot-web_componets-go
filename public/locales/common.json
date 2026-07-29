@@ -190,14 +190,14 @@
     "en": "Pay only when the courier hands you the box."
   },
   "trust.returns.title": {
-    "mk": "Бесплатно враќање и замена",
-    "sq": "Kthim & ndërrim falas",
-    "en": "Free returns & exchange"
+    "mk": "14 дена враќање · бесплатна замена",
+    "sq": "14 ditë kthim · ndërrim falas",
+    "en": "14-day returns · free exchange"
   },
   "trust.returns.body": {
-    "mk": "Пробај ги дома во цела Македонија — без ризик.",
-    "sq": "Provoji në shtëpi në të gjithë Maqedoninë — pa rrezik.",
-    "en": "Try them at home anywhere in Macedonia — risk-free."
+    "mk": "Пробај ги дома во цела Македонија. Замената е на наш трошок.",
+    "sq": "Provoji në shtëpi në të gjithë Maqedoninë. Ndërrimi është me shpenzimet tona.",
+    "en": "Try them at home anywhere in Macedonia. Exchanges are on us."
   },
   "search.empty": {
     "mk": "Нема резултати. Пробај поинаков збор.",
