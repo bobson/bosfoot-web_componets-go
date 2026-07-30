@@ -621,6 +621,22 @@ func (h *PageHandler) SizeGuide(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
+// SizeFinder renders the camera-based foot measuring tool. Phase 1: English
+// chrome; the trilingual pass + entry-point links come after on-device testing.
+func (h *PageHandler) SizeFinder(w http.ResponseWriter, r *http.Request) {
+	if !locale.IsValid(r.PathValue("locale")) {
+		http.Redirect(w, r, "/"+locale.Default+"/size-finder", http.StatusFound)
+		return
+	}
+	loc := locale.FromPath(r.PathValue("locale"))
+	h.Renderer.Render(w, "size-finder", PageBase{
+		Locale:          loc,
+		CurrentPath:     "/size-finder",
+		SiteURL:         h.baseURL(r),
+		MetaDescription: "Measure your feet with your phone camera and a sheet of A4 paper — on-device, nothing uploaded.",
+	})
+}
+
 // About handles GET /{locale}/about. Static page — no DB queries.
 func (h *PageHandler) About(w http.ResponseWriter, r *http.Request) {
 	if !locale.IsValid(r.PathValue("locale")) {

@@ -1,0 +1,118 @@
+{{define "size-finder"}}
+<!doctype html>
+<html lang="{{.Locale}}">
+<head>
+  {{template "head" .}}
+  <link rel="stylesheet" href="{{asset "/css/size-finder.css"}}">
+  <title>Foot Size Finder — Bosfoot</title>
+</head>
+<body>
+  {{template "nav" .}}
+
+  <main class="ff-main">
+    <foot-finder class="ff container">
+      <header class="ff-head">
+        <p class="label-caps text-accent">Bosfoot</p>
+        <h1 class="ff-title">Foot Size Finder</h1>
+        <p class="ff-sub text-muted">Measure your feet with your phone camera and a sheet of A4 paper — everything stays on your phone, nothing is uploaded.</p>
+      </header>
+
+      <div class="ff-steps" aria-hidden="true">
+        <span id="ff-st1" class="on"></span><span id="ff-st2"></span><span id="ff-st3"></span><span id="ff-st4"></span>
+      </div>
+
+      {{/* ── STEP 1: reference + photo ─────────────────────── */}}
+      <div id="ff-step1">
+        <div class="ff-card">
+          <h2>What will you measure with?</h2>
+          <div class="ff-tabs">
+            <button id="ff-refA4" class="active" type="button">A4 paper<br><small>most accurate</small></button>
+            <button id="ff-refCard" type="button">Bank card<br><small>always at hand</small></button>
+          </div>
+          <ol class="ff-howto" id="ff-howtoA4">
+            <li>Place a sheet of <strong>A4 paper</strong> on a hard floor.</li>
+            <li>Stand on it with your <strong>full weight</strong>, foot roughly in the middle. The whole sheet must stay visible.</li>
+            <li>Take a photo <strong>from above</strong> — it doesn't need to be perfectly straight.</li>
+          </ol>
+          <ol class="ff-howto" id="ff-howtoCard" hidden>
+            <li>Put any <strong>bank or ID card</strong> flat on a hard floor.</li>
+            <li>Stand with <strong>full weight</strong> right next to it — card beside the middle of your foot, both fully visible.</li>
+            <li>Take the photo from <strong>directly above</strong> — with the small card this matters more.</li>
+          </ol>
+        </div>
+
+        <div class="ff-card">
+          <div class="ff-tabs">
+            <button id="ff-tabL" class="active" type="button">Left foot</button>
+            <button id="ff-tabR" type="button">Right foot</button>
+          </div>
+          <button class="ff-btn-main" id="ff-btnPhoto" type="button">📷 Take or choose photo</button>
+          <input type="file" id="ff-file" accept="image/*" hidden>
+        </div>
+      </div>
+
+      {{/* ── STEP 2/3: mark the photo ──────────────────────── */}}
+      <div id="ff-step2" hidden>
+        <div class="ff-card">
+          <h2 id="ff-markTitle">Tap the 4 corners of the paper</h2>
+          <div class="ff-stage">
+            <canvas id="ff-canvas"></canvas>
+            <div class="ff-live" id="ff-live" hidden></div>
+          </div>
+          <div class="ff-hint" id="ff-hint">
+            <span class="dot"></span><span>Tap each corner, then drag a dot to fine-tune it.</span>
+          </div>
+          <div class="ff-row">
+            <button class="ff-btn-small" id="ff-btnUndo" type="button">↩ Undo point</button>
+            <button class="ff-btn-small" id="ff-btnRetake" type="button">Retake photo</button>
+          </div>
+          <button class="ff-btn-main" id="ff-btnNext" type="button" disabled>Continue</button>
+        </div>
+      </div>
+
+      {{/* ── STEP 4: result ────────────────────────────────── */}}
+      <div id="ff-step4" hidden>
+        <div class="ff-card">
+          <div class="ff-result-label" id="ff-resFootLabel">Left foot</div>
+          <div class="ff-result-big" id="ff-resLen">–</div>
+          <div class="ff-result-grid">
+            <div><div class="v" id="ff-resEU">–</div><div class="k">Suggested EU size</div></div>
+            <div><div class="v" id="ff-resFit">–</div><div class="k">Fit length (foot + 1.2 cm toe room)</div></div>
+          </div>
+          <p class="ff-result-other text-muted" id="ff-resOther"></p>
+          <div class="ff-note">Barefoot shoes need <strong>about 12 mm of space</strong> in front of your longest toe. Sizes differ slightly between brands — always compare your <strong>fit length</strong> with the brand's internal-length chart on the product page. If your feet differ, order for the longer foot.</div>
+        </div>
+        <button class="ff-btn-ghost" id="ff-btnOtherFoot" type="button">Measure the other foot</button>
+        <button class="ff-btn-main ff-btn-dark" id="ff-btnRestart" type="button">Start over</button>
+      </div>
+
+      {{/* Dynamic (interpolated) strings for the component. Phase 1b swaps these
+           English literals for {{"{{"}}json .I18n{{"}}"}} built from the locale files. */}}
+      <script type="application/json" id="ff-i18n">
+      {
+        "ref.a4": "A4 paper",
+        "ref.card": "bank card",
+        "mark.cornersTitle": "Tap the 4 corners of the {ref}",
+        "mark.cornersHint": "Tap each corner of the {ref} ({n}/4). Place dots roughly, then drag to fine-tune.",
+        "mark.cardCorners": "Card corners are rounded — aim for where the straight edges would meet.",
+        "mark.heel": "Tap the back of your heel",
+        "mark.toe": "Now tap the tip of your longest toe",
+        "mark.adjust": "Adjust the dots if needed",
+        "mark.footHint": "Drag the dots to fine-tune ({n}/2).",
+        "btn.continue": "Continue",
+        "btn.showSize": "Show my size",
+        "err.corners": "Could not read the corners — please retake the photo with the whole sheet visible.",
+        "err.measure": "That measurement ({cm} cm) looks off. Please check the dots sit exactly on the corners, heel and longest toe.",
+        "foot.left": "Left foot",
+        "foot.right": "Right foot",
+        "res.bothFeet": "Other foot: {cm} cm. Your {foot} is longer — choose that size: EU {eu}.",
+        "res.oneFoot": "Tip: feet are rarely identical — measure the other one too."
+      }
+      </script>
+    </foot-finder>
+  </main>
+
+  {{template "footer" .}}
+</body>
+</html>
+{{end}}

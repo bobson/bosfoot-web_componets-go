@@ -28,6 +28,7 @@ const components = [
   ['./components/listing-filter.js', 'initListingFilter'],
   ['./components/product-detail.js', 'initProductDetail'],
   ['./components/size-guide-modal.js', 'initSizeGuideModal'],
+  ['./components/foot-finder.js', 'initFootFinder'],
   ['./components/scroll-reveal.js', 'initScrollReveal'],
   ['./components/prefs-ui.js', 'initPrefsUI'],
 ];

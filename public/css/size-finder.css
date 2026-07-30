@@ -1,0 +1,241 @@
+/* <foot-finder> — camera foot measurer. Ported from the reference design onto
+   Bosfoot's design tokens (colors, spacing, radius, type). Scoped to the
+   component so the generic class names can't leak into the rest of the site. */
+
+.ff-main {
+  padding-block: var(--space-8) var(--space-16);
+}
+.ff {
+  max-width: 33rem;
+}
+
+.ff-head {
+  text-align: center;
+  margin-bottom: var(--space-6);
+}
+.ff-title {
+  font-size: var(--fs-xl);
+  font-weight: var(--fw-semibold);
+  letter-spacing: -0.01em;
+  margin-block: var(--space-1) var(--space-2);
+}
+.ff-sub {
+  font-size: var(--fs-sm);
+}
+
+/* progress dots */
+.ff-steps {
+  display: flex;
+  gap: var(--space-2);
+  margin-bottom: var(--space-6);
+}
+.ff-steps span {
+  flex: 1;
+  height: 5px;
+  border-radius: var(--radius-full);
+  background: var(--color-border);
+  transition: background 0.3s;
+}
+.ff-steps span.on {
+  background: var(--color-cta);
+}
+
+.ff-card {
+  background: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-5);
+  margin-bottom: var(--space-4);
+}
+.ff-card h2 {
+  font-size: var(--fs-md);
+  font-weight: var(--fw-semibold);
+  margin-bottom: var(--space-2);
+}
+
+.ff-howto {
+  padding-left: var(--space-5);
+  font-size: var(--fs-sm);
+}
+.ff-howto li {
+  margin-bottom: var(--space-2);
+}
+
+/* buttons — base reset uses element selectors so the per-button class borders
+   below win on specificity. */
+foot-finder button {
+  font: inherit;
+  cursor: pointer;
+  border: none;
+  border-radius: var(--radius-md);
+}
+.ff-btn-main {
+  width: 100%;
+  background: var(--color-cta);
+  color: var(--color-text-on-dark);
+  font-weight: var(--fw-semibold);
+  font-size: var(--fs-base);
+  padding: var(--space-3) var(--space-5);
+}
+.ff-btn-main:active {
+  background: var(--color-cta-hover);
+}
+.ff-btn-main:disabled {
+  background: var(--color-border);
+  color: var(--color-text-muted);
+  cursor: default;
+}
+#ff-btnNext {
+  margin-top: var(--space-3);
+}
+.ff-btn-dark {
+  background: var(--color-moss-deep);
+  margin-top: var(--space-3);
+}
+.ff-btn-ghost {
+  width: 100%;
+  background: transparent;
+  color: var(--color-cta);
+  border: 1.5px solid var(--color-cta);
+  font-weight: var(--fw-semibold);
+  font-size: var(--fs-base);
+  padding: var(--space-3) var(--space-5);
+}
+.ff-row {
+  display: flex;
+  gap: var(--space-3);
+  margin-top: var(--space-3);
+}
+.ff-row button {
+  flex: 1;
+}
+.ff-btn-small {
+  background: var(--color-sage);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+}
+
+/* left/right + reference tabs */
+.ff-tabs {
+  display: flex;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+}
+.ff-tabs button {
+  flex: 1;
+  background: var(--color-sage);
+  color: var(--color-text-muted);
+  border: 1px solid var(--color-border);
+  font-size: var(--fs-sm);
+  padding: var(--space-3);
+  font-weight: var(--fw-medium);
+}
+.ff-tabs button small {
+  font-weight: var(--fw-regular);
+  font-size: var(--fs-2xs);
+}
+.ff-tabs button.active {
+  background: var(--color-moss-deep);
+  color: var(--color-text-on-dark);
+  border-color: var(--color-moss-deep);
+}
+.ff-tabs button.done::after {
+  content: " ✓";
+  color: var(--color-star);
+}
+
+/* photo stage */
+.ff-stage {
+  position: relative;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: #111;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.ff-stage canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.ff-live {
+  position: absolute;
+  left: var(--space-3);
+  top: var(--space-3);
+  background: color-mix(in oklch, var(--color-moss-deep), transparent 15%);
+  color: var(--color-text-on-dark);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  pointer-events: none;
+}
+
+.ff-hint {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  background: var(--color-sage);
+  border-radius: var(--radius-md);
+  padding: var(--space-3);
+  font-size: var(--fs-sm);
+  margin-top: var(--space-3);
+  color: var(--color-text);
+}
+.ff-hint .dot {
+  width: 14px;
+  height: 14px;
+  border-radius: var(--radius-full);
+  flex: none;
+  border: 2.5px solid var(--color-white);
+  box-shadow: 0 0 0 1px rgb(0 0 0 / 0.25);
+}
+
+/* result */
+.ff-result-label {
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: var(--space-1);
+}
+.ff-result-big {
+  font-size: var(--fs-2xl);
+  line-height: 1.1;
+  font-weight: var(--fw-bold);
+  color: var(--color-cta-hover);
+}
+.ff-result-grid {
+  display: flex;
+  gap: var(--space-3);
+  margin-block: var(--space-4);
+}
+.ff-result-grid > div {
+  flex: 1;
+  background: var(--color-sage);
+  border-radius: var(--radius-md);
+  padding: var(--space-3);
+}
+.ff-result-grid .v {
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-bold);
+  color: var(--color-text);
+}
+.ff-result-grid .k {
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+}
+.ff-result-other {
+  font-size: var(--fs-sm);
+}
+.ff-note {
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+  border-top: 1px solid var(--color-border);
+  padding-top: var(--space-3);
+  margin-top: var(--space-2);
+}

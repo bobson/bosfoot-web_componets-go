@@ -21,6 +21,10 @@
     font-size: var(--fs-md);
 }
 
+.sg-hero__cta {
+    margin-top: var(--space-5);
+}
+
 /* Steps */
 .sg-steps {
     max-width: var(--prose-max);

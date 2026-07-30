@@ -39,6 +39,7 @@ func Register(
 	http.HandleFunc("/{locale}/products/{brand}/{slug}", pc.Wrap(pageHandler.ProductDetail))
 	http.HandleFunc("/{locale}/brands", pc.Wrap(pageHandler.Brands))
 	http.HandleFunc("/{locale}/size-guide", pc.Wrap(pageHandler.SizeGuide))
+	http.HandleFunc("/{locale}/size-finder", pc.Wrap(pageHandler.SizeFinder))
 	http.HandleFunc("/{locale}/about", pc.Wrap(pageHandler.About))
 	http.HandleFunc("/{locale}/contact", pc.Wrap(pageHandler.Contact))
 	http.HandleFunc("/{locale}/checkout", middleware.WithCSRFCookie(pc.Wrap(pageHandler.Checkout)))
