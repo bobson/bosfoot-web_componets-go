@@ -24,7 +24,8 @@ go run ./cmd/dbping
 # Load schema + seed + brand data into Aiven (idempotent, safe to re-run)
 go run ./cmd/dbimport
 
-# Seed the "coming soon" brands (Groundies, Xero, Vivobarefoot) + translations (idempotent)
+# Seed the "coming soon" brands (Be Lenka, Groundies) + translations; also removes
+# the previously seeded Xero/Vivobarefoot (idempotent)
 go run ./cmd/addbrands
 
 # Load foot-health articles from db/articles.json into the DB (idempotent, upserts translations)
