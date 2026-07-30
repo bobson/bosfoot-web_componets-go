@@ -161,6 +161,13 @@ func (h *OrderHandler) CreateOrder(w http.ResponseWriter, r *http.Request) {
 		total += p.price * it.Qty
 	}
 
+	// Delivery fee, computed server-side from the goods subtotal so a tampered
+	// client can't skip it: flat fee below the threshold, free at/above it. The
+	// stored total_mkd is goods + shipping; shipping is recoverable later as
+	// total_mkd − Σ(order_items).
+	shipping := site.ShippingFor(total)
+	grandTotal := total + shipping
+
 	// Which ordered products have any stock at all? A product with zero total
 	// stock is a "preorder" product — orderable without depleting inventory and
 	// with no size required (its size grid is display-only). A product with stock
@@ -211,7 +218,7 @@ func (h *OrderHandler) CreateOrder(w http.ResponseWriter, r *http.Request) {
 		RETURNING id
 	`,
 		req.Email, req.Phone, req.FirstName, req.LastName, req.Address, req.City,
-		nullStr(req.PostalCode), nullStr(req.Notes), req.PaymentMethod, total, req.Locale,
+		nullStr(req.PostalCode), nullStr(req.Notes), req.PaymentMethod, grandTotal, req.Locale,
 	).Scan(&orderID)
 	if err != nil {
 		h.Logger.Error("CreateOrder: insert order failed", err)
@@ -286,7 +293,7 @@ func (h *OrderHandler) CreateOrder(w http.ResponseWriter, r *http.Request) {
 	// Durable record of the sale, independent of email — visible in stdout/journalctl
 	// even if SMTP is down or unconfigured.
 	h.Logger.Info("Order placed",
-		"order_id", orderID, "total_mkd", total,
+		"order_id", orderID, "total_mkd", grandTotal, "shipping_mkd", shipping,
 		"email", req.Email, "payment", req.PaymentMethod, "items", len(req.Items),
 		"ip", clientIP(r))
 
@@ -304,7 +311,8 @@ func (h *OrderHandler) CreateOrder(w http.ResponseWriter, r *http.Request) {
 		}
 		notifyOrder := notify.Order{
 			ID:            orderID,
-			Total:         total,
+			Total:         grandTotal,
+			Shipping:      shipping,
 			PaymentMethod: req.PaymentMethod,
 			Name:          strings.TrimSpace(req.FirstName + " " + req.LastName),
 			Email:         req.Email,
@@ -324,7 +332,7 @@ func (h *OrderHandler) CreateOrder(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(orderResp{
 		ID:            orderID,
-		TotalMKD:      total,
+		TotalMKD:      grandTotal,
 		PaymentMethod: req.PaymentMethod,
 	})
 }

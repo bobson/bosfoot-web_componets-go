@@ -27,9 +27,9 @@
   "cart.quantity": { "mk": "Количина", "sq": "Sasia", "en": "Quantity" },
   "cart.remove": { "mk": "Отстрани", "sq": "Hiq", "en": "Remove" },
   "cart.shippingNote": {
-    "mk": "Поштарината се пресметува при достава.",
-    "sq": "Tarifa e dërgesës llogaritet gjatë dorëzimit.",
-    "en": "Shipping is calculated at delivery."
+    "mk": "Достава 250 ден · бесплатно над 3.500 ден.",
+    "sq": "Dërgesa 250 den · falas mbi 3.500 den.",
+    "en": "Shipping 250 den · free over 3,500 den."
   },
   "cart.size": { "mk": "Големина", "sq": "Madhësia", "en": "Size" },
   "cart.preorder": {
@@ -91,6 +91,11 @@
     "sq": "Këpucë barefoot për liri dhe lëvizje natyrale.",
     "en": "Barefoot shoes for freedom and natural movement."
   },
+  "footer.legalEntity": {
+    "mk": "Друштво за трговија и услуги БОСФУТ ТРЈЕД ДООЕЛ увоз-извоз Охрид ЕДБ:4020026558013",
+    "sq": "Drushtvo za trgovija i uslugi BOSFUT TREJD DOOEL uvoz-izvoz Ohrid EDB:4020026558013",
+    "en": "Drushtvo za trgovija i uslugi BOSFUT TREJD DOOEL uvoz-izvoz Ohrid EDB:4020026558013"
+  },
   "legal.contactCta": {
     "mk": "Прашања? Пиши ни на",
     "sq": "Pyetje? Na shkruaj në",
@@ -145,9 +150,9 @@
     "en": "This model is currently out of stock. Reserve now — pay on delivery, shipped when the next batch arrives."
   },
   "reservation.freeNote": {
-    "mk": "Плаќање при испорака, без плаќање однапред. Бесплатно враќање и замена на број во цела Македонија — пробај ги дома, без ризик.",
-    "sq": "Pagesë me dorëzim, pa parapagim. Kthim dhe ndërrim madhësie falas në të gjithë Maqedoninë — provoji në shtëpi, pa rrezik.",
-    "en": "Pay on delivery, no upfront payment. Free returns & size exchange across Macedonia — try them at home, risk-free."
+    "mk": "Плаќање при испорака, без плаќање однапред. Лесна замена на број и враќање во цела Македонија — пробај ги дома, без ризик.",
+    "sq": "Pagesë me dorëzim, pa parapagim. Ndërrim madhësie dhe kthim i lehtë në të gjithë Maqedoninë — provoji në shtëpi, pa rrezik.",
+    "en": "Pay on delivery, no upfront payment. Easy size exchange & returns across Macedonia — try them at home, risk-free."
   },
   "reservation.note": {
     "mk": "Без плаќање однапред — плаќаш при испорака кога ќе пристигне нарачката.",
@@ -190,14 +195,14 @@
     "en": "Pay only when the courier hands you the box."
   },
   "trust.returns.title": {
-    "mk": "14 дена враќање · бесплатна замена",
-    "sq": "14 ditë kthim · ndërrim falas",
-    "en": "14-day returns · free exchange"
+    "mk": "14 дена враќање · замена на број",
+    "sq": "14 ditë kthim · ndërrim madhësie",
+    "en": "14-day returns · size exchange"
   },
   "trust.returns.body": {
-    "mk": "Пробај ги дома во цела Македонија. Замената е на наш трошок.",
-    "sq": "Provoji në shtëpi në të gjithë Maqedoninë. Ndërrimi është me shpenzimet tona.",
-    "en": "Try them at home anywhere in Macedonia. Exchanges are on us."
+    "mk": "Пробај ги дома во цела Македонија. Новиот број ти го испраќаме бесплатно.",
+    "sq": "Provoji në shtëpi në të gjithë Maqedoninë. Numrin e ri ta dërgojmë falas.",
+    "en": "Try them at home anywhere in Macedonia. We ship your new size free."
   },
   "search.empty": {
     "mk": "Нема резултати. Пробај поинаков збор.",

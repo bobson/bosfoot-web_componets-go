@@ -32,6 +32,10 @@ class CheckoutForm extends HTMLElement {
     this.currency = this.dataset.currency || 'MKD';
     this.showEur = this.dataset.showEur === '1';
     MKD_TO_EUR = parseFloat(this.dataset.eurRate) || MKD_TO_EUR;
+    // Flat delivery fee + free-shipping threshold (denars), injected from
+    // internal/site so the fee shown here matches what the server charges.
+    this.shippingFee = parseInt(this.dataset.shippingFee, 10) || 250;
+    this.freeShipping = parseInt(this.dataset.freeShipping, 10) || 3500;
     this.labelSize = this.dataset.labelSize || 'Size';
     this.labelPreorder = this.dataset.labelPreorder || 'Preorder';
     this.labelEmailSent = this.dataset.labelEmailSent || '';
@@ -46,6 +50,8 @@ class CheckoutForm extends HTMLElement {
     this.itemsEl = this.querySelector('[data-summary-items]');
     this.preorderEl = this.querySelector('[data-summary-preorder]');
     this.subtotalEl = this.querySelector('[data-summary-subtotal]');
+    this.shippingRowEl = this.querySelector('[data-summary-shipping-row]');
+    this.shippingEl = this.querySelector('[data-summary-shipping]');
     this.totalEl = this.querySelector('[data-summary-total]');
     this.errorEl = this.querySelector('[data-checkout-error]');
     this.submitBtn = this.querySelector('[data-checkout-submit]');
@@ -64,7 +70,11 @@ class CheckoutForm extends HTMLElement {
       );
     });
 
-    // Re-render if the cart changes in another tab while checkout is open.
+    // Keep the summary in sync when the cart changes elsewhere: cart:updated
+    // fires in THIS tab (e.g. removing an item from the nav cart drawer, which
+    // the `storage` event never reports for same-document changes); `storage`
+    // covers other tabs. Mirrors how cart-drawer.js listens to both.
+    window.addEventListener('cart:updated', () => this.renderSummary());
     window.addEventListener('storage', (e) => {
       if (e.key === CART_KEY) this.renderSummary();
     });
@@ -127,7 +137,20 @@ class CheckoutForm extends HTMLElement {
     if (this.preorderEl) this.preorderEl.hidden = !cart.some((i) => i.preorder);
     const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
     this.subtotalEl.textContent = this.price(subtotal);
-    this.totalEl.textContent = this.price(subtotal);
+
+    // Flat shipping fee, waived at/above the free-shipping threshold. The row is
+    // shown only when a fee applies; when free, it's hidden (no line). Mirrors
+    // site.ShippingFor on the server, which is what actually gets charged.
+    const shipping = subtotal >= this.freeShipping ? 0 : this.shippingFee;
+    if (this.shippingRowEl) {
+      if (shipping > 0) {
+        this.shippingEl.textContent = this.price(shipping);
+        this.shippingRowEl.hidden = false;
+      } else {
+        this.shippingRowEl.hidden = true;
+      }
+    }
+    this.totalEl.textContent = this.price(subtotal + shipping);
   }
 
   row(i) {

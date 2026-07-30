@@ -51,3 +51,23 @@ func FloorDenar(n int) int {
 func MKD(eur int) int {
 	return FloorDenar(int(math.Round(float64(eur) * MKDtoEUR)))
 }
+
+// ShippingMKD is the flat delivery fee in denars; FreeShippingMKD is the goods
+// subtotal at (or above) which delivery is free. Single source: injected into
+// the checkout via data attributes (data-shipping-fee / data-free-shipping) and
+// applied server-side in the order handler, so the fee shown equals the fee
+// charged. The drawer note and the shipping policy page state these same numbers
+// as prose — keep them in sync if the fee ever changes.
+const (
+	ShippingMKD     = 250
+	FreeShippingMKD = 3500
+)
+
+// ShippingFor returns the delivery fee for a goods subtotal (denars): free once
+// the subtotal reaches FreeShippingMKD, otherwise the flat ShippingMKD.
+func ShippingFor(subtotal int) int {
+	if subtotal >= FreeShippingMKD {
+		return 0
+	}
+	return ShippingMKD
+}

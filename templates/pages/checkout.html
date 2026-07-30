@@ -21,6 +21,8 @@
       data-currency="{{t .Locale "currency.MKD"}}"
       data-show-eur="{{if showEUR .Locale}}1{{end}}"
       data-eur-rate="{{eurRate}}"
+      data-shipping-fee="{{shippingFee}}"
+      data-free-shipping="{{freeShipping}}"
       data-label-size="{{t .Locale "cart.size"}}"
       data-label-email-sent="{{t .Locale "checkout.confirmEmailSent"}}"
       data-label-spam-note="{{t .Locale "checkout.confirmSpamNote"}}"
@@ -134,9 +136,11 @@
               <span>{{t .Locale "cart.subtotal"}}</span>
               <span data-summary-subtotal></span>
             </div>
-            <div class="checkout__row text-muted text-xs">
+            {{/* Shown by checkout-form.js only when the subtotal is below the
+                 free-shipping threshold; hidden (free) otherwise. */}}
+            <div class="checkout__row text-muted text-xs" data-summary-shipping-row hidden>
               <span>{{t .Locale "checkout.shippingLabel"}}</span>
-              <span>{{t .Locale "cart.shippingNote"}}</span>
+              <span data-summary-shipping></span>
             </div>
             <div class="checkout__row checkout__row--total font-semibold">
               <span>{{t .Locale "checkout.total"}}</span>

@@ -36,7 +36,8 @@ type Item struct {
 // Order is the data the notification email needs.
 type Order struct {
 	ID            int
-	Total         int // MKD
+	Total         int // MKD — grand total (goods + shipping)
+	Shipping      int // MKD — delivery fee; 0 when free. Goods subtotal = Total − Shipping.
 	PaymentMethod string
 	Name          string
 	Email         string
@@ -305,6 +306,10 @@ func buildMessage(from string, to []string, o Order) []byte {
 
 	line := func(format string, args ...any) { fmt.Fprintf(&b, format+"\r\n", args...) }
 	line("Order #%d", o.ID)
+	if o.Shipping > 0 {
+		line("Subtotal: %s MKD", mkd(o.Total-o.Shipping))
+		line("Shipping: %s MKD", mkd(o.Shipping))
+	}
 	line("Total: %s MKD", mkd(o.Total))
 	line("Payment: %s", paymentLabel(o.PaymentMethod))
 	line("")
@@ -348,6 +353,8 @@ func buildCustomerMessage(from, replyTo string, o Order) []byte {
 		thanks  string
 		details string
 		ordNum  string
+		subtotL string
+		shipL   string
 		totalL  string
 		paymntL string
 		shipAdd string
@@ -366,6 +373,8 @@ func buildCustomerMessage(from, replyTo string, o Order) []byte {
 		thanks = "Ви благодариме за вашата нарачка во Bosfoot! Ја примивме и ќе ве контактираме за да ја потврдиме. Плаќате при испорака."
 		details = "Детали за нарачката"
 		ordNum = "Број на нарачка:"
+		subtotL = "Меѓузбир:"
+		shipL = "Достава:"
 		totalL = "Вкупно:"
 		paymntL = "Начин на плаќање:"
 		shipAdd = "Адреса за испорака:"
@@ -379,6 +388,8 @@ func buildCustomerMessage(from, replyTo string, o Order) []byte {
 		thanks = "Faleminderit për porosinë tuaj në Bosfoot! E morëm dhe do t'ju kontaktojmë për ta konfirmuar. Paguani me dorëzim."
 		details = "Detajet e porosisë"
 		ordNum = "Numri i porosisë:"
+		subtotL = "Nëntotali:"
+		shipL = "Dërgesa:"
 		totalL = "Total:"
 		paymntL = "Metoda e pagesës:"
 		shipAdd = "Adresa e dërgesës:"
@@ -392,6 +403,8 @@ func buildCustomerMessage(from, replyTo string, o Order) []byte {
 		thanks = "Thank you for your order at Bosfoot! We've received it and will contact you to confirm. You pay on delivery."
 		details = "Order Details"
 		ordNum = "Order Number:"
+		subtotL = "Subtotal:"
+		shipL = "Shipping:"
 		totalL = "Total:"
 		paymntL = "Payment:"
 		shipAdd = "Shipping Address:"
@@ -419,6 +432,10 @@ func buildCustomerMessage(from, replyTo string, o Order) []byte {
 	line(details)
 	line(strings.Repeat("-", len(details)))
 	line("%-15s #%d", ordNum, o.ID)
+	if o.Shipping > 0 {
+		line("%-15s %s MKD", subtotL, mkd(o.Total-o.Shipping))
+		line("%-15s %s MKD", shipL, mkd(o.Shipping))
+	}
 	line("%-15s %s MKD", totalL, mkd(o.Total))
 	line("%-15s %s", paymntL, paymentLabelLoc(o.PaymentMethod, o.Locale))
 	line("")

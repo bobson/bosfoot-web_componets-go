@@ -55,9 +55,9 @@
     "en": "Shoes that adapt to the foot. Not the other way around."
   },
   "home.hero.lead": {
-    "mk": "Барефут чевли обликувани за вистински стапала — широк простор за прстите, рамен ѓон, флексибилен ѓон. Плаќање при испорака, бесплатно враќање во цела Македонија.",
-    "sq": "Këpucë barefoot të formuara për këmbë të vërteta — hapësirë e gjerë për gishtat, zero drop, shollë fleksibël. Pagesë me dorëzim, kthim falas në të gjithë Maqedoninë.",
-    "en": "Barefoot shoes shaped for real feet — wide toe box, zero drop, flexible sole. Pay on delivery, free returns across Macedonia."
+    "mk": "Барефут чевли обликувани за вистински стапала — широк простор за прстите, рамен ѓон, флексибилен ѓон. Плаќање при испорака, лесна замена на број во цела Македонија.",
+    "sq": "Këpucë barefoot të formuara për këmbë të vërteta — hapësirë e gjerë për gishtat, zero drop, shollë fleksibël. Pagesë me dorëzim, ndërrim madhësie i lehtë në të gjithë Maqedoninë.",
+    "en": "Barefoot shoes shaped for real feet — wide toe box, zero drop, flexible sole. Pay on delivery, easy size exchange across Macedonia."
   },
   "home.hero.line1": {
     "mk": "Премиум боси чевли во Македонија",
@@ -251,14 +251,14 @@
     "en": "Personal sizing advice"
   },
   "home.whyUs.3.body": {
-    "mk": "Брза испорака низ Балканот. Враќање без покривање, без прашања.",
-    "sq": "Dërgim i shpejtë nëpër Ballkan. Kthim pa pagesë, pa pyetje.",
-    "en": "Fast shipping across the Balkans. Free returns, no questions asked."
+    "mk": "Брза испорака низ цела Македонија. Лесно враќање и замена на број.",
+    "sq": "Dërgim i shpejtë në të gjithë Maqedoninë. Kthim i lehtë dhe ndërrim madhësie.",
+    "en": "Fast shipping across Macedonia. Easy returns and size exchange."
   },
   "home.whyUs.3.title": {
-    "mk": "Регионална испорака",
-    "sq": "Dërgesa rajonale",
-    "en": "Regional delivery"
+    "mk": "Испорака низ Македонија",
+    "sq": "Dërgesa në Maqedoni",
+    "en": "Delivery across Macedonia"
   },
   "home.whyUs.checkUs": {
     "mk": "Дознај повеќе за нас",

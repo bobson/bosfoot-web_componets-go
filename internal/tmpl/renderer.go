@@ -74,6 +74,12 @@ func NewRenderer(dir string, ui *locale.UI) (*Renderer, error) {
 		// from a data attribute, so the rate lives only in internal/site.
 		"eurRate": site.EURRateString,
 
+		// shippingFee / freeShipping expose the flat delivery fee and the
+		// free-shipping threshold (denars) for the checkout JS to read from data
+		// attributes, so the numbers live only in internal/site.
+		"shippingFee":  func() int { return site.ShippingMKD },
+		"freeShipping": func() int { return site.FreeShippingMKD },
+
 		// pixelID emits the Meta Pixel ID (empty unless META_PIXEL_ID is set); the
 		// head partial only renders the pixel when it's non-empty.
 		"pixelID": site.MetaPixelID,
