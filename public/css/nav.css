@@ -424,3 +424,42 @@ body.nav-open .nav__overlay {
     gap: var(--space-1);
   }
 }
+
+/* "New" pill on nav links (foot-health). Amber from the palette with dark text —
+   pops against the cream header without reading as a sale/alert.
+   Base = mobile drawer: float right so it sticks to the TOP-RIGHT of the link
+   row and stays on the first line even if the label wraps to two lines (floats
+   rise to the top). Desktop overrides this to a superscript corner tag below. */
+.nav__badge {
+  float: right;
+  margin-left: var(--space-2);
+  padding: 0.1em 0.5em;
+  border-radius: var(--radius-full);
+  background: var(--color-star);
+  color: var(--color-text);
+  font-size: var(--fs-2xs);
+  font-weight: var(--fw-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  line-height: 1.5;
+}
+
+/* Desktop menu: hang the pill in the top-right CORNER of the link text, like a
+   superscript tag, instead of inline. Positioned off the text span so it clings
+   to the end of the word; absolute so it adds no width to the horizontal menu.
+   (.nav__desktop-links is hidden on mobile, so this only applies on desktop.) */
+.nav__desktop-links .nav__label {
+  position: relative;
+}
+.nav__desktop-links .nav__badge {
+  float: none;
+  position: absolute;
+  /* Sit ABOVE the text, nudged slightly right — anchored by the right edge so
+     the pill grows leftward over the word instead of rightward into "About". */
+  left: auto;
+  right: -0.5em;
+  top: auto;
+  bottom: 100%;
+  margin-bottom: -0.3em;
+  padding: 0.05em 0.4em;
+}

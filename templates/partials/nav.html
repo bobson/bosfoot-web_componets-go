@@ -20,7 +20,7 @@
       <li><a href="/{{.Locale}}/products" {{if eq .CurrentPath "/products"}}class="nav__link--active" aria-current="page"{{end}}>{{t .Locale "nav.products"}}</a></li>
       <li><a href="/{{.Locale}}/brands"   {{if eq .CurrentPath "/brands"}}class="nav__link--active" aria-current="page"{{end}}>{{t .Locale "nav.brands"}}</a></li>
       <li><a href="/{{.Locale}}/size-guide" {{if eq .CurrentPath "/size-guide"}}class="nav__link--active" aria-current="page"{{end}}>{{t .Locale "nav.sizeGuide"}}</a></li>
-      <li><a href="/{{.Locale}}/foot-health" {{if eq .CurrentPath "/foot-health"}}class="nav__link--active" aria-current="page"{{end}}>{{t .Locale "nav.newToBarefoot"}}</a></li>
+      <li><a href="/{{.Locale}}/foot-health" {{if eq .CurrentPath "/foot-health"}}class="nav__link--active" aria-current="page"{{end}}><span class="nav__label"><span class="nav__badge">{{t .Locale "nav.badgeNew"}}</span>{{t .Locale "nav.newToBarefoot"}}</span></a></li>
       <li><a href="/{{.Locale}}/about" {{if eq .CurrentPath "/about"}}class="nav__link--active" aria-current="page"{{end}}>{{t .Locale "nav.about"}}</a></li>
       <li><a href="/{{.Locale}}/contact" {{if eq .CurrentPath "/contact"}}class="nav__link--active" aria-current="page"{{end}}>{{t .Locale "nav.contact"}}</a></li>
     </ul>
@@ -115,7 +115,7 @@
       <li><a href="/{{.Locale}}/products">{{t .Locale "nav.products"}}</a></li>
       <li><a href="/{{.Locale}}/brands">{{t .Locale "nav.brands"}}</a></li>
       <li><a href="/{{.Locale}}/size-guide">{{t .Locale "nav.sizeGuide"}}</a></li>
-      <li><a href="/{{.Locale}}/foot-health">{{t .Locale "nav.newToBarefoot"}}</a></li>
+      <li><a href="/{{.Locale}}/foot-health"><span class="nav__label"><span class="nav__badge">{{t .Locale "nav.badgeNew"}}</span>{{t .Locale "nav.newToBarefoot"}}</span></a></li>
       <li><a href="/{{.Locale}}/about">{{t .Locale "nav.about"}}</a></li>
       <li><a href="/{{.Locale}}/contact">{{t .Locale "nav.contact"}}</a></li>
     </ul>
