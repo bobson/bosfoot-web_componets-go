@@ -143,10 +143,33 @@ class FootFinder extends HTMLElement {
       this.corners = [];
       this.footPts = [];
       this.H = null;
-      this.phase = 'corners';
       this.setupCanvas();
+      // Try to auto-detect the reference (A4 sheet or bank card) + foot so the
+      // user only verifies. On success we jump straight to the review step
+      // (phase 'auto'); otherwise fall back to manual corner tapping.
+      let auto = null;
+      try {
+        auto = this.autoDetect(im);
+      } catch (err) {
+        // Log so a genuine bug is distinguishable from "nothing detected"
+        // (both otherwise fall back silently to manual corner-tapping).
+        console.error('foot-finder: auto-detect failed', err);
+        auto = null;
+      }
+      if (auto) {
+        this.corners = auto.corners;
+        this.footPts = auto.foot;
+        this.H = this.computeHomography(this.sortCorners(this.corners));
+        this.phase = this.H ? 'auto' : 'corners';
+        if (!this.H) {
+          this.corners = [];
+          this.footPts = [];
+        }
+      } else {
+        this.phase = 'corners';
+      }
       this.updateMarkUI();
-      this.showStep(2);
+      this.showStep(this.phase === 'auto' ? 3 : 2);
       this.draw();
       URL.revokeObjectURL(url);
     };
@@ -155,7 +178,14 @@ class FootFinder extends HTMLElement {
   }
 
   onUndo() {
-    if (this.phase === 'corners' && this.corners.length) this.corners.pop();
+    // From the auto-detected review, "undo" drops back to manual corner tapping.
+    if (this.phase === 'auto') {
+      this.phase = 'corners';
+      this.corners = [];
+      this.footPts = [];
+      this.H = null;
+      this.showStep(2);
+    } else if (this.phase === 'corners' && this.corners.length) this.corners.pop();
     else if (this.phase === 'foot' && this.footPts.length) this.footPts.pop();
     else if (this.phase === 'foot') this.phase = 'corners';
     this.updateMarkUI();
@@ -163,6 +193,13 @@ class FootFinder extends HTMLElement {
   }
 
   onNext() {
+    if (this.phase === 'auto') {
+      // Corners may have been nudged; recompute before measuring.
+      const nh = this.computeHomography(this.sortCorners(this.corners));
+      if (nh) this.H = nh;
+      this.finish();
+      return;
+    }
     if (this.phase === 'corners' && this.corners.length === 4) {
       this.H = this.computeHomography(this.sortCorners(this.corners));
       if (!this.H) {
@@ -191,6 +228,15 @@ class FootFinder extends HTMLElement {
   updateMarkUI() {
     const hint = this.q('#ff-hint span:last-child');
     const dot = this.q('#ff-hint .dot');
+    if (this.phase === 'auto') {
+      this.q('#ff-markTitle').textContent = this.t('mark.autoTitle');
+      hint.textContent = this.t('mark.autoHint');
+      dot.style.background = '#4FA46A';
+      this.q('#ff-btnNext').disabled = false;
+      this.q('#ff-btnNext').textContent = this.t('btn.showSize');
+      this.updateLive();
+      return;
+    }
     if (this.phase === 'corners') {
       this.q('#ff-markTitle').textContent = this.t('mark.cornersTitle', { ref: this.refName() });
       let msg = this.t('mark.cornersHint', { ref: this.refName(), n: this.corners.length });
@@ -249,6 +295,21 @@ class FootFinder extends HTMLElement {
     if (!this.img) return;
     e.preventDefault();
     const p = this.evtToImg(e);
+    // Auto-review: only drag existing dots (foot first, then corners); no adding.
+    if (this.phase === 'auto') {
+      let idx = this.nearPoint(p, this.footPts);
+      if (idx >= 0) {
+        this.dragIdx = idx;
+        this.dragSet = this.footPts;
+        return;
+      }
+      idx = this.nearPoint(p, this.corners);
+      if (idx >= 0) {
+        this.dragIdx = idx;
+        this.dragSet = this.corners;
+      }
+      return;
+    }
     const list = this.phase === 'corners' ? this.corners : this.footPts;
     const idx = this.nearPoint(p, list);
     if (idx >= 0) {
@@ -269,10 +330,17 @@ class FootFinder extends HTMLElement {
     if (this.dragIdx < 0) return;
     e.preventDefault();
     this.dragSet[this.dragIdx] = this.evtToImg(e);
-    if (this.phase === 'foot') this.updateLive();
+    if (this.phase === 'foot' || this.phase === 'auto') this.updateLive();
     this.draw();
   }
   pointerUp() {
+    // If a corner was nudged in the auto review, refresh the homography so the
+    // live length + result reflect the correction.
+    if (this.phase === 'auto' && this.dragSet === this.corners && this.corners.length === 4) {
+      const nh = this.computeHomography(this.sortCorners(this.corners));
+      if (nh) this.H = nh;
+      this.updateLive();
+    }
     this.dragIdx = -1;
     this.dragSet = null;
     this.updateMarkUI();
@@ -294,7 +362,7 @@ class FootFinder extends HTMLElement {
       ctx.stroke();
     }
     this.corners.forEach((c, i) => this.dot(c, '#E8B330', i + 1));
-    if (this.phase === 'foot') {
+    if (this.phase === 'foot' || this.phase === 'auto') {
       if (this.footPts.length === 2) {
         ctx.beginPath();
         ctx.moveTo(this.footPts[0].x, this.footPts[0].y);
@@ -401,6 +469,319 @@ class FootFinder extends HTMLElement {
     const p1 = this.toMM(this.footPts[0]);
     const p2 = this.toMM(this.footPts[1]);
     return Math.hypot(p2.x - p1.x, p2.y - p1.y);
+  }
+
+  // ---------- automatic detection (A4 mode) ----------
+  // Otsu-threshold a 320px thumbnail into bright paper vs. dark floor; take the
+  // largest bright blob as the sheet (corners = diagonal extremes), the largest
+  // dark blob inside it as the foot, and its PCA principal axis for heel/toe.
+  // Points are returned in CANVAS space (not original-image space) since that's
+  // where the rest of the component's coordinates live.
+  autoDetect(image) {
+    const W = 320;
+    const sc = W / image.width;
+    const Hh = Math.round(image.height * sc);
+    const oc = document.createElement('canvas');
+    oc.width = W;
+    oc.height = Hh;
+    const octx = oc.getContext('2d');
+    octx.drawImage(image, 0, 0, W, Hh);
+    const d = octx.getImageData(0, 0, W, Hh).data;
+    const n = W * Hh;
+    const lum = new Uint8Array(n);
+    const hist = new Array(256).fill(0);
+    for (let i = 0; i < n; i++) {
+      const l = (d[i * 4] * 0.299 + d[i * 4 + 1] * 0.587 + d[i * 4 + 2] * 0.114) | 0;
+      lum[i] = l;
+      hist[l]++;
+    }
+    // Otsu threshold between bright paper and darker floor.
+    let sum = 0;
+    for (let i = 0; i < 256; i++) sum += i * hist[i];
+    let sumB = 0;
+    let wB = 0;
+    let best = 0;
+    let thr = 128;
+    for (let t = 0; t < 256; t++) {
+      wB += hist[t];
+      if (!wB) continue;
+      const wF = n - wB;
+      if (!wF) break;
+      sumB += t * hist[t];
+      const mB = sumB / wB;
+      const mF = (sum - sumB) / wF;
+      const v = wB * wF * (mB - mF) * (mB - mF);
+      if (v > best) {
+        best = v;
+        thr = t;
+      }
+    }
+    const bright = (i) => lum[i] > thr;
+    const dark = (i) => !bright(i);
+    // Map detection thumbnail (W×Hh) → display canvas space (where all coords live).
+    const up = (pt) => ({
+      x: (pt[0] * this.canvas.width) / W,
+      y: (pt[1] * this.canvas.height) / Hh,
+    });
+
+    // Card mode needs a different detector (a small rotated rectangle beside the foot).
+    if (this.refType === 'card') return this.detectCard(bright, dark, W, Hh, n, up);
+
+    // A4: the sheet is the largest bright blob; the foot is the largest dark
+    // blob inside it.
+    const paper = this.largestComp(bright, W, Hh);
+    if (!paper || paper.length < n * 0.04) return null;
+    const quad = this.cornersFromComp(paper, W);
+    const inQuad = (x, y) => this.pointInPoly(x, y, quad);
+    const darkInside = (i) => dark(i) && inQuad(i % W, (i / W) | 0);
+    const foot = this.largestComp(darkInside, W, Hh);
+    if (!foot || foot.length < n * 0.008) return null;
+    const fe = this.footExtremes(foot, W);
+    return { corners: quad.map(up), foot: [up(fe.heel), up(fe.toe)] };
+  }
+
+  // Card mode: the reference is a small rectangle (aspect ~1.586) and the foot
+  // is a separate elongated blob beside it — far harder than the A4 sheet. We
+  // validate aspect + rectangularity hard and return null (→ manual tapping)
+  // whenever unsure; the "check the dots" confirm then catches anything shaky.
+  detectCard(bright, dark, W, Hh, n, up) {
+    const CARD_ASPECT = 85.6 / 53.98; // ISO/IEC 7810 ID-1 ≈ 1.586
+    const minArea = n * 0.004;
+    // The card may be lighter OR darker than the floor, so consider both masks.
+    const comps = this.componentsOf(bright, W, Hh, minArea).concat(
+      this.componentsOf(dark, W, Hh, minArea),
+    );
+
+    // Card = the small blob whose quad is most rectangular and closest to the
+    // card's aspect ratio.
+    let card = null;
+    let cardQuad = null;
+    let cardScore = -1e9;
+    for (const c of comps) {
+      if (c.length > n * 0.2) continue; // a card is small; skip the floor/large blobs
+      const q = this.cornersFromComp(c, W);
+      const wEdge =
+        (Math.hypot(q[1][0] - q[0][0], q[1][1] - q[0][1]) +
+          Math.hypot(q[2][0] - q[3][0], q[2][1] - q[3][1])) /
+        2;
+      const hEdge =
+        (Math.hypot(q[3][0] - q[0][0], q[3][1] - q[0][1]) +
+          Math.hypot(q[2][0] - q[1][0], q[2][1] - q[1][1])) /
+        2;
+      if (wEdge < 6 || hEdge < 6) continue;
+      const aspect = Math.max(wEdge, hEdge) / Math.min(wEdge, hEdge);
+      const rect = c.length / Math.max(1, this.quadArea(q)); // ~1 when the blob fills its quad
+      if (aspect < 1.35 || aspect > 1.85 || rect < 0.8) continue;
+      const score = rect - Math.abs(aspect - CARD_ASPECT);
+      if (score > cardScore) {
+        cardScore = score;
+        card = c;
+        cardQuad = q;
+      }
+    }
+    if (!card) return null;
+
+    // Foot = the most elongated large blob that isn't the card.
+    const cx = cardQuad.reduce((s, p) => s + p[0], 0) / 4;
+    const cy = cardQuad.reduce((s, p) => s + p[1], 0) / 4;
+    let footFE = null;
+    let bestElong = 2; // feet are clearly elongated
+    for (const c of comps) {
+      if (c === card || c.length < n * 0.008) continue;
+      const fe = this.footExtremes(c, W);
+      if (Math.hypot(fe.mx - cx, fe.my - cy) < 8) continue; // same region as the card
+      if (fe.elong > bestElong) {
+        bestElong = fe.elong;
+        footFE = fe;
+      }
+    }
+    if (!footFE) return null;
+
+    return { corners: cardQuad.map(up), foot: [up(footFE.heel), up(footFE.toe)] };
+  }
+
+  // Four corners of a blob via diagonal extremes (handles rotated quads).
+  cornersFromComp(comp, W) {
+    let tl = null;
+    let tr = null;
+    let br = null;
+    let bl = null;
+    let vTL = 1e9;
+    let vTR = -1e9;
+    let vBR = -1e9;
+    let vBL = 1e9;
+    for (const i of comp) {
+      const x = i % W;
+      const y = (i / W) | 0;
+      const s = x + y;
+      const df = x - y;
+      if (s < vTL) {
+        vTL = s;
+        tl = [x, y];
+      }
+      if (s > vBR) {
+        vBR = s;
+        br = [x, y];
+      }
+      if (df > vTR) {
+        vTR = df;
+        tr = [x, y];
+      }
+      if (df < vBL) {
+        vBL = df;
+        bl = [x, y];
+      }
+    }
+    return [tl, tr, br, bl];
+  }
+
+  // Heel/toe of a foot blob via its PCA principal axis; also returns the centroid
+  // and elongation (major/minor axis ratio) used to tell a foot from a card/floor.
+  footExtremes(comp, W) {
+    let mx = 0;
+    let my = 0;
+    for (const i of comp) {
+      mx += i % W;
+      my += (i / W) | 0;
+    }
+    mx /= comp.length;
+    my /= comp.length;
+    let sxx = 0;
+    let sxy = 0;
+    let syy = 0;
+    for (const i of comp) {
+      const dx = (i % W) - mx;
+      const dy = ((i / W) | 0) - my;
+      sxx += dx * dx;
+      sxy += dx * dy;
+      syy += dy * dy;
+    }
+    const tr2 = (sxx + syy) / 2;
+    const disc = Math.sqrt(Math.max(0, tr2 * tr2 - (sxx * syy - sxy * sxy)));
+    const l1 = tr2 + disc;
+    const l2 = Math.max(1, tr2 - disc);
+    let ax = sxy;
+    let ay = l1 - sxx;
+    if (Math.abs(ax) < 1e-6 && Math.abs(ay) < 1e-6) {
+      ax = 1;
+      ay = 0;
+    }
+    const alen = Math.hypot(ax, ay);
+    ax /= alen;
+    ay /= alen;
+    let pMin = 1e18;
+    let pMax = -1e18;
+    let heel = null;
+    let toe = null;
+    for (const i of comp) {
+      const x = i % W;
+      const y = (i / W) | 0;
+      const proj = (x - mx) * ax + (y - my) * ay;
+      if (proj < pMin) {
+        pMin = proj;
+        heel = [x, y];
+      }
+      if (proj > pMax) {
+        pMax = proj;
+        toe = [x, y];
+      }
+    }
+    return { mx, my, heel, toe, elong: Math.sqrt(l1 / l2) };
+  }
+
+  // Shoelace area of a quad.
+  quadArea(q) {
+    let a = 0;
+    for (let i = 0, j = q.length - 1; i < q.length; j = i++) {
+      a += (q[j][0] + q[i][0]) * (q[j][1] - q[i][1]);
+    }
+    return Math.abs(a) / 2;
+  }
+
+  // All 4-connected components passing `test` with area >= minArea.
+  componentsOf(test, W, Hh, minArea) {
+    const n = W * Hh;
+    const seen = new Uint8Array(n);
+    const out = [];
+    for (let s = 0; s < n; s++) {
+      if (seen[s] || !test(s)) continue;
+      const stack = [s];
+      const arr = [];
+      seen[s] = 1;
+      while (stack.length) {
+        const i = stack.pop();
+        arr.push(i);
+        const x = i % W;
+        const y = (i / W) | 0;
+        if (x > 0 && !seen[i - 1] && test(i - 1)) {
+          seen[i - 1] = 1;
+          stack.push(i - 1);
+        }
+        if (x < W - 1 && !seen[i + 1] && test(i + 1)) {
+          seen[i + 1] = 1;
+          stack.push(i + 1);
+        }
+        if (y > 0 && !seen[i - W] && test(i - W)) {
+          seen[i - W] = 1;
+          stack.push(i - W);
+        }
+        if (y < Hh - 1 && !seen[i + W] && test(i + W)) {
+          seen[i + W] = 1;
+          stack.push(i + W);
+        }
+      }
+      if (arr.length >= minArea) out.push(arr);
+    }
+    return out;
+  }
+
+  // Largest 4-connected component of pixels passing `test`, as a flat index array.
+  largestComp(test, W, Hh) {
+    const n = W * Hh;
+    const seen = new Uint8Array(n);
+    let bestArr = null;
+    for (let s = 0; s < n; s += 3) {
+      if (seen[s] || !test(s)) continue;
+      const stack = [s];
+      const arr = [];
+      seen[s] = 1;
+      while (stack.length) {
+        const i = stack.pop();
+        arr.push(i);
+        const x = i % W;
+        const y = (i / W) | 0;
+        if (x > 0 && !seen[i - 1] && test(i - 1)) {
+          seen[i - 1] = 1;
+          stack.push(i - 1);
+        }
+        if (x < W - 1 && !seen[i + 1] && test(i + 1)) {
+          seen[i + 1] = 1;
+          stack.push(i + 1);
+        }
+        if (y > 0 && !seen[i - W] && test(i - W)) {
+          seen[i - W] = 1;
+          stack.push(i - W);
+        }
+        if (y < Hh - 1 && !seen[i + W] && test(i + W)) {
+          seen[i + W] = 1;
+          stack.push(i + W);
+        }
+      }
+      if (!bestArr || arr.length > bestArr.length) bestArr = arr;
+    }
+    return bestArr;
+  }
+
+  pointInPoly(x, y, poly) {
+    let inside = false;
+    for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
+      const xi = poly[i][0];
+      const yi = poly[i][1];
+      const xj = poly[j][0];
+      const yj = poly[j][1];
+      if (yi > y !== yj > y && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi) inside = !inside;
+    }
+    return inside;
   }
 
   updateLive() {
