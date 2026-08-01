@@ -59,6 +59,8 @@ func main() {
 		siteURL = "http://localhost:8080"
 	}
 
+	assistantHandler := &handlers.AssistantHandler{Logger: logInstance, SiteURL: siteURL}
+
 	pageHandler := &handlers.PageHandler{
 		DB:       db,
 		Logger:   logInstance,
@@ -70,7 +72,7 @@ func main() {
 	pc := cache.New(60 * time.Second)
 
 	// Register all routes
-	routes.Register(productHandler, orderHandler, pageHandler, trackHandler, reviewHandler, pc)
+	routes.Register(productHandler, orderHandler, pageHandler, trackHandler, reviewHandler, assistantHandler, pc)
 
 	port := os.Getenv("PORT")
 	if port == "" {

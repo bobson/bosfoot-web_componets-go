@@ -1,0 +1,55 @@
+{{define "faq"}}
+<!doctype html>
+<html lang="{{.Locale}}">
+<head>
+  {{template "head" .}}
+  <link rel="stylesheet" href="{{asset "/css/faq.css"}}">
+  <title>{{t .Locale "faq.title"}} — Bosfoot</title>
+  <script type="application/ld+json">{{faqSchema .Locale}}</script>
+</head>
+<body>
+  {{template "nav" .}}
+
+  <main class="faq-main">
+    <header class="section section--hero faq-hero">
+      <div class="container faq-hero__inner">
+        <p class="label-caps text-accent" data-reveal>Bosfoot</p>
+        <h1 class="faq-hero__title" data-reveal>{{t .Locale "faq.title"}}</h1>
+        <p class="faq-hero__lead text-muted" data-reveal>{{t .Locale "faq.lead"}}</p>
+      </div>
+    </header>
+
+    <section class="section container faq-list">
+      {{range faq .Locale}}
+      <details class="faq-item" data-reveal>
+        <summary class="faq-item__q">
+          <span>{{.Q}}</span>
+          <svg class="faq-item__chevron" width="18" height="18" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polyline points="6 9 12 15 18 9"/>
+          </svg>
+        </summary>
+        <div class="faq-item__a">
+          <p>{{.A}}</p>
+          {{if .Link}}<a class="btn btn--brand faq-item__cta" href="{{.Link}}">{{.LinkLabel}}</a>{{end}}
+        </div>
+      </details>
+      {{end}}
+    </section>
+
+    <section class="section section--deep faq-help">
+      <div class="container faq-help__inner" data-reveal>
+        <h2 class="faq-help__title">{{t .Locale "faq.help.title"}}</h2>
+        <p>{{t .Locale "faq.help.body"}}</p>
+        <div class="faq-help__links">
+          <a class="faq-help__link" href="mailto:{{(contact).Email}}">{{(contact).Email}}</a>
+          <a class="faq-help__link" href="{{(contact).PhoneHref}}">{{(contact).Phone}}</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  {{template "footer" .}}
+</body>
+</html>
+{{end}}

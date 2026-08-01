@@ -31,6 +31,7 @@ const components = [
   ['./components/foot-finder.js', 'initFootFinder'],
   ['./components/scroll-reveal.js', 'initScrollReveal'],
   ['./components/prefs-ui.js', 'initPrefsUI'],
+  ['./components/assistant.js', 'initAssistant'],
 ];
 
 // Cache-bust component imports with app.js's own asset version (its ?v=hash).

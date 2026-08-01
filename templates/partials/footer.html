@@ -97,6 +97,7 @@
           <li>
             <a href="/{{.Locale}}/contact">{{t .Locale "nav.contact"}}</a>
           </li>
+          <li><a href="/{{.Locale}}/faq">{{t .Locale "nav.faq"}}</a></li>
           <li>
             <a href="/{{.Locale}}/shipping">{{t .Locale "nav.shipping"}}</a>
           </li>
@@ -120,4 +121,5 @@
     </div>
   </div>
 </footer>
+{{template "assistant" .}}
 {{end}}

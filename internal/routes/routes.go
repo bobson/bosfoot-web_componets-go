@@ -15,6 +15,7 @@ func Register(
 	pageHandler *handlers.PageHandler,
 	trackHandler *handlers.TrackHandler,
 	reviewHandler *handlers.ReviewHandler,
+	assistantHandler *handlers.AssistantHandler,
 	pc *cache.Cache,
 ) {
 	// API handlers (JSON, CSR)
@@ -31,6 +32,10 @@ func Register(
 	// Not CSRF-wrapped: it changes no state — it only appends to the log.
 	http.HandleFunc("/api/track", trackHandler.Track)
 
+	// FAQ assistant free-text answers (Claude-backed, gated on ANTHROPIC_API_KEY).
+	// Not CSRF-wrapped: rate-limited instead — see AssistantHandler for why.
+	http.HandleFunc("/api/assistant", assistantHandler.Answer)
+
 	// Page handlers (HTML, SSR)
 	for _, loc := range []string{"mk", "sq", "en"} {
 		http.HandleFunc("/"+loc, pc.Wrap(pageHandler.Home))
@@ -40,6 +45,7 @@ func Register(
 	http.HandleFunc("/{locale}/brands", pc.Wrap(pageHandler.Brands))
 	http.HandleFunc("/{locale}/size-guide", pc.Wrap(pageHandler.SizeGuide))
 	http.HandleFunc("/{locale}/size-finder", pc.Wrap(pageHandler.SizeFinder))
+	http.HandleFunc("/{locale}/faq", pc.Wrap(pageHandler.FAQ))
 	http.HandleFunc("/{locale}/about", pc.Wrap(pageHandler.About))
 	http.HandleFunc("/{locale}/contact", pc.Wrap(pageHandler.Contact))
 	http.HandleFunc("/{locale}/checkout", middleware.WithCSRFCookie(pc.Wrap(pageHandler.Checkout)))

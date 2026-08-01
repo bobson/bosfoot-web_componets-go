@@ -637,6 +637,22 @@ func (h *PageHandler) SizeFinder(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
+// FAQ renders the frequently-asked-questions page. Content comes from the shared
+// internal/faq source via the `faq`/`faqSchema` template funcs.
+func (h *PageHandler) FAQ(w http.ResponseWriter, r *http.Request) {
+	if !locale.IsValid(r.PathValue("locale")) {
+		http.Redirect(w, r, "/"+locale.Default+"/faq", http.StatusFound)
+		return
+	}
+	loc := locale.FromPath(r.PathValue("locale"))
+	h.Renderer.Render(w, "faq", PageBase{
+		Locale:          loc,
+		CurrentPath:     "/faq",
+		SiteURL:         h.baseURL(r),
+		MetaDescription: h.UI.T(loc, "faq.lead"),
+	})
+}
+
 // About handles GET /{locale}/about. Static page — no DB queries.
 func (h *PageHandler) About(w http.ResponseWriter, r *http.Request) {
 	if !locale.IsValid(r.PathValue("locale")) {

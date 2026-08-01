@@ -17,6 +17,13 @@ func MetaPixelID() string {
 	return strings.TrimSpace(os.Getenv("META_PIXEL_ID"))
 }
 
+// AssistantEnabled reports whether the Claude-backed free-text answering is
+// configured (ANTHROPIC_API_KEY set). When false, the assistant widget still
+// works but shows only the canned quick-questions — no text box, no API calls.
+func AssistantEnabled() bool {
+	return strings.TrimSpace(os.Getenv("ANTHROPIC_API_KEY")) != ""
+}
+
 // PreorderAll forces the entire catalogue into preorder mode for the pre-launch
 // phase: every product is shown and behaves as "preorder" — orderable without a
 // size, with no inventory decrement — regardless of real stock. This is the

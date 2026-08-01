@@ -1,0 +1,98 @@
+{{define "assistant"}}
+{{/* Floating FAQ assistant. Static chrome is server-rendered (crawlable, works
+     without JS as a set of expandable questions); components/assistant.js adds
+     behaviour. Quick questions give instant canned answers from internal/faq —
+     no API call. The free-text box is rendered only when assistantEnabled
+     (ANTHROPIC_API_KEY set); it POSTs to /api/assistant. */}}
+<div
+  id="assistant"
+  class="assistant"
+  data-locale="{{.Locale}}"
+  data-enabled="{{if assistantEnabled}}1{{end}}"
+  data-endpoint="/api/assistant"
+  data-msg-thinking="{{t .Locale "assistant.thinking"}}"
+  data-msg-error="{{t .Locale "assistant.error"}}"
+>
+  <button
+    type="button"
+    class="assistant__launcher"
+    id="assistant-launcher"
+    aria-expanded="false"
+    aria-controls="assistant-panel"
+    aria-label="{{t .Locale "assistant.open"}}"
+  >
+    <svg class="assistant__launcher-icon" width="24" height="24" viewBox="0 0 24 24" fill="none"
+         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+    </svg>
+  </button>
+
+  <section
+    class="assistant__panel"
+    id="assistant-panel"
+    role="dialog"
+    aria-label="{{t .Locale "assistant.title"}}"
+    aria-hidden="true"
+    inert
+  >
+    <header class="assistant__head">
+      <div class="assistant__head-text">
+        <p class="assistant__title">{{t .Locale "assistant.title"}}</p>
+        <p class="assistant__subtitle">{{t .Locale "assistant.subtitle"}}</p>
+      </div>
+      <button type="button" class="assistant__close" id="assistant-close"
+              aria-label="{{t .Locale "assistant.close"}}">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </header>
+
+    <div class="assistant__body">
+      {{/* Free-text replies are appended here as accordion items by assistant.js. */}}
+      <div class="assistant__replies" id="assistant-log" aria-live="polite"></div>
+
+      <p class="assistant__quick-title">{{t .Locale "assistant.quickTitle"}}</p>
+      <div class="assistant__accordion">
+        {{range faq .Locale}}
+        <details class="assistant__item">
+          <summary class="assistant__q">
+            <span>{{.Q}}</span>
+            <svg class="assistant__chevron" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="6 9 12 15 18 9"/>
+            </svg>
+          </summary>
+          <div class="assistant__a">
+            <p>{{.A}}</p>
+            {{if .Link}}<a class="assistant__cta btn btn--brand" href="{{.Link}}">{{.LinkLabel}}</a>{{end}}
+          </div>
+        </details>
+        {{end}}
+      </div>
+    </div>
+
+    {{if assistantEnabled}}
+    <form class="assistant__form" id="assistant-form">
+      <input
+        class="assistant__input"
+        id="assistant-input"
+        type="text"
+        autocomplete="off"
+        maxlength="500"
+        placeholder="{{t .Locale "assistant.inputPlaceholder"}}"
+        aria-label="{{t .Locale "assistant.inputPlaceholder"}}"
+      >
+      <button class="assistant__send" type="submit" aria-label="{{t .Locale "assistant.send"}}">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+        </svg>
+      </button>
+    </form>
+    <p class="assistant__disclaimer">{{t .Locale "assistant.disclaimer"}}</p>
+    {{end}}
+  </section>
+</div>
+{{end}}

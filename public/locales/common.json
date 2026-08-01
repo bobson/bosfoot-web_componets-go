@@ -125,6 +125,61 @@
     "sq": "E re",
     "en": "New"
   },
+  "nav.faq": {
+    "mk": "Прашања",
+    "sq": "Pyetje",
+    "en": "FAQ"
+  },
+  "assistant.open": {
+    "mk": "Отвори помош",
+    "sq": "Hap ndihmën",
+    "en": "Open help"
+  },
+  "assistant.close": {
+    "mk": "Затвори",
+    "sq": "Mbyll",
+    "en": "Close"
+  },
+  "assistant.title": {
+    "mk": "Како да ти помогнеме?",
+    "sq": "Si mund të ndihmojmë?",
+    "en": "How can we help?"
+  },
+  "assistant.subtitle": {
+    "mk": "Големини, достава, плаќање и враќање.",
+    "sq": "Numra, dërgesë, pagesë dhe kthim.",
+    "en": "Sizing, delivery, payment and returns."
+  },
+  "assistant.quickTitle": {
+    "mk": "Чести прашања",
+    "sq": "Pyetje të shpeshta",
+    "en": "Common questions"
+  },
+  "assistant.inputPlaceholder": {
+    "mk": "Прашај нè нешто…",
+    "sq": "Na pyet diçka…",
+    "en": "Ask us anything…"
+  },
+  "assistant.send": {
+    "mk": "Испрати",
+    "sq": "Dërgo",
+    "en": "Send"
+  },
+  "assistant.thinking": {
+    "mk": "Размислувам…",
+    "sq": "Po mendoj…",
+    "en": "Thinking…"
+  },
+  "assistant.error": {
+    "mk": "Извини, не успеав. Пиши ни на info@bosfoot.com.",
+    "sq": "Më fal, s'ia dola. Na shkruaj në info@bosfoot.com.",
+    "en": "Sorry, that didn't work. Email us at info@bosfoot.com."
+  },
+  "assistant.disclaimer": {
+    "mk": "Автоматски одговори — за сигурно пиши ни на info@bosfoot.com.",
+    "sq": "Përgjigje automatike — për siguri na shkruaj në info@bosfoot.com.",
+    "en": "Automated answers — for anything important, email info@bosfoot.com."
+  },
   "nav.privacy": {
     "mk": "Политика на приватност",
     "sq": "Politika e privatësisë",

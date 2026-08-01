@@ -19,6 +19,7 @@ import (
 	"strings"
 	"sync"
 
+	"bosfoot/internal/faq"
 	"bosfoot/internal/locale"
 	"bosfoot/internal/site"
 )
@@ -83,6 +84,12 @@ func NewRenderer(dir string, ui *locale.UI) (*Renderer, error) {
 		// pixelID emits the Meta Pixel ID (empty unless META_PIXEL_ID is set); the
 		// head partial only renders the pixel when it's non-empty.
 		"pixelID": site.MetaPixelID,
+
+		// faq / faqSchema power the FAQ page + assistant widget from one source
+		// (internal/faq); assistantEnabled gates the free-text box on the API key.
+		"faq":              faq.Localized,
+		"faqSchema":        faq.SchemaJSON,
+		"assistantEnabled": site.AssistantEnabled,
 
 		// eur converts MKD to EUR and formats with 2 decimals: 6200 → "100.81"
 		"eur": func(amount int) string {

@@ -1,0 +1,22 @@
+{
+  "faq.title": {
+    "mk": "Често поставувани прашања",
+    "sq": "Pyetje të shpeshta",
+    "en": "Frequently asked questions"
+  },
+  "faq.lead": {
+    "mk": "Кратки одговори за големини, достава, плаќање и враќање. Не го гледаш твоето прашање? Пиши ни.",
+    "sq": "Përgjigje të shkurtra për numrat, dërgesën, pagesën dhe kthimin. Nuk e sheh pyetjen tënde? Na shkruaj.",
+    "en": "Quick answers on sizing, delivery, payment and returns. Don't see your question? Get in touch."
+  },
+  "faq.help.title": {
+    "mk": "Сè уште имаш прашање?",
+    "sq": "Ke ende një pyetje?",
+    "en": "Still have a question?"
+  },
+  "faq.help.body": {
+    "mk": "Јави се или пиши ни — ти одговараме брзо, на твојот јазик.",
+    "sq": "Na telefono ose na shkruaj — të përgjigjemi shpejt, në gjuhën tënde.",
+    "en": "Call or message us — we reply quickly, in your language."
+  }
+}
