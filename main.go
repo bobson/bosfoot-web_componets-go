@@ -52,7 +52,7 @@ func main() {
 	productHandler := &handlers.ProductHandler{DB: db, Logger: logInstance}
 	orderHandler := &handlers.OrderHandler{DB: db, Logger: logInstance, Notifier: notifier}
 	trackHandler := &handlers.TrackHandler{Logger: logInstance}
-	reviewHandler := &handlers.ReviewHandler{DB: db, Logger: logInstance}
+	reviewHandler := &handlers.ReviewHandler{DB: db, Logger: logInstance, Notifier: notifier}
 
 	siteURL := os.Getenv("SITE_URL")
 	if siteURL == "" {

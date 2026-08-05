@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"bosfoot/internal/notify"
 	"bosfoot/logger"
 	"bosfoot/models"
 	"database/sql"
@@ -14,8 +15,9 @@ import (
 // the product being reviewed is read from the review token row, not the client,
 // and the token is consumed atomically so it can't be replayed.
 type ReviewHandler struct {
-	DB     *sql.DB
-	Logger *logger.Logger
+	DB       *sql.DB
+	Logger   *logger.Logger
+	Notifier *notify.Mailer // emails the owner on each pending review; nil/disabled is fine
 }
 
 type reviewReq struct {
@@ -132,6 +134,22 @@ func (h *ReviewHandler) CreateReview(w http.ResponseWriter, r *http.Request) {
 
 	h.Logger.Info("Review submitted",
 		"product_id", review.ProductID, "order_id", tok.OrderID, "rating", review.Rating)
+
+	// Notify the owner that a review is waiting for moderation. Best-effort: the
+	// product name lookup and the send never affect the customer's response.
+	if h.Notifier != nil {
+		var productName string
+		_ = h.DB.QueryRowContext(ctx, `SELECT name FROM products WHERE id = $1`, review.ProductID).Scan(&productName)
+		h.Notifier.PendingReview(notify.ReviewNotice{
+			ProductID:   review.ProductID,
+			ProductName: productName,
+			OrderID:     tok.OrderID,
+			Rating:      review.Rating,
+			AuthorName:  review.AuthorName,
+			Body:        req.Body,
+			Locale:      review.Lang,
+		})
+	}
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)

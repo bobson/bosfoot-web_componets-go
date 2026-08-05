@@ -121,6 +121,68 @@ func (m *Mailer) OrderPlaced(o Order) {
 	}()
 }
 
+// ReviewNotice is what the owner "new pending review" email needs.
+type ReviewNotice struct {
+	ProductID   int
+	ProductName string
+	OrderID     int
+	Rating      int
+	AuthorName  string
+	Body        string
+	Locale      string // mk | sq | en
+}
+
+// PendingReview emails the owner that a review is awaiting moderation. Like
+// OrderPlaced it returns immediately; the send runs in the background and can
+// only ever log an error. Owner-only — the reviewer is not emailed.
+func (m *Mailer) PendingReview(n ReviewNotice) {
+	if m == nil || !m.on {
+		return
+	}
+	go func() {
+		defer m.recover("Pending review notification", n.OrderID)
+		if err := m.send(m.to, buildReviewNoticeMessage(m.from, m.to, n)); err != nil {
+			m.log.Error("Pending review notification failed to send", err, "product_id", n.ProductID)
+			return
+		}
+		m.log.Info("Pending review notification sent to owner", "product_id", n.ProductID)
+	}()
+}
+
+// buildReviewNoticeMessage renders the owner-facing "new pending review" email.
+// English (owner-only), with a reminder of the moderation command.
+func buildReviewNoticeMessage(from string, to []string, n ReviewNotice) []byte {
+	var b strings.Builder
+	header := func(k, v string) {
+		v = strings.NewReplacer("\r", "", "\n", "").Replace(v)
+		fmt.Fprintf(&b, "%s: %s\r\n", k, v)
+	}
+	header("From", from)
+	header("To", strings.Join(to, ", "))
+	header("Subject", fmt.Sprintf("New pending review: %s (%d/5) — Bosfoot", n.ProductName, n.Rating))
+	header("MIME-Version", "1.0")
+	header("Content-Type", "text/plain; charset=utf-8")
+	b.WriteString("\r\n")
+
+	line := func(format string, args ...any) { fmt.Fprintf(&b, format+"\r\n", args...) }
+	line("A new review is awaiting moderation.")
+	line("")
+	line("Product: %s (#%d)", n.ProductName, n.ProductID)
+	line("Order:   #%d", n.OrderID)
+	line("Rating:  %d/5", n.Rating)
+	line("Author:  %s", n.AuthorName)
+	line("Lang:    %s", n.Locale)
+	if n.Body != "" {
+		line("")
+		line("%s", n.Body)
+	}
+	line("")
+	line("List pending:  go run ./cmd/reviews")
+	line("Approve:       go run ./cmd/reviews -approve <id>")
+	line("Reject:        go run ./cmd/reviews -reject <id>")
+	return []byte(b.String())
+}
+
 // CustomerConfirmation emails the customer a "Thank you" with their order details.
 func (m *Mailer) CustomerConfirmation(o Order) {
 	if m == nil || !m.on || o.Email == "" {
@@ -168,6 +230,85 @@ func (m *Mailer) ReviewInvite(d ReviewInviteData) error {
 		return fmt.Errorf("nothing to send")
 	}
 	return m.send([]string{d.Email}, buildReviewInviteMessage(m.from, strings.Join(m.to, ", "), d))
+}
+
+// ReviewApprovedData is what the reviewer "your review is live" thank-you needs.
+type ReviewApprovedData struct {
+	Email       string
+	Name        string
+	Locale      string // mk | sq | en
+	ProductName string
+}
+
+// ReviewApproved sends the reviewer a localized "thanks, your review is now
+// live" email when the owner approves it. Synchronous + returns an error like
+// ReviewInvite, so cmd/reviews can report success. Sent to the reviewer, with
+// Reply-To the owner inbox.
+func (m *Mailer) ReviewApproved(d ReviewApprovedData) error {
+	if !m.Enabled() {
+		return fmt.Errorf("mailer disabled")
+	}
+	if d.Email == "" {
+		return fmt.Errorf("no recipient email")
+	}
+	return m.send([]string{d.Email}, buildReviewApprovedMessage(m.from, strings.Join(m.to, ", "), d))
+}
+
+// buildReviewApprovedMessage renders the reviewer thank-you, localised by the
+// review's locale (same approach as buildReviewInviteMessage).
+func buildReviewApprovedMessage(from, replyTo string, d ReviewApprovedData) []byte {
+	var b strings.Builder
+	header := func(k, v string) {
+		v = strings.NewReplacer("\r", "", "\n", "").Replace(v)
+		fmt.Fprintf(&b, "%s: %s\r\n", k, v)
+	}
+
+	firstName := strings.Split(d.Name, " ")[0]
+	var subject, hello, intro, footer, regards, team string
+	switch d.Locale {
+	case "mk":
+		subject = "Вашата оценка е објавена — Bosfoot"
+		hello = "Здраво " + firstName + ","
+		intro = "Ви благодариме за вашата оценка за " + d.ProductName + "! Веќе е објавена на нашата страница и им помага на другите да ја изберат вистинската големина."
+		footer = "Ви благодариме што сте дел од Bosfoot."
+		regards = "Со почит,"
+		team = "Тимот на Bosfoot"
+	case "sq":
+		subject = "Vlerësimi juaj u publikua — Bosfoot"
+		hello = "Përshëndetje " + firstName + ","
+		intro = "Faleminderit për vlerësimin tuaj për " + d.ProductName + "! Tashmë është publikuar në faqen tonë dhe ndihmon të tjerët të zgjedhin madhësinë e duhur."
+		footer = "Faleminderit që jeni pjesë e Bosfoot."
+		regards = "Gjithë të mirat,"
+		team = "Ekipi i Bosfoot"
+	default: // en
+		subject = "Your review is live — Bosfoot"
+		hello = "Hello " + firstName + ","
+		intro = "Thank you for your review of " + d.ProductName + "! It's now published on our site and helps others pick the right size."
+		footer = "Thank you for being part of Bosfoot."
+		regards = "Best regards,"
+		team = "The Bosfoot Team"
+	}
+
+	header("From", from)
+	header("To", d.Email)
+	if replyTo != "" {
+		header("Reply-To", replyTo)
+	}
+	header("Subject", subject)
+	header("MIME-Version", "1.0")
+	header("Content-Type", "text/plain; charset=utf-8")
+	b.WriteString("\r\n")
+
+	line := func(format string, args ...any) { fmt.Fprintf(&b, format+"\r\n", args...) }
+	line(hello)
+	line("")
+	line(intro)
+	line("")
+	line(footer)
+	line("")
+	line(regards)
+	line(team)
+	return []byte(b.String())
 }
 
 // buildReviewInviteMessage renders the RFC 5322 review-invite email, localised

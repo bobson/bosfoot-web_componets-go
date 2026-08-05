@@ -20,6 +20,8 @@ import (
 	"time"
 
 	"bosfoot/internal/database"
+	"bosfoot/internal/notify"
+	"bosfoot/logger"
 )
 
 func main() {
@@ -37,7 +39,12 @@ func main() {
 
 	switch {
 	case *approve != 0:
-		setStatus(db, *approve, "approved")
+		lg, err := logger.NewLogger("bosfoot.log")
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer lg.Close()
+		approveReview(db, notify.New(lg), *approve)
 		return
 	case *reject != 0:
 		setStatus(db, *reject, "rejected")
@@ -101,6 +108,61 @@ func main() {
 		fmt.Print("  ·  approve with:  go run ./cmd/reviews -approve <id>")
 	}
 	fmt.Println()
+}
+
+// approveReview approves one review and, on a real pending→approved transition,
+// emails the reviewer a localized thank-you. The guarded UPDATE means re-running
+// -approve on an already-approved review is a no-op that sends no second email.
+func approveReview(db *sql.DB, mailer *notify.Mailer, id int) {
+	var productID int
+	var orderID sql.NullInt64
+	var lang, author string
+	err := db.QueryRow(`
+		UPDATE reviews SET status = 'approved'
+		WHERE id = $1 AND status <> 'approved'
+		RETURNING product_id, order_id, lang_code::text, author_name
+	`, id).Scan(&productID, &orderID, &lang, &author)
+	if err == sql.ErrNoRows {
+		// No row updated: either the id doesn't exist or it was already approved.
+		var existing string
+		if e := db.QueryRow(`SELECT status FROM reviews WHERE id = $1`, id).Scan(&existing); e == sql.ErrNoRows {
+			fmt.Printf("No review with id %d.\n", id)
+		} else {
+			fmt.Printf("Review #%d is already approved (no thank-you re-sent).\n", id)
+		}
+		return
+	}
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Printf("Review #%d approved.\n", id)
+
+	// Look up the product name + reviewer email for the thank-you. Best-effort:
+	// a missing email or an SMTP outage never un-approves the review.
+	var productName, email string
+	_ = db.QueryRow(`
+		SELECT b.name || ' ' || p.name FROM products p
+		JOIN brands b ON b.id = p.brand_id WHERE p.id = $1
+	`, productID).Scan(&productName)
+	if orderID.Valid {
+		_ = db.QueryRow(`SELECT COALESCE(email, '') FROM orders WHERE id = $1`, orderID.Int64).Scan(&email)
+	}
+
+	if email == "" {
+		fmt.Println("    (no reviewer email on file — thank-you not sent)")
+		return
+	}
+	if !mailer.Enabled() {
+		fmt.Printf("    (SMTP not configured — thank-you to %s not sent)\n", email)
+		return
+	}
+	if err := mailer.ReviewApproved(notify.ReviewApprovedData{
+		Email: email, Name: author, Locale: lang, ProductName: productName,
+	}); err != nil {
+		fmt.Printf("    ! thank-you send failed: %v\n", err)
+		return
+	}
+	fmt.Printf("    ✓ thank-you emailed to %s\n", email)
 }
 
 // setStatus flips one review's status and reports the result.
