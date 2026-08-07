@@ -51,12 +51,21 @@ func FloorDenar(n int) int {
 	return n / 10 * 10
 }
 
+// DenarMarkup is a flat surcharge (in denars) added to every product's derived
+// denar price on top of the euro×rate conversion. It lets us raise all shoe
+// prices by a fixed denar amount without touching the euro source or the rate.
+// It's a multiple of 10 so prices still end in 0 after FloorDenar. Note this
+// makes the euro shown on sq/en (round(price_mkd/62)) rise ~3 and no longer be a
+// round source number — inherent to keeping the rate at 62 while adding a flat
+// denar amount.
+const DenarMarkup = 200
+
 // MKD converts a euro price (the stored source) to denars: euro × rate, floored
-// to the nearest 10. This is the ONE conversion — the template `mkd` helper and
-// the order handler both call it, so the price a customer sees equals the price
-// charged. €135 → 8370; €100 → 6200.
+// to the nearest 10, plus the flat DenarMarkup. This is the ONE conversion — the
+// display handlers and the order handler both call it, so the price a customer
+// sees equals the price charged. €135 → 8570; €100 → 6400.
 func MKD(eur int) int {
-	return FloorDenar(int(math.Round(float64(eur) * MKDtoEUR)))
+	return FloorDenar(int(math.Round(float64(eur)*MKDtoEUR))) + DenarMarkup
 }
 
 // ShippingMKD is the flat delivery fee in denars; FreeShippingMKD is the goods
