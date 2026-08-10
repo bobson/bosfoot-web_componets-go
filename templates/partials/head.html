@@ -61,17 +61,26 @@
 <link rel="preload" href="/fonts/GolosText-Regular.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/GolosText-Bold.woff2" as="font" type="font/woff2" crossorigin>
 
-{{/* Always-on chrome: design tokens/utilities (global), nav, search box, cart
-   drawer and footer all appear on every page. Page-specific stylesheets are
-   loaded by each page template right after this partial, so a page only pulls
-   the CSS it actually uses (fewer render-blocking requests). */}}
+{{/* Critical, render-blocking: design tokens/utilities (global) + the nav, which
+   is the only always-on chrome in the initial viewport. Everything below the fold
+   or behind an interaction (search overlay, cart drawer, footer, assistant widget,
+   cookie notice) is loaded non-blocking via preload→stylesheet, so it no longer
+   delays first paint / LCP. The <noscript> block keeps them working without JS.
+   Page-specific stylesheets are loaded by each page template right after this. */}}
 <link rel="stylesheet" href="{{asset "/css/global.css"}}">
 <link rel="stylesheet" href="{{asset "/css/nav.css"}}">
-<link rel="stylesheet" href="{{asset "/css/search.css"}}">
-<link rel="stylesheet" href="{{asset "/css/cart.css"}}">
-<link rel="stylesheet" href="{{asset "/css/footer.css"}}">
-<link rel="stylesheet" href="{{asset "/css/assistant.css"}}">
-{{if pixelID}}<link rel="stylesheet" href="{{asset "/css/prefs.css"}}">{{end}}
+<link rel="preload" as="style" href="{{asset "/css/search.css"}}" onload="this.onload=null;this.rel='stylesheet'">
+<link rel="preload" as="style" href="{{asset "/css/cart.css"}}" onload="this.onload=null;this.rel='stylesheet'">
+<link rel="preload" as="style" href="{{asset "/css/footer.css"}}" onload="this.onload=null;this.rel='stylesheet'">
+<link rel="preload" as="style" href="{{asset "/css/assistant.css"}}" onload="this.onload=null;this.rel='stylesheet'">
+{{if pixelID}}<link rel="preload" as="style" href="{{asset "/css/prefs.css"}}" onload="this.onload=null;this.rel='stylesheet'">{{end}}
+<noscript>
+  <link rel="stylesheet" href="{{asset "/css/search.css"}}">
+  <link rel="stylesheet" href="{{asset "/css/cart.css"}}">
+  <link rel="stylesheet" href="{{asset "/css/footer.css"}}">
+  <link rel="stylesheet" href="{{asset "/css/assistant.css"}}">
+  {{if pixelID}}<link rel="stylesheet" href="{{asset "/css/prefs.css"}}">{{end}}
+</noscript>
 <link rel="icon" href="/favicon.ico" sizes="32x32">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">

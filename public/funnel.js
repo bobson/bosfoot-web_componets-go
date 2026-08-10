@@ -17,9 +17,10 @@ export function track(event, data = {}) {
 
   // First-party beacon is deliberately NOT gated on cookie consent: it sets no
   // cookie and stores no identifier (only product_id + locale), so it's anonymous
-  // legitimate-interest analytics, not marketing tracking. Only the Meta Pixel
-  // above requires consent (handled by it simply not loading — window.fbq stays
-  // undefined — until the visitor accepts; see public/prefs.js).
+  // legitimate-interest analytics, not marketing tracking. The Meta Pixel above
+  // is gated only on META_PIXEL_ID (server-side): when it's unset window.fbq
+  // stays undefined and the call no-ops. The cookie notice (public/prefs.js) is
+  // informational — it does NOT hold the pixel until the visitor accepts.
   if (event === 'AddToCart' && navigator.sendBeacon) {
     const body = JSON.stringify({
       event: 'add_to_cart',

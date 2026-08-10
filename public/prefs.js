@@ -37,32 +37,51 @@ export function dismissNotice() {
   setCookie(NOTICE_COOKIE, 'seen', 365);
 }
 
-// Install the Meta Pixel: the standard base stub (which QUEUES events until
-// fbevents.js loads), then init + PageView. Idempotent — the stub's own guard
-// plus the window.fbq check make a second call a no-op, so app.js and the banner
-// component can both call it safely. Reads the pixel ID from the inert <meta> tag
-// in <head>; a no-op when it's absent (META_PIXEL_ID unset).
+// Install the Meta Pixel. Two-phase so tracking is lossless AND off the critical
+// path: the fbq stub + init + PageView run synchronously (cheap — they only push
+// onto a queue), so events fired during page init (e.g. ViewContent) are captured
+// even before the library exists. The heavy 110 KiB fbevents.js — which caused the
+// long tasks inside the LCP window — is deferred to the first interaction or
+// window 'load' (see below) and flushes the queued events when it loads.
+// Idempotent (window.fbq guard), so app.js and the banner component can both call
+// it. No-op when META_PIXEL_ID is unset (no <meta> tag).
 export function bootstrapPixel() {
   const id = document.querySelector('meta[name="meta-pixel-id"]')?.content;
   if (!id || window.fbq) return;
 
-  (function (f, b, e, v, n, t, s) {
-    if (f.fbq) return;
-    n = f.fbq = function () {
-      n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments);
-    };
-    if (!f._fbq) f._fbq = n;
-    n.push = n;
-    n.loaded = true;
-    n.version = '2.0';
-    n.queue = [];
-    t = b.createElement(e);
-    t.async = true;
-    t.src = v;
-    s = b.getElementsByTagName(e)[0];
-    s.parentNode.insertBefore(t, s);
-  })(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
-
+  // Phase 1 (synchronous): the standard fbq stub that queues calls until the
+  // library loads, then init + PageView — all just enqueue, no network yet.
+  const n = (window.fbq = function () {
+    n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments);
+  });
+  if (!window._fbq) window._fbq = n;
+  n.push = n;
+  n.loaded = true;
+  n.version = '2.0';
+  n.queue = [];
   window.fbq('init', id);
   window.fbq('track', 'PageView');
+
+  // Phase 2 (deferred): download fbevents.js AFTER the hero paints, but reliably
+  // early — on the FIRST of a user interaction or window 'load' — so the queued
+  // PageView/ViewContent still send for visitors who bounce quickly. (A long idle
+  // timeout would risk losing those top-of-funnel events on slow mobile, which is
+  // exactly the ad's landing traffic.) Conversions are unaffected — they fire
+  // post-interaction, by which point the library is already loaded.
+  const loadLib = () => {
+    if (document.getElementById('fb-pixel-lib')) return;
+    const t = document.createElement('script');
+    t.async = true;
+    t.id = 'fb-pixel-lib';
+    t.src = 'https://connect.facebook.net/en_US/fbevents.js';
+    document.head.appendChild(t);
+  };
+  for (const ev of ['pointerdown', 'keydown', 'touchstart', 'scroll']) {
+    window.addEventListener(ev, loadLib, { once: true, passive: true });
+  }
+  if (document.readyState === 'complete') {
+    setTimeout(loadLib, 800);
+  } else {
+    window.addEventListener('load', () => setTimeout(loadLib, 800), { once: true });
+  }
 }

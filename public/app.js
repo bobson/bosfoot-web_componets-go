@@ -5,12 +5,13 @@
 // Bumped: 2026-07-24
 import { bootstrapPixel } from './prefs.js';
 
-// Install the Meta Pixel for every visitor, synchronously, before the dynamic
-// component imports below resolve. The fbq stub queues events, so a ViewContent
-// fired at product-detail init is captured instead of racing an undefined
-// window.fbq. No-op when META_PIXEL_ID is unset (no <meta> tag in <head>). The
-// prefs-ui component shows an informational cookie notice — it does NOT gate the
-// pixel.
+// Install the Meta Pixel for every visitor. The fbq stub + init + PageView run
+// synchronously here (before the dynamic component imports below), so a
+// ViewContent fired at product-detail init is queued instead of racing an
+// undefined window.fbq — but the heavy fbevents.js library is deferred to idle
+// inside bootstrapPixel(), keeping it out of the LCP window. No-op when
+// META_PIXEL_ID is unset (no <meta> tag). The prefs-ui component shows an
+// informational cookie notice — it does NOT gate the pixel.
 bootstrapPixel();
 
 // Each component is loaded with a dynamic import and initialised in isolation.

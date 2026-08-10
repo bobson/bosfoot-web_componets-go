@@ -3,9 +3,15 @@
 <html lang="{{.Locale}}">
   <head>
     {{template "head" .}}
+    {{/* home.css styles the hero (LCP) — keep it render-blocking. The product
+       grid and reviews sit below the fold, so their CSS loads non-blocking. */}}
     <link rel="stylesheet" href="{{asset "/css/home.css"}}">
-    <link rel="stylesheet" href="{{asset "/css/listing.css"}}">
-    <link rel="stylesheet" href="{{asset "/css/reviews.css"}}">
+    <link rel="preload" as="style" href="{{asset "/css/listing.css"}}" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" as="style" href="{{asset "/css/reviews.css"}}" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript>
+      <link rel="stylesheet" href="{{asset "/css/listing.css"}}">
+      <link rel="stylesheet" href="{{asset "/css/reviews.css"}}">
+    </noscript>
     <title>{{t .Locale "seo.title.home"}} — Bosfoot</title>
   </head>
   <body>
@@ -155,10 +161,15 @@
               href="/{{$.Locale}}/products?brand={{.Slug}}"
             >
               {{if .LogoURL}}
+              {{/* width/height give the box an aspect ratio up front (no CLS);
+                 CSS sizes it to 3rem tall and object-fit:contain keeps any brand
+                 logo undistorted regardless of its real ratio. */}}
               <img
                 class="brand-chip__logo"
                 src="{{deref .LogoURL}}"
                 alt="{{.Name}}"
+                width="321"
+                height="176"
                 loading="lazy"
               />
               {{else}}
