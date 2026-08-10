@@ -34,9 +34,10 @@
         --color-forest: hsl(79 45% 25%);
 
         /* Deep moss for the editorial "point of view" band + its soft-olive
-           accent (serif monogram, principle numbers). */
+           accent (serif monogram, principle numbers). Lightness kept high enough
+           for the accent to clear WCAG AA (4.5:1) on --color-moss-deep. */
         --color-moss-deep: hsl(103 31% 17%);
-        --color-moss-soft: hsl(93 21% 45%);
+        --color-moss-soft: hsl(93 24% 58%);
 
         /* ── Third-party brand colors ────────────────────
        Use only for that brand's logo/badge context,

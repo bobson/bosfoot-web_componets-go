@@ -146,7 +146,9 @@
 .footer__legal a {
   font-size: var(--fs-2xs);
   color: inherit;
-  opacity: 0.6;
+  /* 0.8 (matching .footer__col a) keeps the muted look while clearing WCAG AA
+     (4.5:1) for the cream text on --color-forest; 0.6 fell short (~3.7:1). */
+  opacity: 0.8;
   transition: opacity 0.15s ease;
 }
 

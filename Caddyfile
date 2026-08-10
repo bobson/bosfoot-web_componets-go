@@ -5,29 +5,34 @@ www.bosfoot.com {
 bosfoot.com {
     encode gzip zstd
 
+    # Access logging — per-request JSON, so the funnel/traffic scripts
+    # (scripts/funnel.sh, scripts/traffic.sh) have data to read.
+    log {
+        output stderr
+        format json
+    }
+
     # Let Caddy serve static files directly for better performance.
-    # It will check the 'public' folder first for these extensions.
     @static {
         path *.css *.js *.webp *.jpg *.jpeg *.png *.svg *.woff2 *.json *.webmanifest *.txt
     }
-    
+
     handle @static {
-        root * public
-        
-        # 1. Versioned assets (?v=...) get 1 year "immutable" cache.
-        # This solves the hard-refresh problem for users.
+        root * /srv/bosfoot/public
+
+        # Versioned assets (?v=...) get a 1 year "immutable" cache (hard-refresh proof).
         @versioned query v=*
         header @versioned Cache-Control "public, max-age=31536000, immutable"
 
-        # 2. Non-versioned static files get 7 days.
+        # Non-versioned static files get 7 days.
         @unversioned not query v=*
         header @unversioned Cache-Control "public, max-age=604800, must-revalidate"
 
         file_server
     }
 
-    # Everything else (Pages, API, Sitemap) goes to the Go backend.
-    # Caddy sets X-Forwarded-For/Proto/Host automatically — no header_up needed.
+    # Everything else (Pages, API, Sitemap) goes to the Go backend. Caddy sets
+    # X-Forwarded-For/Proto/Host automatically — no header_up needed.
     reverse_proxy localhost:8080
 
     # Standard Security Headers
@@ -36,5 +41,8 @@ bosfoot.com {
         X-Frame-Options "DENY"
         X-Content-Type-Options "nosniff"
         Referrer-Policy "strict-origin-when-cross-origin"
+        # Isolate the top-level window from anything it opens. Safe: no cross-origin
+        # popups need window.opener (guest checkout, no OAuth/payment popups).
+        Cross-Origin-Opener-Policy "same-origin"
     }
 }
