@@ -50,6 +50,7 @@ type orderReq struct {
 
 type orderResp struct {
 	ID            int    `json:"id"`
+	Number        string `json:"number"` // customer-facing order number, e.g. "BF-1064"
 	TotalMKD      int    `json:"total_mkd"`
 	PaymentMethod string `json:"payment_method"`
 }
@@ -332,6 +333,7 @@ func (h *OrderHandler) CreateOrder(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(orderResp{
 		ID:            orderID,
+		Number:        site.OrderNumber(orderID),
 		TotalMKD:      grandTotal,
 		PaymentMethod: req.PaymentMethod,
 	})

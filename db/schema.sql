@@ -16,7 +16,7 @@
 
 CREATE TYPE lang_code AS ENUM ('mk', 'sq', 'en');
 
-CREATE TYPE order_status AS ENUM ('pending', 'shipped', 'delivered');
+CREATE TYPE order_status AS ENUM ('pending', 'shipped', 'delivered', 'cancelled');
 
 CREATE TYPE payment_method AS ENUM ('cod', 'bank_transfer');
 

@@ -28,6 +28,7 @@ import (
 
 	"bosfoot/internal/database"
 	"bosfoot/internal/notify"
+	"bosfoot/internal/site"
 	"bosfoot/logger"
 )
 
@@ -114,7 +115,7 @@ func main() {
 			continue
 		}
 
-		fmt.Printf("#%d  %s  <%s>  [%s]\n", o.id, o.name, o.email, o.locale)
+		fmt.Printf("%s  %s  <%s>  [%s]\n", site.OrderNumber(o.id), o.name, o.email, o.locale)
 		for _, l := range links {
 			fmt.Printf("    %s\n    %s\n", l.ProductName, l.URL)
 		}

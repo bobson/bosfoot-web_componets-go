@@ -16,12 +16,12 @@ func TestBuildMessage(t *testing.T) {
 	msg := string(buildMessage("shop@bosfoot.com", []string{"owner@bosfoot.com"}, o))
 
 	wants := []string{
-		"Subject: New Bosfoot order #42 — 12 900 MKD",
+		"Subject: New Bosfoot order BF-1042 — 12 900 MKD",
 		"Reply-To: john@example.com",
 		"To: owner@bosfoot.com",
 		"Content-Type: text/plain; charset=utf-8",
 		"\r\n\r\n", // header/body separator
-		"Order #42",
+		"Order BF-1042",
 		"Payment: Cash on delivery",
 		"  - Freet Chamois — size 42, Black ×1 — 12 900 MKD",
 		"Notes: leave at the door",

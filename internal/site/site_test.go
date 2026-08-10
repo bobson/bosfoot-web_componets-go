@@ -2,6 +2,31 @@ package site
 
 import "testing"
 
+// TestOrderNumberRoundTrip confirms ParseOrderNumber inverts OrderNumber, so the
+// BF- number the owner sees in the listing/emails is exactly what the terminal
+// tools accept back. Also checks a raw id (no offset) is rejected.
+func TestOrderNumberRoundTrip(t *testing.T) {
+	for _, id := range []int{1, 7, 64, 999, 12345} {
+		s := OrderNumber(id)
+		got, err := ParseOrderNumber(s)
+		if err != nil || got != id {
+			t.Errorf("ParseOrderNumber(OrderNumber(%d)=%q) = %d, %v; want %d, nil", id, s, got, err, id)
+		}
+	}
+	// Accept a bare display number and a #-prefixed one.
+	for _, s := range []string{"1064", "#1064", " bf-1064 "} {
+		if got, err := ParseOrderNumber(s); err != nil || got != 64 {
+			t.Errorf("ParseOrderNumber(%q) = %d, %v; want 64, nil", s, got, err)
+		}
+	}
+	// A raw id (below the offset) and junk must error, not silently mis-map.
+	for _, s := range []string{"64", "0", "BF-1000", "abc", ""} {
+		if _, err := ParseOrderNumber(s); err == nil {
+			t.Errorf("ParseOrderNumber(%q) should error", s)
+		}
+	}
+}
+
 // TestMKD pins the euro→denar conversion. The product display and the order
 // handler both call site.MKD, so this is what a customer sees AND is charged.
 func TestMKD(t *testing.T) {

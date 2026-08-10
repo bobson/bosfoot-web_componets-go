@@ -3,11 +3,44 @@
 package site
 
 import (
+	"fmt"
 	"math"
 	"os"
 	"strconv"
 	"strings"
 )
+
+// OrderNumberOffset is added to an order's DB id to produce the customer-facing
+// number, so early orders don't read as "#1" and reveal low volume. Display-only
+// — the integer id stays the source of truth (order_items, review_tokens etc.
+// still reference it).
+const OrderNumberOffset = 1000
+
+// OrderNumber renders an order id as the branded, phone-friendly number shown to
+// customers and in the terminal tools, e.g. 64 → "BF-1064".
+func OrderNumber(id int) string {
+	return fmt.Sprintf("BF-%d", id+OrderNumberOffset)
+}
+
+// ParseOrderNumber is the inverse of OrderNumber: it turns the customer-facing
+// number back into the DB id, so the terminal tools can accept the same "BF-1064"
+// the owner sees everywhere. It accepts "BF-1064", "bf-1064", "#1064" or a bare
+// "1064" (all the display number), and errors if the result isn't a real id (≥1),
+// which is what a raw id like "64" would map to — steering the owner to the BF form.
+func ParseOrderNumber(s string) (int, error) {
+	t := strings.TrimSpace(s)
+	t = strings.TrimPrefix(strings.ToUpper(t), "BF-")
+	t = strings.TrimPrefix(t, "#")
+	n, err := strconv.Atoi(strings.TrimSpace(t))
+	if err != nil {
+		return 0, fmt.Errorf("not an order number %q (use the BF- number, e.g. BF-1064)", s)
+	}
+	id := n - OrderNumberOffset
+	if id < 1 {
+		return 0, fmt.Errorf("no such order %q (use the BF- number you see, e.g. BF-1064)", s)
+	}
+	return id, nil
+}
 
 // MetaPixelID returns the configured Meta (Facebook/Instagram) Pixel ID, or ""
 // when unset. The analytics partial emits the pixel only when this is non-empty,

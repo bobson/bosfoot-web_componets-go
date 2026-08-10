@@ -44,6 +44,9 @@ func main() {
 		// Always run (after the freet* seeds): replaces the placeholder size_chart
 		// with Freet's official insole/width chart. Idempotent (DELETE + INSERT).
 		"db/freet-sizechart.sql",
+		// Always run: adds the 'cancelled' order status. Idempotent (ADD VALUE IF
+		// NOT EXISTS), so safe on both fresh and existing DBs.
+		"db/orders-status.sql",
 	)
 
 	for _, f := range files {

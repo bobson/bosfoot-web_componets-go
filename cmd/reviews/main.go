@@ -21,6 +21,7 @@ import (
 
 	"bosfoot/internal/database"
 	"bosfoot/internal/notify"
+	"bosfoot/internal/site"
 	"bosfoot/logger"
 )
 
@@ -83,8 +84,12 @@ func main() {
 		}
 		count++
 
-		fmt.Printf("#%d  %s  %s  (%s, order #%d, %s)\n",
-			id, stars(rating), product, lang, orderID, createdAt.Format("2006-01-02 15:04"))
+		ord := "no order"
+		if orderID != 0 {
+			ord = site.OrderNumber(orderID)
+		}
+		fmt.Printf("#%d  %s  %s  (%s, %s, %s)\n",
+			id, stars(rating), product, lang, ord, createdAt.Format("2006-01-02 15:04"))
 		fmt.Printf("    %s", author)
 		if fit.Valid {
 			fmt.Printf("  ·  fit: %s", fitLabel(int(fit.Int64)))

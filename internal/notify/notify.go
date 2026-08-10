@@ -21,6 +21,7 @@ import (
 	"strings"
 	"time"
 
+	"bosfoot/internal/site"
 	"bosfoot/logger"
 )
 
@@ -168,7 +169,7 @@ func buildReviewNoticeMessage(from string, to []string, n ReviewNotice) []byte {
 	line("A new review is awaiting moderation.")
 	line("")
 	line("Product: %s (#%d)", n.ProductName, n.ProductID)
-	line("Order:   #%d", n.OrderID)
+	line("Order:   %s", site.OrderNumber(n.OrderID))
 	line("Rating:  %d/5", n.Rating)
 	line("Author:  %s", n.AuthorName)
 	line("Lang:    %s", n.Locale)
@@ -440,13 +441,13 @@ func buildMessage(from string, to []string, o Order) []byte {
 	if o.Email != "" {
 		header("Reply-To", o.Email)
 	}
-	header("Subject", fmt.Sprintf("New Bosfoot order #%d — %s MKD", o.ID, mkd(o.Total)))
+	header("Subject", fmt.Sprintf("New Bosfoot order %s — %s MKD", site.OrderNumber(o.ID), mkd(o.Total)))
 	header("MIME-Version", "1.0")
 	header("Content-Type", "text/plain; charset=utf-8")
 	b.WriteString("\r\n")
 
 	line := func(format string, args ...any) { fmt.Fprintf(&b, format+"\r\n", args...) }
-	line("Order #%d", o.ID)
+	line("Order %s", site.OrderNumber(o.ID))
 	if o.Shipping > 0 {
 		line("Subtotal: %s MKD", mkd(o.Total-o.Shipping))
 		line("Shipping: %s MKD", mkd(o.Shipping))
@@ -509,7 +510,7 @@ func buildCustomerMessage(from, replyTo string, o Order) []byte {
 
 	switch o.Locale {
 	case "mk":
-		subject = fmt.Sprintf("Потврда за нарачка #%d — Bosfoot", o.ID)
+		subject = fmt.Sprintf("Потврда за нарачка %s — Bosfoot", site.OrderNumber(o.ID))
 		hello = "Здраво " + firstName + ","
 		thanks = "Ви благодариме за вашата нарачка во Bosfoot! Ја примивме и ќе ве контактираме за да ја потврдиме. Плаќате при испорака."
 		details = "Детали за нарачката"
@@ -524,7 +525,7 @@ func buildCustomerMessage(from, replyTo string, o Order) []byte {
 		regards = "Со почит,"
 		team = "Тимот на Bosfoot"
 	case "sq":
-		subject = fmt.Sprintf("Konfirmimi i porosisë #%d — Bosfoot", o.ID)
+		subject = fmt.Sprintf("Konfirmimi i porosisë %s — Bosfoot", site.OrderNumber(o.ID))
 		hello = "Përshëndetje " + firstName + ","
 		thanks = "Faleminderit për porosinë tuaj në Bosfoot! E morëm dhe do t'ju kontaktojmë për ta konfirmuar. Paguani me dorëzim."
 		details = "Detajet e porosisë"
@@ -539,7 +540,7 @@ func buildCustomerMessage(from, replyTo string, o Order) []byte {
 		regards = "Gjithë të mirat,"
 		team = "Ekipi i Bosfoot"
 	default: // en
-		subject = fmt.Sprintf("Order Confirmation #%d — Bosfoot", o.ID)
+		subject = fmt.Sprintf("Order Confirmation %s — Bosfoot", site.OrderNumber(o.ID))
 		hello = "Hello " + firstName + ","
 		thanks = "Thank you for your order at Bosfoot! We've received it and will contact you to confirm. You pay on delivery."
 		details = "Order Details"
@@ -572,7 +573,7 @@ func buildCustomerMessage(from, replyTo string, o Order) []byte {
 	line("")
 	line(details)
 	line(strings.Repeat("-", len(details)))
-	line("%-15s #%d", ordNum, o.ID)
+	line("%-15s %s", ordNum, site.OrderNumber(o.ID))
 	if o.Shipping > 0 {
 		line("%-15s %s MKD", subtotL, mkd(o.Total-o.Shipping))
 		line("%-15s %s MKD", shipL, mkd(o.Shipping))

@@ -274,7 +274,9 @@ class CheckoutForm extends HTMLElement {
     localStorage.removeItem(CART_KEY);
     window.dispatchEvent(new Event('cart:updated'));
 
-    this.confirmOrderEl.textContent = '#' + data.id;
+    // Server sends the customer-facing number (e.g. "BF-1064"); fall back to the
+    // raw id only if an older response is cached.
+    this.confirmOrderEl.textContent = data.number || '#' + data.id;
     // Email is optional now — only show the "we emailed you" note if one was given.
     if (this.confirmEmailNoteEl && this.lastEmail) {
       this.confirmEmailNoteEl.innerHTML = `${esc(this.labelEmailSent)} <strong>${esc(this.lastEmail)}</strong>. ${this.labelSpamNote}`;
