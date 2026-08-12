@@ -72,8 +72,13 @@ func Register(
 	// (UPLOADS_DIR); pending/rejected ones are never in here. On prod Caddy serves
 	// /uploads/ straight from disk and this handler isn't reached; locally it does
 	// the serving. Filenames are content-random, so cache hard.
+	//
+	// Registered at the specific "/uploads/reviews/" (not "/uploads/") because Go
+	// 1.22's ServeMux treats "/uploads/" as ambiguous against "/{locale}/products"
+	// (both match "/uploads/products") and panics at startup. The literal segments
+	// here are unambiguous.
 	uploadsFS := http.StripPrefix("/uploads/", http.FileServer(http.Dir(uploads.PublicRoot())))
-	http.HandleFunc("/uploads/", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/uploads/reviews/", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Cache-Control", "public, max-age=604800")
 		uploadsFS.ServeHTTP(w, r)
 	})
