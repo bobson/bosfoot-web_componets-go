@@ -13,7 +13,7 @@ WHERE product_id IN (
     WHERE b.slug = 'freet'
 );
 
-INSERT INTO size_chart (product_id, eu_size, foot_length_mm, foot_width_mm)
+INSERT INTO size_chart (product_id, eu_size, insole_length_mm, insole_width_mm)
 SELECT p.id, s.eu, s.len, s.wid
 FROM products p
 JOIN brands b ON b.id = p.brand_id

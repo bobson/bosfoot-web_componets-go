@@ -181,8 +181,8 @@ CREATE TABLE size_chart (
     id              SERIAL PRIMARY KEY,
     product_id      INTEGER NOT NULL REFERENCES products(id) ON DELETE CASCADE,
     eu_size         NUMERIC(4,1) NOT NULL,
-    foot_length_mm  NUMERIC(5,1),
-    foot_width_mm   NUMERIC(5,1),
+    insole_length_mm  NUMERIC(5,1),
+    insole_width_mm   NUMERIC(5,1),
     UNIQUE (product_id, eu_size)
 );
 

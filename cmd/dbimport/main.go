@@ -35,6 +35,9 @@ func main() {
 		fmt.Println("schema already initialised, skipping schema.sql + seed.sql")
 	}
 	files = append(files,
+		// Must run before the freet* size_chart seeds (which insert the new column
+		// names): renames size_chart.foot_*→insole_* on existing DBs. Idempotent.
+		"db/size-chart-insole.sql",
 		"db/freet.sql",
 		"db/freet-update.sql",
 		"db/price-eur.sql",

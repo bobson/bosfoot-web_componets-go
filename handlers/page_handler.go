@@ -1361,7 +1361,7 @@ func (h *PageHandler) ProductDetail(w http.ResponseWriter, r *http.Request) {
 	// Size chart.
 	g.Go(func() error {
 		rows, err := h.DB.QueryContext(gctx, `
-			SELECT eu_size, foot_length_mm, foot_width_mm FROM size_chart WHERE product_id = $1 ORDER BY eu_size
+			SELECT eu_size, insole_length_mm, insole_width_mm FROM size_chart WHERE product_id = $1 ORDER BY eu_size
 		`, p.ID)
 		if err != nil {
 			return err
@@ -1374,10 +1374,10 @@ func (h *PageHandler) ProductDetail(w http.ResponseWriter, r *http.Request) {
 				return err
 			}
 			if lenMM.Valid {
-				sc.FootLengthMM = &lenMM.Float64
+				sc.InsoleLengthMM = &lenMM.Float64
 			}
 			if widMM.Valid {
-				sc.FootWidthMM = &widMM.Float64
+				sc.InsoleWidthMM = &widMM.Float64
 			}
 			p.SizeChart = append(p.SizeChart, sc)
 		}

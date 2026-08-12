@@ -93,6 +93,6 @@ type ProductStock struct {
 
 type SizeChartEntry struct {
 	EUSize       float64  `json:"eu_size"`
-	FootLengthMM *float64 `json:"foot_length_mm,omitempty"`
-	FootWidthMM  *float64 `json:"foot_width_mm,omitempty"`
+	InsoleLengthMM *float64 `json:"insole_length_mm,omitempty"`
+	InsoleWidthMM  *float64 `json:"insole_width_mm,omitempty"`
 }

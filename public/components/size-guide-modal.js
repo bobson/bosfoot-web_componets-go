@@ -52,8 +52,8 @@ function initSizeFinder(modal) {
   let rows = [];
   try {
     rows = JSON.parse(chartEl.textContent || '[]')
-      .filter((r) => r.foot_length_mm != null)
-      .map((r) => ({ size: Number(r.eu_size), len: Number(r.foot_length_mm) }))
+      .filter((r) => r.insole_length_mm != null)
+      .map((r) => ({ size: Number(r.eu_size), len: Number(r.insole_length_mm) }))
       .sort((a, b) => a.size - b.size);
   } catch {
     rows = [];

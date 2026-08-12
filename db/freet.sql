@@ -110,7 +110,7 @@ ON CONFLICT (sku) DO NOTHING;
 
 -- ---------- Size chart (Freet brand chart applies to all products) ----------
 
-INSERT INTO size_chart (product_id, eu_size, foot_length_mm)
+INSERT INTO size_chart (product_id, eu_size, insole_length_mm)
 SELECT p.id, s.eu_size, s.len FROM products p
 CROSS JOIN (VALUES
     (36, 230), (37, 237), (38, 244), (39, 251), (40, 258),

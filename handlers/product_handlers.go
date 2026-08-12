@@ -436,7 +436,7 @@ func (h *ProductHandler) GetProductByID(w http.ResponseWriter, r *http.Request) 
 
 	// --- size chart ---
 	scRows, err := h.DB.QueryContext(ctx, `
-		SELECT eu_size, foot_length_mm, foot_width_mm
+		SELECT eu_size, insole_length_mm, insole_width_mm
 		FROM size_chart
 		WHERE product_id = $1 ORDER BY eu_size
 	`, id)
@@ -455,10 +455,10 @@ func (h *ProductHandler) GetProductByID(w http.ResponseWriter, r *http.Request) 
 			return
 		}
 		if lenMM.Valid {
-			sc.FootLengthMM = &lenMM.Float64
+			sc.InsoleLengthMM = &lenMM.Float64
 		}
 		if widMM.Valid {
-			sc.FootWidthMM = &widMM.Float64
+			sc.InsoleWidthMM = &widMM.Float64
 		}
 		p.SizeChart = append(p.SizeChart, sc)
 	}

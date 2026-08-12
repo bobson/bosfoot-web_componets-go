@@ -17,27 +17,37 @@ const REFS = {
   card: { w: 53.98, h: 85.6 },
 };
 
-// Bosfoot size-guide chart: foot length (mm) -> EU. Nearest wins. Mirrors the
-// table in templates/pages/size-guide.html — keep them in sync.
+// Freet's official size chart: the INSOLE length (mm) of each EU size, mirrored
+// from db/freet-sizechart.sql (size_chart.insole_length_mm) and the Freet product
+// pages. Keep the two in sync.
+//
+// Freet's fit rule (from their sizing guide): measure your foot, allow AT LEAST
+// 5mm at the toe, and take the smallest size whose insole >= foot + allowance.
+// Freet's own worked example: a 248mm foot -> EU40. So we add FIT_ALLOWANCE_MM and
+// round up. The old code treated these as foot lengths with no toe allowance AND
+// used "nearest wins", so it recommended a size (sometimes two) too small.
+const FIT_ALLOWANCE_MM = 5; // Freet advises 5–10mm of toe room; 5 = smallest good fit
 const EU_CHART = [
-  [230, 36],
-  [237, 37],
-  [244, 38],
-  [251, 39],
-  [258, 40],
-  [265, 41],
-  [272, 42],
-  [279, 43],
-  [286, 44],
-  [293, 45],
-  [300, 46],
+  [236, 37],
+  [242, 38],
+  [249, 39],
+  [257, 40],
+  [262, 41],
+  [268, 42],
+  [275, 43],
+  [284, 44],
+  [290, 45],
+  [295, 46],
+  [300, 47],
+  [307, 48],
+  [313, 49],
 ];
 function euFromFootMM(mm) {
-  let best = EU_CHART[0];
-  for (const row of EU_CHART) {
-    if (Math.abs(row[0] - mm) < Math.abs(best[0] - mm)) best = row;
+  const needed = mm + FIT_ALLOWANCE_MM; // insole length this foot needs
+  for (const [insole, eu] of EU_CHART) {
+    if (insole >= needed) return eu; // smallest size with enough toe room
   }
-  return best[1];
+  return EU_CHART[EU_CHART.length - 1][1]; // longer than the chart -> largest size
 }
 
 const MAX_CANVAS_DIM = 1500; // downscale phone photos so mobile canvas caps can't blank us

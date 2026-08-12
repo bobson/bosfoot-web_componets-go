@@ -81,8 +81,8 @@
               {{range .Product.SizeChart}}
               <tr>
                 <td class="sg-modal__eu">{{.EUSize}}</td>
-                <td>{{derefF .FootLengthMM}} mm</td>
-                <td>{{if .FootWidthMM}}{{derefF .FootWidthMM}} mm{{else}}—{{end}}</td>
+                <td>{{derefF .InsoleLengthMM}} mm</td>
+                <td>{{if .InsoleWidthMM}}{{derefF .InsoleWidthMM}} mm{{else}}—{{end}}</td>
               </tr>
               {{end}}
             </tbody>
