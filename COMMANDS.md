@@ -144,6 +144,17 @@ npm run reviews -- -delete 12               # permanently delete #12
 
 Direct forms: `go run ./cmd/reviewinvites [flags]`, `go run ./cmd/reviews [flags]`.
 
+> ⚠️ **Moderate reviews with photos ON THE DROPLET.** `-approve`/`-reject`/`-delete`
+> move or delete the uploaded photo **files**, which live on the droplet under
+> `UPLOADS_DIR`. Run them from `/srv/bosfoot` (so `.env`/`UPLOADS_DIR` load and the
+> files are local):
+> ```bash
+> cd /srv/bosfoot && go run ./cmd/reviews -approve <id>
+> ```
+> Running them from your laptop still flips the DB status, but can't touch the
+> files — you'll see `published 0/1 photo(s)` and the photo won't appear. Listing
+> (`go run ./cmd/reviews`, `-status`, `-photo`) is DB-only and works anywhere.
+
 ---
 
 ## Reservations / supplier export
@@ -181,9 +192,27 @@ npm run lint                                # lint only
 
 ---
 
+## Droplet / deploy notes
+
+- **Caddy runs `/etc/caddy/Caddyfile`, not the repo copy.** The repo's `Caddyfile`
+  is deployed to `/srv/bosfoot/Caddyfile` by `git reset --hard`, but Caddy loads
+  `/etc/caddy/Caddyfile`. Keep them in sync with a symlink (one-time), then a
+  reload picks up any repo change:
+  ```bash
+  sudo ln -sf /srv/bosfoot/Caddyfile /etc/caddy/Caddyfile
+  sudo systemctl reload caddy
+  ```
+- **Review photo uploads need ImageMagick + `UPLOADS_DIR`** on the droplet:
+  `apt install imagemagick`, `UPLOADS_DIR=/srv/bosfoot/uploads` in `.env`, and the
+  dir writable by the app user. Photos are served by the Caddy `/uploads` block.
+- **Cloudflare caches `.webp` at the edge.** If a photo 404s publicly but the
+  origin serves it (`curl --resolve bosfoot.com:443:127.0.0.1 …` returns 200), it's
+  a stale cached 404 — purge the Cloudflare cache.
+
 ## Quick reference
 
 - `npm run help` — one-line list of every script.
 - Pass tool flags after `--`: `npm run reviews -- -approve 12`.
 - Write-tools default to **dry-run**; add `-commit` to apply.
 - Post-launch stock changes: **`add-stock`**, never `stock-import`.
+- Review-photo moderation (`-approve`/`-reject`/`-delete`): **on the droplet**.
