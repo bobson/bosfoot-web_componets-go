@@ -17,8 +17,9 @@ reservations_contacts.csv
 # DB backup dumps (e.g. from order cleanups) — contain customer PII, never commit
 backup_*.csv
 
-# User-uploaded review photos (local dev store; prod uses UPLOADS_DIR on the box)
-uploads/
+# User-uploaded review photos (local dev store; prod uses UPLOADS_DIR on the box).
+# Anchored to repo root so it does NOT also ignore internal/uploads/ (the Go pkg).
+/uploads/
 
 
 # Built test binary from `go build ./cmd/orders`
