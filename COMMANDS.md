@@ -130,6 +130,11 @@ npm run review-invites                      # preview eligible orders
 npm run review-invites -- -order 42         # just order 42, any age
 npm run review-invites -- -commit           # create tokens + send
 
+# Re-email an order's EXISTING link (e.g. the buyer lost the email). Requires
+# -order; reuses the same token (no new link), so only useful if they haven't
+# reviewed yet. Note: -order takes the raw id, not the BF- number (BF-1064 -> 64).
+npm run review-invites -- -order 64 -resend -commit
+
 # Moderate (reviews land 'pending', show only once approved):
 npm run reviews                             # list pending
 npm run reviews -- -approve 12              # approve #12 (emails the reviewer a thank-you)

@@ -10,10 +10,11 @@
 // nothing. Pass -commit to generate the tokens and send. Links are printed even
 // when SMTP is unconfigured, so you can paste them into whatever you email from.
 //
-//	go run ./cmd/reviewinvites            # preview eligible orders (dry-run)
-//	go run ./cmd/reviewinvites -days 10   # older-than-10-days threshold
-//	go run ./cmd/reviewinvites -order 42  # just order #42
-//	go run ./cmd/reviewinvites -commit    # create tokens + send
+//	go run ./cmd/reviewinvites                     # preview eligible orders (dry-run)
+//	go run ./cmd/reviewinvites -days 10            # older-than-10-days threshold
+//	go run ./cmd/reviewinvites -order 42           # just order #42
+//	go run ./cmd/reviewinvites -commit             # create tokens + send
+//	go run ./cmd/reviewinvites -order 42 -resend -commit  # re-email order #42's existing link
 package main
 
 import (
@@ -35,8 +36,13 @@ import (
 func main() {
 	days := flag.Int("days", 7, "invite orders older than this many days")
 	orderID := flag.Int("order", 0, "target a single order id (ignores -days)")
+	resend := flag.Bool("resend", false, "re-email an already-invited order's EXISTING link (requires -order)")
 	commit := flag.Bool("commit", false, "actually create tokens and send (default: dry-run)")
 	flag.Parse()
+
+	if *resend && *orderID == 0 {
+		log.Fatal("-resend needs -order <id> (which order to re-send)")
+	}
 
 	db, err := database.Connect() // also loads .env (godotenv)
 	if err != nil {
@@ -59,13 +65,19 @@ func main() {
 	defer lg.Close()
 	mailer := notify.New(lg)
 
-	// Eligible orders: have an email, not yet invited (no review_tokens), and
-	// either the explicitly requested order or old enough.
+	// Eligible orders: have an email, and either the explicitly requested order or
+	// old enough. Normally we skip orders that already have a token; -resend drops
+	// that filter so we can re-email an order's EXISTING link (buildLinks reuses
+	// the token via ON CONFLICT, so no new token is created).
+	invitedFilter := "AND NOT EXISTS (SELECT 1 FROM review_tokens rt WHERE rt.order_id = o.id)"
+	if *resend {
+		invitedFilter = ""
+	}
 	rows, err := db.Query(`
 		SELECT o.id, o.email, o.first_name || ' ' || o.last_name, o.locale::text
 		FROM orders o
 		WHERE COALESCE(o.email, '') <> ''
-		  AND NOT EXISTS (SELECT 1 FROM review_tokens rt WHERE rt.order_id = o.id)
+		  `+invitedFilter+`
 		  AND CASE WHEN $1 <> 0 THEN o.id = $1
 		           ELSE o.created_at < now() - ($2 * interval '1 day') END
 		ORDER BY o.created_at
