@@ -5,6 +5,7 @@ import (
 	"bosfoot/internal/cache"
 	"bosfoot/internal/locale"
 	"bosfoot/internal/middleware"
+	"bosfoot/internal/uploads"
 	"net/http"
 	"strings"
 )
@@ -66,6 +67,16 @@ func Register(
 	http.HandleFunc("/{locale}/returns", pc.Wrap(pageHandler.Returns))
 	http.HandleFunc("/{locale}/shipping", pc.Wrap(pageHandler.Shipping))
 	http.HandleFunc("/sitemap.xml", pageHandler.Sitemap)
+
+	// Approved review photos. They live in the served "public" uploads dir
+	// (UPLOADS_DIR); pending/rejected ones are never in here. On prod Caddy serves
+	// /uploads/ straight from disk and this handler isn't reached; locally it does
+	// the serving. Filenames are content-random, so cache hard.
+	uploadsFS := http.StripPrefix("/uploads/", http.FileServer(http.Dir(uploads.PublicRoot())))
+	http.HandleFunc("/uploads/", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Cache-Control", "public, max-age=604800")
+		uploadsFS.ServeHTTP(w, r)
+	})
 
 	// Catch-all: static files from public/ with tiered caching (see
 	// setStaticCacheHeaders). Keeps fingerprinted assets cached hard while

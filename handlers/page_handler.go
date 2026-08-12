@@ -4,6 +4,7 @@ import (
 	"bosfoot/internal/locale"
 	"bosfoot/internal/site"
 	"bosfoot/internal/tmpl"
+	"bosfoot/internal/uploads"
 	"bosfoot/logger"
 	"bosfoot/models"
 	"context"
@@ -1388,7 +1389,8 @@ func (h *PageHandler) ProductDetail(w http.ResponseWriter, r *http.Request) {
 	// aggregate is computed after g.Wait() from this slice.
 	g.Go(func() error {
 		rows, err := h.DB.QueryContext(gctx, `
-			SELECT rating, fit, author_name, COALESCE(body,''), lang_code::text, created_at
+			SELECT id, rating, fit, author_name, COALESCE(body,''), lang_code::text, created_at,
+			       COALESCE(buyer_city,''), COALESCE(size,''), COALESCE(color,'')
 			FROM reviews
 			WHERE product_id = $1 AND status = 'approved'
 			ORDER BY created_at DESC
@@ -1402,7 +1404,8 @@ func (h *PageHandler) ProductDetail(w http.ResponseWriter, r *http.Request) {
 			var rv models.Review
 			var fit sql.NullInt64
 			var body string
-			if err := rows.Scan(&rv.Rating, &fit, &rv.AuthorName, &body, &rv.Lang, &rv.CreatedAt); err != nil {
+			if err := rows.Scan(&rv.ID, &rv.Rating, &fit, &rv.AuthorName, &body, &rv.Lang, &rv.CreatedAt,
+				&rv.City, &rv.Size, &rv.Color); err != nil {
 				return err
 			}
 			if fit.Valid {
@@ -1414,7 +1417,38 @@ func (h *PageHandler) ProductDetail(w http.ResponseWriter, r *http.Request) {
 			}
 			reviews = append(reviews, rv)
 		}
-		return rows.Err()
+		if err := rows.Err(); err != nil {
+			return err
+		}
+		// Attach photos for all of these reviews in ONE query (no per-review N+1).
+		if len(reviews) == 0 {
+			return nil
+		}
+		ids := make([]int, len(reviews))
+		byID := make(map[int]*models.Review, len(reviews))
+		for i := range reviews {
+			ids[i] = reviews[i].ID
+			byID[reviews[i].ID] = &reviews[i]
+		}
+		prows, err := h.DB.QueryContext(gctx, `
+			SELECT review_id, filename FROM review_photos
+			WHERE review_id = ANY($1) ORDER BY sort_order, id
+		`, pq.Array(ids))
+		if err != nil {
+			return err
+		}
+		defer prows.Close()
+		for prows.Next() {
+			var rid int
+			var fn string
+			if err := prows.Scan(&rid, &fn); err != nil {
+				return err
+			}
+			if rv := byID[rid]; rv != nil {
+				rv.Photos = append(rv.Photos, uploads.PublicURL(fn))
+			}
+		}
+		return prows.Err()
 	})
 
 	// Related products from the same brand, plus their colors. These two are
@@ -1589,12 +1623,20 @@ func (h *PageHandler) ReviewPage(w http.ResponseWriter, r *http.Request) {
 	var usedAt sql.NullTime
 	var imageURL sql.NullString
 	err := h.DB.QueryRowContext(ctx, `
-		SELECT rt.used_at, b.name, p.name, p.image_url
+		SELECT rt.used_at, b.name, p.name, p.image_url,
+		       COALESCE(o.first_name,''), COALESCE(o.city,''),
+		       COALESCE(oi.size,''), COALESCE(oi.color,'')
 		FROM review_tokens rt
 		JOIN products p ON p.id = rt.product_id
 		JOIN brands   b ON b.id = p.brand_id
+		LEFT JOIN orders o ON o.id = rt.order_id
+		LEFT JOIN LATERAL (
+			SELECT size, color FROM order_items
+			WHERE order_id = rt.order_id AND product_id = rt.product_id ORDER BY id LIMIT 1
+		) oi ON true
 		WHERE rt.token = $1
-	`, token).Scan(&usedAt, &d.BrandName, &d.ProductName, &imageURL)
+	`, token).Scan(&usedAt, &d.BrandName, &d.ProductName, &imageURL,
+		&d.FirstName, &d.City, &d.Size, &d.Color)
 	switch {
 	case err == sql.ErrNoRows:
 		d.State = "invalid"
@@ -1622,4 +1664,9 @@ type ReviewPageData struct {
 	BrandName   string
 	ProductName string
 	ImageURL    string
+	// Buyer context from the order: prefill the (editable) name, show size/city.
+	FirstName string
+	City      string
+	Size      string
+	Color     string
 }

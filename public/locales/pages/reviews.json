@@ -23,6 +23,12 @@
   "reviews.body.label": { "mk": "Твојата оценка", "sq": "Vlerësimi yt", "en": "Your review" },
   "reviews.body.placeholder": { "mk": "Како ти се чинат патиките? Удобност, големина, квалитет…", "sq": "Si të duken këpucët? Rehatia, madhësia, cilësia…", "en": "How do the shoes feel? Comfort, sizing, quality…" },
 
+  "reviews.photos.label": { "mk": "Додади фотографии", "sq": "Shto foto", "en": "Add photos" },
+  "reviews.photos.hint": { "mk": "по избор, до 3", "sq": "opsionale, deri në 3", "en": "optional, up to 3" },
+  "reviews.photos.tooMany": { "mk": "Може да додадеш најмногу 3 фотографии.", "sq": "Mund të shtosh maksimum 3 foto.", "en": "You can add up to 3 photos." },
+  "reviews.photo.alt": { "mk": "Фотографија од купувач", "sq": "Foto nga blerësi", "en": "Customer photo" },
+  "reviews.write.size": { "mk": "големина", "sq": "madhësia", "en": "size" },
+
   "reviews.submit": { "mk": "Испрати оценка", "sq": "Dërgo vlerësimin", "en": "Submit review" },
   "reviews.submitting": { "mk": "Се испраќа…", "sq": "Po dërgohet…", "en": "Submitting…" },
   "reviews.error.generic": { "mk": "Нешто тргна наопаку. Обиди се повторно.", "sq": "Diçka shkoi keq. Provo përsëri.", "en": "Something went wrong. Please try again." },

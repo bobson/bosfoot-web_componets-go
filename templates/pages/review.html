@@ -23,6 +23,11 @@
         <div>
           <p class="review-product__eyebrow text-xs text-muted">{{t .Locale "reviews.write.forProduct"}}</p>
           <p class="review-product__name font-medium">{{.BrandName}} {{.ProductName}}</p>
+          {{if or .Color .Size}}
+          <p class="review-product__variant text-xs text-muted">
+            {{with .Color}}{{.}}{{end}}{{if and .Color .Size}} · {{end}}{{with .Size}}{{t $.Locale "reviews.write.size"}} {{.}}{{end}}
+          </p>
+          {{end}}
         </div>
       </div>
 
@@ -30,9 +35,11 @@
            validates, POSTs to /api/reviews, then swaps in the thank-you panel. */}}
       <review-form
         data-token="{{.Token}}"
+        data-max-photos="3"
         data-label-submit="{{t .Locale "reviews.submit"}}"
         data-label-submitting="{{t .Locale "reviews.submitting"}}"
         data-error-rating="{{t .Locale "reviews.rating.required"}}"
+        data-error-photos="{{t .Locale "reviews.photos.tooMany"}}"
         data-error-generic="{{t .Locale "reviews.error.generic"}}">
 
         <form data-review-form novalidate>
@@ -63,13 +70,22 @@
           <div class="review-field">
             <label class="review-field__label" for="review-name">{{t .Locale "reviews.name.label"}}</label>
             <input class="review-input" id="review-name" name="author_name" type="text" maxlength="80"
-                   required placeholder="{{t .Locale "reviews.name.placeholder"}}">
+                   required value="{{.FirstName}}" placeholder="{{t .Locale "reviews.name.placeholder"}}">
           </div>
 
           <div class="review-field">
             <label class="review-field__label" for="review-body">{{t .Locale "reviews.body.label"}}</label>
             <textarea class="review-input" id="review-body" name="body" rows="5" maxlength="2000"
                       placeholder="{{t .Locale "reviews.body.placeholder"}}"></textarea>
+          </div>
+
+          <div class="review-field">
+            <label class="review-field__label" for="review-photos">
+              {{t .Locale "reviews.photos.label"}} <span class="text-muted text-xs">{{t .Locale "reviews.photos.hint"}}</span>
+            </label>
+            <input class="review-photos__input" id="review-photos" name="photos" type="file"
+                   accept="image/jpeg,image/png,image/gif,image/webp,image/heic" multiple data-photos-input>
+            <div class="review-photos__preview" data-photos-preview></div>
           </div>
 
           <p class="review-error" data-review-error hidden></p>

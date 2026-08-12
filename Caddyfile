@@ -12,6 +12,17 @@ bosfoot.com {
         format json
     }
 
+    # Approved review photos (user uploads). MUST come before @static, or the
+    # *.webp rule below would try to serve them from /public and 404. They live
+    # OUTSIDE the repo (UPLOADS_DIR) so `git reset --hard` deploys don't wipe them.
+    # Only the "public" subdir is served; pending/rejected photos are never here.
+    handle /uploads/* {
+        root * /srv/bosfoot/uploads/public
+        uri strip_prefix /uploads
+        header Cache-Control "public, max-age=604800"
+        file_server
+    }
+
     # Let Caddy serve static files directly for better performance.
     @static {
         path *.css *.js *.webp *.jpg *.jpeg *.png *.svg *.woff2 *.json *.webmanifest *.txt

@@ -21,6 +21,11 @@ type Review struct {
 	Lang       string    `json:"lang"` // mk | sq | en
 	Status     string    `json:"status"`
 	CreatedAt  time.Time `json:"created_at"`
+	Photos     []string  `json:"photos,omitempty"` // approved review photo URLs (/uploads/reviews/<f>)
+	// Buyer context, snapshotted from the order at submit (survives order delete).
+	City  string `json:"city,omitempty"`
+	Size  string `json:"size,omitempty"`
+	Color string `json:"color,omitempty"`
 }
 
 // Validate checks a submitted review. Rating is required (1–5); fit, when given,

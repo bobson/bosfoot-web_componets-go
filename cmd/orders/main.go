@@ -63,11 +63,11 @@ func main() {
 		       o.email, COALESCE(o.phone, '') AS phone, o.city,
 		       o.payment_method::text, o.status::text, o.total_mkd, o.locale::text,
 		       COALESCE(o.notes, '') AS notes,
-		       string_agg(
+		       COALESCE(string_agg(
 		         COALESCE(p.name, '?') || itemcols.variant ||
 		         '  x' || oi.quantity || '  @ ' || oi.unit_price_mkd || ' MKD',
 		         $3 ORDER BY oi.id
-		       ) AS items
+		       ), '') AS items
 		FROM orders o
 		JOIN order_items oi ON oi.order_id = o.id
 		LEFT JOIN products p ON p.id = oi.product_id
@@ -75,10 +75,10 @@ func main() {
 		  SELECT CASE
 		           WHEN COALESCE(NULLIF(oi.size, ''), '') = '' AND COALESCE(NULLIF(oi.color, ''), '') = ''
 		             THEN ''
-		           ELSE '  ' || NULLIF(oi.size, '') ||
-		                CASE WHEN NULLIF(oi.size, '') IS NOT NULL AND NULLIF(oi.color, '') IS NOT NULL
-		                     THEN ' / ' ELSE '' END ||
-		                NULLIF(oi.color, '')
+		           -- concat_ws ignores NULLs, so a size-only or colour-only item
+		           -- renders correctly instead of "|| NULL" nulling the whole line
+		           -- (which would make string_agg NULL and break the row scan).
+		           ELSE '  ' || concat_ws(' / ', NULLIF(oi.size, ''), NULLIF(oi.color, ''))
 		         END AS variant
 		) itemcols
 		WHERE ($1 = '' OR o.status::text = $1)

@@ -14,6 +14,12 @@ bosfoot
 reservations_to_order.csv
 reservations_contacts.csv
 
+# DB backup dumps (e.g. from order cleanups) — contain customer PII, never commit
+backup_*.csv
+
+# User-uploaded review photos (local dev store; prod uses UPLOADS_DIR on the box)
+uploads/
+
 
 # Built test binary from `go build ./cmd/orders`
 /orders

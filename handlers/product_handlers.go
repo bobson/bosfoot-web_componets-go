@@ -4,6 +4,7 @@ import (
 	"bosfoot/internal/database"
 	"bosfoot/internal/pubsub"
 	"bosfoot/internal/site"
+	"bosfoot/internal/uploads"
 	"bosfoot/logger"
 	"bosfoot/models"
 	"database/sql"
@@ -465,7 +466,8 @@ func (h *ProductHandler) GetProductByID(w http.ResponseWriter, r *http.Request) 
 
 	// --- reviews (approved only) ---
 	rRows, err := h.DB.QueryContext(ctx, `
-		SELECT id, rating, fit, author_name, body, lang_code::text, created_at
+		SELECT id, rating, fit, author_name, body, lang_code::text, created_at,
+		       COALESCE(buyer_city,''), COALESCE(size,''), COALESCE(color,'')
 		FROM reviews
 		WHERE product_id = $1 AND status = 'approved' ORDER BY created_at DESC
 	`, id)
@@ -479,7 +481,8 @@ func (h *ProductHandler) GetProductByID(w http.ResponseWriter, r *http.Request) 
 		var rev models.Review
 		var fit sql.NullInt64
 		var body sql.NullString
-		if err := rRows.Scan(&rev.ID, &rev.Rating, &fit, &rev.AuthorName, &body, &rev.Lang, &rev.CreatedAt); err != nil {
+		if err := rRows.Scan(&rev.ID, &rev.Rating, &fit, &rev.AuthorName, &body, &rev.Lang, &rev.CreatedAt,
+			&rev.City, &rev.Size, &rev.Color); err != nil {
 			h.Logger.Error("GetProductByID: review scan failed", err)
 			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 			return
@@ -494,6 +497,31 @@ func (h *ProductHandler) GetProductByID(w http.ResponseWriter, r *http.Request) 
 			rev.Body = &body.String
 		}
 		p.Reviews = append(p.Reviews, rev)
+	}
+
+	// Attach review photos in one bulk query (no per-review N+1).
+	if len(p.Reviews) > 0 {
+		ids := make([]int, len(p.Reviews))
+		byID := make(map[int]*models.Review, len(p.Reviews))
+		for i := range p.Reviews {
+			ids[i] = p.Reviews[i].ID
+			byID[p.Reviews[i].ID] = &p.Reviews[i]
+		}
+		if pRows, err := h.DB.QueryContext(ctx, `
+			SELECT review_id, filename FROM review_photos
+			WHERE review_id = ANY($1) ORDER BY sort_order, id
+		`, pq.Array(ids)); err == nil {
+			defer pRows.Close()
+			for pRows.Next() {
+				var rid int
+				var fn string
+				if pRows.Scan(&rid, &fn) == nil {
+					if rv := byID[rid]; rv != nil {
+						rv.Photos = append(rv.Photos, uploads.PublicURL(fn))
+					}
+				}
+			}
+		}
 	}
 
 	h.writeJSONResponse(w, p)

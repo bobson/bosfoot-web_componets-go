@@ -131,6 +131,7 @@ type ReviewNotice struct {
 	AuthorName  string
 	Body        string
 	Locale      string // mk | sq | en
+	PhotoCount  int
 }
 
 // PendingReview emails the owner that a review is awaiting moderation. Like
@@ -173,6 +174,9 @@ func buildReviewNoticeMessage(from string, to []string, n ReviewNotice) []byte {
 	line("Rating:  %d/5", n.Rating)
 	line("Author:  %s", n.AuthorName)
 	line("Lang:    %s", n.Locale)
+	if n.PhotoCount > 0 {
+		line("Photos:  %d (view: go run ./cmd/reviews -photo <id>)", n.PhotoCount)
+	}
 	if n.Body != "" {
 		line("")
 		line("%s", n.Body)

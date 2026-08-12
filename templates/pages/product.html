@@ -310,7 +310,23 @@
             <span class="review-item__badge text-xs">{{t $.Locale "reviews.verified"}}</span>
             <span class="review-item__date text-xs text-muted">{{.CreatedAt.Format "2 Jan 2006"}}</span>
           </div>
+          {{if or .City .Color .Size}}
+          <div class="review-item__meta text-xs text-muted">
+            {{if .City}}<span>{{.City}}</span>{{end}}
+            {{if .Color}}<span>{{.Color}}</span>{{end}}
+            {{if .Size}}<span>{{t $.Locale "reviews.write.size"}} {{.Size}}</span>{{end}}
+          </div>
+          {{end}}
           {{if deref .Body}}<p class="review-item__body">{{deref .Body}}</p>{{end}}
+          {{if .Photos}}
+          <div class="review-item__photos">
+            {{range .Photos}}
+            <a class="review-item__photo" href="{{.}}" target="_blank" rel="noopener">
+              <img src="{{.}}" alt="{{t $.Locale "reviews.photo.alt"}}" loading="lazy" decoding="async">
+            </a>
+            {{end}}
+          </div>
+          {{end}}
         </li>
         {{end}}
       </ul>
