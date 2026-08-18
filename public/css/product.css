@@ -349,6 +349,14 @@ body.page-product {
   border-color: var(--color-sale);
 }
 
+/* Low-stock hint (on size select AND hover). The line always reserves one row
+   so showing/clearing the text never shifts the buy section below it. */
+.product__low-stock {
+  margin-top: var(--space-2);
+  min-height: 1.5em;
+  color: var(--color-sale);
+}
+
 .product__size-btn {
   min-width: 3rem;
   padding: var(--space-2) var(--space-3);

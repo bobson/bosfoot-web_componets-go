@@ -334,25 +334,26 @@ export function initProductDetail() {
     },
   };
 
-  function refreshLowStockWarning() {
+  // The fuzzy low-stock message for a size in the current colour, or null when
+  // the size isn't low (>3 left, out of stock, or a preorder product). Shared by
+  // the on-select warning and the on-hover preview so both read identically.
+  function lowStockMessageFor(size) {
+    if (preorderMode || size == null) return null;
+    const qty = (stockMap[selectedColor] || {})[size] || 0;
+    if (qty === 1) return lowStockMessages[locale]?.one || lowStockMessages.en.one;
+    if (qty === 2 || qty === 3) return lowStockMessages[locale]?.few || lowStockMessages.en.few;
+    return null;
+  }
+
+  function setLowStockWarning(msg) {
     if (!lowStockWarning) return;
-    if (selectedSize == null || preorderMode) {
-      lowStockWarning.hidden = true;
-      return;
-    }
+    // The line always occupies one row (CSS min-height), so setting empty text
+    // clears the hint without shifting the buy section below it.
+    lowStockWarning.textContent = msg || '';
+  }
 
-    const byColor = stockMap[selectedColor] || {};
-    const qty = byColor[selectedSize] || 0;
-
-    if (qty === 1) {
-      lowStockWarning.textContent = lowStockMessages[locale]?.one || lowStockMessages.en.one;
-      lowStockWarning.hidden = false;
-    } else if (qty === 2 || qty === 3) {
-      lowStockWarning.textContent = lowStockMessages[locale]?.few || lowStockMessages.en.few;
-      lowStockWarning.hidden = false;
-    } else {
-      lowStockWarning.hidden = true;
-    }
+  function refreshLowStockWarning() {
+    setLowStockWarning(lowStockMessageFor(selectedSize));
   }
 
   function updateSizes() {
@@ -394,6 +395,15 @@ export function initProductDetail() {
       refreshBuyState();
       refreshLowStockWarning();
     });
+
+    // Hover preview (desktop): show the hovered size's low-stock message; fall
+    // back to the selected size's warning when the hovered size isn't low, and
+    // restore the selected-size state on mouse-out.
+    btn.addEventListener('mouseenter', () => {
+      const msg = lowStockMessageFor(parseFloat(btn.dataset.size));
+      setLowStockWarning(msg || lowStockMessageFor(selectedSize));
+    });
+    btn.addEventListener('mouseleave', refreshLowStockWarning);
   });
 
   // Pre-select the first colour on load (single or multi colour).

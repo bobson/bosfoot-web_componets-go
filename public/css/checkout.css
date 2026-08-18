@@ -57,6 +57,11 @@ checkout-form { display: block; }
   gap: var(--space-4);
 }
 
+/* Street name (wide) + house number (narrow) sit on one row. */
+.field-row--addr {
+  grid-template-columns: 3fr 1fr;
+}
+
 .field__label {
   font-size: var(--fs-sm);
   font-weight: var(--fw-medium);

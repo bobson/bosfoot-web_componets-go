@@ -216,7 +216,11 @@ class CheckoutForm extends HTMLElement {
       phone: (fd.get('phone') || '').trim(),
       first_name: (fd.get('first_name') || '').trim(),
       last_name: (fd.get('last_name') || '').trim(),
-      address: (fd.get('address') || '').trim(),
+      // Street name + house number are two required fields in the form; the
+      // server stores a single address string, so join them here ("Ulica 12").
+      address: [(fd.get('address') || '').trim(), (fd.get('address_number') || '').trim()]
+        .filter(Boolean)
+        .join(' '),
       city: (fd.get('city') || '').trim(),
       postal_code: (fd.get('postal_code') || '').trim(),
       notes: (fd.get('notes') || '').trim(),

@@ -72,10 +72,17 @@
                        autocomplete="family-name" required>
               </div>
             </div>
-            <div class="field">
-              <label class="field__label" for="co-address">{{t .Locale "checkout.address"}}</label>
-              <input class="field__input" id="co-address" name="address"
-                     autocomplete="street-address" required>
+            <div class="field-row field-row--addr">
+              <div class="field">
+                <label class="field__label" for="co-address">{{t .Locale "checkout.street"}}</label>
+                <input class="field__input" id="co-address" name="address"
+                       autocomplete="address-line1" required>
+              </div>
+              <div class="field">
+                <label class="field__label" for="co-address-number">{{t .Locale "checkout.streetNumber"}}</label>
+                <input class="field__input" id="co-address-number" name="address_number"
+                       autocomplete="address-line2" required>
+              </div>
             </div>
             <div class="field-row">
               <div class="field">

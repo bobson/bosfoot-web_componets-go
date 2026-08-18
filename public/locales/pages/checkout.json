@@ -1,5 +1,7 @@
 {
   "checkout.address": { "mk": "Адреса", "sq": "Adresa", "en": "Address" },
+  "checkout.street": { "mk": "Улица", "sq": "Rruga", "en": "Street" },
+  "checkout.streetNumber": { "mk": "Број", "sq": "Numri", "en": "Number" },
   "checkout.bankDetails": { "mk": "Банкарски детали", "sq": "Detajet bankare", "en": "Bank details" },
   "checkout.city": { "mk": "Град", "sq": "Qyteti", "en": "City" },
   "checkout.confirmBank": { "mk": "Префрлете го износот на сметката подолу и наведете го бројот на нарачката како цел на дознаката. Испораката започнува по потврда на уплатата.", "sq": "Transferoni shumën në llogarinë më poshtë dhe shënoni numrin e porosisë si qëllim të pagesës. Dërgesa fillon pas konfirmimit të pagesës.", "en": "Transfer the amount to the account below and use your order number as the payment reference. Shipping starts after payment is confirmed." },
