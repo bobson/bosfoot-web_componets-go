@@ -53,7 +53,9 @@ go run ./cmd/imgvariants -force
 go run ./cmd/reservations
 
 # Read orders to the terminal, newest first, with contact + line items.
-# -status <s> filters by status, -limit N shows only the N most recent.
+# -status <s> filters by status, -limit N shows only the N most recent. Orders
+# that have been sent a review invite show a "✓ invited" marker — since an
+# invite is only sent post-delivery, that doubles as the "delivered" signal.
 go run ./cmd/orders
 
 # Send post-purchase "leave a review" invites. Each invite carries a single-use
@@ -61,10 +63,14 @@ go run ./cmd/orders
 # (there are no accounts). Time-based (no fulfilment step exists): an order is
 # eligible once older than -days (default 7) and not yet invited. DEFAULT IS
 # DRY-RUN — prints the links it WOULD send; pass -commit to create tokens + send.
+# On -commit the order is ALSO marked 'delivered' (an invite only happens after
+# delivery, so the invite is the single fulfilment action — no separate
+# `orders -deliver` step). Cancelled orders are skipped entirely — never
+# emailed, tokened, or delivered.
 # Links print even if SMTP is unset, so you can paste them into any mail client.
 go run ./cmd/reviewinvites            # preview eligible orders (dry-run)
 go run ./cmd/reviewinvites -order 42  # just order #42, any age
-go run ./cmd/reviewinvites -commit    # create tokens + send
+go run ./cmd/reviewinvites -commit    # create tokens + send + mark delivered
 
 # Moderate reviews. Reviews land 'pending' and show on the site only once
 # approved; this is the approval path (no admin UI, avoids raw SQL). Approved

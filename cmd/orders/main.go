@@ -67,7 +67,10 @@ func main() {
 		         COALESCE(p.name, '?') || itemcols.variant ||
 		         '  x' || oi.quantity || '  @ ' || oi.unit_price_mkd || ' MKD',
 		         $3 ORDER BY oi.id
-		       ), '') AS items
+		       ), '') AS items,
+		       -- A review invite is only ever sent after delivery, so an existing
+		       -- review token doubles as the "delivered + invited" signal.
+		       EXISTS (SELECT 1 FROM review_tokens rt WHERE rt.order_id = o.id) AS invited
 		FROM orders o
 		JOIN order_items oi ON oi.order_id = o.id
 		LEFT JOIN products p ON p.id = oi.product_id
@@ -96,8 +99,9 @@ func main() {
 		var id, totalMKD int
 		var createdAt time.Time
 		var name, email, phone, city, pay, st, locale, notes, items string
+		var invited bool
 		if err := rows.Scan(&id, &createdAt, &name, &email, &phone, &city,
-			&pay, &st, &totalMKD, &locale, &notes, &items); err != nil {
+			&pay, &st, &totalMKD, &locale, &notes, &items, &invited); err != nil {
 			log.Fatal(err)
 		}
 		if count == 0 {
@@ -106,8 +110,12 @@ func main() {
 		count++
 		grand += totalMKD
 
-		fmt.Printf("%s  %s  [%s]  %d MKD  (%s, %s)\n",
-			site.OrderNumber(id), createdAt.Format("2006-01-02 15:04"), st, totalMKD, pay, locale)
+		invitedMark := ""
+		if invited {
+			invitedMark = "  ✓ invited"
+		}
+		fmt.Printf("%s  %s  [%s]  %d MKD  (%s, %s)%s\n",
+			site.OrderNumber(id), createdAt.Format("2006-01-02 15:04"), st, totalMKD, pay, locale, invitedMark)
 		fmt.Printf("    %s  <%s>  %s\n", name, email, phone)
 		fmt.Printf("    %s\n", city)
 		if notes != "" {

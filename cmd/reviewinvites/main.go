@@ -77,6 +77,9 @@ func main() {
 		SELECT o.id, o.email, o.first_name || ' ' || o.last_name, o.locale::text
 		FROM orders o
 		WHERE COALESCE(o.email, '') <> ''
+		  -- A cancelled order is dead: never invite it (no email, no token, no
+		  -- delivered flip). Applies to both -order and the time-based path.
+		  AND o.status <> 'cancelled'
 		  `+invitedFilter+`
 		  AND CASE WHEN $1 <> 0 THEN o.id = $1
 		           ELSE o.created_at < now() - ($2 * interval '1 day') END
@@ -150,6 +153,18 @@ func main() {
 		} else {
 			fmt.Println("    (SMTP not configured — paste the links above)")
 			sent++
+		}
+
+		// An invite is only sent after the shoes are delivered, so sending one
+		// also marks the order delivered — the invite is the single action, no
+		// separate `orders -deliver` step. (Cancelled orders were already
+		// excluded from the eligibility query above, so they never reach here.)
+		if _, err := db.Exec(
+			`UPDATE orders SET status = 'delivered' WHERE id = $1`,
+			o.id); err != nil {
+			fmt.Printf("    ! could not mark delivered: %v\n", err)
+		} else {
+			fmt.Println("    ✓ marked delivered")
 		}
 		fmt.Println()
 	}
