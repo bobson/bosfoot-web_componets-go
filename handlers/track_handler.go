@@ -28,7 +28,8 @@ type trackReq struct {
 	Locale    string `json:"locale"`
 }
 
-// Track handles POST /api/track. It is fire-and-forget: any malformed or
+// Track handles POST /api/cart-add (legacy alias /api/track). It is
+// fire-and-forget: any malformed or
 // disallowed beacon is silently dropped (204) rather than erroring, since the
 // client uses navigator.sendBeacon and never reads the response.
 func (h *TrackHandler) Track(w http.ResponseWriter, r *http.Request) {

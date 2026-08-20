@@ -5,7 +5,7 @@
 //    server-side on META_PIXEL_ID, so when it's unset window.fbq is undefined
 //    and every call here no-ops.
 //
-//  - First-party beacon: only add-to-cart is sent to /api/track, because it's
+//  - First-party beacon: only add-to-cart is sent to /api/cart-add, because it's
 //    the single funnel step with no server request of its own. Page views, the
 //    checkout page and the order POST are already in the access log + slog, so
 //    beaconing them too would just duplicate data and add load.
@@ -27,6 +27,8 @@ export function track(event, data = {}) {
       product_id: Number(data.product_id) || 0,
       locale: document.documentElement.lang || '',
     });
-    navigator.sendBeacon('/api/track', body);
+    // Path is "cart-add", NOT "track": privacy blockers drop any /api/track,
+    // which was silently killing ~96% of these beacons.
+    navigator.sendBeacon('/api/cart-add', body);
   }
 }

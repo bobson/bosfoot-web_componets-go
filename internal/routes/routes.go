@@ -31,6 +31,11 @@ func Register(
 
 	// Funnel beacon for add-to-cart (the only client-side-only funnel step).
 	// Not CSRF-wrapped: it changes no state — it only appends to the log.
+	// Named "cart-add" on purpose: privacy blockers (uBlock/EasyPrivacy) drop
+	// any path containing "track", which was silently killing ~96% of these
+	// beacons. /api/track stays as a legacy alias for cached clients (e.g. the
+	// FB in-app browser) and can be removed once no beacons hit it.
+	http.HandleFunc("/api/cart-add", trackHandler.Track)
 	http.HandleFunc("/api/track", trackHandler.Track)
 
 	// FAQ assistant free-text answers (Claude-backed, gated on ANTHROPIC_API_KEY).

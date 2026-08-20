@@ -32,7 +32,7 @@ import (
 //   - Origin check rejects trivial cross-site browser embedding.
 // CSRF is deliberately skipped: it doesn't stop cost-abuse (curl has no cookie),
 // the _csrf cookie isn't seeded globally, and the rate limit is the real guard
-// (same rationale as the /api/track beacon).
+// (same rationale as the /api/cart-add beacon).
 type AssistantHandler struct {
 	Logger  *logger.Logger
 	SiteURL string
