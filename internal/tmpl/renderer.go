@@ -119,6 +119,15 @@ func NewRenderer(dir string, ui *locale.UI) (*Renderer, error) {
 			return strconv.FormatFloat(*f, 'g', -1, 64)
 		},
 
+		// derefI dereferences a *int safely, returning 0 for nil. Used to pass an
+		// optional price (e.g. OriginalPriceMKD) into the int-typed mkd/eur funcs.
+		"derefI": func(n *int) int {
+			if n == nil {
+				return 0
+			}
+			return *n
+		},
+
 		// lower lowercases a string: {{lower .Color}}
 		"lower": strings.ToLower,
 

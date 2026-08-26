@@ -3,7 +3,6 @@ package handlers
 import (
 	"bosfoot/internal/database"
 	"bosfoot/internal/pubsub"
-	"bosfoot/internal/site"
 	"bosfoot/internal/uploads"
 	"bosfoot/logger"
 	"bosfoot/models"
@@ -148,11 +147,7 @@ func (h *ProductHandler) GetProducts(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		p.PriceMKD = site.MKD(p.PriceMKD) // scanned euro → derive denars
-		if origPrice.Valid {
-			v := site.MKD(int(origPrice.Int64))
-			p.OriginalPriceMKD = &v
-		}
+		applyPricing(&p, p.PriceMKD, origPrice) // scanned euro → derive denars (+ clearance)
 		if imageURL.Valid {
 			p.ImageURL = &imageURL.String
 		}
@@ -261,11 +256,7 @@ func (h *ProductHandler) GetProductByID(w http.ResponseWriter, r *http.Request) 
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		return
 	}
-	p.PriceMKD = site.MKD(p.PriceMKD) // scanned euro → derive denars
-	if origPrice.Valid {
-		v := site.MKD(int(origPrice.Int64))
-		p.OriginalPriceMKD = &v
-	}
+	applyPricing(&p, p.PriceMKD, origPrice) // scanned euro → derive denars (+ clearance)
 	if imageURL.Valid {
 		p.ImageURL = &imageURL.String
 	}

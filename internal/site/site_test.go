@@ -30,17 +30,17 @@ func TestOrderNumberRoundTrip(t *testing.T) {
 // TestMKD pins the euro→denar conversion. The product display and the order
 // handler both call site.MKD, so this is what a customer sees AND is charged.
 func TestMKD(t *testing.T) {
-	// Each want is euro*62 (floored to 10) + the flat DenarMarkup (200).
+	// Each want is euro*62 (floored to 10) + the flat DenarMarkup (currently 0).
 	cases := []struct {
 		eur, want int
 	}{
-		{100, 6400},  // 100*62 = 6200 + 200
-		{90, 5780},   // 90*62  = 5580 + 200
-		{135, 8570},  // 135*62 = 8370 + 200
-		{140, 8880},  // 140*62 = 8680 + 200
-		{105, 6710},  // 105*62 = 6510 + 200
-		{210, 13220}, // 210*62 = 13020 + 200
-		{0, 200},     // 0*62   = 0    + 200
+		{100, 6200},  // 100*62 = 6200 + 0
+		{90, 5580},   // 90*62  = 5580 + 0
+		{135, 8370},  // 135*62 = 8370 + 0
+		{140, 8680},  // 140*62 = 8680 + 0
+		{105, 6510},  // 105*62 = 6510 + 0
+		{210, 13020}, // 210*62 = 13020 + 0
+		{0, 0},       // 0*62   = 0    + 0
 	}
 	for _, c := range cases {
 		if got := MKD(c.eur); got != c.want {
@@ -52,11 +52,36 @@ func TestMKD(t *testing.T) {
 	}
 }
 
+// TestSalePrice pins the site-wide clearance markdown. With ClearancePct 0.10 the
+// full price drops 10%, floored to the nearest 10 so it still ends in 0.
+func TestSalePrice(t *testing.T) {
+	cases := []struct {
+		full, want int
+	}{
+		{6200, 5580},  // 6200*0.9 = 5580
+		{8370, 7530},  // 8370*0.9 = 7533 → floor 7530
+		{6510, 5850},  // 6510*0.9 = 5859 → floor 5850
+		{13020, 11710}, // 13020*0.9 = 11718 → floor 11710
+		{0, 0},
+	}
+	for _, c := range cases {
+		if got := SalePrice(c.full); got != c.want {
+			t.Errorf("SalePrice(%d) = %d, want %d", c.full, got, c.want)
+		}
+		if got := SalePrice(c.full); got%10 != 0 {
+			t.Errorf("SalePrice(%d) = %d does not end in 0", c.full, got)
+		}
+	}
+	if !SaleActive() {
+		t.Error("SaleActive() = false, want true while ClearancePct > 0")
+	}
+}
+
 // TestEURDisplay pins the euro shown on sq/en to round(price_mkd/62) — the exact
 // formula the `eur` template helper uses — so the guarded value matches what the
-// site renders. With the flat DenarMarkup the euro no longer recovers the source
-// euro (it rises ~3); this test locks in that intended, markup-aware relationship
-// rather than the old round-trip.
+// site renders. With DenarMarkup at 0 the euro again recovers the source euro
+// exactly; the range guard still allows a few denars of drift so the test keeps
+// passing if a small markup is reintroduced.
 func TestEURDisplay(t *testing.T) {
 	for eur := 1; eur <= 500; eur++ {
 		mkd := MKD(eur)

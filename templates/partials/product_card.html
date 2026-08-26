@@ -47,6 +47,7 @@
 
       <div class="product-card__price">
         <span class="product-card__price-mkd font-semibold">{{mkd $p.PriceMKD}} {{t $locale "currency.MKD"}}</span>
+        {{if $p.OriginalPriceMKD}}<span class="product-card__price-original">{{mkd (derefI $p.OriginalPriceMKD)}}</span>{{end}}
         {{if showEUR $locale}}<span class="product-card__price-eur text-muted text-xs">{{eur $p.PriceMKD}} €</span>{{end}}
       </div>
     </div>

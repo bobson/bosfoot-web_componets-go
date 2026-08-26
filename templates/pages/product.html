@@ -144,6 +144,7 @@
         <div class="product__buy">
           <div class="product__price-row">
             <span class="product__price font-bold">{{mkd .Product.PriceMKD}} {{t .Locale "currency.MKD"}}</span>
+            {{if .Product.OriginalPriceMKD}}<span class="product__price-original">{{mkd (derefI .Product.OriginalPriceMKD)}} {{t .Locale "currency.MKD"}}</span>{{end}}
             {{if showEUR .Locale}}<span class="product__price-eur text-muted">{{eur .Product.PriceMKD}} €</span>{{end}}
           </div>
 
@@ -354,7 +355,7 @@
     <div class="product__floating-inner container">
       <div class="product__floating-info">
         <span class="product__floating-name font-semibold">{{.Product.Name}}</span>
-        <span class="product__floating-price text-muted text-sm">{{mkd .Product.PriceMKD}} {{t .Locale "currency.MKD"}}{{if showEUR .Locale}} · {{eur .Product.PriceMKD}} €{{end}}</span>
+        <span class="product__floating-price text-muted text-sm">{{mkd .Product.PriceMKD}} {{t .Locale "currency.MKD"}}{{if .Product.OriginalPriceMKD}} <s class="product__price-original">{{mkd (derefI .Product.OriginalPriceMKD)}}</s>{{end}}{{if showEUR .Locale}} · {{eur .Product.PriceMKD}} €{{end}}</span>
         <span class="product__floating-trust text-xs">{{t .Locale "trust.cod.title"}} · {{t .Locale "trust.returns.title"}}</span>
       </div>
       <button class="product__add-to-cart" id="add-to-cart-floating"

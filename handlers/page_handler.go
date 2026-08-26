@@ -54,12 +54,9 @@ func scanProduct(s rowScanner) (models.Product, error) {
 	); err != nil {
 		return p, err
 	}
-	// Euro is the stored source; derive denars once here via the shared helper.
-	p.PriceMKD = site.MKD(priceEUR)
-	if origEUR.Valid {
-		v := site.MKD(int(origEUR.Int64))
-		p.OriginalPriceMKD = &v
-	}
+	// Euro is the stored source; derive denars (and apply any clearance) once here
+	// via the shared helper so display and charge stay in lockstep.
+	applyPricing(&p, priceEUR, origEUR)
 	if imageURL.Valid {
 		p.ImageURL = &imageURL.String
 	}

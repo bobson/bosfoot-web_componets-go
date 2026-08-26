@@ -146,8 +146,9 @@ func (h *OrderHandler) CreateOrder(w http.ResponseWriter, r *http.Request) {
 			writeJSONError(w, http.StatusInternalServerError, "internal error")
 			return
 		}
-		// Charge the same denar figure the customer sees (one conversion).
-		prodByID[id] = prodInfo{name: name, price: site.MKD(priceEUR)}
+		// Charge the same denar figure the customer sees: full price via MKD, then
+		// the site-wide clearance via SalePrice (no-op when no sale is running).
+		prodByID[id] = prodInfo{name: name, price: site.SalePrice(site.MKD(priceEUR))}
 	}
 	priceRows.Close()
 

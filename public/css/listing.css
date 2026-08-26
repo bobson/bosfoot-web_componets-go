@@ -405,6 +405,13 @@ details.filter-group[open] .filter-group__arrow {
   color: var(--color-text);
 }
 
+/* Struck-through pre-clearance price under the sale price on the card. */
+.product-card__price-original {
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+  text-decoration: line-through;
+}
+
 /* ── Badges ──────────────────────────────────────────── */
 
 .product-card__badge {

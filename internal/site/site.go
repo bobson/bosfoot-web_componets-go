@@ -87,18 +87,43 @@ func FloorDenar(n int) int {
 // DenarMarkup is a flat surcharge (in denars) added to every product's derived
 // denar price on top of the euro×rate conversion. It lets us raise all shoe
 // prices by a fixed denar amount without touching the euro source or the rate.
-// It's a multiple of 10 so prices still end in 0 after FloorDenar. Note this
-// makes the euro shown on sq/en (round(price_mkd/62)) rise ~3 and no longer be a
-// round source number — inherent to keeping the rate at 62 while adding a flat
-// denar amount.
-const DenarMarkup = 200
+// It's a multiple of 10 so prices still end in 0 after FloorDenar.
+//
+// Currently 0: reverted 2026-08-26 back to pure euro×62 after a 2-week sales
+// stall that began when the markup pushed every price up 200 denars (e.g. €100
+// went 6200 → 6400). With the markup at 0 the euro shown on sq/en
+// (round(price_mkd/62)) again recovers the round source euro. Raise this again
+// only if a fixed across-the-board denar uplift is wanted.
+const DenarMarkup = 0
 
 // MKD converts a euro price (the stored source) to denars: euro × rate, floored
 // to the nearest 10, plus the flat DenarMarkup. This is the ONE conversion — the
 // display handlers and the order handler both call it, so the price a customer
-// sees equals the price charged. €135 → 8570; €100 → 6400.
+// sees equals the price charged. €135 → 8370; €100 → 6200.
 func MKD(eur int) int {
 	return FloorDenar(int(math.Round(float64(eur)*MKDtoEUR))) + DenarMarkup
+}
+
+// ClearancePct is a site-wide clearance markdown applied to EVERY product's price
+// (0 = no sale). When > 0 the full price is shown struck through and the
+// discounted price is both displayed and charged. It layers on top of MKD (the
+// canonical full price) rather than being baked in, so a running clearance always
+// has a "was" price to strike, and ending it is a one-constant flip back to 0.
+// 2026-08-26: 0.10 — summer clearance across the whole catalogue.
+const ClearancePct = 0.10
+
+// SaleActive reports whether a site-wide clearance is currently running.
+func SaleActive() bool { return ClearancePct > 0 }
+
+// SalePrice applies ClearancePct to a full denar price, floored to the nearest 10
+// so sale prices still end in 0 like every other price. With the clearance off it
+// returns the price unchanged. The display handlers and the order handler both
+// call it, so the price a customer sees equals the price charged.
+func SalePrice(full int) int {
+	if ClearancePct <= 0 {
+		return full
+	}
+	return FloorDenar(int(math.Round(float64(full) * (1 - ClearancePct))))
 }
 
 // ShippingMKD is the flat delivery fee in denars; FreeShippingMKD is the goods

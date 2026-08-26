@@ -427,6 +427,13 @@ body.page-product {
   font-size: var(--fs-sm);
 }
 
+/* Struck-through pre-clearance price shown next to the sale price. */
+.product__price-original {
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+  text-decoration: line-through;
+}
+
 .product__add-to-cart {
   display: flex;
   align-items: center;
