@@ -92,12 +92,15 @@ func main() {
 			log.Fatal(err)
 		}
 
-		// Current qty — 0 if this variant has no stock row yet.
+		// Current qty — 0 (and no row) if this variant has no stock row yet.
 		var cur int
+		exists := true
 		switch err := tx.QueryRow(`
 			SELECT qty FROM product_stock WHERE product_id=$1 AND size_id=$2 AND color_id=$3`,
 			productID, sizeID, colorID).Scan(&cur); err {
-		case nil, sql.ErrNoRows:
+		case nil:
+		case sql.ErrNoRows:
+			exists = false
 		default:
 			log.Fatal(err)
 		}
@@ -107,12 +110,26 @@ func main() {
 			log.Fatalf("size %s: %d + (%d) = %d would be negative — refusing", d.sizeStr, cur, d.qty, next)
 		}
 
-		// Add-only upsert: create the row at the delta, or bump an existing one.
-		if _, err := tx.Exec(`
-			INSERT INTO product_stock (product_id, size_id, color_id, qty) VALUES ($1,$2,$3,$4)
-			ON CONFLICT (product_id, size_id, color_id) DO UPDATE SET qty = product_stock.qty + $4`,
-			productID, sizeID, colorID, d.qty); err != nil {
-			log.Fatal(err)
+		// Bump an existing row, or create it at the delta. We branch instead of
+		// using INSERT … ON CONFLICT because Postgres validates the qty>=0 CHECK
+		// on the *speculative* insert tuple (the raw delta) BEFORE resolving the
+		// conflict to DO UPDATE — so a negative delta on an existing row would
+		// wrongly fail even though the final value is >= 0. A plain UPDATE only
+		// checks the final row; a fresh-row INSERT only ever carries a non-negative
+		// delta here (cur=0, so the next<0 guard above already caught negatives).
+		if exists {
+			if _, err := tx.Exec(`
+				UPDATE product_stock SET qty = qty + $4
+				WHERE product_id=$1 AND size_id=$2 AND color_id=$3`,
+				productID, sizeID, colorID, d.qty); err != nil {
+				log.Fatal(err)
+			}
+		} else {
+			if _, err := tx.Exec(`
+				INSERT INTO product_stock (product_id, size_id, color_id, qty) VALUES ($1,$2,$3,$4)`,
+				productID, sizeID, colorID, d.qty); err != nil {
+				log.Fatal(err)
+			}
 		}
 
 		fmt.Printf("  size %-4s  %d → %d  (%+d)\n", d.sizeStr, cur, next, d.qty)
