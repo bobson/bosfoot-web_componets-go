@@ -154,13 +154,17 @@
     </a>
   </div>
 
-  {{/* User/login — bottom of drawer, hidden on desktop */}}
+  {{/* User/login — bottom of drawer, hidden on desktop. Commented out until the
+       account/admin feature ships: /{locale}/account has no route yet, so a live
+       link 404s for visitors and Google. Un-comment once the account pages exist. */}}
+  {{/*
   <a class="nav__user" href="/{{.Locale}}/account">
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false">
       <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
     </svg>
     <span>{{t .Locale "nav.login"}}</span>
   </a>
+  */}}
 
 </div>
 
