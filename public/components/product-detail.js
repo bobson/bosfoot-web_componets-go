@@ -465,7 +465,7 @@ export function initProductDetail() {
 
     // Funnel: the only step with no server request, so this beacon is what makes
     // add-to-cart visible (plus the Meta AddToCart event when the pixel is on).
-    track('AddToCart', { product_id: parseInt(d.productId, 10) });
+    track('AddToCart', { product_id: parseInt(d.productId, 10), size, color: selectedColor });
 
     // Brief confirmation on both buttons, then restore the live state.
     buyBtns.forEach((b) => {

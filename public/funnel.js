@@ -16,15 +16,21 @@ export function track(event, data = {}) {
   if (window.fbq) window.fbq('track', event, data);
 
   // First-party beacon is deliberately NOT gated on cookie consent: it sets no
-  // cookie and stores no identifier (only product_id + locale), so it's anonymous
-  // legitimate-interest analytics, not marketing tracking. The Meta Pixel above
-  // is gated only on META_PIXEL_ID (server-side): when it's unset window.fbq
-  // stays undefined and the call no-ops. The cookie notice (public/prefs.js) is
-  // informational — it does NOT hold the pixel until the visitor accepts.
+  // cookie and stores no identifier (only product_id + size + colour + locale, all
+  // product attributes), so it's anonymous legitimate-interest analytics, not
+  // marketing tracking. The Meta Pixel above is gated only on META_PIXEL_ID
+  // (server-side): when it's unset window.fbq stays undefined and the call
+  // no-ops. The cookie notice (public/prefs.js) is informational — it does NOT
+  // hold the pixel until the visitor accepts.
   if (event === 'AddToCart' && navigator.sendBeacon) {
     const body = JSON.stringify({
       event: 'add_to_cart',
       product_id: Number(data.product_id) || 0,
+      // size + colour make the beacon a size-level demand signal (which
+      // size/colour gets added but not bought) — the reorder question. Both are
+      // optional; the server bounds/normalises them.
+      size: Number(data.size) || 0,
+      color: (data.color || '').toString(),
       locale: document.documentElement.lang || '',
     });
     // Path is "cart-add", NOT "track": privacy blockers drop any /api/track,

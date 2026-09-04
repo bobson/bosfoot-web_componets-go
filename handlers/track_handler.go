@@ -25,6 +25,8 @@ var allowedEvents = map[string]bool{"add_to_cart": true}
 type trackReq struct {
 	Event     string `json:"event"`
 	ProductID int    `json:"product_id"`
+	Size      int    `json:"size"`  // EU size, e.g. 42; 0 when the client omitted it
+	Color     string `json:"color"` // colour name, e.g. "Chestnut"; "" when omitted
 	Locale    string `json:"locale"`
 }
 
@@ -47,7 +49,16 @@ func (h *TrackHandler) Track(w http.ResponseWriter, r *http.Request) {
 	if req.Locale != "mk" && req.Locale != "sq" && req.Locale != "en" {
 		req.Locale = ""
 	}
-	h.Logger.Info("funnel", "event", req.Event, "product_id", req.ProductID, "locale", req.Locale,
-		"ip", clientIP(r))
+	// Bound the size to the real EU range (37–48) so a junk beacon can't pollute
+	// the log; anything out of range is dropped to 0 ("unknown"). Cap the colour
+	// name length — it's an attacker-controlled free string in a public endpoint.
+	if req.Size < 37 || req.Size > 48 {
+		req.Size = 0
+	}
+	if len(req.Color) > 32 {
+		req.Color = req.Color[:32]
+	}
+	h.Logger.Info("funnel", "event", req.Event, "product_id", req.ProductID,
+		"size", req.Size, "color", req.Color, "locale", req.Locale, "ip", clientIP(r))
 	w.WriteHeader(http.StatusNoContent)
 }

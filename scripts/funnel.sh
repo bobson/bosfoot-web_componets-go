@@ -96,6 +96,38 @@ printf '  %-34s %s\n' "↳ Checkout page views"    "$checkouts"
 printf '  %-34s %s\n' "↳ Reservations (real)"    "$realorders"
 
 echo
+# product_id → name map for the breakdown below. The beacon logs the id, not the
+# name, so we look names up in Postgres once (json_object_agg → a single JSON
+# object jq can index). Best-effort: if psql is missing or DATABASE_URL isn't
+# readable, NAMES_JSON stays "{}" and the breakdown falls back to "product #<id>".
+# Reads DATABASE_URL from the project-root .env regardless of the current dir.
+NAMES_JSON='{}'
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+DBURL="$(sed -n 's/^DATABASE_URL=//p' "$ROOT/.env" 2>/dev/null | head -1)"
+if [ -n "$DBURL" ] && command -v psql >/dev/null 2>&1; then
+  n="$(psql "$DBURL" -tAc "SELECT json_object_agg(id::text, name) FROM products" 2>/dev/null)"
+  case "$n" in '{'*) NAMES_JSON="$n" ;; esac  # ignore empty/NULL/error output
+fi
+
+# Add-to-cart demand, broken out by product / size / colour. This is the reorder
+# signal: which size + colour gets added, and how often. NOTE it counts add
+# EVENTS (an append-only log), not carts "sitting" open — the cart is client-side
+# only, so there is no live cart state to read. size/colour appear only on beacons
+# from 2026-09 onward (older lines show size "—"). jq -s (slurp) so we can group
+# across lines; same owner-IP filter as the totals above.
+echo "Add-to-cart by product / size / colour (real, excl. bots/test):"
+addbreak="$(printf '%s\n' "$APP" | jq -rs --arg ips "$TEST_IPS" --argjson names "$NAMES_JSON" '
+  [ .[]
+    | select((.event // "")=="add_to_cart" and ((.ip // "") | '"$NOTOWN"'))
+    | {pid: (.product_id // 0), size: (.size // 0), color: (.color // "")} ]
+  | group_by([.pid, .size, .color])
+  | map({pid: .[0].pid, size: .[0].size, color: .[0].color, n: length,
+         name: ($names[(.[0].pid|tostring)] // "product #\(.[0].pid)")})
+  | sort_by(-.n)
+  | .[] | "  \(.n)×  \(.name)  ·  size \(if .size==0 then "—" else (.size|tostring) end)  ·  \(if .color=="" then "—" else .color end)"' 2>/dev/null)"
+[ -n "$addbreak" ] && printf '%s\n' "$addbreak" || echo "  (none)"
+
+echo
 echo "Reservation POST attempts by status (real, excl. bots/test):"
 status="$(cq "select(.request.method==\"POST\" and (.request.uri|test(\"/api/orders\")) and $HUMAN) | .status" | sort | uniq -c)"
 [ -n "$status" ] && printf '%s\n' "$status" || echo "  (none)"
