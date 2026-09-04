@@ -116,15 +116,19 @@ fi
 # from 2026-09 onward (older lines show size "—"). jq -s (slurp) so we can group
 # across lines; same owner-IP filter as the totals above.
 echo "Add-to-cart by product / size / colour (real, excl. bots/test):"
-addbreak="$(printf '%s\n' "$APP" | jq -rs --arg ips "$TEST_IPS" --argjson names "$NAMES_JSON" '
-  [ .[]
-    | select((.event // "")=="add_to_cart" and ((.ip // "") | '"$NOTOWN"'))
-    | {pid: (.product_id // 0), size: (.size // 0), color: (.color // "")} ]
-  | group_by([.pid, .size, .color])
-  | map({pid: .[0].pid, size: .[0].size, color: .[0].color, n: length,
-         name: ($names[(.[0].pid|tostring)] // "product #\(.[0].pid)")})
-  | sort_by(-.n)
-  | .[] | "  \(.n)×  \(.name)  ·  size \(if .size==0 then "—" else (.size|tostring) end)  ·  \(if .color=="" then "—" else .color end)"' 2>/dev/null)"
+# Two stages so we never slurp the whole (potentially huge) app log into memory:
+# stage 1 streams line-by-line, keeping only the tiny add_to_cart set; stage 2
+# slurps just those to group + count.
+addbreak="$(printf '%s\n' "$APP" \
+  | jq -c --arg ips "$TEST_IPS" \
+      'select((.event // "")=="add_to_cart" and ((.ip // "") | '"$NOTOWN"'))
+       | {pid: (.product_id // 0), size: (.size // 0), color: (.color // "")}' 2>/dev/null \
+  | jq -rs --argjson names "$NAMES_JSON" '
+      group_by([.pid, .size, .color])
+      | map({pid: .[0].pid, size: .[0].size, color: .[0].color, n: length,
+             name: ($names[(.[0].pid|tostring)] // "product #\(.[0].pid)")})
+      | sort_by(-.n)
+      | .[] | "  \(.n)×  \(.name)  ·  size \(if .size==0 then "—" else (.size|tostring) end)  ·  \(if .color=="" then "—" else .color end)"' 2>/dev/null)"
 [ -n "$addbreak" ] && printf '%s\n' "$addbreak" || echo "  (none)"
 
 echo
