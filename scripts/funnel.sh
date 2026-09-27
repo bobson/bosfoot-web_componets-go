@@ -26,7 +26,8 @@ SINCE="${1:-24 hours ago}"
 #                            /24 (seen .165 and .17), so it's listed as a /24 prefix
 #                            (trailing dot). Safe: residential block, no real
 #                            customers share it.
-#              185.100.245.80 = mobile (A1). A1 mobile ALSO rotates across its /24,
+#              46.217.230.59 = home Wi-Fi (T-Home), exact address.
+#              185.100.245.80, 185.100.245.151 = mobile (A1). A1 mobile ALSO rotates across its /24,
 #                            but A1 is a big shared/CGNAT provider, so a /24 prefix
 #                            would risk dropping real MK mobile shoppers — kept FULL
 #                            on purpose. Mobile testing is now rare, and the FB
@@ -41,7 +42,7 @@ SINCE="${1:-24 hours ago}"
 BOT='bot|crawl|spider|facebookexternalhit|headless|scan|python-requests|go-http|curl|wget|okhttp|libwww|java/|axios|node-fetch|ahrefs|semrush|mj12|dataforseo|iphone os 13_2_3|trident/|chrome/88\.|chrome/19\.'
 TEST_UA='A142P'
 TEST_EMAIL='bmarkoski@gmail.com'
-TEST_IPS='146.255.75. 185.100.245.80'
+TEST_IPS='146.255.75. 185.100.245.80 185.100.245.151 46.217.230.59'
 RE="$BOT|$TEST_UA"
 # Static-asset URIs (query string stripped before matching). Used to tell a real
 # browser (loads HTML *and* assets) from a bot that only grabs the HTML.
@@ -50,7 +51,11 @@ ASSET_RE='\.(css|js|mjs|ttf|woff2?|webp|avif|jpe?g|png|gif|svg|ico|json|webmanif
 command -v jq >/dev/null 2>&1 || { echo "jq required: sudo apt install jq" >&2; exit 1; }
 
 CADDY="$(journalctl -u caddy   --since "$SINCE" -o cat 2>/dev/null | grep '"msg":"handled request"')"
-APP="$(journalctl   -u bosfoot --since "$SINCE" -o cat 2>/dev/null)"
+# Keep only the JSON (slog) lines. The unit's journal also holds plain-text
+# lines — systemd's "Started bosfoot.service" on every deploy/restart, stray
+# log.Printf output — and jq ABORTS at the first unparseable line, silently
+# dropping every add-to-cart/order after it (windows spanning a deploy showed 0).
+APP="$(journalctl   -u bosfoot --since "$SINCE" -o cat 2>/dev/null | grep '^{')"
 
 # jq filter over the Caddy log ($re = bot/test UA regex, $ips = owner IP prefixes).
 cq() { printf '%s\n' "$CADDY" | jq -r --arg re "$RE" --arg ips "$TEST_IPS" "$1" 2>/dev/null; }
