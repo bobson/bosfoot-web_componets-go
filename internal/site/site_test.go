@@ -1,6 +1,9 @@
 package site
 
-import "testing"
+import (
+	"math"
+	"testing"
+)
 
 // TestOrderNumberRoundTrip confirms ParseOrderNumber inverts OrderNumber, so the
 // BF- number the owner sees in the listing/emails is exactly what the terminal
@@ -52,28 +55,25 @@ func TestMKD(t *testing.T) {
 	}
 }
 
-// TestSalePrice pins the site-wide clearance markdown. With ClearancePct 0.10 the
-// full price drops 10%, floored to the nearest 10 so it still ends in 0.
+// TestSalePrice pins the site-wide clearance markdown: the full price drops by
+// ClearancePct, floored to the nearest 10 so it still ends in 0. With the
+// clearance off (0) the price must come back unchanged.
 func TestSalePrice(t *testing.T) {
-	cases := []struct {
-		full, want int
-	}{
-		{6200, 5580},  // 6200*0.9 = 5580
-		{8370, 7530},  // 8370*0.9 = 7533 → floor 7530
-		{6510, 5850},  // 6510*0.9 = 5859 → floor 5850
-		{13020, 11710}, // 13020*0.9 = 11718 → floor 11710
-		{0, 0},
-	}
-	for _, c := range cases {
-		if got := SalePrice(c.full); got != c.want {
-			t.Errorf("SalePrice(%d) = %d, want %d", c.full, got, c.want)
+	for _, full := range []int{6200, 8370, 6510, 13020, 0} {
+		got := SalePrice(full)
+		want := FloorDenar(int(math.Round(float64(full) * (1 - ClearancePct))))
+		if ClearancePct <= 0 {
+			want = full
 		}
-		if got := SalePrice(c.full); got%10 != 0 {
-			t.Errorf("SalePrice(%d) = %d does not end in 0", c.full, got)
+		if got != want {
+			t.Errorf("SalePrice(%d) = %d, want %d", full, got, want)
+		}
+		if got%10 != 0 {
+			t.Errorf("SalePrice(%d) = %d does not end in 0", full, got)
 		}
 	}
-	if !SaleActive() {
-		t.Error("SaleActive() = false, want true while ClearancePct > 0")
+	if SaleActive() != (ClearancePct > 0) {
+		t.Errorf("SaleActive() = %v with ClearancePct %v", SaleActive(), ClearancePct)
 	}
 }
 

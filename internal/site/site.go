@@ -110,7 +110,8 @@ func MKD(eur int) int {
 // canonical full price) rather than being baked in, so a running clearance always
 // has a "was" price to strike, and ending it is a one-constant flip back to 0.
 // 2026-08-26: 0.10 — summer clearance across the whole catalogue.
-const ClearancePct = 0.10
+// 2026-09-27: 0 — clearance ended, back to regular prices.
+const ClearancePct = 0.0
 
 // SaleActive reports whether a site-wide clearance is currently running.
 func SaleActive() bool { return ClearancePct > 0 }
