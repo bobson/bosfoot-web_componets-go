@@ -123,6 +123,9 @@ func NewRenderer(dir string, ui *locale.UI) (*Renderer, error) {
 		// head partial only renders the pixel when it's non-empty.
 		"pixelID": site.MetaPixelID,
 
+		// preordersOpen reports whether no-stock products can be reserved (site.PreordersOpen).
+		"preordersOpen": func() bool { return site.PreordersOpen },
+
 		// faq / faqSchema power the FAQ page + assistant widget from one source
 		// (internal/faq); assistantEnabled gates the free-text box on the API key.
 		"faq":              faq.Localized,

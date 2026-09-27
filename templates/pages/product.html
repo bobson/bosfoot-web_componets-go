@@ -21,7 +21,7 @@
       <div class="product__gallery">
         <div class="product__carousel">
           <div class="product__badges">
-            {{if not .Product.InStock}}<span class="product__badge product__badge--preorder">{{t .Locale "cart.preorder"}}</span>{{end}}
+            {{if not .Product.InStock}}<span class="product__badge product__badge--preorder">{{if preordersOpen}}{{t .Locale "cart.preorder"}}{{else}}{{t .Locale "product.outOfStock"}}{{end}}</span>{{end}}
             {{if .Product.IsNew}}<span class="product__badge product__badge--new">{{t .Locale "product.new"}}</span>{{end}}
             {{if .Product.IsOnSale}}<span class="product__badge product__badge--sale">{{t .Locale "product.sale"}}</span>{{end}}
           </div>
@@ -155,6 +155,7 @@
             data-image-url="{{if .Product.ImageURL}}{{asset (deref .Product.ImageURL)}}{{end}}"
             data-price="{{.Product.PriceMKD}}"
             data-in-stock="{{if .Product.InStock}}1{{end}}"
+            data-preorders-open="{{if preordersOpen}}1{{end}}"
             data-label-pick="{{t .Locale "detail.selectSize"}}"
             data-label-add="{{t .Locale "cta.addToCart"}}"
             data-label-notify="{{t .Locale "detail.notifySize"}}"

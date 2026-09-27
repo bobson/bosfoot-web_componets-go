@@ -107,7 +107,10 @@ export function initProductDetail() {
   // fully selectable (the batch ships later) — the customer picks a size + colour
   // like normal, but the order never decrements inventory. Only the label/note
   // and the missing stock/notify behaviour differ from a stocked product.
-  const preorderMode = realBtn?.dataset.inStock !== '1';
+  // With reservations closed (site.PreordersOpen = false) a no-stock product is
+  // NOT preorder: it falls through to the stocked-product path with every size at
+  // 0, so all sizes grey out and picking one shows "Get notified".
+  const preorderMode = realBtn?.dataset.inStock !== '1' && realBtn?.dataset.preordersOpen === '1';
   const notifyNote = document.getElementById('notify-note');
   const preorderNote = document.getElementById('preorder-note');
 

@@ -230,7 +230,7 @@ func (h *OrderHandler) CreateOrder(w http.ResponseWriter, r *http.Request) {
 
 	// Three cases per line:
 	//   • preorder product (no stock) → accept as preorder, no decrement, size
-	//     optional (grid is display-only for these).
+	//     optional — only while site.PreordersOpen; otherwise rejected (409).
 	//   • stocked product, size in stock → atomically decrement. The `qty >= $1`
 	//     guard + the row lock the UPDATE takes make concurrent last-pair orders
 	//     safe (the loser matches 0 rows and is rejected).
@@ -238,6 +238,15 @@ func (h *OrderHandler) CreateOrder(w http.ResponseWriter, r *http.Request) {
 	//     not orderable. Rolls the whole order back (defer tx.Rollback).
 	var eventsToBroadcast []pubsub.StockEvent
 	for _, it := range req.Items {
+		// Reservations closed: a no-stock product can't be ordered at all (e.g. a
+		// preorder line left in an old localStorage cart). Same 409 as a sold-out
+		// size, so the checkout shows its "just sold out" message.
+		if !hasStock[it.ProductID] && !site.PreordersOpen && !site.PreorderAll {
+			h.Logger.Info("order rejected", "reason", "preorders closed",
+				"product_id", it.ProductID, "size", it.Size, "color", it.Color)
+			writeJSONError(w, http.StatusConflict, "out_of_stock")
+			return
+		}
 		if hasStock[it.ProductID] {
 			var newQty int
 			err := tx.QueryRowContext(r.Context(), `
