@@ -165,8 +165,10 @@
           {{/* Static note shown when an out-of-stock size is picked on a stocked
                product (no capture — points to our channels). */}}
           <p class="product__notify-note text-sm text-muted" id="notify-note" hidden>{{t .Locale "notify.body"}}</p>
-          {{/* Preorder note — shown by JS for products with no stock at all. */}}
-          <p class="product__preorder-note text-sm text-muted" id="preorder-note" hidden>{{t .Locale "preorder.note"}}</p>
+          {{/* Preorder note — shown by JS for products with no stock at all. Be Lenka
+               is dropshipped from the maker (no batch to wait for), so it gets a
+               fixed delivery time instead of the "next batch" wording. */}}
+          <p class="product__preorder-note text-sm text-muted" id="preorder-note" hidden>{{if eq .Product.BrandSlug "be-lenka"}}{{t .Locale "preorder.noteDropship"}}{{else}}{{t .Locale "preorder.note"}}{{end}}</p>
 
           {{/* Trust block: authentic → pay on delivery → free returns. Biggest
                conversion lever for risk-averse MK buyers; applies to in-stock and

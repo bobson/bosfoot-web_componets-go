@@ -4,8 +4,11 @@
 // safe and self-healing (ON CONFLICT DO UPDATE for the parent row; child rows
 // are rebuilt), so the flow is: edit a data/ JSON in euro → run this → DB matches.
 //
-//	go run ./cmd/shoeimport
+//	go run ./cmd/shoeimport                  # Freet (default brand)
+//	go run ./cmd/shoeimport -brand be-lenka  # one brand only — never touches others
 //
+// Only the chosen brand's products are rebuilt, so importing a new brand can't
+// reset another brand's live stock.
 // Euro is the source price; MKD is derived via site.MKD (legacy price_mkd kept
 // in sync during the transition). Brand row + size_chart still come from the SQL
 // seed for now. Run from the project root so data/ and public/ resolve.
@@ -28,8 +31,6 @@ import (
 	"bosfoot/internal/site"
 )
 
-const brandSlug = "freet"
-
 type product struct {
 	Name   string `json:"name"`
 	Price  int    `json:"price"` // EUR (source)
@@ -39,11 +40,11 @@ type product struct {
 		Published bool `json:"published"`
 		Featured  bool `json:"featured"`
 	} `json:"status"`
-	SortOrder    int                          `json:"sortOrder"`
-	Activities   []string                     `json:"activities"`
-	Highlights   []map[string]string          `json:"highlights"`
-	Colors       []struct{ Name, Hex string } `json:"colors"`
-	Stock        map[string]map[string]int    `json:"stock"` // color -> size -> qty
+	SortOrder    int                           `json:"sortOrder"`
+	Activities   []string                      `json:"activities"`
+	Highlights   []map[string]string           `json:"highlights"`
+	Colors       []struct{ Name, Hex string }  `json:"colors"`
+	Stock        map[string]map[string]int     `json:"stock"` // color -> size -> qty
 	Specs        []struct{ Key, Value string } `json:"specs"`
 	Translations map[string]struct {
 		Description    string `json:"description"`
@@ -98,7 +99,9 @@ func main() {
 	// back) because committing changes price_mkd on the shared/live DB before the
 	// euro-aware code deploys. Pass -commit at the coordinated deploy.
 	commit := flag.Bool("commit", false, "actually write to the DB (default: dry-run, rolled back)")
+	brand := flag.String("brand", "freet", "brand slug: reads data/{brand}/products, images from public/images/{brand}")
 	flag.Parse()
+	brandSlug := *brand
 
 	db, err := database.Connect()
 	if err != nil {
@@ -125,7 +128,7 @@ func main() {
 	}
 	for _, path := range files {
 		slug := strings.TrimSuffix(filepath.Base(path), ".json")
-		if err := importProduct(db, brandID, catID, slug, path, *commit); err != nil {
+		if err := importProduct(db, brandSlug, brandID, catID, slug, path, *commit); err != nil {
 			log.Fatalf("%s: %v", slug, err)
 		}
 	}
@@ -136,7 +139,7 @@ func main() {
 	}
 }
 
-func importProduct(db *sql.DB, brandID, catID int, slug, path string, commit bool) error {
+func importProduct(db *sql.DB, brandSlug string, brandID, catID int, slug, path string, commit bool) error {
 	raw, err := os.ReadFile(path)
 	if err != nil {
 		return err
@@ -149,13 +152,13 @@ func importProduct(db *sql.DB, brandID, catID int, slug, path string, commit boo
 		return fmt.Errorf("no colors")
 	}
 
-	sku := "FREET-" + strings.ToUpper(slug)
+	sku := strings.ToUpper(strings.ReplaceAll(brandSlug, "-", "")) + "-" + strings.ToUpper(slug)
 	var genderID int
 	if err := db.QueryRow(`SELECT id FROM genders WHERE value=$1`, p.Gender).Scan(&genderID); err != nil {
 		return fmt.Errorf("gender %q: %w", p.Gender, err)
 	}
 	primaryFolder := colorFolder(p.Colors[0].Name)
-	imageURL := fmt.Sprintf("/images/freet/%s/images/%s/%s.webp", slug, primaryFolder, slug)
+	imageURL := fmt.Sprintf("/images/%s/%s/images/%s/%s.webp", brandSlug, slug, primaryFolder, slug)
 	priceMKD := site.MKD(p.Price)
 
 	tx, err := db.Begin()
@@ -280,7 +283,7 @@ func importProduct(db *sql.DB, brandID, catID int, slug, path string, commit boo
 	sortOrder := 0
 	for i, c := range p.Colors {
 		folder := colorFolder(c.Name)
-		dir := filepath.Join("public/images/freet", slug, "images", folder)
+		dir := filepath.Join("public/images", brandSlug, slug, "images", folder)
 		var names []string
 		if i > 0 {
 			if _, err := os.Stat(filepath.Join(dir, slug+".webp")); err == nil {
@@ -290,7 +293,7 @@ func importProduct(db *sql.DB, brandID, catID int, slug, path string, commit boo
 		names = append(names, galleryFiles(dir, slug)...)
 		for _, name := range names {
 			sortOrder++
-			url := fmt.Sprintf("/images/freet/%s/images/%s/%s", slug, folder, name)
+			url := fmt.Sprintf("/images/%s/%s/images/%s/%s", brandSlug, slug, folder, name)
 			if _, err := tx.Exec(`INSERT INTO product_gallery (product_id, image_url, sort_order) VALUES ($1,$2,$3)`,
 				pid, url, sortOrder); err != nil {
 				return fmt.Errorf("gallery %s: %w", name, err)

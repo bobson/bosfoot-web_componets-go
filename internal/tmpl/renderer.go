@@ -30,40 +30,78 @@ type Renderer struct {
 	hashes sync.Map // path -> hash string
 }
 
+// asset appends a content hash to a public asset path: /styles.css -> /styles.css?v=abcdef.
+// A missing file is returned unversioned.
+func (r *Renderer) asset(path string) string {
+	fullPath := filepath.Join("public", strings.TrimPrefix(path, "/"))
+	info, err := os.Stat(fullPath)
+	if err != nil {
+		log.Printf("Asset not found: %s (path: %s)", fullPath, path)
+		return path
+	}
+
+	// Use path + modtime + size as a cache key
+	key := fmt.Sprintf("%s:%d:%d", path, info.ModTime().Unix(), info.Size())
+	if h, ok := r.hashes.Load(key); ok {
+		return fmt.Sprintf("%s?v=%s", path, h.(string))
+	}
+
+	f, err := os.Open(fullPath)
+	if err != nil {
+		return path
+	}
+	defer f.Close()
+
+	hash := sha256.New()
+	if _, err := io.Copy(hash, f); err != nil {
+		return path
+	}
+	hStr := hex.EncodeToString(hash.Sum(nil))[:8]
+	r.hashes.Store(key, hStr)
+	return fmt.Sprintf("%s?v=%s", path, hStr)
+}
+
+// jsModuleGlobs are the directories holding the browser ES modules. Every file
+// matched here gets an import-map entry; a module outside them would load
+// unversioned, so add its directory here.
+var jsModuleGlobs = []string{"public/*.js", "public/components/*.js"}
+
+// importMap renders an import map that points every JS module's plain URL at
+// its content-hashed URL ("/funnel.js" -> "/funnel.js?v=ab12cd34"). The browser
+// applies it to ALL module loads — app.js's dynamic imports and the static
+// imports between modules — so each file is cached immutably under its own hash
+// and a changed file gets a new URL on the next deploy. Previously components
+// were versioned by app.js's hash, so an edit to a component alone kept its old
+// URL and returning visitors ran year-cached stale code. Must be emitted before
+// the first module script.
+func (r *Renderer) importMap() template.HTML {
+	imports := map[string]string{}
+	for _, g := range jsModuleGlobs {
+		files, _ := filepath.Glob(g)
+		for _, f := range files {
+			url := "/" + filepath.ToSlash(strings.TrimPrefix(f, "public"+string(filepath.Separator)))
+			imports[url] = r.asset(url)
+		}
+	}
+	// json.Marshal escapes <, > and &, so the output can't close the script tag.
+	b, err := json.Marshal(map[string]any{"imports": imports})
+	if err != nil {
+		return ""
+	}
+	return template.HTML(`<script type="importmap">` + string(b) + `</script>`)
+}
+
 // NewRenderer parses all templates under dir/partials/*.html and dir/pages/*.html.
 // The provided UI is used by the t() template function.
 func NewRenderer(dir string, ui *locale.UI) (*Renderer, error) {
 	r := &Renderer{}
 	funcMap := template.FuncMap{
 		// asset appends a content hash to a public asset path: /styles.css -> /styles.css?v=abcdef
-		"asset": func(path string) string {
-			fullPath := filepath.Join("public", strings.TrimPrefix(path, "/"))
-			info, err := os.Stat(fullPath)
-			if err != nil {
-				log.Printf("Asset not found: %s (path: %s)", fullPath, path)
-				return path
-			}
+		"asset": r.asset,
 
-			// Use path + modtime + size as a cache key
-			key := fmt.Sprintf("%s:%d:%d", path, info.ModTime().Unix(), info.Size())
-			if h, ok := r.hashes.Load(key); ok {
-				return fmt.Sprintf("%s?v=%s", path, h.(string))
-			}
-
-			f, err := os.Open(fullPath)
-			if err != nil {
-				return path
-			}
-			defer f.Close()
-
-			hash := sha256.New()
-			if _, err := io.Copy(hash, f); err != nil {
-				return path
-			}
-			hStr := hex.EncodeToString(hash.Sum(nil))[:8]
-			r.hashes.Store(key, hStr)
-			return fmt.Sprintf("%s?v=%s", path, hStr)
-		},
+		// importMap emits the <script type="importmap"> that versions every JS
+		// module by its own content hash (see Renderer.importMap).
+		"importMap": r.importMap,
 
 		// t translates a key for the given locale: {{t .Locale "nav.products"}}
 		"t": ui.T,

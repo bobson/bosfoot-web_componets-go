@@ -81,7 +81,10 @@ visitors=$(printf '%s\n' "$CADDY" \
       { ips[$1]=1; if ($2=="a") a[$1]=1; else { k=$1 SUBSEP $3; if (!(k in sp)) { sp[k]=1; pc[$1]++ } } }
       END { n=0; for (ip in ips) if (a[ip] || pc[ip]>=2) n++; print n+0 }')
 pviews=$(cq   "select(.status==200 and (.request.uri|test(\"/products/[^/]+/\")) and $HUMAN) | 1" | grep -c .)
-checkouts=$(cq "select((.request.uri|test(\"/checkout\")) and $HUMAN) | 1" | grep -c .)
+# Anchored to the checkout PAGE (/{locale}/checkout): every page loads
+# /components/checkout-form.js, so an unanchored "/checkout" match counted
+# that script fetch as a checkout visit and inflated this step.
+checkouts=$(cq "select((.request.uri|test(\"^/(mk|sq|en)/checkout/?(\\\\?|$)\")) and $HUMAN) | 1" | grep -c .)
 addcart=$(aq   "select((.event // \"\")==\"add_to_cart\" and ((.ip // \"\") | $NOTOWN)) | 1" | grep -c .)
 realorders=$(aq "select(.msg==\"Order placed\" and ((.email // \"\")|ascii_downcase|contains(\$em|ascii_downcase)|not) and ((.ip // \"\") | $NOTOWN)) | 1" | grep -c .)
 

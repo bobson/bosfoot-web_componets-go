@@ -38,9 +38,9 @@
     "en": "Reserved"
   },
   "cart.preorderBanner": {
-    "mk": "Некои производи во кошничката се резервација — се плаќаат при испорака и се испорачуваат кога ќе пристигне следната нарачка.",
-    "sq": "Disa produkte në shportë janë me rezervim — paguhen me dorëzim dhe dërgohen kur të mbërrijë malli i radhës.",
-    "en": "Some items in your cart are reservations — pay on delivery, shipped when the next batch arrives."
+    "mk": "Некои производи во кошничката се резервација — се плаќаат при испорака. Рокот на испорака е наведен на страницата на секој производ.",
+    "sq": "Disa produkte në shportë janë me rezervim — paguhen me dorëzim. Afati i dërgesës tregohet në faqen e secilit produkt.",
+    "en": "Some items in your cart are reservations — pay on delivery. The delivery time is shown on each product's page."
   },
   "cart.subtotal": { "mk": "Меѓузбир", "sq": "Nëntotali", "en": "Subtotal" },
   "cart.title": { "mk": "Кошничка", "sq": "Shporta", "en": "Cart" },
@@ -208,6 +208,11 @@
     "mk": "Овој модел моментално не е на залиха. Резервирај сега — плаќаш при испорака, се испорачува кога ќе пристигне следната нарачка.",
     "sq": "Ky model nuk është aktualisht në stok. Rezervo tani — paguan me dorëzim, dërgohet kur të mbërrijë malli i radhës.",
     "en": "This model is currently out of stock. Reserve now — pay on delivery, shipped when the next batch arrives."
+  },
+  "preorder.noteDropship": {
+    "mk": "Овој модел го нарачуваме директно од производителот, специјално за тебе. Стига за околу 7 дена — плаќаш при испорака.",
+    "sq": "Porositet drejtpërdrejt nga prodhuesi për ty. Dërgesa për rreth 7 ditë — paguan me dorëzim.",
+    "en": "Ordered directly from the maker for you. Delivered in about 7 days — pay on delivery."
   },
   "reservation.freeNote": {
     "mk": "Плаќање при испорака, без плаќање однапред. Лесна замена на број и враќање во цела Македонија — пробај ги дома, без ризик.",

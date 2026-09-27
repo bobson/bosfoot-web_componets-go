@@ -1,8 +1,7 @@
-// Cache-bust marker — the dynamic component imports below are versioned by
-// app.js's OWN content hash (VER = ?v on this file). When you change a component
-// but NOT app.js, its hash won't move and browsers keep the old, immutably
-// cached module. Bump this date on such deploys to force a fresh fetch.
-// Bumped: 2026-08-12 (foot-finder size chart + size-guide-modal + review-form photos)
+// Cache-busting: every JS module is versioned by its OWN content hash through
+// the import map the server emits before this script (Renderer.importMap), so
+// the plain paths below resolve to /components/x.js?v=<hash>. Don't append a
+// version here — a URL that isn't a map key would bypass the map.
 import { bootstrapPixel } from './prefs.js';
 
 // Install the Meta Pixel for every visitor. The fbq stub + init + PageView run
@@ -35,16 +34,8 @@ const components = [
   ['./components/assistant.js', 'initAssistant'],
 ];
 
-// Cache-bust component imports with app.js's own asset version (its ?v=hash).
-// app.js is loaded versioned ({{asset "/app.js"}}), but these dynamic imports
-// used bare paths, so aggressive caches (notably the Facebook in-app browser,
-// which ignores hard-refresh) could pair a fresh deploy's HTML with stale
-// cached component JS — e.g. old checkout JS reading a renamed form field.
-// Stamping app.js's version onto each import forces a fresh fetch on deploy.
-const VER = new URL(import.meta.url).search; // "?v=abcd1234" (or "" in dev)
-
 for (const [path, fn] of components) {
-  import(path + VER)
+  import(path)
     .then((mod) => mod[fn]?.())
     .catch((err) => console.error(`Component failed to load: ${path}`, err));
 }
