@@ -41,7 +41,8 @@ SINCE="${1:-24 hours ago}"
 # normal browser are NOT caught here — the behavioural filter below handles those.
 BOT='bot|crawl|spider|facebookexternalhit|headless|scan|python-requests|go-http|curl|wget|okhttp|libwww|java/|axios|node-fetch|ahrefs|semrush|mj12|dataforseo|iphone os 13_2_3|trident/|chrome/88\.|chrome/19\.'
 TEST_UA='A142P'
-TEST_EMAIL='bmarkoski@gmail.com'
+# Substring match, so 'bmarkoski@' covers both owner test inboxes (gmail + yahoo).
+TEST_EMAIL='bmarkoski@'
 TEST_IPS='146.255.75. 185.100.245.80 185.100.245.151 46.217.230.59'
 RE="$BOT|$TEST_UA"
 # Static-asset URIs (query string stripped before matching). Used to tell a real
