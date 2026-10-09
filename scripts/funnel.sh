@@ -45,6 +45,15 @@ TEST_UA='A142P'
 TEST_EMAIL='bmarkoski@'
 TEST_IPS='146.255.75. 185.100.245.80 185.100.245.151 46.217.230.59'
 RE="$BOT|$TEST_UA"
+# Countries we actually ship to, by Cloudflare's Cf-Ipcountry header (space-
+# separated ISO codes). Page-traffic steps (visitors, product views, checkout,
+# POSTs) count ONLY these. Why: datacenter scrapers with real-browser UAs sail
+# through the UA + behaviour filters — in Oct 2026 the funnel said 228 visitors /
+# 213 product views for a week when only ~8 MK IPs had actually viewed a product
+# (the rest: US/DE/IE/CA… with no Referer). Set REGION='' to count all countries.
+# Add-to-cart + orders come from the app log (no country) and aren't filtered by
+# this; they need JS/a real form submit, so bots rarely reach them anyway.
+REGION='MK AL XK'
 # Static-asset URIs (query string stripped before matching). Used to tell a real
 # browser (loads HTML *and* assets) from a bot that only grabs the HTML.
 ASSET_RE='\.(css|js|mjs|ttf|woff2?|webp|avif|jpe?g|png|gif|svg|ico|json|webmanifest|txt|map|xml)$'
@@ -59,7 +68,7 @@ CADDY="$(journalctl -u caddy   --since "$SINCE" -o cat 2>/dev/null | grep '"msg"
 APP="$(journalctl   -u bosfoot --since "$SINCE" -o cat 2>/dev/null | grep '^{')"
 
 # jq filter over the Caddy log ($re = bot/test UA regex, $ips = owner IP prefixes).
-cq() { printf '%s\n' "$CADDY" | jq -r --arg re "$RE" --arg ips "$TEST_IPS" "$1" 2>/dev/null; }
+cq() { printf '%s\n' "$CADDY" | jq -r --arg re "$RE" --arg ips "$TEST_IPS" --arg region "$REGION" "$1" 2>/dev/null; }
 # jq filter over the bosfoot app log ($ips = owner IP prefixes, $em = test email).
 aq() { printf '%s\n' "$APP" | jq -r --arg ips "$TEST_IPS" --arg em "$TEST_EMAIL" "$1" 2>/dev/null; }
 
@@ -70,6 +79,10 @@ aq() { printf '%s\n' "$APP" | jq -r --arg ips "$TEST_IPS" --arg em "$TEST_EMAIL"
 NOTOWN='(. as $ip | (any($ips | split(" ")[]; . as $p | ($p|length)>0 and ($ip | startswith($p))) | not))'
 # Request is NOT a bot/test UA AND NOT from an owner IP.
 HUMAN='((((.request.headers."User-Agent"[0]) // "") | test($re;"i") | not) and (((.request.headers."Cf-Connecting-Ip"[0]) // "") | '"$NOTOWN"'))'
+# Request comes from a REGION country (always true when REGION is empty).
+LOCAL='(($region | length) == 0 or (((.request.headers."Cf-Ipcountry"[0]) // "") as $c | any($region | split(" ")[]; length > 0 and . == $c)))'
+# What every page-traffic step uses: not a bot, not the owner, and in REGION.
+REAL="($HUMAN and $LOCAL)"
 
 # A "real visitor" is an IP that behaved like a browser: it loaded at least one
 # static asset (CSS/JS/img) alongside its HTML, OR it viewed ≥2 distinct pages.
@@ -78,15 +91,20 @@ HUMAN='((((.request.headers."User-Agent"[0]) // "") | test($re;"i") | not) and (
 # real. (Assets can be Cloudflare-cached and miss the origin log, so the ≥2-page
 # fallback keeps multi-page real sessions counted.)
 visitors=$(printf '%s\n' "$CADDY" \
-  | jq -r --arg re "$RE" --arg ips "$TEST_IPS" --arg asset "$ASSET_RE" \
-      "select($HUMAN) | [ (.request.headers.\"Cf-Connecting-Ip\"[0] // \"\"),
+  | jq -r --arg re "$RE" --arg ips "$TEST_IPS" --arg region "$REGION" --arg asset "$ASSET_RE" \
+      "select($REAL) | [ (.request.headers.\"Cf-Connecting-Ip\"[0] // \"\"),
          ((.request.uri|split(\"?\")[0]) | if test(\$asset) then \"a\" else \"p\" end),
          (.request.uri|split(\"?\")[0]) ] | @tsv" 2>/dev/null \
   | awk -F'\t' '
       $1=="" { next }
       { ips[$1]=1; if ($2=="a") a[$1]=1; else { k=$1 SUBSEP $3; if (!(k in sp)) { sp[k]=1; pc[$1]++ } } }
       END { n=0; for (ip in ips) if (a[ip] || pc[ip]>=2) n++; print n+0 }')
-pviews=$(cq   "select(.status==200 and (.request.uri|test(\"/products/[^/]+/\")) and $HUMAN) | 1" | grep -c .)
+PRODUCT='(.status==200 and (.request.uri|test("/products/[^/]+/")))'
+pviews=$(cq   "select($PRODUCT and $REAL) | 1" | grep -c .)
+# Distinct IPs behind those views — a truer "people who looked at a shoe" count.
+pviewers=$(cq "select($PRODUCT and $REAL) | .request.headers.\"Cf-Connecting-Ip\"[0] // empty" | sort -u | grep -c .)
+# Same, but OUTSIDE REGION — shown only so it's visible how much is filtered.
+pforeign=$(cq "select($PRODUCT and $HUMAN and ($LOCAL | not)) | .request.headers.\"Cf-Connecting-Ip\"[0] // empty" | sort -u | grep -c .)
 # Anchored to the checkout PAGE (/{locale}/checkout): every page loads
 # /components/checkout-form.js, so an unanchored "/checkout" match counted
 # that script fetch as a checkout visit and inflated this step.
@@ -94,19 +112,20 @@ pviews=$(cq   "select(.status==200 and (.request.uri|test(\"/products/[^/]+/\"))
 # from the cart (Referrer-Policy strict-origin-when-cross-origin sends the full
 # URL in-site), whereas scrapers hit /checkout cold from datacenter IPs with no
 # Referer — in Oct 2026 those were ALL 30 "checkout views" in a 0-cart week.
-checkouts=$(cq "select((.request.uri|test(\"^/(mk|sq|en)/checkout/?(\\\\?|$)\")) and ((.request.headers.Referer[0] // \"\")|startswith(\"https://bosfoot.com/\")) and $HUMAN) | 1" | grep -c .)
+checkouts=$(cq "select((.request.uri|test(\"^/(mk|sq|en)/checkout/?(\\\\?|$)\")) and ((.request.headers.Referer[0] // \"\")|startswith(\"https://bosfoot.com/\")) and $REAL) | 1" | grep -c .)
 addcart=$(aq   "select((.event // \"\")==\"add_to_cart\" and ((.ip // \"\") | $NOTOWN)) | 1" | grep -c .)
 realorders=$(aq "select(.msg==\"Order placed\" and ((.email // \"\")|ascii_downcase|contains(\$em|ascii_downcase)|not) and ((.ip // \"\") | $NOTOWN)) | 1" | grep -c .)
 
 echo "═══════════════════════════════════════════════════════"
 echo " Bosfoot funnel — since: $SINCE"
-echo " (bots + owner test device/email filtered out)"
+echo " (bots + owner test device/email filtered out; page traffic from: ${REGION:-all countries})"
 echo "═══════════════════════════════════════════════════════"
 printf '  %-34s %s\n' "Real visitors"            "$visitors"
-printf '  %-34s %s\n' "↳ Product page views"     "$pviews"
+printf '  %-34s %s\n' "↳ Product page views"     "$pviews  ($pviewers people)"
 printf '  %-34s %s\n' "↳ Add-to-cart"            "$addcart"
 printf '  %-34s %s\n' "↳ Checkout page views"    "$checkouts"
 printf '  %-34s %s\n' "↳ Reservations (real)"    "$realorders"
+[ -n "$REGION" ] && printf '  %-34s %s\n' "(excluded: product viewers abroad)" "$pforeign IPs — mostly bots"
 
 echo
 # product_id → name map for the breakdown below. The beacon logs the id, not the
@@ -146,7 +165,7 @@ addbreak="$(printf '%s\n' "$APP" \
 
 echo
 echo "Reservation POST attempts by status (real, excl. bots/test):"
-status="$(cq "select(.request.method==\"POST\" and (.request.uri|test(\"/api/orders\")) and $HUMAN) | .status" | sort | uniq -c)"
+status="$(cq "select(.request.method==\"POST\" and (.request.uri|test(\"/api/orders\")) and $REAL) | .status" | sort | uniq -c)"
 [ -n "$status" ] && printf '%s\n' "$status" || echo "  (none)"
 
 echo
