@@ -39,7 +39,7 @@ SINCE="${1:-24 hours ago}"
 # Named crawlers + programmatic clients + a few notorious spoofed-browser
 # fingerprints that are never real shoppers. Spoofed-UA bots that look like a
 # normal browser are NOT caught here — the behavioural filter below handles those.
-BOT='bot|crawl|spider|facebookexternalhit|headless|scan|python-requests|go-http|curl|wget|okhttp|libwww|java/|axios|node-fetch|ahrefs|semrush|mj12|dataforseo|iphone os 13_2_3|trident/|chrome/88\.|chrome/19\.'
+BOT='bot|crawl|spider|facebookexternalhit|headless|scan|python-requests|go-http|curl|wget|okhttp|libwww|java/|axios|node-fetch|ahrefs|semrush|mj12|dataforseo|panscient|dataprovider|iphone os 13_2_3|trident/|chrome/88\.|chrome/19\.'
 TEST_UA='A142P'
 # Substring match, so 'bmarkoski@' covers both owner test inboxes (gmail + yahoo).
 TEST_EMAIL='bmarkoski@'
@@ -90,7 +90,11 @@ pviews=$(cq   "select(.status==200 and (.request.uri|test(\"/products/[^/]+/\"))
 # Anchored to the checkout PAGE (/{locale}/checkout): every page loads
 # /components/checkout-form.js, so an unanchored "/checkout" match counted
 # that script fetch as a checkout visit and inflated this step.
-checkouts=$(cq "select((.request.uri|test(\"^/(mk|sq|en)/checkout/?(\\\\?|$)\")) and $HUMAN) | 1" | grep -c .)
+# Also requires a same-site Referer: a real shopper reaches checkout by clicking
+# from the cart (Referrer-Policy strict-origin-when-cross-origin sends the full
+# URL in-site), whereas scrapers hit /checkout cold from datacenter IPs with no
+# Referer — in Oct 2026 those were ALL 30 "checkout views" in a 0-cart week.
+checkouts=$(cq "select((.request.uri|test(\"^/(mk|sq|en)/checkout/?(\\\\?|$)\")) and ((.request.headers.Referer[0] // \"\")|startswith(\"https://bosfoot.com/\")) and $HUMAN) | 1" | grep -c .)
 addcart=$(aq   "select((.event // \"\")==\"add_to_cart\" and ((.ip // \"\") | $NOTOWN)) | 1" | grep -c .)
 realorders=$(aq "select(.msg==\"Order placed\" and ((.email // \"\")|ascii_downcase|contains(\$em|ascii_downcase)|not) and ((.ip // \"\") | $NOTOWN)) | 1" | grep -c .)
 
