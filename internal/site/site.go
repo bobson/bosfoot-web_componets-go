@@ -71,8 +71,9 @@ var PreorderAll = false
 // and selecting one shows the get-notified note, exactly like a sold-out size on
 // a stocked product, and the order handler rejects them. Stocked products are
 // unaffected. 2026-09-27: false — no restocking planned; only the pairs on hand
-// can be bought. Set true to reopen reservations (e.g. a dropship brand).
-var PreordersOpen = false
+// can be bought. 2026-10-09: true again — reopened so the no-stock Freet models
+// (incl. boots) can be reserved and Be Lenka can be sold as dropship.
+var PreordersOpen = true
 
 // MKDtoEUR is the denar→euro conversion rate for the secondary EUR price shown
 // on the sq/en locales. Single source of truth: the client JS reads it from a
