@@ -8,8 +8,7 @@
   data-brand="{{$p.BrandSlug}}"
   data-gender="{{$p.GenderValue}}"
   data-activities="{{range $p.Activities}}{{.}}|{{end}}"
-  data-sizes="{{range $p.Sizes}}{{.}}|{{end}}"
-  data-colors="{{range $p.Colors}}{{lower .Color}}|{{end}}">
+  data-variants="{{range $p.FilterVariants}}{{.}}|{{end}}">
   {{if not $p.InStock}}<span class="product-card__badge product-card__badge--preorder">{{if preordersOpen}}{{t $locale "cart.preorder"}}{{else}}{{t $locale "product.outOfStock"}}{{end}}</span>
   {{else}}
   {{if $p.IsNew}}<span class="product-card__badge product-card__badge--new">{{t $locale "product.new"}}</span>{{end}}

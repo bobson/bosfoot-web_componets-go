@@ -34,13 +34,17 @@ type Product struct {
 	Translations []ProductTranslation `json:"translations,omitempty"`
 	Sizes        []float64            `json:"sizes,omitempty"`
 	Colors       []ProductColor       `json:"colors,omitempty"`
-	Activities   []string             `json:"activities,omitempty"`
-	Gallery      []ProductGallery     `json:"gallery,omitempty"`
-	Specs        []ProductSpec        `json:"specs,omitempty"`
-	Highlights   []ProductHighlight   `json:"highlights,omitempty"`
-	Stock        []ProductStock       `json:"stock,omitempty"`
-	SizeChart    []SizeChartEntry     `json:"size_chart,omitempty"`
-	Reviews      []Review             `json:"reviews,omitempty"`
+	// Listing-only filter data (not in the JSON API): in-stock "colour:size"
+	// pairs and the set of in-stock colours (lowercased).
+	FilterVariants []string           `json:"-"`
+	StockColors    map[string]bool    `json:"-"`
+	Activities     []string           `json:"activities,omitempty"`
+	Gallery        []ProductGallery   `json:"gallery,omitempty"`
+	Specs          []ProductSpec      `json:"specs,omitempty"`
+	Highlights     []ProductHighlight `json:"highlights,omitempty"`
+	Stock          []ProductStock     `json:"stock,omitempty"`
+	SizeChart      []SizeChartEntry   `json:"size_chart,omitempty"`
+	Reviews        []Review           `json:"reviews,omitempty"`
 
 	// InStock is true when at least one (size, colour) variant has qty > 0.
 	// Populated for SSR pages (listing + detail) to decide whether a product is
@@ -92,7 +96,7 @@ type ProductStock struct {
 }
 
 type SizeChartEntry struct {
-	EUSize       float64  `json:"eu_size"`
+	EUSize         float64  `json:"eu_size"`
 	InsoleLengthMM *float64 `json:"insole_length_mm,omitempty"`
 	InsoleWidthMM  *float64 `json:"insole_width_mm,omitempty"`
 }

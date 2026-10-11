@@ -111,13 +111,20 @@ export function initListingFilter() {
       const v = (d.activities || '').split('|').filter(Boolean);
       if (![...applied.activity].some((a) => v.includes(a))) return false;
     }
-    if (applied.size.size) {
-      const v = (d.sizes || '').split('|').filter(Boolean);
-      if (![...applied.size].some((s) => v.includes(s))) return false;
-    }
-    if (applied.color.size) {
-      const v = (d.colors || '').split('|').filter(Boolean);
-      if (![...applied.color].some((c) => v.includes(c))) return false;
+    // Size + colour match against in-stock "colour:size" pairs, so "White + 43"
+    // needs a white 43 in stock, not just white in one size and 43 in another.
+    if (applied.size.size || applied.color.size) {
+      const variants = (d.variants || '').split('|').filter(Boolean);
+      const ok = variants.some((v) => {
+        const i = v.lastIndexOf(':');
+        const color = v.slice(0, i);
+        const size = v.slice(i + 1);
+        return (
+          (!applied.size.size || applied.size.has(size)) &&
+          (!applied.color.size || applied.color.has(color))
+        );
+      });
+      if (!ok) return false;
     }
     return true;
   }

@@ -1044,33 +1044,64 @@ func (h *PageHandler) ProductListing(w http.ResponseWriter, r *http.Request) {
 			products[i].Activities = actMap[products[i].ID]
 		}
 
-		// Fetch available sizes for all products.
-		sizeRows, err := h.DB.QueryContext(ctx, `
-			SELECT product_id, eu_size
-			FROM product_sizes
-			WHERE product_id = ANY($1)
-			ORDER BY product_id, eu_size
-		`, pq.Array(ids))
+		// Filter variants: the in-stock colour+size pairs ("black:43") behind the
+		// size/colour filters (card data-variants + the facet chips), so "White"
+		// or "43" — or "White + 43" — means "I can get that now". A no-stock
+		// (reservation) product has none, so it drops out whenever a size or
+		// colour is selected and only lists unfiltered. The product page keeps the
+		// full size run, since any size can be reserved. Pre-launch (PreorderAll)
+		// nothing is stocked, so fall back to every colour × size.
+		variantQuery := `
+			SELECT st.product_id, pc.color, ps.eu_size
+			FROM product_stock st
+			JOIN product_sizes ps ON ps.id = st.size_id
+			JOIN product_colors pc ON pc.id = st.color_id
+			WHERE st.product_id = ANY($1) AND st.qty > 0
+			ORDER BY st.product_id, ps.eu_size, pc.color
+		`
+		if site.PreorderAll {
+			variantQuery = `
+				SELECT ps.product_id, pc.color, ps.eu_size
+				FROM product_sizes ps
+				JOIN product_colors pc ON pc.product_id = ps.product_id
+				WHERE ps.product_id = ANY($1)
+				ORDER BY ps.product_id, ps.eu_size, pc.color
+			`
+		}
+		variantRows, err := h.DB.QueryContext(ctx, variantQuery, pq.Array(ids))
 		if err != nil {
-			h.Logger.Error("ProductListing: sizes query failed", err)
+			h.Logger.Error("ProductListing: variants query failed", err)
 			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 			return
 		}
-		defer sizeRows.Close()
+		defer variantRows.Close()
 
+		variantMap := make(map[int][]string)
 		sizeMap := make(map[int][]float64)
-		for sizeRows.Next() {
+		stockColorMap := make(map[int]map[string]bool)
+		for variantRows.Next() {
 			var productID int
+			var color string
 			var euSize float64
-			if err := sizeRows.Scan(&productID, &euSize); err != nil {
-				h.Logger.Error("ProductListing: size scan failed", err)
+			if err := variantRows.Scan(&productID, &color, &euSize); err != nil {
+				h.Logger.Error("ProductListing: variant scan failed", err)
 				http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 				return
 			}
-			sizeMap[productID] = append(sizeMap[productID], euSize)
+			lc := strings.ToLower(color)
+			variantMap[productID] = append(variantMap[productID], lc+":"+strconv.FormatFloat(euSize, 'f', -1, 64))
+			if n := len(sizeMap[productID]); n == 0 || sizeMap[productID][n-1] != euSize {
+				sizeMap[productID] = append(sizeMap[productID], euSize)
+			}
+			if stockColorMap[productID] == nil {
+				stockColorMap[productID] = map[string]bool{}
+			}
+			stockColorMap[productID][lc] = true
 		}
 		for i := range products {
+			products[i].FilterVariants = variantMap[products[i].ID]
 			products[i].Sizes = sizeMap[products[i].ID]
+			products[i].StockColors = stockColorMap[products[i].ID]
 		}
 
 		// In-stock flag: a product is buyable if any variant has qty > 0.
@@ -1121,6 +1152,9 @@ func (h *PageHandler) ProductListing(w http.ResponseWriter, r *http.Request) {
 		}
 		for _, c := range p.Colors {
 			lname := strings.ToLower(c.Color)
+			if !p.StockColors[lname] {
+				continue // facet lists only colours someone can get now
+			}
 			if !colorSeen[lname] {
 				colorSeen[lname] = true
 				hex := ""
