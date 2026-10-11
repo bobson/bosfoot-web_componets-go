@@ -1,6 +1,7 @@
 {
   "name": "Vibe 2",
-  "price": 100,
+  "price": 90,
+  "originalPrice": 100,
   "gender": "unisex",
   "status": {
     "active": true,

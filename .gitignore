@@ -28,3 +28,4 @@ backup_*.csv
 
 # Biome lint toolchain (devDependency; package.json + lockfile are committed)
 node_modules/
+ads/

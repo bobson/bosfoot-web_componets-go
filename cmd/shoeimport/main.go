@@ -20,6 +20,7 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"math"
 	"os"
 	"path/filepath"
 	"regexp"
@@ -32,10 +33,15 @@ import (
 )
 
 type product struct {
-	Name   string `json:"name"`
-	Price  int    `json:"price"` // EUR (source)
-	Gender string `json:"gender"`
-	Status struct {
+	Name  string `json:"name"`
+	Price int    `json:"price"` // EUR (source)
+	// OriginalPrice (EUR, optional) puts this one product on sale: Price is what's
+	// shown and charged, OriginalPrice is struck through and the Sale badge shows.
+	// Omit it (or set it <= Price) to end the sale — the import then clears the
+	// sale columns, so removing the field is the whole "end sale" step.
+	OriginalPrice int    `json:"originalPrice,omitempty"`
+	Gender        string `json:"gender"`
+	Status        struct {
 		Active    bool `json:"active"`
 		Published bool `json:"published"`
 		Featured  bool `json:"featured"`
@@ -160,6 +166,15 @@ func importProduct(db *sql.DB, brandSlug string, brandID, catID int, slug, path 
 	primaryFolder := colorFolder(p.Colors[0].Name)
 	imageURL := fmt.Sprintf("/images/%s/%s/images/%s/%s.webp", brandSlug, slug, primaryFolder, slug)
 	priceMKD := site.MKD(p.Price)
+	// Per-product sale columns, all NULL/false unless OriginalPrice > Price.
+	var origEUR, origMKD *int
+	var discountPct *float64
+	onSale := p.OriginalPrice > p.Price
+	if onSale {
+		oe, om := p.OriginalPrice, site.MKD(p.OriginalPrice)
+		pct := math.Round(float64(om-priceMKD)/float64(om)*10000) / 100
+		origEUR, origMKD, discountPct = &oe, &om, &pct
+	}
 
 	tx, err := db.Begin()
 	if err != nil {
@@ -171,17 +186,21 @@ func importProduct(db *sql.DB, brandSlug string, brandID, catID int, slug, path 
 	err = tx.QueryRow(`
 		INSERT INTO products
 			(sku, name, slug, brand_id, category_id, gender_id,
-			 price_mkd, price_eur, image_url, is_active, is_published, is_featured, sort_order)
-		VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13)
+			 price_mkd, price_eur, image_url, is_active, is_published, is_featured, sort_order,
+			 original_price_eur, original_price_mkd, is_on_sale, discount_pct)
+		VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17)
 		ON CONFLICT (sku) DO UPDATE SET
 			name=EXCLUDED.name, slug=EXCLUDED.slug, gender_id=EXCLUDED.gender_id,
 			price_mkd=EXCLUDED.price_mkd, price_eur=EXCLUDED.price_eur,
 			image_url=EXCLUDED.image_url, is_active=EXCLUDED.is_active,
 			is_published=EXCLUDED.is_published, is_featured=EXCLUDED.is_featured,
-			sort_order=EXCLUDED.sort_order, updated_at=now()
+			sort_order=EXCLUDED.sort_order,
+			original_price_eur=EXCLUDED.original_price_eur, original_price_mkd=EXCLUDED.original_price_mkd,
+			is_on_sale=EXCLUDED.is_on_sale, discount_pct=EXCLUDED.discount_pct, updated_at=now()
 		RETURNING id
 	`, sku, p.Name, slug, brandID, catID, genderID,
-		priceMKD, p.Price, imageURL, p.Status.Active, p.Status.Published, p.Status.Featured, p.SortOrder).Scan(&pid)
+		priceMKD, p.Price, imageURL, p.Status.Active, p.Status.Published, p.Status.Featured, p.SortOrder,
+		origEUR, origMKD, onSale, discountPct).Scan(&pid)
 	if err != nil {
 		return fmt.Errorf("upsert product: %w", err)
 	}
@@ -301,8 +320,12 @@ func importProduct(db *sql.DB, brandSlug string, brandID, catID int, slug, path 
 		}
 	}
 
-	fmt.Printf("  %-12s €%-4d → %d MKD | %d colours, %d sizes, %d gallery, %d specs | %s\n",
-		slug, p.Price, priceMKD, len(p.Colors), len(sizeID), sortOrder, len(p.Specs), imageURL)
+	sale := ""
+	if onSale {
+		sale = fmt.Sprintf(" (SALE, was €%d → %d MKD, -%.0f%%)", *origEUR, *origMKD, *discountPct)
+	}
+	fmt.Printf("  %-12s €%-4d → %d MKD%s | %d colours, %d sizes, %d gallery, %d specs | %s\n",
+		slug, p.Price, priceMKD, sale, len(p.Colors), len(sizeID), sortOrder, len(p.Specs), imageURL)
 
 	if commit {
 		return tx.Commit()
