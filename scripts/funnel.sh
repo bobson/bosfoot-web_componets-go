@@ -102,7 +102,11 @@ visitors=$(printf '%s\n' "$CADDY" \
       $1=="" { next }
       { ips[$1]=1; if ($2=="a") a[$1]=1; else { k=$1 SUBSEP $3; if (!(k in sp)) { sp[k]=1; pc[$1]++ } } }
       END { n=0; for (ip in ips) if (a[ip] || pc[ip]>=2) n++; print n+0 }')
-PRODUCT='(.status==200 and (.request.uri|test("/products/[^/]+/")))'
+# Anchored to the product PAGE (/{locale}/products/{brand}/{slug}). Unanchored,
+# "/products/x/" also matched /api/products/{id}/stock — fetched (and re-polled
+# by the live stock stream) on every product page — which inflated product views
+# ~3× (Oct 2026: 662 "views" were 193 real page views + 469 stock API calls).
+PRODUCT='(.status==200 and (.request.uri|test("^/(mk|sq|en)/products/[^/?]+/[^/?]+/?(\\?|$)")))'
 pviews=$(cq   "select($PRODUCT and $REAL) | 1" | grep -c .)
 # Distinct IPs behind those views — a truer "people who looked at a shoe" count.
 pviewers=$(cq "select($PRODUCT and $REAL) | .request.headers.\"Cf-Connecting-Ip\"[0] // empty" | sort -u | grep -c .)
@@ -129,6 +133,18 @@ printf '  %-34s %s\n' "↳ Add-to-cart"            "$addcart"
 printf '  %-34s %s\n' "↳ Checkout page views"    "$checkouts"
 printf '  %-34s %s\n' "↳ Reservations (real)"    "$realorders"
 [ -n "$REGION" ] && printf '  %-34s %s\n' "(excluded: product viewers abroad)" "$pforeign IPs — mostly bots"
+
+echo
+# Product page views per product (same REAL filter as the totals): which shoe the
+# traffic actually looks at — compare with add-to-cart below to spot products that
+# draw views but no carts. Keyed by brand/slug from the URL, so all three locales
+# of a product count together; "people" = distinct IPs.
+echo "Product page views by product (real, in region):"
+pbreak="$(cq "select($PRODUCT and $REAL) | [ (.request.uri | split(\"?\")[0] | capture(\"/products/(?<p>[^/]+/[^/]+)\").p), (.request.headers.\"Cf-Connecting-Ip\"[0] // \"\") ] | @tsv" \
+  | awk -F'\t' '{ v[$1]++; k=$1 SUBSEP $2; if (!(k in s)) { s[k]=1; p[$1]++ } }
+      END { for (x in v) printf "  %4d views  %4d people  %s\n", v[x], p[x], x }' \
+  | sort -rn)"
+[ -n "$pbreak" ] && printf '%s\n' "$pbreak" || echo "  (none)"
 
 echo
 # product_id → name map for the breakdown below. The beacon logs the id, not the
