@@ -668,6 +668,10 @@ details.product__tab[open] .product__tab-arrow {
   border-bottom: 2px solid var(--color-border);
 }
 
+.product__size-tip {
+  margin-top: var(--space-3);
+}
+
 /* ── Related products ────────────────────────────────── */
 
 .product__related {

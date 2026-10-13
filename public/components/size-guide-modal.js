@@ -74,7 +74,7 @@ function initSizeFinder(modal) {
       out.classList.remove('is-set');
       return;
     }
-    const targetMm = mm + ROOM_MM;
+    const targetMm = mm + (Number(out.dataset.room) || ROOM_MM);
     const smallest = rows[0];
     const largest = rows[rows.length - 1];
 

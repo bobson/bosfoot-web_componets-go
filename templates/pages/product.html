@@ -281,7 +281,8 @@
             <thead>
               <tr>
                 <th class="text-xs font-semibold">EU</th>
-                <th class="text-xs font-semibold">{{t .Locale "brand.sizeChart.measureFoot"}} (mm)</th>
+                <th class="text-xs font-semibold">{{t .Locale "brand.sizeChart.measureInsole"}} (mm)</th>
+                <th class="text-xs font-semibold">{{t .Locale "sizeChart.insoleWidth"}} (mm)</th>
               </tr>
             </thead>
             <tbody>
@@ -289,10 +290,13 @@
               <tr>
                 <td class="text-sm">{{.EUSize}}</td>
                 <td class="text-sm text-muted">{{derefF .InsoleLengthMM}}</td>
+                <td class="text-sm text-muted">{{derefF .InsoleWidthMM}}</td>
               </tr>
               {{end}}
             </tbody>
           </table>
+          {{/* The chart is the shoe's INSIDE (insole), not the foot — say how to pick. */}}
+          <p class="product__size-tip text-sm text-muted">{{if or (eq .Product.BrandSlug "be-lenka") (eq .Product.BrandSlug "barebarics")}}{{t .Locale "sizeChart.insoleTip.beLenka"}}{{else}}{{t .Locale "sizeChart.insoleTip"}}{{end}}</p>
         </div>
       </details>
       {{end}}

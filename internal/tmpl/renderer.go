@@ -185,6 +185,17 @@ func NewRenderer(dir string, ui *locale.UI) (*Renderer, error) {
 			return 0
 		},
 
+		// fitRoomMM is how many mm the size finder adds to the measured foot
+		// before matching the insole chart — the brand's own advice. Be Lenka
+		// (and its Barebarics line) say "add approx. 0.5 cm"; Freet 5–10 mm.
+		"fitRoomMM": func(brandSlug string) int {
+			switch brandSlug {
+			case "be-lenka", "barebarics":
+				return 5
+			}
+			return 7
+		},
+
 		// cardImg returns the 500px "-card" variant path for a primary product
 		// image (/a/x.webp → /a/x-card.webp), used in product-card srcset.
 		// If the variant doesn't exist on disk, it returns the original URL.

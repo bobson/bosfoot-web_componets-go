@@ -1,9 +1,11 @@
 {{define "size-guide-modal"}}
+{{/* Be Lenka + its Barebarics line share sizing advice; the rest is Freet's. */}}
+{{$bl := or (eq .Product.BrandSlug "be-lenka") (eq .Product.BrandSlug "barebarics")}}
 <dialog class="sg-modal" id="size-guide-modal" aria-labelledby="sg-modal-title">
   <div class="sg-modal__inner">
 
     <header class="sg-modal__header">
-      <h2 class="sg-modal__title font-bold" id="sg-modal-title">{{t .Locale "sizeModal.title"}}</h2>
+      <h2 class="sg-modal__title font-bold" id="sg-modal-title">{{t .Locale "sizeModal.title"}} — {{.Product.BrandName}}</h2>
       <button class="sg-modal__close" type="button" aria-label="{{t .Locale "sizeModal.close"}}">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
           <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
@@ -50,17 +52,25 @@
           data-toosmall="{{t .Locale "sizeModal.calc.tooSmall"}}"
           data-invalid="{{t .Locale "sizeModal.calc.invalid"}}"
           data-fitoffset="{{fitOffsetMM .Product.SKU}}"
+          data-room="{{fitRoomMM .Product.BrandSlug}}"
         ></output>
         <script id="sg-chart-data" type="application/json">{{json .Product.SizeChart}}</script>
       </section>
       {{end}}
 
-      {{/* ── True to size ──────────────────────────────── */}}
+      {{/* ── Brand fit advice ──────────────────────────── */}}
       <section class="sg-modal__section">
+        {{if $bl}}
+        <h3 class="sg-modal__section-title font-semibold">{{t .Locale "sizeModal.beLenka.title"}}</h3>
+        <div class="sg-modal__text text-muted">
+          {{nl2p (t .Locale "sizeModal.beLenka.body")}}
+        </div>
+        {{else}}
         <h3 class="sg-modal__section-title font-semibold">{{t .Locale "sizeModal.trueToSize.title"}}</h3>
         <div class="sg-modal__text text-muted">
           {{nl2p (t .Locale "sizeModal.trueToSize.body")}}
         </div>
+        {{end}}
       </section>
 
       {{/* ── Adult size table — this model's own chart (single source,
@@ -91,7 +101,8 @@
       </section>
       {{end}}
 
-      {{/* ── Kids size table ───────────────────────────── */}}
+      {{/* ── Kids size table (Freet's — other brands' kids lines aren't sold) ── */}}
+      {{if not $bl}}
       <section class="sg-modal__section">
         <h3 class="sg-modal__section-title font-semibold">{{t .Locale "sizeModal.kids"}}</h3>
         <div class="sg-modal__table-wrap">
@@ -120,6 +131,7 @@
           </table>
         </div>
       </section>
+      {{end}}
 
       {{/* ── How to measure ────────────────────────────── */}}
       <section class="sg-modal__section">
@@ -150,7 +162,7 @@
             <img class="sg-modal__step-img" src="/images/how-to-measure/step4.webp" alt="{{t .Locale "sizeModal.step4.title"}}" loading="lazy" width="200" height="200">
             <div class="sg-modal__step-text">
               <p class="sg-modal__step-title font-semibold">{{t .Locale "sizeModal.step4.title"}}</p>
-              <p class="sg-modal__step-body text-muted">{{t .Locale "sizeModal.step4.body"}}</p>
+              <p class="sg-modal__step-body text-muted">{{if $bl}}{{t .Locale "sizeModal.step4.bodyBeLenka"}}{{else}}{{t .Locale "sizeModal.step4.body"}}{{end}}</p>
             </div>
           </li>
         </ol>
