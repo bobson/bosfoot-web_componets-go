@@ -30,3 +30,8 @@ backup_*.csv
 node_modules/
 ads/
 ads/
+
+# Raw supplier photos + price notes (large originals; import prices are private)
+/data/sources/
+# Supplier import costs read by shoeimport for margin previews — never commit
+data/*/costs.json

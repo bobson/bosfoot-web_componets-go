@@ -36,8 +36,13 @@ go run ./cmd/articleimport
 # DEFAULT IS DRY-RUN (builds each product in a tx, rolls back, prints a summary).
 # Pass -commit to actually write — only AFTER the euro-aware code is deployed,
 # since it sets price_mkd to the euro-derived value that old deployed code reads.
+# STOCK: the DB is the source of truth (orders decrement it). By default the
+# import KEEPS live DB stock and only uses the JSON "stock" for a brand-new
+# product; the summary flags variants where the JSON differs. Pass -stock only
+# when a delivery arrives and the JSON holds the real counts (overwrites DB).
 go run ./cmd/shoeimport          # dry-run / preview
-go run ./cmd/shoeimport -commit  # apply (post-deploy)
+go run ./cmd/shoeimport -commit  # apply (post-deploy) — prices/text/images/sale, stock untouched
+go run ./cmd/shoeimport -stock -commit  # ALSO overwrite DB stock from the JSON (new delivery)
 
 # Generate ~500px "-card" WebP variants of primary product images (idempotent;
 # needs ImageMagick). Run after adding a brand's images.

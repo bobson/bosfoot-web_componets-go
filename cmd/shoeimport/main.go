@@ -6,6 +6,13 @@
 //
 //	go run ./cmd/shoeimport                  # Freet (default brand)
 //	go run ./cmd/shoeimport -brand be-lenka  # one brand only — never touches others
+//	go run ./cmd/shoeimport -stock -commit   # ALSO load stock qty from the JSON
+//
+// STOCK: the database is the source of truth for live stock (orders decrement
+// it). By default the import keeps each product's current DB quantities and only
+// takes the JSON "stock" for a brand-new product (no stock rows yet). Pass -stock
+// only when a delivery arrives and the JSON holds the real counts — it then
+// overwrites DB stock with the JSON, as the import always did before.
 //
 // Only the chosen brand's products are rebuilt, so importing a new brand can't
 // reset another brand's live stock.
@@ -61,6 +68,10 @@ type product struct {
 	} `json:"translations"`
 }
 
+// sizeKey normalises an EU size for map lookups so the JSON key ("43", "42.5")
+// and the DB numeric (43, 42.5) agree.
+func sizeKey(f float64) string { return strconv.FormatFloat(f, 'f', -1, 64) }
+
 // colorFolder slugifies a colour name to its image folder: "Brown Black" -> "brown-black".
 func colorFolder(name string) string {
 	return strings.ToLower(strings.ReplaceAll(name, " ", "-"))
@@ -106,6 +117,7 @@ func main() {
 	// euro-aware code deploys. Pass -commit at the coordinated deploy.
 	commit := flag.Bool("commit", false, "actually write to the DB (default: dry-run, rolled back)")
 	brand := flag.String("brand", "freet", "brand slug: reads data/{brand}/products, images from public/images/{brand}")
+	loadStock := flag.Bool("stock", false, "overwrite DB stock with the JSON quantities (new delivery); default keeps live DB stock")
 	flag.Parse()
 	brandSlug := *brand
 
@@ -132,9 +144,14 @@ func main() {
 	if !*commit {
 		fmt.Println("DRY RUN (no changes written — pass -commit to apply)")
 	}
+	if *loadStock {
+		fmt.Println("STOCK: loading quantities from the JSON (overwrites live DB stock)")
+	} else {
+		fmt.Println("STOCK: keeping live DB quantities (pass -stock to load from the JSON)")
+	}
 	for _, path := range files {
 		slug := strings.TrimSuffix(filepath.Base(path), ".json")
-		if err := importProduct(db, brandSlug, brandID, catID, slug, path, *commit); err != nil {
+		if err := importProduct(db, brandSlug, brandID, catID, slug, path, *commit, *loadStock); err != nil {
 			log.Fatalf("%s: %v", slug, err)
 		}
 	}
@@ -145,7 +162,7 @@ func main() {
 	}
 }
 
-func importProduct(db *sql.DB, brandSlug string, brandID, catID int, slug, path string, commit bool) error {
+func importProduct(db *sql.DB, brandSlug string, brandID, catID int, slug, path string, commit, loadStock bool) error {
 	raw, err := os.ReadFile(path)
 	if err != nil {
 		return err
@@ -220,6 +237,40 @@ func importProduct(db *sql.DB, brandSlug string, brandID, catID int, slug, path 
 		}
 	}
 
+	// Snapshot live stock (colour -> size -> qty) before the rebuild wipes it, so
+	// it can be restored unless -stock asks for the JSON counts. A product with no
+	// stock rows yet is new, so it takes the JSON either way.
+	live := map[string]map[string]int{}
+	stockRows, err := tx.Query(`
+		SELECT pc.color, ps.eu_size, st.qty
+		FROM product_stock st
+		JOIN product_colors pc ON pc.id = st.color_id
+		JOIN product_sizes ps ON ps.id = st.size_id
+		WHERE st.product_id = $1`, pid)
+	if err != nil {
+		return fmt.Errorf("read live stock: %w", err)
+	}
+	hasLive := false
+	for stockRows.Next() {
+		var color string
+		var size float64
+		var qty int
+		if err := stockRows.Scan(&color, &size, &qty); err != nil {
+			stockRows.Close()
+			return fmt.Errorf("scan live stock: %w", err)
+		}
+		if live[color] == nil {
+			live[color] = map[string]int{}
+		}
+		live[color][sizeKey(size)] = qty
+		hasLive = true
+	}
+	stockRows.Close()
+	if err := stockRows.Err(); err != nil {
+		return fmt.Errorf("read live stock: %w", err)
+	}
+	fromJSON := loadStock || !hasLive
+
 	// Child lists are rebuilt. Stock first (FK to colors/sizes), then colors/sizes, then the rest.
 	for _, table := range []string{"product_stock", "product_colors", "product_sizes",
 		"product_gallery", "product_activities", "product_highlights", "product_specs"} {
@@ -261,13 +312,22 @@ func importProduct(db *sql.DB, brandSlug string, brandID, catID int, slug, path 
 		sizeID[s] = id
 	}
 
-	// Stock per colour × size.
+	// Stock per colour × size: the JSON qty with -stock (or for a new product),
+	// otherwise the live DB qty snapshotted above (0 for a newly added variant).
+	jsonDiffs := 0
 	for color, bySize := range p.Stock {
 		cid, ok := colorID[color]
 		if !ok {
 			return fmt.Errorf("stock references unknown colour %q", color)
 		}
-		for s, qty := range bySize {
+		for s, jsonQty := range bySize {
+			qty := jsonQty
+			if !fromJSON {
+				qty = live[color][sizeKey(atof(s))]
+				if qty != jsonQty {
+					jsonDiffs++
+				}
+			}
 			if _, err := tx.Exec(`INSERT INTO product_stock (product_id, size_id, color_id, qty) VALUES ($1,$2,$3,$4)`,
 				pid, sizeID[s], cid, qty); err != nil {
 				return fmt.Errorf("stock %s/%s: %w", color, s, err)
@@ -320,12 +380,18 @@ func importProduct(db *sql.DB, brandSlug string, brandID, catID int, slug, path 
 		}
 	}
 
+	stockNote := "stock: live DB"
+	if fromJSON {
+		stockNote = "stock: from JSON"
+	} else if jsonDiffs > 0 {
+		stockNote = fmt.Sprintf("stock: live DB (JSON differs on %d variant(s))", jsonDiffs)
+	}
 	sale := ""
 	if onSale {
 		sale = fmt.Sprintf(" (SALE, was €%d → %d MKD, -%.0f%%)", *origEUR, *origMKD, *discountPct)
 	}
-	fmt.Printf("  %-12s €%-4d → %d MKD%s | %d colours, %d sizes, %d gallery, %d specs | %s\n",
-		slug, p.Price, priceMKD, sale, len(p.Colors), len(sizeID), sortOrder, len(p.Specs), imageURL)
+	fmt.Printf("  %-12s €%-4d → %d MKD%s | %d colours, %d sizes, %d gallery, %d specs | %s | %s\n",
+		slug, p.Price, priceMKD, sale, len(p.Colors), len(sizeID), sortOrder, len(p.Specs), stockNote, imageURL)
 
 	if commit {
 		return tx.Commit()
