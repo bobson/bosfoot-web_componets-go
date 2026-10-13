@@ -27,7 +27,7 @@
     "pace": {
       "price": 105,
       "mode": "stock",
-      "published": true,
+      "published": false,
       "featured": false,
       "sortOrder": 7
     },
@@ -41,7 +41,7 @@
     "tanga-3": {
       "price": 100,
       "mode": "stock",
-      "published": true,
+      "published": false,
       "featured": true,
       "sortOrder": 4
     },
