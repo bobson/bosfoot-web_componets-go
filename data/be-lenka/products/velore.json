@@ -29,16 +29,16 @@
   ],
   "colors": [
     {
+      "name": "Dark Green",
+      "hex": "#1f4a45"
+    },
+    {
       "name": "All Black",
       "hex": "#1c1c1c"
     },
     {
       "name": "Dark Blue",
       "hex": "#1f2a5c"
-    },
-    {
-      "name": "Dark Green",
-      "hex": "#1f4a45"
     }
   ],
   "sizes": [
