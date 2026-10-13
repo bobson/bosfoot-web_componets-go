@@ -440,6 +440,14 @@ body.page-product {
   line-height: 1.5;
 }
 
+/* Reservation (not in stock, ~1–2 weeks): orange so the wait is noticed. */
+.product__preorder-note {
+  color: var(--color-warn);
+  background: var(--color-warn-bg);
+  border-color: var(--color-warn-border);
+  font-weight: var(--fw-medium);
+}
+
 /* ── Buy: price + add-to-cart (in-flow, in the details column) ─────────── */
 
 .product__buy {

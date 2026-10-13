@@ -26,6 +26,11 @@
         --color-img-bg: hsl(34 22% 95%);
         --color-overlay: rgb(0 0 0 / 0.4);
         --color-sale: hsl(0 72% 45%);
+        /* "Not in stock — reserve it" note: orange so the wait isn't missed.
+           Text clears WCAG AA (4.5:1) on the warn background. */
+        --color-warn: hsl(25 90% 32%);
+        --color-warn-bg: hsl(33 100% 95%);
+        --color-warn-border: hsl(30 85% 75%);
         --color-star: hsl(38 92% 52%);
         --color-sage: hsl(88 14% 92%);
         --color-cream: hsl(40 33% 94%);
