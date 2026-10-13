@@ -33,7 +33,7 @@ type rowScanner interface {
 //	p.id, sku, name, slug, brand_id, category_id, gender_id,
 //	price_eur, original_price_eur, image_url,  (MKD derived via site.MKD)
 //	is_new, is_featured, is_on_sale, discount_pct,
-//	is_active, is_published, sort_order, created_at, updated_at,
+//	is_active, is_published, sort_order, fulfilment, created_at, updated_at,
 //	b.name, b.slug, g.value
 //
 // The three nullable columns are mapped to their pointer fields.
@@ -48,7 +48,7 @@ func scanProduct(s rowScanner) (models.Product, error) {
 		&p.BrandID, &p.CategoryID, &p.GenderID,
 		&priceEUR, &origEUR, &imageURL,
 		&p.IsNew, &p.IsFeatured, &p.IsOnSale, &discountPct,
-		&p.IsActive, &p.IsPublished, &p.SortOrder,
+		&p.IsActive, &p.IsPublished, &p.SortOrder, &p.Fulfilment,
 		&p.CreatedAt, &p.UpdatedAt,
 		&p.BrandName, &p.BrandSlug, &p.GenderValue,
 	); err != nil {
@@ -74,10 +74,10 @@ func (h *PageHandler) fetchColors(ctx context.Context, ids []int) (map[int][]mod
 		return colorMap, nil
 	}
 	rows, err := h.DB.QueryContext(ctx, `
-		SELECT product_id, color, hex
+		SELECT product_id, color, hex, swatch_url
 		FROM product_colors
 		WHERE product_id = ANY($1)
-		ORDER BY product_id, color
+		ORDER BY product_id, id
 	`, pq.Array(ids))
 	if err != nil {
 		return nil, err
@@ -86,13 +86,16 @@ func (h *PageHandler) fetchColors(ctx context.Context, ids []int) (map[int][]mod
 	for rows.Next() {
 		var productID int
 		var color string
-		var hex sql.NullString
-		if err := rows.Scan(&productID, &color, &hex); err != nil {
+		var hex, swatch sql.NullString
+		if err := rows.Scan(&productID, &color, &hex, &swatch); err != nil {
 			return nil, err
 		}
 		c := models.ProductColor{Color: color}
 		if hex.Valid {
 			c.Hex = &hex.String
+		}
+		if swatch.Valid {
+			c.SwatchURL = &swatch.String
 		}
 		colorMap[productID] = append(colorMap[productID], c)
 	}
@@ -371,6 +374,7 @@ func (h *PageHandler) Home(w http.ResponseWriter, r *http.Request) {
 	brandRows, err := h.DB.QueryContext(ctx, `
 		SELECT id, name, slug, logo_url, is_featured
 		FROM brands
+		WHERE is_visible -- hidden = being prepared (catalog.json brand.visible)
 		ORDER BY is_featured DESC, sort_order ASC, name ASC
 	`)
 	if err != nil {
@@ -401,7 +405,7 @@ func (h *PageHandler) Home(w http.ResponseWriter, r *http.Request) {
 		       p.brand_id, p.category_id, p.gender_id,
 		       p.price_eur, p.original_price_eur, p.image_url,
 		       p.is_new, p.is_featured, p.is_on_sale, p.discount_pct,
-		       p.is_active, p.is_published, p.sort_order,
+		       p.is_active, p.is_published, p.sort_order, p.fulfilment,
 		       p.created_at, p.updated_at,
 		       b.name, b.slug, g.value
 		FROM products p
@@ -508,6 +512,7 @@ type BrandCard struct {
 	IsFeatured      bool
 	IsComingSoon    bool
 	WebsiteURL      *string
+	AboutURL        *string // brand's own "about" page → "Read more" link
 	CountryOfOrigin *string
 }
 
@@ -529,13 +534,14 @@ func (h *PageHandler) Brands(w http.ResponseWriter, r *http.Request) {
 	// Query all brands with product counts
 	rows, err := h.DB.QueryContext(ctx, `
 		SELECT b.id, b.name, b.slug, b.logo_url, b.is_featured,
-		       b.website_url, b.country_of_origin,
+		       b.website_url, b.about_url, b.country_of_origin,
 		       COALESCE(bt.description, '') as description,
 		       COUNT(p.id) as product_count
 		FROM brands b
 		LEFT JOIN brand_translations bt ON b.id = bt.brand_id AND bt.lang = $1
 		LEFT JOIN products p ON b.id = p.brand_id AND p.is_active = TRUE AND p.is_published = TRUE
-		GROUP BY b.id, b.name, b.slug, b.logo_url, b.is_featured, b.website_url, b.country_of_origin, bt.description
+		WHERE b.is_visible -- hidden = being prepared (catalog.json brand.visible)
+		GROUP BY b.id, b.name, b.slug, b.logo_url, b.is_featured, b.website_url, b.about_url, b.country_of_origin, bt.description
 		ORDER BY b.is_featured DESC, b.sort_order ASC, b.name ASC
 	`, loc)
 	if err != nil {
@@ -548,11 +554,11 @@ func (h *PageHandler) Brands(w http.ResponseWriter, r *http.Request) {
 	var brands []BrandCard
 	for rows.Next() {
 		var b BrandCard
-		var logo, website, country sql.NullString
+		var logo, website, about, country sql.NullString
 		var description sql.NullString
 		if err := rows.Scan(
 			&b.ID, &b.Name, &b.Slug, &logo, &b.IsFeatured,
-			&website, &country,
+			&website, &about, &country,
 			&description, &b.ProductCount,
 		); err != nil {
 			h.Logger.Error("Brands: scan failed", err)
@@ -564,6 +570,9 @@ func (h *PageHandler) Brands(w http.ResponseWriter, r *http.Request) {
 		}
 		if website.Valid {
 			b.WebsiteURL = &website.String
+		}
+		if about.Valid {
+			b.AboutURL = &about.String
 		}
 		if country.Valid {
 			b.CountryOfOrigin = &country.String
@@ -967,7 +976,7 @@ func (h *PageHandler) ProductListing(w http.ResponseWriter, r *http.Request) {
 		       p.brand_id, p.category_id, p.gender_id,
 		       p.price_eur, p.original_price_eur, p.image_url,
 		       p.is_new, p.is_featured, p.is_on_sale, p.discount_pct,
-		       p.is_active, p.is_published, p.sort_order,
+		       p.is_active, p.is_published, p.sort_order, p.fulfilment,
 		       p.created_at, p.updated_at,
 		       b.name, b.slug, g.value
 		FROM products p
@@ -1051,13 +1060,22 @@ func (h *PageHandler) ProductListing(w http.ResponseWriter, r *http.Request) {
 		// colour is selected and only lists unfiltered. The product page keeps the
 		// full size run, since any size can be reserved. Pre-launch (PreorderAll)
 		// nothing is stocked, so fall back to every colour × size.
+		// Dropship models count every colour × size: any of them reaches the
+		// customer in ~7 days. Reservation models only count what's in stock, so
+		// they drop out when a size/colour is selected (owner's call, 2026-10).
 		variantQuery := `
 			SELECT st.product_id, pc.color, ps.eu_size
 			FROM product_stock st
 			JOIN product_sizes ps ON ps.id = st.size_id
 			JOIN product_colors pc ON pc.id = st.color_id
 			WHERE st.product_id = ANY($1) AND st.qty > 0
-			ORDER BY st.product_id, ps.eu_size, pc.color
+			UNION
+			SELECT ps.product_id, pc.color, ps.eu_size
+			FROM product_sizes ps
+			JOIN product_colors pc ON pc.product_id = ps.product_id
+			JOIN products p ON p.id = ps.product_id
+			WHERE ps.product_id = ANY($1) AND p.fulfilment = 'dropship'
+			ORDER BY 1, 3, 2
 		`
 		if site.PreorderAll {
 			variantQuery = `
@@ -1170,10 +1188,12 @@ func (h *PageHandler) ProductListing(w http.ResponseWriter, r *http.Request) {
 	sort.Float64s(filterSizes)
 	sort.Slice(filterColors, func(i, j int) bool { return filterColors[i].Name < filterColors[j].Name })
 
-	// Buyable products first, preorder ones (no stock) after — stable, so the
-	// existing sort_order is preserved within each group.
+	// Buyable-now products first (in stock, or dropship — any size arrives in
+	// ~7 days), reservation/out-of-stock after — stable, so the existing
+	// sort_order is preserved within each group.
+	available := func(p models.Product) bool { return p.InStock || p.Fulfilment == FulfilDropship }
 	sort.SliceStable(products, func(i, j int) bool {
-		return products[i].InStock && !products[j].InStock
+		return available(products[i]) && !available(products[j])
 	})
 
 	h.Renderer.Render(w, "products", ProductListingData{
@@ -1210,7 +1230,7 @@ func (h *PageHandler) ProductDetail(w http.ResponseWriter, r *http.Request) {
 		       p.brand_id, p.category_id, p.gender_id,
 		       p.price_eur, p.original_price_eur, p.image_url,
 		       p.is_new, p.is_featured, p.is_on_sale, p.discount_pct,
-		       p.is_active, p.is_published, p.sort_order,
+		       p.is_active, p.is_published, p.sort_order, p.fulfilment,
 		       p.created_at, p.updated_at,
 		       b.name, b.slug, g.value
 		FROM products p
@@ -1269,7 +1289,7 @@ func (h *PageHandler) ProductDetail(w http.ResponseWriter, r *http.Request) {
 	// Colors.
 	g.Go(func() error {
 		rows, err := h.DB.QueryContext(gctx, `
-			SELECT color, hex FROM product_colors WHERE product_id = $1 ORDER BY color
+			SELECT color, hex, swatch_url FROM product_colors WHERE product_id = $1 ORDER BY id
 		`, p.ID)
 		if err != nil {
 			return err
@@ -1277,13 +1297,16 @@ func (h *PageHandler) ProductDetail(w http.ResponseWriter, r *http.Request) {
 		defer rows.Close()
 		for rows.Next() {
 			var color string
-			var hex sql.NullString
-			if err := rows.Scan(&color, &hex); err != nil {
+			var hex, swatch sql.NullString
+			if err := rows.Scan(&color, &hex, &swatch); err != nil {
 				return err
 			}
 			c := models.ProductColor{Color: color}
 			if hex.Valid {
 				c.Hex = &hex.String
+			}
+			if swatch.Valid {
+				c.SwatchURL = &swatch.String
 			}
 			p.Colors = append(p.Colors, c)
 		}
@@ -1491,7 +1514,7 @@ func (h *PageHandler) ProductDetail(w http.ResponseWriter, r *http.Request) {
 			       p.brand_id, p.category_id, p.gender_id,
 			       p.price_eur, p.original_price_eur, p.image_url,
 			       p.is_new, p.is_featured, p.is_on_sale, p.discount_pct,
-			       p.is_active, p.is_published, p.sort_order,
+			       p.is_active, p.is_published, p.sort_order, p.fulfilment,
 			       p.created_at, p.updated_at,
 			       b.name, b.slug, g.value
 			FROM products p

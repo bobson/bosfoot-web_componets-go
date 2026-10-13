@@ -1,0 +1,149 @@
+{
+  "name": "Revive",
+  "gender": "unisex",
+  "activities": [
+    "casual"
+  ],
+  "highlights": [
+    {
+      "en": "MADE IN EU",
+      "mk": "Произведено во ЕУ",
+      "sq": "Prodhuar në BE"
+    },
+    {
+      "en": "VEGAN",
+      "mk": "Веганско",
+      "sq": "Vegan"
+    },
+    {
+      "en": "COOLMAX LINING",
+      "mk": "Coolmax постава",
+      "sq": "Veshje Coolmax"
+    },
+    {
+      "en": "ZERO DROP",
+      "mk": "Нула дроп",
+      "sq": "Zero drop"
+    }
+  ],
+  "colors": [
+    {
+      "name": "Blue & White",
+      "hex": "#3b4f8f"
+    },
+    {
+      "name": "Light Grey & Black",
+      "hex": "#2b2b2b"
+    }
+  ],
+  "sizes": [
+    "36",
+    "37",
+    "38",
+    "39",
+    "40",
+    "41",
+    "42",
+    "43",
+    "44",
+    "45",
+    "46",
+    "47"
+  ],
+  "sizeChart": {
+    "36": {
+      "length": 233,
+      "width": 88
+    },
+    "37": {
+      "length": 239,
+      "width": 90
+    },
+    "38": {
+      "length": 246,
+      "width": 92
+    },
+    "39": {
+      "length": 253,
+      "width": 94
+    },
+    "40": {
+      "length": 259,
+      "width": 96
+    },
+    "41": {
+      "length": 266,
+      "width": 98
+    },
+    "42": {
+      "length": 273,
+      "width": 100
+    },
+    "43": {
+      "length": 279,
+      "width": 102
+    },
+    "44": {
+      "length": 286,
+      "width": 103
+    },
+    "45": {
+      "length": 293,
+      "width": 105
+    },
+    "46": {
+      "length": 299,
+      "width": 107
+    },
+    "47": {
+      "length": 306,
+      "width": 109
+    }
+  },
+  "specs": [
+    {
+      "key": "Upper",
+      "value": "Microfibre + polyester (vegan)"
+    },
+    {
+      "key": "Lining",
+      "value": "Dermodry Coolmax® technical fabric"
+    },
+    {
+      "key": "Insole",
+      "value": "Recycled PU + microfibre"
+    },
+    {
+      "key": "Outsole",
+      "value": "Synthetic rubber — ComfortGrip, 4 mm + 2 mm lugs"
+    },
+    {
+      "key": "Drop",
+      "value": "Zero drop"
+    },
+    {
+      "key": "Made in",
+      "value": "EU (hand-crafted)"
+    }
+  ],
+  "translations": {
+    "en": {
+      "description": "Barebarics' best-loved city sneaker: double lacing, premium vegan materials, hand-crafted in the EU.",
+      "about": "Revive brings sporty looks and real barefoot comfort together — a sneaker you'll reach for more often than not.\n\nThe Dermodry Coolmax® lining keeps moving moisture away, so feet stay dry from morning to evening.\n\nThe ComfortGrip sole (4 mm + 2 mm lugs) is light and flexible for exploring the city.",
+      "sizeAndFit": "Measure your foot length (heel to longest toe) and choose the size whose insole (inner length) is about 0.5 cm longer — that is the maker's own sizing advice. The size chart shows insole length and width per size. If you're between sizes, go up.",
+      "productInfo": "Upper\nMicrofibre + polyester, vegan, colour-stable and tear-resistant.\n\nLining\nDermodry Coolmax® technical fabric for continuous moisture drainage.\n\nInsole\nRecycled PU + microfibre, breathable.\n\nOutsole\nSoft synthetic rubber — ComfortGrip, 4 mm + 2 mm lugs.\n\nDrop\nZero drop.\n\nMade in\nDesigned and hand-crafted in the EU."
+    },
+    "mk": {
+      "description": "Омилената градска патика на Barebarics: двојно врзување, премиум вегански материјали, рачно изработена во ЕУ.",
+      "about": "Revive спојува спортски изглед и вистинска барефут удобност — патика по која ќе посегнувате почесто од која било друга.\n\nПоставата Dermodry Coolmax® постојано ја одведува влагата, па стапалата остануваат суви од утро до вечер.\n\nЃонот ComfortGrip (4 мм + 2 мм газење) е лесен и флексибилен за шетање низ градот.",
+      "sizeAndFit": "Измерете ја должината на стапалото (од петица до најдолгиот прст) и изберете големина чија влошка (внатрешна должина) е околу 0,5 см подолга — тоа е препораката на производителот. Табелата со големини ја покажува должината и ширината на влошката. Ако сте помеѓу две големини, земете ја поголемата.",
+      "productInfo": "Горен дел\nМикрофибер + полиестер, вегански, со постојана боја и отпорен на кинење.\n\nПостава\nТехничка ткаенина Dermodry Coolmax® за постојано одведување на влагата.\n\nВлошка\nРециклиран PU + микрофибер, дишлива.\n\nЃон\nМека синтетичка гума — ComfortGrip, 4 мм + 2 мм газење.\n\nДроп\nНула дроп.\n\nПроизведено во\nДизајнирано и рачно изработено во ЕУ."
+    },
+    "sq": {
+      "description": "Atletja urbane më e dashur e Barebarics: lidhje e dyfishtë, materiale vegane premium, punuar me dorë në BE.",
+      "about": "Revive bashkon pamjen sportive me komfortin e vërtetë barefoot — atlete që do ta zgjidhni më shpesh se çdo tjetër.\n\nVeshja Dermodry Coolmax® e largon vazhdimisht lagështinë, kështu që këmbët mbeten të thata nga mëngjesi në mbrëmje.\n\nSholla ComfortGrip (4 mm + 2 mm dhëmbëza) është e lehtë dhe fleksibël për të eksploruar qytetin.",
+      "sizeAndFit": "Matni gjatësinë e këmbës (nga thembra te gishti më i gjatë) dhe zgjidhni masën me shollë të brendshme (gjatësi e brendshme) rreth 0,5 cm më të gjatë — kjo është këshilla e prodhuesit. Tabela e masave tregon gjatësinë dhe gjerësinë e shollës. Nëse jeni mes dy masave, zgjidhni më të madhen.",
+      "productInfo": "Pjesa e sipërme\nMikrofibër + poliestër, vegane, me ngjyrë të qëndrueshme dhe rezistente ndaj grisjes.\n\nVeshja e brendshme\nPëlhurë teknike Dermodry Coolmax® për largim të vazhdueshëm të lagështisë.\n\nSholla e brendshme\nPU i ricikluar + mikrofibër, e ajrosur.\n\nSholla\nGomë sintetike e butë — ComfortGrip, 4 mm + 2 mm dhëmbëza.\n\nDrop\nZero drop.\n\nProdhuar në\nDizajnuar dhe punuar me dorë në BE."
+    }
+  }
+}

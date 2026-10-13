@@ -35,6 +35,7 @@ class CartDrawer extends HTMLElement {
       size: this.dataset.labelSize || 'Size',
       remove: this.dataset.labelRemove || 'Remove',
       preorder: this.dataset.labelPreorder || 'Preorder',
+      dropship: this.dataset.labelDropship || 'Arrives in ~7 days',
     };
 
     this.overlay = this.querySelector('[data-cart-overlay]');
@@ -175,7 +176,7 @@ class CartDrawer extends HTMLElement {
           <p class="cart-item__name font-medium">${esc(i.productName)}</p>
           <p class="cart-item__variant text-xs text-muted">${
             i.preorder
-              ? `<span class="cart-item__preorder">${esc(this.labels.preorder)}</span>${
+              ? `<span class="cart-item__preorder">${esc(i.fulfilment === 'dropship' ? this.labels.dropship : this.labels.preorder)}</span>${
                   i.size != null ? ` · ${esc(this.labels.size)} ${esc(i.size)}` : ''
                 } · ${esc(i.color)}`
               : `${esc(this.labels.size)} ${esc(i.size)} · ${esc(i.color)}`

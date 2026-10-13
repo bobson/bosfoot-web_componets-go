@@ -1,13 +1,6 @@
 {
   "name": "Feldom 3",
-  "price": 100,
   "gender": "unisex",
-  "status": {
-    "active": true,
-    "published": true,
-    "featured": true
-  },
-  "sortOrder": 3,
   "activities": [
     "hiking",
     "running"
@@ -96,7 +89,7 @@
       "description": "Grippy, durable performance for running and hiking across a wide range of trail surfaces.",
       "productInfo": "Upper\nBottleYarn: breathable, durable, moisture moving mesh, made from recycled plastic bottles.\nStitched overlay on high impact and wear areas.\nFlat lace — green with lime fleck.\n\nLining\nBreathable, moisture moving lining.\n\nInsole\nReBound 4 mm: energy return with ground connectivity to allow full natural movement. Ideal for performance on harder surfaces and longer distances.\n\nMidsole\nSoftFlex: fully flexible for maximum foot movement.\n\nOutsole\nHillGrip: 4.0 mm tread gives good traction on hard and muddy trail surfaces.\n\nWaterproofness\nNot waterproof, highly breathable. Use a waterproof sock for cold / wet conditions.\n\nWeight\n522 grams per size 42.\n\nStack Height\n10.5 mm with insole; 7.5 mm without insole.\n\nCare\nHand wash with luke warm water and mild detergent. Air dry.\nWe do not recommend putting your Freets in the washing machine or dryer.",
       "sizeAndFit": "Customers say it fits true to size — you may stay at your usual size.",
-      "sustainability": "Upper: 60% recycled (BottleYarn)\nOutsole: 60% natural rubber\nLining: 65% recycled (BottleYarn)\nLace: 70% recycled (BottleYarn)\nInsole: 60% recycled\nPackaging: box/wrapping recycled and recyclable card \u0026 paper\nOuter packaging: recycled and recyclable plastic or card/paper packet"
+      "sustainability": "Upper: 60% recycled (BottleYarn)\nOutsole: 60% natural rubber\nLining: 65% recycled (BottleYarn)\nLace: 70% recycled (BottleYarn)\nInsole: 60% recycled\nPackaging: box/wrapping recycled and recyclable card & paper\nOuter packaging: recycled and recyclable plastic or card/paper packet"
     },
     "mk": {
       "about": "Минимална патика за трчање и планинарење погодна за патеки и надвор од нив со нов дизајн и посилна, подишлива и поудобна горна мрежа.\n\nПришиена HillGrip ѓон со подлабок шаблон од 4мм за подобар грип на помеки патеки.\n\nДури и поиздржлива со прошиено засилување на местата со голема истроеност.",

@@ -1,14 +1,6 @@
 {
   "name": "Vibe 2",
-  "price": 90,
-  "originalPrice": 100,
   "gender": "unisex",
-  "status": {
-    "active": true,
-    "published": true,
-    "featured": true
-  },
-  "sortOrder": 1,
   "activities": [
     "casual",
     "running",
@@ -116,7 +108,7 @@
       "description": "Designed for demanding activity but completely at ease with wearing casually everyday.",
       "productInfo": "Upper\nBottleYarn: breathable, durable, moisture moving mesh, made from recycled plastic bottles.\nConventional lace — black.\n\nLining\nUnlined for complete breathability.\n\nInsole\nReBound 4 mm: energy return with ground connectivity to allow full natural movement.\n\nMidsole\nSoftFlex: fully flexible for maximum foot movement.\n\nOutsole\nUrbanGrip: 3.0 mm wide-area tread for optimum grip and durability on urban surfaces.\n\nWaterproofness\nNot waterproof, highly breathable. Use a waterproof sock for cold / wet conditions.\n\nWeight\n585 grams per pair size 42.\n\nStack Height\n10.5 mm with insole; 6.5 mm without insole, zero drop.",
       "sizeAndFit": "Customers say it fits true to size — you may stay at your usual size.",
-      "sustainability": "Upper: 30% recycled (BottleYarn)\nOutsole: 60% natural rubber\nLining: 65% recycled (BottleYarn)\nLace: 70% recycled (BottleYarn)\nInsole: 60% recycled\nPackaging: box/wrapping recycled and recyclable card \u0026 paper"
+      "sustainability": "Upper: 30% recycled (BottleYarn)\nOutsole: 60% natural rubber\nLining: 65% recycled (BottleYarn)\nLace: 70% recycled (BottleYarn)\nInsole: 60% recycled\nPackaging: box/wrapping recycled and recyclable card & paper"
     },
     "mk": {
       "about": "Flyknit горен дел со удобна обвивка за целодневна удобност со или без чорапи.\n\nВлошка ReBound со енергетски одѕив плус UrbanGrip ѓон даваат одличен осет за подлогата со амортизација.\n\nВисоко дишливо за моменти кога темпото се забрзува.",

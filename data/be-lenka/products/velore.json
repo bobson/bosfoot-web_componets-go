@@ -1,0 +1,154 @@
+{
+  "name": "Velore",
+  "gender": "female",
+  "activities": [
+    "training",
+    "casual"
+  ],
+  "highlights": [
+    {
+      "en": "KNIT UPPER",
+      "mk": "Плетен горен дел",
+      "sq": "Pjesë e sipërme e thurur"
+    },
+    {
+      "en": "LIGHTWEIGHT",
+      "mk": "Лесно",
+      "sq": "I lehtë"
+    },
+    {
+      "en": "GYM READY",
+      "mk": "За теретана",
+      "sq": "Për palestër"
+    },
+    {
+      "en": "ZERO DROP",
+      "mk": "Нула дроп",
+      "sq": "Zero drop"
+    }
+  ],
+  "colors": [
+    {
+      "name": "All Black",
+      "hex": "#1c1c1c"
+    },
+    {
+      "name": "Dark Blue",
+      "hex": "#1f2a5c"
+    },
+    {
+      "name": "Dark Green",
+      "hex": "#1f4a45"
+    }
+  ],
+  "sizes": [
+    "36",
+    "37",
+    "38",
+    "39",
+    "40",
+    "41",
+    "42",
+    "43",
+    "44",
+    "45",
+    "46",
+    "47"
+  ],
+  "sizeChart": {
+    "36": {
+      "length": 230,
+      "width": 91
+    },
+    "37": {
+      "length": 237,
+      "width": 93
+    },
+    "38": {
+      "length": 243,
+      "width": 94
+    },
+    "39": {
+      "length": 250,
+      "width": 96
+    },
+    "40": {
+      "length": 257,
+      "width": 98
+    },
+    "41": {
+      "length": 263,
+      "width": 99
+    },
+    "42": {
+      "length": 273,
+      "width": 102
+    },
+    "43": {
+      "length": 279,
+      "width": 104
+    },
+    "44": {
+      "length": 286,
+      "width": 105
+    },
+    "45": {
+      "length": 293,
+      "width": 107
+    },
+    "46": {
+      "length": 300,
+      "width": 109
+    },
+    "47": {
+      "length": 306,
+      "width": 110
+    }
+  },
+  "specs": [
+    {
+      "key": "Upper",
+      "value": "Textile knit"
+    },
+    {
+      "key": "Lining",
+      "value": "Textile knit"
+    },
+    {
+      "key": "Insole",
+      "value": "PU + polyester, removable, antibacterial"
+    },
+    {
+      "key": "Outsole",
+      "value": "Rubber — MotionGrip, 4.5 mm"
+    },
+    {
+      "key": "Drop",
+      "value": "Zero drop"
+    },
+    {
+      "key": "Made in",
+      "value": "Vietnam"
+    }
+  ],
+  "translations": {
+    "en": {
+      "description": "A soft, breathable knit sneaker for the gym, walks and everyday wear — light on the foot, with a roomy barefoot fit.",
+      "about": "The stretchy knit upper hugs the foot without pressure and breathes during training.\n\nThe 4.5 mm MotionGrip sole is thin enough to feel the ground and grippy enough for the gym floor.\n\nWide toe box and zero drop for natural movement all day.",
+      "sizeAndFit": "Velore has a roomier fit: choose the size whose insole is about the same as your foot length (up to 0.5 cm longer) — no need to add the usual toe room. The size chart shows insole length and width per size.",
+      "productInfo": "Upper\nTextile knit.\n\nLining\nTextile knit.\n\nInsole\nPU + polyester, removable and antibacterial.\n\nOutsole\nRubber — MotionGrip, 4.5 mm.\n\nDrop\nZero drop.\n\nMade in\nVietnam (Be Lenka, Slovakia)."
+    },
+    "mk": {
+      "description": "Мека, дишлива плетена патика за теретана, прошетки и секојдневно носење — лесна на ногата, со пространа барефут форма.",
+      "about": "Еластичниот плетен горен дел го обвива стапалото без притисок и дише за време на тренинг.\n\nЃонот MotionGrip од 4,5 мм е доволно тенок за да ја почувствувате подлогата и доволно лепив за подот во теретана.\n\nШирок простор за прсти и нула дроп за природно движење цел ден.",
+      "sizeAndFit": "Velore е пошироко кроен: изберете големина чија влошка е приближно колку должината на стапалото (до 0,5 см подолга) — не треба да додавате вообичаен простор за прстите. Табелата со големини ја покажува должината и ширината на влошката.",
+      "productInfo": "Горен дел\nТекстилно плетиво.\n\nПостава\nТекстилно плетиво.\n\nВлошка\nPU + полиестер, вадлива и антибактериска.\n\nЃон\nГума — MotionGrip, 4,5 мм.\n\nДроп\nНула дроп.\n\nПроизведено во\nВиетнам (Be Lenka, Словачка)."
+    },
+    "sq": {
+      "description": "Atlete e butë dhe e ajrosur me thurje për palestër, shëtitje dhe përditshmëri — e lehtë në këmbë, me prerje të gjerë barefoot.",
+      "about": "Pjesa e sipërme elastike e thurur e përqafon këmbën pa shtypje dhe merr frymë gjatë stërvitjes.\n\nSholla MotionGrip 4,5 mm është mjaft e hollë për të ndjerë tokën dhe mjaft ngjitëse për dyshemenë e palestrës.\n\nHapësirë e gjerë për gishtat dhe zero drop për lëvizje natyrale gjithë ditën.",
+      "sizeAndFit": "Velore ka prerje më të gjerë: zgjidhni masën me shollë të brendshme afërsisht sa gjatësia e këmbës (deri 0,5 cm më të gjatë) — nuk ka nevojë të shtoni hapësirën e zakonshme për gishtat. Tabela e masave tregon gjatësinë dhe gjerësinë e shollës.",
+      "productInfo": "Pjesa e sipërme\nThurje tekstili.\n\nVeshja e brendshme\nThurje tekstili.\n\nSholla e brendshme\nPU + poliestër, e lëvizshme dhe antibakteriale.\n\nSholla\nGomë — MotionGrip, 4,5 mm.\n\nDrop\nZero drop.\n\nProdhuar në\nVietnam (Be Lenka, Sllovaki)."
+    }
+  }
+}

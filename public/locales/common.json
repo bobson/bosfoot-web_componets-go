@@ -24,26 +24,51 @@
     "sq": "Shiko produktet",
     "en": "Browse products"
   },
-  "cart.quantity": { "mk": "Количина", "sq": "Sasia", "en": "Quantity" },
-  "cart.remove": { "mk": "Отстрани", "sq": "Hiq", "en": "Remove" },
+  "cart.quantity": {
+    "mk": "Количина",
+    "sq": "Sasia",
+    "en": "Quantity"
+  },
+  "cart.remove": {
+    "mk": "Отстрани",
+    "sq": "Hiq",
+    "en": "Remove"
+  },
   "cart.shippingNote": {
     "mk": "Достава 250 ден · бесплатно над 3.500 ден.",
     "sq": "Dërgesa 250 den · falas mbi 3.500 den.",
     "en": "Shipping 250 den · free over 3,500 den."
   },
-  "cart.size": { "mk": "Големина", "sq": "Madhësia", "en": "Size" },
+  "cart.size": {
+    "mk": "Големина",
+    "sq": "Madhësia",
+    "en": "Size"
+  },
   "cart.preorder": {
     "mk": "Резервација",
     "sq": "Rezervim",
     "en": "Reserved"
   },
-  "cart.preorderBanner": {
-    "mk": "Некои производи во кошничката се резервација — се плаќаат при испорака. Рокот на испорака е наведен на страницата на секој производ.",
-    "sq": "Disa produkte në shportë janë me rezervim — paguhen me dorëzim. Afati i dërgesës tregohet në faqen e secilit produkt.",
-    "en": "Some items in your cart are reservations — pay on delivery. The delivery time is shown on each product's page."
+  "cart.dropship": {
+    "mk": "Стига за ~7 дена",
+    "sq": "Arrin për ~7 ditë",
+    "en": "Arrives in ~7 days"
   },
-  "cart.subtotal": { "mk": "Меѓузбир", "sq": "Nëntotali", "en": "Subtotal" },
-  "cart.title": { "mk": "Кошничка", "sq": "Shporta", "en": "Cart" },
+  "cart.preorderBanner": {
+    "mk": "Некои производи во кошничката не се на залиха — ги нарачуваме специјално за тебе и се плаќаат при испорака. Рокот на испорака е наведен кај секој производ.",
+    "sq": "Disa produkte në shportë nuk janë në stok — i porosisim posaçërisht për ty dhe paguhen me dorëzim. Afati i dërgesës tregohet te secili produkt.",
+    "en": "Some items in your cart aren't in stock — we order them specially for you, pay on delivery. The delivery time is shown with each item."
+  },
+  "cart.subtotal": {
+    "mk": "Меѓузбир",
+    "sq": "Nëntotali",
+    "en": "Subtotal"
+  },
+  "cart.title": {
+    "mk": "Кошничка",
+    "sq": "Shporta",
+    "en": "Cart"
+  },
   "consent.title": {
     "mk": "Колачиња",
     "sq": "Cookies",
@@ -74,13 +99,26 @@
     "sq": "Rezervo",
     "en": "Reserve"
   },
-  "cta.shopNow": { "mk": "Купи сега", "sq": "Bli tani", "en": "Shop now" },
+  "cta.orderDropship": {
+    "mk": "Нарачај",
+    "sq": "Porosit",
+    "en": "Order"
+  },
+  "cta.shopNow": {
+    "mk": "Купи сега",
+    "sq": "Bli tani",
+    "en": "Shop now"
+  },
   "cta.viewAll": {
     "mk": "Прикажи ги сите",
     "sq": "Shiko të gjitha",
     "en": "View all"
   },
-  "currency.MKD": { "mk": "ден", "sq": "denarë", "en": "MKD" },
+  "currency.MKD": {
+    "mk": "ден",
+    "sq": "denarë",
+    "en": "MKD"
+  },
   "footer.copyright": {
     "mk": "© 2026 Bosfoot. Сите права задржани.",
     "sq": "© 2026 Bosfoot. Të gjitha të drejtat e rezervuara.",
@@ -111,10 +149,26 @@
     "sq": "Ky tekst është placeholder. Zëvendësoje me versionin ligjor përfundimtar para lansimit.",
     "en": "This text is a placeholder. Replace with final legal version before launch."
   },
-  "nav.about": { "mk": "За нас", "sq": "Rreth nesh", "en": "About" },
-  "nav.brands": { "mk": "Брендови", "sq": "Markat", "en": "Brands" },
-  "nav.contact": { "mk": "Контакт", "sq": "Kontakti", "en": "Contact" },
-  "nav.login": { "mk": "Најава", "sq": "Hyrje", "en": "Login" },
+  "nav.about": {
+    "mk": "За нас",
+    "sq": "Rreth nesh",
+    "en": "About"
+  },
+  "nav.brands": {
+    "mk": "Брендови",
+    "sq": "Markat",
+    "en": "Brands"
+  },
+  "nav.contact": {
+    "mk": "Контакт",
+    "sq": "Kontakti",
+    "en": "Contact"
+  },
+  "nav.login": {
+    "mk": "Најава",
+    "sq": "Hyrje",
+    "en": "Login"
+  },
   "nav.newToBarefoot": {
     "mk": "Здравје на стапалата",
     "sq": "Shëndeti i këmbëve",
@@ -185,10 +239,26 @@
     "sq": "Politika e privatësisë",
     "en": "Privacy policy"
   },
-  "nav.products": { "mk": "Производи", "sq": "Produktet", "en": "Products" },
-  "nav.returns": { "mk": "Враќање", "sq": "Kthim", "en": "Returns" },
-  "nav.search": { "mk": "Пребарај", "sq": "Kërko", "en": "Search" },
-  "nav.shipping": { "mk": "Достава", "sq": "Dërgesa", "en": "Shipping" },
+  "nav.products": {
+    "mk": "Производи",
+    "sq": "Produktet",
+    "en": "Products"
+  },
+  "nav.returns": {
+    "mk": "Враќање",
+    "sq": "Kthim",
+    "en": "Returns"
+  },
+  "nav.search": {
+    "mk": "Пребарај",
+    "sq": "Kërko",
+    "en": "Search"
+  },
+  "nav.shipping": {
+    "mk": "Достава",
+    "sq": "Dërgesa",
+    "en": "Shipping"
+  },
   "nav.sizeGuide": {
     "mk": "Водич за големини",
     "sq": "Udhëzues përmasash",
@@ -205,14 +275,14 @@
     "en": "This size is currently out of stock. Message us or follow us on Instagram and we'll let you know when it's back."
   },
   "preorder.note": {
-    "mk": "Овој модел моментално не е на залиха. Резервирај сега — го нарачуваме специјално за тебе и стига за околу 1–2 недели. Плаќаш при испорака.",
-    "sq": "Ky model nuk është aktualisht në stok. Rezervo tani — e porosisim posaçërisht për ty dhe arrin për rreth 1–2 javë. Paguan me dorëzim.",
-    "en": "This model is currently out of stock. Reserve now — we order it specially for you and it arrives in about 1–2 weeks. Pay on delivery."
+    "mk": "Оваа големина моментално не е на залиха. Резервирај ја — ја нарачуваме специјално за тебе и стига за околу 1–2 недели. Плаќаш при испорака.",
+    "sq": "Kjo masë nuk është në stok tani. Rezervoje — e porosisim posaçërisht për ty dhe arrin për rreth 1–2 javë. Paguan me dorëzim.",
+    "en": "This size isn't in stock right now. Reserve it — we order it specially for you and it arrives in about 1–2 weeks. Pay on delivery."
   },
   "preorder.noteDropship": {
-    "mk": "Овој модел го нарачуваме директно од производителот, специјално за тебе. Стига за околу 7 дена — плаќаш при испорака.",
-    "sq": "Porositet drejtpërdrejt nga prodhuesi për ty. Dërgesa për rreth 7 ditë — paguan me dorëzim.",
-    "en": "Ordered directly from the maker for you. Delivered in about 7 days — pay on delivery."
+    "mk": "Оваа големина ја нарачуваме директно од производителот, специјално за тебе. Стига за околу 7 дена — плаќаш при испорака.",
+    "sq": "Këtë masë e porosisim drejtpërdrejt nga prodhuesi, posaçërisht për ty. Arrin për rreth 7 ditë — paguan me dorëzim.",
+    "en": "We order this size directly from the maker, specially for you. It arrives in about 7 days — pay on delivery."
   },
   "reservation.freeNote": {
     "mk": "Плаќање при испорака, без плаќање однапред. Лесна замена на број и враќање во цела Македонија — пробај ги дома, без ризик.",
@@ -289,7 +359,11 @@
     "sq": "Kërko produkt ose markë…",
     "en": "Search products or brands…"
   },
-  "search.title": { "mk": "Пребарување", "sq": "Kërkim", "en": "Search" },
+  "search.title": {
+    "mk": "Пребарување",
+    "sq": "Kërkim",
+    "en": "Search"
+  },
   "section.brands": {
     "mk": "Нашите брендови",
     "sq": "Markat tona",

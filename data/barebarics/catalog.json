@@ -1,0 +1,28 @@
+{
+  "brand": {
+    "visible": false
+  },
+  "products": {
+    "wave-2-0": {
+      "price": 99,
+      "mode": "dropship",
+      "published": false,
+      "featured": false,
+      "sortOrder": 22
+    },
+    "zing-fresh": {
+      "price": 119,
+      "mode": "dropship",
+      "published": false,
+      "featured": false,
+      "sortOrder": 23
+    },
+    "revive": {
+      "price": 149,
+      "mode": "dropship",
+      "published": false,
+      "featured": false,
+      "sortOrder": 24
+    }
+  }
+}

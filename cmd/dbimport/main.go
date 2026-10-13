@@ -54,6 +54,13 @@ func main() {
 		// Always run: adds the 'cancelled' order status. Idempotent (ADD VALUE IF
 		// NOT EXISTS), so safe on both fresh and existing DBs.
 		"db/orders-status.sql",
+		// Always run: per-product fulfilment mode (stock/reservation/dropship),
+		// colour swatch photos, order_items.fulfilment, brands.is_visible, and the
+		// (hidden) Barebarics brand. ADD-only + idempotent.
+		"db/fulfilment.sql",
+		// Always run (after fulfilment.sql creates Barebarics): brands.about_url +
+		// Be Lenka / Barebarics logos, descriptions and read-more links. Idempotent.
+		"db/brand-about.sql",
 	)
 
 	for _, f := range files {

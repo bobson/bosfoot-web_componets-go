@@ -24,7 +24,7 @@
     <section class="section container brands-grid">
       <div class="brands-grid__list">
         {{range .Brands}}
-        <article class="brand-card{{if .IsFeatured}} brand-card--featured{{end}}" data-reveal>
+        <article class="brand-card brand-card--{{.Slug}}" data-reveal>
           {{if .LogoURL}}
           <div class="brand-card__logo">
             <img src="{{.LogoURL}}" alt="{{.Name}}" loading="lazy" decoding="async">
@@ -61,6 +61,11 @@
             {{else if .WebsiteURL}}
             <a href="{{.WebsiteURL}}" target="_blank" rel="noopener noreferrer" class="btn btn--secondary btn--external">
               {{t $.Locale "brand.officialSite"}} ↗
+            </a>
+            {{end}}
+            {{if .AboutURL}}
+            <a href="{{.AboutURL}}" target="_blank" rel="noopener noreferrer" class="brand-card__more">
+              {{t $.Locale "brands.readMore"}} ↗
             </a>
             {{end}}
           </div>

@@ -1,13 +1,6 @@
 {
   "name": "Chamois",
-  "price": 210,
   "gender": "unisex",
-  "status": {
-    "active": true,
-    "published": false,
-    "featured": false
-  },
-  "sortOrder": 8,
   "activities": [
     "hiking"
   ],
@@ -95,7 +88,7 @@
       "description": "Premium leather, barefoot boot designed to take on the toughest mountain challenges, whilst being wonderfully comfortable and extremely lightweight.",
       "productInfo": "Upper\nLeather: premium, full grain leather.\nConventional lace — brown.\n\nLining\nFull waterproof, breathable bootee lining.\n\nInsole\nFlexile Nano: a lighter, thinner version of our 3mm Flexile insole, which gives a little more ground feel and breathability.\n\nMidsole\nFirmFlex: flexibility with some protection on more arduous, rocky terrain.\n\nOutsole\nMountainGrip: 6.0 mm tread for tougher, wetter trails and off track.\n\nWeight\n860 grams per pair size 42.\n\nStack Height\n12.5 mm with insole; 10 mm without insole.\n\nCare\nWipe with a damp cloth. Air dry. Treat with a conditioner/waterproofer suitable for premium leather.",
       "sizeAndFit": "Customers say it fits true to size — you may stay at your usual size.",
-      "sustainability": "Upper: Premium full grain leather Gold Certificated by the Leather Working Group\nLaces: 70% recycled (BottleYarn)\nMidsole: 70% recycled (BottleYarn)\nInsole: 60% recycled\nOutsole: 60% natural rubber\nPackaging: box/wrapping recycled and recyclable card \u0026 paper"
+      "sustainability": "Upper: Premium full grain leather Gold Certificated by the Leather Working Group\nLaces: 70% recycled (BottleYarn)\nMidsole: 70% recycled (BottleYarn)\nInsole: 60% recycled\nOutsole: 60% natural rubber\nPackaging: box/wrapping recycled and recyclable card & paper"
     },
     "mk": {
       "about": "Комбинира удобност, леснотија и издржливост.\n\n6мм MountainGrip ножеви обезбедуваат одличен грип на стрмни кални патеки.\n\nПремиум, мазен кожен горен дел и целосна водоотпорна, дишлива обвивка ја заокружуваат највисоката заштита.",

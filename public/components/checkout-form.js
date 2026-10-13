@@ -38,6 +38,7 @@ class CheckoutForm extends HTMLElement {
     this.freeShipping = parseInt(this.dataset.freeShipping, 10) || 3500;
     this.labelSize = this.dataset.labelSize || 'Size';
     this.labelPreorder = this.dataset.labelPreorder || 'Preorder';
+    this.labelDropship = this.dataset.labelDropship || 'Arrives in ~7 days';
     this.labelEmailSent = this.dataset.labelEmailSent || '';
     this.labelSpamNote = this.dataset.labelSpamNote || '';
     this.errorGeneric = this.dataset.errorGeneric || 'Something went wrong. Please try again.';
@@ -167,7 +168,7 @@ class CheckoutForm extends HTMLElement {
           <p class="checkout-item__name font-medium">${esc(i.productName)}</p>
           <p class="checkout-item__variant text-xs text-muted">${
             i.preorder
-              ? `<span class="checkout-item__preorder">${esc(this.labelPreorder)}</span>${
+              ? `<span class="checkout-item__preorder">${esc(i.fulfilment === 'dropship' ? this.labelDropship : this.labelPreorder)}</span>${
                   i.size != null ? ` · ${esc(this.labelSize)} ${esc(i.size)}` : ''
                 } · ${esc(i.color)}`
               : `${esc(this.labelSize)} ${esc(i.size)} · ${esc(i.color)}`

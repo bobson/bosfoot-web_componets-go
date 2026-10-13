@@ -32,6 +32,9 @@ type Item struct {
 	Color string
 	Qty   int
 	Price int // unit price, MKD
+	// Fulfilment: "stock" (ship from the shelf), "reservation" or "dropship"
+	// (order it from the supplier). "" on lines from before the column existed.
+	Fulfilment string
 }
 
 // Order is the data the notification email needs.
@@ -473,7 +476,7 @@ func buildMessage(from string, to []string, o Order) []byte {
 		if it.Size != "" || it.Color != "" {
 			variant = fmt.Sprintf(" — size %s, %s", it.Size, it.Color)
 		}
-		line("  - %s%s ×%d — %s MKD", it.Name, variant, it.Qty, mkd(it.Price*it.Qty))
+		line("  - %s%s ×%d — %s MKD%s", it.Name, variant, it.Qty, mkd(it.Price*it.Qty), ownerFulfilNote(it.Fulfilment))
 	}
 	if o.Notes != "" {
 		line("")
@@ -603,7 +606,7 @@ func buildCustomerMessage(from, replyTo string, o Order) []byte {
 				variant = fmt.Sprintf(" (size: %s, color: %s)", it.Size, it.Color)
 			}
 		}
-		line("- %s%s x%d", it.Name, variant, it.Qty)
+		line("- %s%s x%d%s", it.Name, variant, it.Qty, customerFulfilNote(it.Fulfilment, o.Locale))
 	}
 	line("")
 	line(footer)
@@ -662,4 +665,35 @@ func mkd(n int) string {
 		return "-" + out.String()
 	}
 	return out.String()
+}
+
+// ownerFulfilNote flags lines the owner must order from the supplier.
+func ownerFulfilNote(f string) string {
+	switch f {
+	case "dropship":
+		return "  [DROPSHIP — order from the maker, ~7 days]"
+	case "reservation":
+		return "  [RESERVATION — order from the brand, ~1–2 weeks]"
+	}
+	return ""
+}
+
+// customerFulfilNote tells the buyer when a not-in-stock line will arrive.
+func customerFulfilNote(f, locale string) string {
+	var mk, sq, en string
+	switch f {
+	case "dropship":
+		mk, sq, en = "стига за околу 7 дена", "arrin për rreth 7 ditë", "arrives in about 7 days"
+	case "reservation":
+		mk, sq, en = "стига за околу 1–2 недели", "arrin për rreth 1–2 javë", "arrives in about 1–2 weeks"
+	default:
+		return ""
+	}
+	switch locale {
+	case "mk":
+		return " — " + mk
+	case "sq":
+		return " — " + sq
+	}
+	return " — " + en
 }

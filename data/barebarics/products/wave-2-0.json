@@ -1,0 +1,149 @@
+{
+  "name": "Wave 2.0",
+  "gender": "unisex",
+  "activities": [
+    "casual"
+  ],
+  "highlights": [
+    {
+      "en": "RETRO 90S",
+      "mk": "Ретро 90-ти",
+      "sq": "Retro vitet '90"
+    },
+    {
+      "en": "VEGAN",
+      "mk": "Веганско",
+      "sq": "Vegan"
+    },
+    {
+      "en": "LIGHTWEIGHT",
+      "mk": "Лесно",
+      "sq": "I lehtë"
+    },
+    {
+      "en": "ZERO DROP",
+      "mk": "Нула дроп",
+      "sq": "Zero drop"
+    }
+  ],
+  "colors": [
+    {
+      "name": "White & Green",
+      "hex": "#6b7a3a"
+    },
+    {
+      "name": "Black & Dark Brown",
+      "hex": "#1e1e1e"
+    }
+  ],
+  "sizes": [
+    "36",
+    "37",
+    "38",
+    "39",
+    "40",
+    "41",
+    "42",
+    "43",
+    "44",
+    "45",
+    "46",
+    "47"
+  ],
+  "sizeChart": {
+    "36": {
+      "length": 232,
+      "width": 92
+    },
+    "37": {
+      "length": 239,
+      "width": 94
+    },
+    "38": {
+      "length": 246,
+      "width": 95
+    },
+    "39": {
+      "length": 253,
+      "width": 96
+    },
+    "40": {
+      "length": 259,
+      "width": 98
+    },
+    "41": {
+      "length": 266,
+      "width": 99
+    },
+    "42": {
+      "length": 272,
+      "width": 101
+    },
+    "43": {
+      "length": 279,
+      "width": 102
+    },
+    "44": {
+      "length": 286,
+      "width": 103
+    },
+    "45": {
+      "length": 292,
+      "width": 105
+    },
+    "46": {
+      "length": 299,
+      "width": 106
+    },
+    "47": {
+      "length": 306,
+      "width": 108
+    }
+  },
+  "specs": [
+    {
+      "key": "Upper",
+      "value": "Synthetic material (vegan)"
+    },
+    {
+      "key": "Lining",
+      "value": "Textile"
+    },
+    {
+      "key": "Insole",
+      "value": "PU + polyester, removable, antibacterial"
+    },
+    {
+      "key": "Outsole",
+      "value": "Rubber — Retro Neo"
+    },
+    {
+      "key": "Drop",
+      "value": "Zero drop"
+    },
+    {
+      "key": "Made in",
+      "value": "Vietnam"
+    }
+  ],
+  "translations": {
+    "en": {
+      "description": "A retro-inspired street sneaker with a clean 90s look — lightweight, breathable, and barefoot inside.",
+      "about": "Wave 2.0 takes the classic court-sneaker silhouette and gives it a foot-shaped toe box.\n\nThe perforated vegan upper is light and breathable, made for long days on your feet.\n\nThe Retro Neo sole is flexible and flat from heel to toe — zero drop for a natural posture.",
+      "sizeAndFit": "Measure your foot length (heel to longest toe) and choose the size whose insole (inner length) is about 0.5 cm longer — that is the maker's own sizing advice. The size chart shows insole length and width per size. If you're between sizes, go up.",
+      "productInfo": "Upper\nSynthetic material, vegan, perforated for airflow.\n\nLining\nTextile.\n\nInsole\nPU + polyester, removable and antibacterial.\n\nOutsole\nRubber — Retro Neo, ultra-flexible.\n\nDrop\nZero drop.\n\nMade in\nVietnam (Barebarics, Slovakia)."
+    },
+    "mk": {
+      "description": "Ретро улична патика со чист изглед од 90-тите — лесна, дишлива и барефут внатре.",
+      "about": "Wave 2.0 го зема класичниот изглед на тениска патика и му дава простор за прсти во форма на стапало.\n\nПерфорираниот вегански горен дел е лесен и дишлив, за долги денови на нозе.\n\nЃонот Retro Neo е флексибилен и рамен од петица до прсти — нула дроп за природно држење.",
+      "sizeAndFit": "Измерете ја должината на стапалото (од петица до најдолгиот прст) и изберете големина чија влошка (внатрешна должина) е околу 0,5 см подолга — тоа е препораката на производителот. Табелата со големини ја покажува должината и ширината на влошката. Ако сте помеѓу две големини, земете ја поголемата.",
+      "productInfo": "Горен дел\nСинтетички материјал, вегански, перфориран за проветрување.\n\nПостава\nТекстил.\n\nВлошка\nPU + полиестер, вадлива и антибактериска.\n\nЃон\nГума — Retro Neo, ултра флексибилен.\n\nДроп\nНула дроп.\n\nПроизведено во\nВиетнам (Barebarics, Словачка)."
+    },
+    "sq": {
+      "description": "Atlete rrugësh me frymëzim retro dhe pamje të pastër të viteve '90 — e lehtë, e ajrosur dhe barefoot brenda.",
+      "about": "Wave 2.0 merr siluetën klasike të atleteve të tenisit dhe i jep hapësirë për gishtat në formën e këmbës.\n\nPjesa e sipërme vegane e shpuar është e lehtë dhe e ajrosur, për ditë të gjata në këmbë.\n\nSholla Retro Neo është fleksibël dhe e rrafshët nga thembra te gishtat — zero drop për qëndrim natyral.",
+      "sizeAndFit": "Matni gjatësinë e këmbës (nga thembra te gishti më i gjatë) dhe zgjidhni masën me shollë të brendshme (gjatësi e brendshme) rreth 0,5 cm më të gjatë — kjo është këshilla e prodhuesit. Tabela e masave tregon gjatësinë dhe gjerësinë e shollës. Nëse jeni mes dy masave, zgjidhni më të madhen.",
+      "productInfo": "Pjesa e sipërme\nMaterial sintetik, vegan, i shpuar për ajrosje.\n\nVeshja e brendshme\nTekstil.\n\nSholla e brendshme\nPU + poliestër, e lëvizshme dhe antibakteriale.\n\nSholla\nGomë — Retro Neo, ultra fleksibël.\n\nDrop\nZero drop.\n\nProdhuar në\nVietnam (Barebarics, Sllovaki)."
+    }
+  }
+}

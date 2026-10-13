@@ -65,7 +65,12 @@ func main() {
 		       COALESCE(o.notes, '') AS notes,
 		       COALESCE(string_agg(
 		         COALESCE(p.name, '?') || itemcols.variant ||
-		         '  x' || oi.quantity || '  @ ' || oi.unit_price_mkd || ' MKD',
+		         '  x' || oi.quantity || '  @ ' || oi.unit_price_mkd || ' MKD' ||
+		         -- Lines to order from the supplier (needs db/fulfilment.sql).
+		         CASE oi.fulfilment
+		           WHEN 'dropship'    THEN '  [DROPSHIP → order from the maker]'
+		           WHEN 'reservation' THEN '  [RESERVATION → order from the brand]'
+		           ELSE '' END,
 		         $3 ORDER BY oi.id
 		       ), '') AS items,
 		       -- A review invite is only ever sent after delivery, so an existing

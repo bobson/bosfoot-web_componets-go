@@ -47,7 +47,16 @@ func homeStructuredData(siteURL string) []any {
 // product detail page. price is emitted as a string and availability is derived
 // from live stock, so Google can show price/availability rich results.
 func productStructuredData(siteURL, productURL, desc string, p models.Product, reviews ReviewSummary) map[string]any {
+	// In stock → InStock. Otherwise by the model's mode: dropship ships from the
+	// maker (BackOrder), reservation is ordered ahead (PreOrder), a plain stock
+	// model is OutOfStock.
 	availability := "https://schema.org/OutOfStock"
+	switch p.Fulfilment {
+	case FulfilDropship:
+		availability = "https://schema.org/BackOrder"
+	case FulfilReservation:
+		availability = "https://schema.org/PreOrder"
+	}
 	if site.PreorderAll {
 		// Pre-launch: the whole catalogue is preorder.
 		availability = "https://schema.org/PreOrder"

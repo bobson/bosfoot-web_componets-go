@@ -1,6 +1,11 @@
-// Command imgvariants generates small "-card" WebP variants of primary product
-// images so the listing/home product cards can serve ~500px images via srcset
-// instead of the full 1000px source.
+// Command imgvariants generates small WebP variants of primary product images:
+//   - "-card":   ~500px, so listing/home product cards serve it via srcset
+//     instead of the full 1000px source.
+//
+// Colour-picker swatches ({slug}-swatch.webp) are NOT generated here: they are
+// the brand's own colour tiles, converted with scripts/prep-images.sh (models
+// without one — e.g. Freet — keep the hex dot). The suffix is still skipped
+// below so a swatch file is never mistaken for a primary image.
 //
 // A primary product image is the file whose name matches its product directory,
 // e.g. public/images/freet/chamois/images/chamois.webp → chamois-card.webp.
@@ -25,11 +30,24 @@ import (
 )
 
 const (
-	imagesRoot   = "public/images"
-	variantWidth = 500
-	variantSfx   = "-card"
-	quality      = "82"
+	imagesRoot = "public/images"
+	quality    = "82"
 )
+
+// variant is one derived image built from each primary product image.
+type variant struct {
+	suffix string
+	args   []string // magick args between the input and output paths
+}
+
+var variants = []variant{
+	// 500px WIDE (the card srcset declares 500w), any height — portrait photos
+	// keep their shape; only shrinks, never upscales.
+	{"-card", []string{"-resize", "500x>"}},
+}
+
+// skipSuffixes are derived files that must never count as a primary image.
+var skipSuffixes = []string{"-card", "-swatch"}
 
 func main() {
 	force := flag.Bool("force", false, "regenerate variants even if they already exist")
@@ -49,23 +67,22 @@ func main() {
 			return nil
 		}
 
-		variant := variantPath(path)
-		if !*force {
-			if _, err := os.Stat(variant); err == nil {
-				skipped++
-				return nil
+		for _, v := range variants {
+			out := variantPath(path, v.suffix)
+			if !*force {
+				if _, err := os.Stat(out); err == nil {
+					skipped++
+					continue
+				}
 			}
+			args := append([]string{path}, v.args...)
+			args = append(args, "-quality", quality, out)
+			if msg, err := exec.Command("magick", args...).CombinedOutput(); err != nil {
+				return fmt.Errorf("magick failed for %s: %v\n%s", path, err, msg)
+			}
+			fmt.Printf("generated %s\n", out)
+			generated++
 		}
-
-		// -resize WxH> only shrinks (never upscales) and preserves aspect ratio.
-		cmd := exec.Command("magick", path,
-			"-resize", fmt.Sprintf("%dx%d>", variantWidth, variantWidth),
-			"-quality", quality, variant)
-		if out, err := cmd.CombinedOutput(); err != nil {
-			return fmt.Errorf("magick failed for %s: %v\n%s", path, err, out)
-		}
-		fmt.Printf("generated %s\n", variant)
-		generated++
 		return nil
 	})
 	if err != nil {
@@ -85,8 +102,10 @@ func isPrimaryProductImage(path string) bool {
 		return false
 	}
 	name := strings.TrimSuffix(filepath.Base(path), filepath.Ext(path))
-	if strings.HasSuffix(name, variantSfx) {
-		return false
+	for _, sfx := range skipSuffixes {
+		if strings.HasSuffix(name, sfx) {
+			return false
+		}
 	}
 	// Two levels up: .../slug/images/slug.webp
 	if name == filepath.Base(filepath.Dir(filepath.Dir(path))) {
@@ -96,8 +115,8 @@ func isPrimaryProductImage(path string) bool {
 	return name == filepath.Base(filepath.Dir(filepath.Dir(filepath.Dir(path))))
 }
 
-// variantPath turns /a/b/x.webp into /a/b/x-card.webp.
-func variantPath(path string) string {
+// variantPath turns /a/b/x.webp into /a/b/x{suffix}.webp, e.g. x-card.webp.
+func variantPath(path, suffix string) string {
 	ext := filepath.Ext(path)
-	return strings.TrimSuffix(path, ext) + variantSfx + ext
+	return strings.TrimSuffix(path, ext) + suffix + ext
 }

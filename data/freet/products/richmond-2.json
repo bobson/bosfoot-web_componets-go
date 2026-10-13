@@ -1,13 +1,6 @@
 {
   "name": "Richmond 2",
-  "price": 140,
   "gender": "unisex",
-  "status": {
-    "active": true,
-    "published": true,
-    "featured": false
-  },
-  "sortOrder": 6,
   "activities": [
     "casual",
     "office"
@@ -96,7 +89,7 @@
       "description": "A classic desert boot for smarter days at the office or casual relaxing with friends.",
       "productInfo": "Upper\nLeather: premium, full grain leather.\nConventional lace — brown.\n\nLining\nBreathable, moisture moving lining.\n\nInsole\nFlexile: 3.0 mm some shock absorption with excellent ground connectivity.\n\nMidsole\nSoftFlex: fully flexible for maximum foot movement.\n\nOutsole\nUrbanGrip: 3.0 mm wide-area tread for optimum grip on urban surfaces.\n\nWaterproofness\nWater resistant upper when treated regularly.\n\nWeight\n640 grams per pair size 42.\n\nStack Height\n9.5 mm with insole; 6.5 mm without insole, zero drop.",
       "sizeAndFit": "Customers say it fits true to size — you may stay at your usual size.",
-      "sustainability": "Laces: 70% BottleYarn\nBacker/micro lining: 70% BottleYarn\nInsole: 60% BottleYarn\nOutsole: 60% natural rubber tapped from sustainable forestry\nPackaging: box/wrapping recycled and recyclable card \u0026 paper\nDWR: Durable water repellency treatment. No use of PFCs"
+      "sustainability": "Laces: 70% BottleYarn\nBacker/micro lining: 70% BottleYarn\nInsole: 60% BottleYarn\nOutsole: 60% natural rubber tapped from sustainable forestry\nPackaging: box/wrapping recycled and recyclable card & paper\nDWR: Durable water repellency treatment. No use of PFCs"
     },
     "mk": {
       "about": "Сите придобивки на барефоот, секој ден. Сега ажурирана за поголема удобност и издржливост.\n\nНашата премиум кожа е мека, дишлива, отпорна на вода — обезбедувајќи целодневна удобност.\n\nБезвременски убав изглед во чевел погоден за град и природа.",

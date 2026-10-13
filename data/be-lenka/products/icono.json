@@ -1,0 +1,150 @@
+{
+  "name": "Icono",
+  "gender": "unisex",
+  "activities": [
+    "casual",
+    "office"
+  ],
+  "highlights": [
+    {
+      "en": "NAPPA LEATHER",
+      "mk": "Напа кожа",
+      "sq": "Lëkurë nappa"
+    },
+    {
+      "en": "ANKLE HEIGHT",
+      "mk": "До глужд",
+      "sq": "Deri te kyçi"
+    },
+    {
+      "en": "TOWN & OFFICE",
+      "mk": "Град и канцеларија",
+      "sq": "Qytet dhe zyrë"
+    },
+    {
+      "en": "ZERO DROP",
+      "mk": "Нула дроп",
+      "sq": "Zero drop"
+    }
+  ],
+  "colors": [
+    {
+      "name": "Chocolate",
+      "hex": "#4a2c20"
+    },
+    {
+      "name": "Black",
+      "hex": "#1a1a1a"
+    }
+  ],
+  "sizes": [
+    "36",
+    "37",
+    "38",
+    "39",
+    "40",
+    "41",
+    "42",
+    "43",
+    "44",
+    "45",
+    "46",
+    "47"
+  ],
+  "sizeChart": {
+    "36": {
+      "length": 231,
+      "width": 95
+    },
+    "37": {
+      "length": 237,
+      "width": 97
+    },
+    "38": {
+      "length": 243,
+      "width": 99
+    },
+    "39": {
+      "length": 251,
+      "width": 101
+    },
+    "40": {
+      "length": 257,
+      "width": 103
+    },
+    "41": {
+      "length": 264,
+      "width": 105
+    },
+    "42": {
+      "length": 274,
+      "width": 108
+    },
+    "43": {
+      "length": 280,
+      "width": 110
+    },
+    "44": {
+      "length": 287,
+      "width": 112
+    },
+    "45": {
+      "length": 294,
+      "width": 114
+    },
+    "46": {
+      "length": 300,
+      "width": 116
+    },
+    "47": {
+      "length": 307,
+      "width": 118
+    }
+  },
+  "specs": [
+    {
+      "key": "Upper",
+      "value": "Leather (nappa)"
+    },
+    {
+      "key": "Lining",
+      "value": "Textile + synthetic"
+    },
+    {
+      "key": "Insole",
+      "value": "PU + polyester, removable, antibacterial"
+    },
+    {
+      "key": "Outsole",
+      "value": "Rubber — EverydayComfort Neo"
+    },
+    {
+      "key": "Drop",
+      "value": "Zero drop"
+    },
+    {
+      "key": "Made in",
+      "value": "Vietnam"
+    }
+  ],
+  "translations": {
+    "en": {
+      "description": "A clean ankle-height leather shoe that looks polished at work and relaxed at the weekend — with full barefoot freedom inside.",
+      "about": "Smooth nappa leather and minimalist lines make Icono easy to wear with jeans, chinos or a coat.\n\nThe ankle height turns a simple shoe into an elegant one, and the leather keeps its looks with long wear.\n\nWide toe box, flexible sole and zero drop let your feet move the way they're built to.",
+      "sizeAndFit": "Measure your foot length (heel to longest toe) and choose the size whose insole (inner length) is about 0.5 cm longer — that is the maker's own sizing advice. The size chart shows insole length and width per size. If you're between sizes, go up.",
+      "productInfo": "Upper\nLeather (nappa).\n\nLining\nTextile + synthetic material.\n\nInsole\nPU + polyester, removable and antibacterial.\n\nOutsole\nRubber — EverydayComfort Neo.\n\nDrop\nZero drop: heel and toe at the same height.\n\nMade in\nVietnam (Be Lenka, Slovakia)."
+    },
+    "mk": {
+      "description": "Чиста кожна обувка до глужд што изгледа уредно на работа и опуштено за викенд — со целосна барефут слобода внатре.",
+      "about": "Мазна напа кожа и минималистички линии — Icono лесно се носи со фармерки, панталони или палто.\n\nВисината до глужд ја прави едноставната обувка елегантна, а кожата го задржува изгледот и по долго носење.\n\nШирок простор за прсти, флексибилен ѓон и нула дроп — стапалата се движат природно.",
+      "sizeAndFit": "Измерете ја должината на стапалото (од петица до најдолгиот прст) и изберете големина чија влошка (внатрешна должина) е околу 0,5 см подолга — тоа е препораката на производителот. Табелата со големини ја покажува должината и ширината на влошката. Ако сте помеѓу две големини, земете ја поголемата.",
+      "productInfo": "Горен дел\nКожа (напа).\n\nПостава\nТекстил + синтетички материјал.\n\nВлошка\nPU + полиестер, вадлива и антибактериска.\n\nЃон\nГума — EverydayComfort Neo.\n\nДроп\nНула дроп: петицата и прстите се на иста висина.\n\nПроизведено во\nВиетнам (Be Lenka, Словачка)."
+    },
+    "sq": {
+      "description": "Këpucë lëkure deri te kyçi, e pastër dhe elegante në punë e e lirshme në fundjavë — me liri të plotë barefoot brenda.",
+      "about": "Lëkura e butë nappa dhe linjat minimaliste e bëjnë Icono të lehtë për t'u veshur me xhinse, pantallona ose pallto.\n\nLartësia deri te kyçi e bën një këpucë të thjeshtë elegante, dhe lëkura e ruan pamjen edhe pas përdorimit të gjatë.\n\nHapësirë e gjerë për gishtat, shollë fleksibël dhe zero drop — këmbët lëvizin natyrshëm.",
+      "sizeAndFit": "Matni gjatësinë e këmbës (nga thembra te gishti më i gjatë) dhe zgjidhni masën me shollë të brendshme (gjatësi e brendshme) rreth 0,5 cm më të gjatë — kjo është këshilla e prodhuesit. Tabela e masave tregon gjatësinë dhe gjerësinë e shollës. Nëse jeni mes dy masave, zgjidhni më të madhen.",
+      "productInfo": "Pjesa e sipërme\nLëkurë (nappa).\n\nVeshja e brendshme\nTekstil + material sintetik.\n\nSholla e brendshme\nPU + poliestër, e lëvizshme dhe antibakteriale.\n\nSholla\nGomë — EverydayComfort Neo.\n\nDrop\nZero drop: thembra dhe gishtat në të njëjtën lartësi.\n\nProdhuar në\nVietnam (Be Lenka, Sllovaki)."
+    }
+  }
+}

@@ -21,7 +21,9 @@
       <div class="product__gallery">
         <div class="product__carousel">
           <div class="product__badges">
-            {{if not .Product.InStock}}<span class="product__badge product__badge--preorder">{{if preordersOpen}}{{t .Locale "cart.preorder"}}{{else}}{{t .Locale "product.outOfStock"}}{{end}}</span>{{end}}
+            {{/* No-stock badge by mode: reservation → "Reserved"; stock → "Out of
+                 stock"; dropship → none (always orderable, ~7 days). */}}
+            {{if not .Product.InStock}}{{if eq .Product.Fulfilment "reservation"}}<span class="product__badge product__badge--preorder">{{t .Locale "cart.preorder"}}</span>{{else if ne .Product.Fulfilment "dropship"}}<span class="product__badge product__badge--preorder">{{t .Locale "product.outOfStock"}}</span>{{end}}{{end}}
             {{if .Product.IsNew}}<span class="product__badge product__badge--new">{{t .Locale "product.new"}}</span>{{end}}
             {{if .Product.IsOnSale}}<span class="product__badge product__badge--sale">{{t .Locale "product.sale"}}</span>{{end}}
           </div>
@@ -32,7 +34,7 @@
           <div class="product__track" id="gallery-track" tabindex="0" aria-label="{{t .Locale "detail.gallery"}}">
             {{if deref .Product.ImageURL}}
             <div class="product__slide">
-              <img class="product__slide-img" src="{{asset (deref .Product.ImageURL)}}" width="1000" height="1000" alt="{{.Product.Name}}">
+              <img class="product__slide-img" src="{{asset (deref .Product.ImageURL)}}" {{imgsize (deref .Product.ImageURL)}} alt="{{.Product.Name}}">
             </div>
             {{else if not .Product.Gallery}}
             <div class="product__slide">
@@ -41,7 +43,7 @@
             {{end}}
             {{range .Product.Gallery}}
             <div class="product__slide">
-              <img class="product__slide-img" src="{{asset .ImageURL}}" width="1000" height="1000" loading="lazy" alt="{{$.Product.Name}}">
+              <img class="product__slide-img" src="{{asset .ImageURL}}" {{imgsize .ImageURL}} loading="lazy" alt="{{$.Product.Name}}">
             </div>
             {{end}}
           </div>
@@ -83,12 +85,22 @@
           </div>
           <div class="product__colors" id="color-select">
             {{range .Product.Colors}}
+            {{/* A small photo of the shoe in that colour when one exists
+                 ({slug}-swatch.webp, natural shape), else the hex dot. */}}
+            {{if .SwatchURL}}
+            <button class="product__color-btn product__color-btn--photo"
+              data-color="{{.Color}}"
+              title="{{.Color}}"
+              aria-label="{{.Color}}"
+              aria-pressed="false"><img src="{{asset (deref .SwatchURL)}}" {{imgsize (deref .SwatchURL)}} alt="" loading="lazy"></button>
+            {{else}}
             <button class="product__color-btn"
               data-color="{{.Color}}"
               title="{{.Color}}"
               aria-label="{{.Color}}"
               aria-pressed="false"
               {{if .Hex}}style="background:{{.Hex}}"{{end}}></button>
+            {{end}}
             {{end}}
           </div>
         </div>
@@ -154,22 +166,22 @@
             data-brand-name="{{.Product.BrandName}}"
             data-image-url="{{if .Product.ImageURL}}{{asset (deref .Product.ImageURL)}}{{end}}"
             data-price="{{.Product.PriceMKD}}"
-            data-in-stock="{{if .Product.InStock}}1{{end}}"
-            data-preorders-open="{{if preordersOpen}}1{{end}}"
+            data-fulfilment="{{.Product.Fulfilment}}"
             data-label-pick="{{t .Locale "detail.selectSize"}}"
             data-label-add="{{t .Locale "cta.addToCart"}}"
             data-label-notify="{{t .Locale "detail.notifySize"}}"
-            data-label-preorder="{{t .Locale "cta.preorderNow"}}">
+            data-label-preorder="{{t .Locale "cta.preorderNow"}}"
+            data-label-order="{{t .Locale "cta.orderDropship"}}">
             {{t .Locale "detail.selectSize"}}
           </button>
 
           {{/* Static note shown when an out-of-stock size is picked on a stocked
                product (no capture — points to our channels). */}}
           <p class="product__notify-note text-sm text-muted" id="notify-note" hidden>{{t .Locale "notify.body"}}</p>
-          {{/* Preorder note — shown by JS for products with no stock at all. Be Lenka
-               is dropshipped from the maker (no batch to wait for), so it gets a
-               fixed delivery time instead of the "next batch" wording. */}}
-          <p class="product__preorder-note text-sm text-muted" id="preorder-note" hidden>{{if eq .Product.BrandSlug "be-lenka"}}{{t .Locale "preorder.noteDropship"}}{{else}}{{t .Locale "preorder.note"}}{{end}}</p>
+          {{/* Shown by JS when the picked size isn't in stock but the model still
+               takes orders: dropship → ~7 days from the maker; reservation →
+               ~1–2 weeks from the brand. */}}
+          <p class="product__preorder-note text-sm text-muted" id="preorder-note" hidden>{{if eq .Product.Fulfilment "dropship"}}{{t .Locale "preorder.noteDropship"}}{{else}}{{t .Locale "preorder.note"}}{{end}}</p>
 
           {{/* Trust block: authentic → pay on delivery → free returns. Biggest
                conversion lever for risk-averse MK buyers; applies to in-stock and

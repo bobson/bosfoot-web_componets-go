@@ -43,6 +43,8 @@
        Use only for that brand's logo/badge context,
        never as a general accent next to --color-accent. */
         --color-brand-freet: #92be00;
+        --color-brand-be-lenka: #0e574a;
+        --color-brand-barebarics: #13212e;
 
         /* ── Section washes & gradients ──────────────────
        Backgrounds for alternating page sections.
@@ -114,6 +116,7 @@
         /* ── Sizes ───────────────────────────────────────── */
         --size-icon: 4.5rem;
         --swatch-lg: 28px;
+        --swatch-photo-w: 5.5rem; /* product page colour tile: max width (desktop) */
         --thumb-size: 64px;
 
         /* ── Radii ───────────────────────────────────────── */

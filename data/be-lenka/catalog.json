@@ -1,0 +1,21 @@
+{
+  "brand": {
+    "visible": false
+  },
+  "products": {
+    "velore": {
+      "price": 79,
+      "mode": "dropship",
+      "published": false,
+      "featured": false,
+      "sortOrder": 20
+    },
+    "icono": {
+      "price": 129,
+      "mode": "dropship",
+      "published": false,
+      "featured": false,
+      "sortOrder": 21
+    }
+  }
+}

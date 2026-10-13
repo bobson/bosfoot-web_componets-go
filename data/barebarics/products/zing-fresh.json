@@ -1,0 +1,150 @@
+{
+  "name": "Zing Fresh",
+  "gender": "unisex",
+  "activities": [
+    "casual",
+    "training"
+  ],
+  "highlights": [
+    {
+      "en": "BREATHABLE",
+      "mk": "Дишливо",
+      "sq": "I ajrosur"
+    },
+    {
+      "en": "VEGAN",
+      "mk": "Веганско",
+      "sq": "Vegan"
+    },
+    {
+      "en": "EVERYDAY",
+      "mk": "Секојдневно",
+      "sq": "Për çdo ditë"
+    },
+    {
+      "en": "ZERO DROP",
+      "mk": "Нула дроп",
+      "sq": "Zero drop"
+    }
+  ],
+  "colors": [
+    {
+      "name": "White & Beige",
+      "hex": "#e6dfd2"
+    },
+    {
+      "name": "Midnight Blue",
+      "hex": "#2a3350"
+    }
+  ],
+  "sizes": [
+    "36",
+    "37",
+    "38",
+    "39",
+    "40",
+    "41",
+    "42",
+    "43",
+    "44",
+    "45",
+    "46",
+    "47"
+  ],
+  "sizeChart": {
+    "36": {
+      "length": 232,
+      "width": 92
+    },
+    "37": {
+      "length": 239,
+      "width": 94
+    },
+    "38": {
+      "length": 246,
+      "width": 95
+    },
+    "39": {
+      "length": 253,
+      "width": 96
+    },
+    "40": {
+      "length": 259,
+      "width": 98
+    },
+    "41": {
+      "length": 266,
+      "width": 99
+    },
+    "42": {
+      "length": 273,
+      "width": 101
+    },
+    "43": {
+      "length": 279,
+      "width": 102
+    },
+    "44": {
+      "length": 286,
+      "width": 103
+    },
+    "45": {
+      "length": 293,
+      "width": 105
+    },
+    "46": {
+      "length": 300,
+      "width": 106
+    },
+    "47": {
+      "length": 307,
+      "width": 108
+    }
+  },
+  "specs": [
+    {
+      "key": "Upper",
+      "value": "Synthetic material + textile (vegan)"
+    },
+    {
+      "key": "Lining",
+      "value": "Textile"
+    },
+    {
+      "key": "Insole",
+      "value": "PU + polyester, removable, antibacterial"
+    },
+    {
+      "key": "Outsole",
+      "value": "Rubber — ComfortGrip Neo, 5.5 mm (3 mm + 2.5 mm lugs)"
+    },
+    {
+      "key": "Drop",
+      "value": "Zero drop"
+    },
+    {
+      "key": "Made in",
+      "value": "Vietnam"
+    }
+  ],
+  "translations": {
+    "en": {
+      "description": "A versatile everyday sneaker for the gym, work or the city — breathable, clean-looking, and barefoot from the first step.",
+      "about": "Zing Fresh pairs effortlessly with almost any outfit, from gym kit to smart-casual.\n\nThe breathable upper keeps feet fresh, and the stitched ComfortGrip Neo sole adds durability with enough flex for natural movement.\n\nFoot-shaped toe box, zero drop and a removable antibacterial insole.",
+      "sizeAndFit": "Measure your foot length (heel to longest toe) and choose the size whose insole (inner length) is about 0.5 cm longer — that is the maker's own sizing advice. The size chart shows insole length and width per size. If you're between sizes, go up.",
+      "productInfo": "Upper\nSynthetic material + textile, vegan, breathable.\n\nLining\nTextile.\n\nInsole\nPU + polyester, removable and antibacterial.\n\nOutsole\nRubber — stitched ComfortGrip Neo, 5.5 mm (3 mm base + 2.5 mm lugs).\n\nDrop\nZero drop.\n\nMade in\nVietnam (Barebarics, Slovakia)."
+    },
+    "mk": {
+      "description": "Разновидна секојдневна патика за теретана, работа или град — дишлива, чиста на изглед и барефут од првиот чекор.",
+      "about": "Zing Fresh лесно се комбинира со речиси сè — од спортска облека до smart-casual.\n\nДишливиот горен дел ги одржува стапалата свежи, а сошиениот ѓон ComfortGrip Neo е издржлив и доволно флексибилен за природно движење.\n\nПростор за прсти во форма на стапало, нула дроп и вадлива антибактериска влошка.",
+      "sizeAndFit": "Измерете ја должината на стапалото (од петица до најдолгиот прст) и изберете големина чија влошка (внатрешна должина) е околу 0,5 см подолга — тоа е препораката на производителот. Табелата со големини ја покажува должината и ширината на влошката. Ако сте помеѓу две големини, земете ја поголемата.",
+      "productInfo": "Горен дел\nСинтетички материјал + текстил, вегански, дишлив.\n\nПостава\nТекстил.\n\nВлошка\nPU + полиестер, вадлива и антибактериска.\n\nЃон\nГума — сошиен ComfortGrip Neo, 5,5 мм (3 мм основа + 2,5 мм газење).\n\nДроп\nНула дроп.\n\nПроизведено во\nВиетнам (Barebarics, Словачка)."
+    },
+    "sq": {
+      "description": "Atlete e gjithanshme e përditshme për palestër, punë ose qytet — e ajrosur, me pamje të pastër dhe barefoot që nga hapi i parë.",
+      "about": "Zing Fresh përshtatet lehtë me pothuajse çdo veshje, nga palestra te smart-casual.\n\nPjesa e sipërme e ajrosur i mban këmbët të freskëta, dhe sholla e qepur ComfortGrip Neo është e qëndrueshme dhe mjaft fleksibël për lëvizje natyrale.\n\nHapësirë për gishtat në formën e këmbës, zero drop dhe shollë e brendshme antibakteriale e lëvizshme.",
+      "sizeAndFit": "Matni gjatësinë e këmbës (nga thembra te gishti më i gjatë) dhe zgjidhni masën me shollë të brendshme (gjatësi e brendshme) rreth 0,5 cm më të gjatë — kjo është këshilla e prodhuesit. Tabela e masave tregon gjatësinë dhe gjerësinë e shollës. Nëse jeni mes dy masave, zgjidhni më të madhen.",
+      "productInfo": "Pjesa e sipërme\nMaterial sintetik + tekstil, vegan, i ajrosur.\n\nVeshja e brendshme\nTekstil.\n\nSholla e brendshme\nPU + poliestër, e lëvizshme dhe antibakteriale.\n\nSholla\nGomë — ComfortGrip Neo e qepur, 5,5 mm (3 mm bazë + 2,5 mm dhëmbëza).\n\nDrop\nZero drop.\n\nProdhuar në\nVietnam (Barebarics, Sllovaki)."
+    }
+  }
+}

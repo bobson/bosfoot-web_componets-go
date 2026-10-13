@@ -4,25 +4,29 @@ import "time"
 
 // Product maps to the products table plus common joined data returned by the API.
 type Product struct {
-	ID               int       `json:"id"`
-	SKU              string    `json:"sku"`
-	Name             string    `json:"name"`
-	Slug             string    `json:"slug"`
-	BrandID          int       `json:"brand_id"`
-	CategoryID       int       `json:"category_id"`
-	GenderID         int       `json:"gender_id"`
-	PriceMKD         int       `json:"price_mkd"`
-	OriginalPriceMKD *int      `json:"original_price_mkd,omitempty"`
-	ImageURL         *string   `json:"image_url,omitempty"`
-	IsNew            bool      `json:"is_new"`
-	IsFeatured       bool      `json:"is_featured"`
-	IsOnSale         bool      `json:"is_on_sale"`
-	DiscountPct      *float64  `json:"discount_pct,omitempty"`
-	IsActive         bool      `json:"is_active"`
-	IsPublished      bool      `json:"is_published"`
-	SortOrder        int       `json:"sort_order"`
-	CreatedAt        time.Time `json:"created_at"`
-	UpdatedAt        time.Time `json:"updated_at"`
+	ID               int      `json:"id"`
+	SKU              string   `json:"sku"`
+	Name             string   `json:"name"`
+	Slug             string   `json:"slug"`
+	BrandID          int      `json:"brand_id"`
+	CategoryID       int      `json:"category_id"`
+	GenderID         int      `json:"gender_id"`
+	PriceMKD         int      `json:"price_mkd"`
+	OriginalPriceMKD *int     `json:"original_price_mkd,omitempty"`
+	ImageURL         *string  `json:"image_url,omitempty"`
+	IsNew            bool     `json:"is_new"`
+	IsFeatured       bool     `json:"is_featured"`
+	IsOnSale         bool     `json:"is_on_sale"`
+	DiscountPct      *float64 `json:"discount_pct,omitempty"`
+	IsActive         bool     `json:"is_active"`
+	IsPublished      bool     `json:"is_published"`
+	SortOrder        int      `json:"sort_order"`
+	// Fulfilment: what happens to sizes NOT in stock — "stock" (notify only),
+	// "reservation" (~1–2 weeks) or "dropship" (~7 days). In-stock sizes always
+	// ship fast. Set per model in data/{brand}/catalog.json.
+	Fulfilment string    `json:"fulfilment"`
+	CreatedAt  time.Time `json:"created_at"`
+	UpdatedAt  time.Time `json:"updated_at"`
 
 	// Denormalised brand fields — populated on every product response so the
 	// frontend doesn't need a second request to resolve the brand name/slug.
@@ -65,9 +69,20 @@ type ProductTranslation struct {
 }
 
 type ProductColor struct {
-	Color string  `json:"color"`
-	Hex   *string `json:"hex,omitempty"`
+	Color     string  `json:"color"`
+	Hex       *string `json:"hex,omitempty"`
+	SwatchURL *string `json:"swatch_url,omitempty"` // small shoe photo for the colour picker
 }
+
+// Backorderable reports whether sizes that are out of stock can still be
+// ordered (reservation or dropship) rather than only "get notified".
+func (p Product) Backorderable() bool {
+	return p.Fulfilment == "reservation" || p.Fulfilment == "dropship"
+}
+
+// Orderable reports whether the product can be bought in at least one size
+// right now: something in stock, or a mode that takes orders without stock.
+func (p Product) Orderable() bool { return p.InStock || p.Backorderable() }
 
 type ProductGallery struct {
 	ImageURL  string `json:"image_url"`

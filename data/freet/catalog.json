@@ -1,0 +1,64 @@
+{
+  "brand": {
+    "visible": true
+  },
+  "products": {
+    "chamois": {
+      "price": 210,
+      "mode": "stock",
+      "published": false,
+      "featured": false,
+      "sortOrder": 8
+    },
+    "feldom-3": {
+      "price": 100,
+      "mode": "stock",
+      "published": true,
+      "featured": true,
+      "sortOrder": 3
+    },
+    "keld-3": {
+      "price": 90,
+      "mode": "stock",
+      "published": true,
+      "featured": false,
+      "sortOrder": 2
+    },
+    "pace": {
+      "price": 105,
+      "mode": "reservation",
+      "published": true,
+      "featured": false,
+      "sortOrder": 7
+    },
+    "richmond-2": {
+      "price": 140,
+      "mode": "reservation",
+      "published": true,
+      "featured": false,
+      "sortOrder": 6
+    },
+    "tanga-3": {
+      "price": 100,
+      "mode": "reservation",
+      "published": true,
+      "featured": true,
+      "sortOrder": 4
+    },
+    "vibe-2": {
+      "price": 90,
+      "originalPrice": 100,
+      "mode": "stock",
+      "published": true,
+      "featured": true,
+      "sortOrder": 1
+    },
+    "york-2": {
+      "price": 135,
+      "mode": "reservation",
+      "published": true,
+      "featured": true,
+      "sortOrder": 5
+    }
+  }
+}

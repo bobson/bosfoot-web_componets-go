@@ -123,7 +123,7 @@ func (h *OrderHandler) CreateOrder(w http.ResponseWriter, r *http.Request) {
 	}
 
 	priceRows, err := h.DB.QueryContext(r.Context(), `
-		SELECT id, name, price_eur
+		SELECT id, name, price_eur, fulfilment
 		FROM products
 		WHERE id = ANY($1) AND is_active = TRUE AND is_published = TRUE
 	`, pq.Array(ids))
@@ -134,13 +134,14 @@ func (h *OrderHandler) CreateOrder(w http.ResponseWriter, r *http.Request) {
 	}
 	type prodInfo struct {
 		name  string
-		price int // denars, derived from the euro source via site.MKD
+		price int    // denars, derived from the euro source via site.MKD
+		mode  string // stock | reservation | dropship (products.fulfilment)
 	}
 	prodByID := make(map[int]prodInfo)
 	for priceRows.Next() {
 		var id, priceEUR int
-		var name string
-		if err := priceRows.Scan(&id, &name, &priceEUR); err != nil {
+		var name, mode string
+		if err := priceRows.Scan(&id, &name, &priceEUR, &mode); err != nil {
 			priceRows.Close()
 			h.Logger.Error("CreateOrder: price scan failed", err)
 			writeJSONError(w, http.StatusInternalServerError, "internal error")
@@ -148,7 +149,7 @@ func (h *OrderHandler) CreateOrder(w http.ResponseWriter, r *http.Request) {
 		}
 		// Charge the same denar figure the customer sees: full price via MKD, then
 		// the site-wide clearance via SalePrice (no-op when no sale is running).
-		prodByID[id] = prodInfo{name: name, price: site.SalePrice(site.MKD(priceEUR))}
+		prodByID[id] = prodInfo{name: name, price: site.SalePrice(site.MKD(priceEUR)), mode: mode}
 	}
 	priceRows.Close()
 
@@ -169,38 +170,6 @@ func (h *OrderHandler) CreateOrder(w http.ResponseWriter, r *http.Request) {
 	// total_mkd − Σ(order_items).
 	shipping := site.ShippingFor(total)
 	grandTotal := total + shipping
-
-	// Which ordered products have any stock at all? A product with zero total
-	// stock is a "preorder" product — orderable without depleting inventory and
-	// with no size required (its size grid is display-only). A product with stock
-	// only sells the specific sizes that are on hand.
-	// Pre-launch (PreorderAll): treat every line as preorder — leave hasStock
-	// empty so nothing decrements inventory, regardless of real stock. Flip the
-	// flag at launch to restore per-variant decrement.
-	hasStock := make(map[int]bool)
-	if !site.PreorderAll {
-		stockRows, err := h.DB.QueryContext(r.Context(), `
-			SELECT product_id FROM product_stock
-			WHERE product_id = ANY($1)
-			GROUP BY product_id HAVING SUM(qty) > 0
-		`, pq.Array(ids))
-		if err != nil {
-			h.Logger.Error("CreateOrder: stock query failed", err)
-			writeJSONError(w, http.StatusInternalServerError, "internal error")
-			return
-		}
-		for stockRows.Next() {
-			var pid int
-			if err := stockRows.Scan(&pid); err != nil {
-				stockRows.Close()
-				h.Logger.Error("CreateOrder: stock scan failed", err)
-				writeJSONError(w, http.StatusInternalServerError, "internal error")
-				return
-			}
-			hasStock[pid] = true
-		}
-		stockRows.Close()
-	}
 
 	// Persist the order + items in one transaction.
 	tx, err := h.DB.BeginTx(r.Context(), nil)
@@ -228,26 +197,19 @@ func (h *OrderHandler) CreateOrder(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Three cases per line:
-	//   • preorder product (no stock) → accept as preorder, no decrement, size
-	//     optional — only while site.PreordersOpen; otherwise rejected (409).
-	//   • stocked product, size in stock → atomically decrement. The `qty >= $1`
-	//     guard + the row lock the UPDATE takes make concurrent last-pair orders
-	//     safe (the loser matches 0 rows and is rejected).
-	//   • stocked product, size NOT in stock → reject: that size is "notify me",
-	//     not orderable. Rolls the whole order back (defer tx.Rollback).
+	// Per line: try to take the pair off our shelf (atomic decrement — the
+	// `qty >= $1` guard + the UPDATE's row lock make concurrent last-pair orders
+	// safe: the loser matches 0 rows). If that fails, resolveLine decides by the
+	// model's mode: reservation/dropship still take the order (ordered from the
+	// supplier afterwards), a "stock" model is sold out → 409, rolling the whole
+	// order back. Pre-launch (PreorderAll) never touches stock.
 	var eventsToBroadcast []pubsub.StockEvent
-	for _, it := range req.Items {
-		// Reservations closed: a no-stock product can't be ordered at all (e.g. a
-		// preorder line left in an old localStorage cart). Same 409 as a sold-out
-		// size, so the checkout shows its "just sold out" message.
-		if !hasStock[it.ProductID] && !site.PreordersOpen && !site.PreorderAll {
-			h.Logger.Info("order rejected", "reason", "preorders closed",
-				"product_id", it.ProductID, "size", it.Size, "color", it.Color)
-			writeJSONError(w, http.StatusConflict, "out_of_stock")
-			return
-		}
-		if hasStock[it.ProductID] {
+	lineFulfil := make([]string, len(req.Items))
+	for i, it := range req.Items {
+		mode := prodByID[it.ProductID].mode
+		euSize, sizeErr := strconv.ParseFloat(it.Size, 64)
+		decremented := false
+		if !site.PreorderAll && sizeErr == nil && it.Color != "" {
 			var newQty int
 			err := tx.QueryRowContext(r.Context(), `
 				UPDATE product_stock
@@ -258,32 +220,58 @@ func (h *OrderHandler) CreateOrder(w http.ResponseWriter, r *http.Request) {
 				  AND qty >= $1
 				RETURNING qty
 			`, it.Qty, it.ProductID, it.Size, it.Color).Scan(&newQty)
-			if err == sql.ErrNoRows {
-				h.Logger.Info("order rejected", "reason", "size not in stock",
-					"product_id", it.ProductID, "size", it.Size, "color", it.Color, "qty", it.Qty)
-				writeJSONError(w, http.StatusConflict, "out_of_stock")
-				return
-			}
-			if err != nil {
+			switch {
+			case err == nil:
+				decremented = true
+				eventsToBroadcast = append(eventsToBroadcast, pubsub.StockEvent{
+					ProductID: it.ProductID,
+					EUSize:    euSize,
+					Color:     it.Color,
+					Qty:       newQty,
+				})
+			case err != sql.ErrNoRows:
 				h.Logger.Error("CreateOrder: stock decrement failed", err)
 				writeJSONError(w, http.StatusInternalServerError, "internal error")
 				return
 			}
-
-			euSize, _ := strconv.ParseFloat(it.Size, 64)
-			eventsToBroadcast = append(eventsToBroadcast, pubsub.StockEvent{
-				ProductID: it.ProductID,
-				EUSize:    euSize,
-				Color:     it.Color,
-				Qty:       newQty,
-			})
 		}
+
+		fulfil, ok := resolveLine(mode, site.PreorderAll, decremented)
+		if !ok {
+			h.Logger.Info("order rejected", "reason", "size not in stock",
+				"product_id", it.ProductID, "size", it.Size, "color", it.Color, "qty", it.Qty, "mode", mode)
+			writeJSONError(w, http.StatusConflict, "out_of_stock")
+			return
+		}
+		// An ordered-from-supplier line must name a real size + colour of this
+		// model — we have to know exactly what to order. Catches stale carts
+		// (e.g. old preorder lines saved without a size) with the same clean 409.
+		if !decremented && !site.PreorderAll {
+			var exists bool
+			if sizeErr == nil {
+				if err := tx.QueryRowContext(r.Context(), `
+					SELECT EXISTS (SELECT 1 FROM product_sizes  WHERE product_id = $1 AND eu_size = $2::numeric)
+					   AND EXISTS (SELECT 1 FROM product_colors WHERE product_id = $1 AND color   = $3)
+				`, it.ProductID, it.Size, it.Color).Scan(&exists); err != nil {
+					h.Logger.Error("CreateOrder: variant check failed", err)
+					writeJSONError(w, http.StatusInternalServerError, "internal error")
+					return
+				}
+			}
+			if !exists {
+				h.Logger.Info("order rejected", "reason", "unknown variant",
+					"product_id", it.ProductID, "size", it.Size, "color", it.Color, "mode", mode)
+				writeJSONError(w, http.StatusConflict, "out_of_stock")
+				return
+			}
+		}
+		lineFulfil[i] = fulfil
 
 		if _, err := tx.ExecContext(r.Context(), `
 			INSERT INTO order_items
-				(order_id, product_id, size, color, quantity, unit_price_mkd)
-			VALUES ($1,$2,$3,$4,$5,$6)
-		`, orderID, it.ProductID, nullStr(it.Size), nullStr(it.Color), it.Qty, prodByID[it.ProductID].price); err != nil {
+				(order_id, product_id, size, color, quantity, unit_price_mkd, fulfilment)
+			VALUES ($1,$2,$3,$4,$5,$6,$7)
+		`, orderID, it.ProductID, nullStr(it.Size), nullStr(it.Color), it.Qty, prodByID[it.ProductID].price, fulfil); err != nil {
 			h.Logger.Error("CreateOrder: insert item failed", err)
 			writeJSONError(w, http.StatusInternalServerError, "internal error")
 			return
@@ -311,13 +299,14 @@ func (h *OrderHandler) CreateOrder(w http.ResponseWriter, r *http.Request) {
 	// Best-effort owner notification (async; never blocks or fails the order).
 	if h.Notifier != nil {
 		items := make([]notify.Item, 0, len(req.Items))
-		for _, it := range req.Items {
+		for i, it := range req.Items {
 			items = append(items, notify.Item{
-				Name:  prodByID[it.ProductID].name,
-				Size:  it.Size,
-				Color: it.Color,
-				Qty:   it.Qty,
-				Price: prodByID[it.ProductID].price,
+				Name:       prodByID[it.ProductID].name,
+				Size:       it.Size,
+				Color:      it.Color,
+				Qty:        it.Qty,
+				Price:      prodByID[it.ProductID].price,
+				Fulfilment: lineFulfil[i],
 			})
 		}
 		notifyOrder := notify.Order{

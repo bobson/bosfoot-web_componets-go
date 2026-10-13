@@ -31,26 +31,50 @@ go run ./cmd/addbrands
 # Load foot-health articles from db/articles.json into the DB (idempotent, upserts translations)
 go run ./cmd/articleimport
 
-# Import products from data/{brand}/products/*.json into the DB (euro source price;
-# MKD derived via site.MKD; gallery/primary image scanned from public/images).
+# Import products into the DB from, per brand (every data/*/catalog.json by default):
+#   data/{brand}/catalog.json  — CONTROL PANEL: per model "price" (EUR source; MKD
+#     derived via site.MKD), optional "originalPrice" (sale — remove to end it),
+#     "mode" (stock | reservation | dropship), "published", "featured",
+#     "sortOrder"; brand-level "visible" (brands page). Edit here, then import.
+#   data/{brand}/products/{slug}.json — content: name, gender, colours, sizes
+#     ("stock" counts or a plain "sizes" list), "sizeChart" (mm), specs,
+#     highlights, MK/SQ/EN translations. Must NOT contain catalog fields.
+#   data/{brand}/costs.json — GITIGNORED import prices (+customs %, shipping/pair):
+#     only prints "landed ~€X → profit ~€Y/pair" in the summary; never in the DB.
+# Gallery, primary image and colour swatches are scanned from public/images.
 # DEFAULT IS DRY-RUN (builds each product in a tx, rolls back, prints a summary).
-# Pass -commit to actually write — only AFTER the euro-aware code is deployed,
-# since it sets price_mkd to the euro-derived value that old deployed code reads.
 # STOCK: the DB is the source of truth (orders decrement it). By default the
-# import KEEPS live DB stock and only uses the JSON "stock" for a brand-new
+# import KEEPS live DB stock and only uses the JSON stock for a brand-new
 # product; the summary flags variants where the JSON differs. Pass -stock only
 # when a delivery arrives and the JSON holds the real counts (overwrites DB).
-go run ./cmd/shoeimport          # dry-run / preview
-go run ./cmd/shoeimport -commit  # apply (post-deploy) — prices/text/images/sale, stock untouched
-go run ./cmd/shoeimport -stock -commit  # ALSO overwrite DB stock from the JSON (new delivery)
+go run ./cmd/shoeimport                   # dry-run / preview, all brands
+go run ./cmd/shoeimport -commit           # apply — prices/modes/text/images/sale, stock untouched
+go run ./cmd/shoeimport -brand be-lenka   # one brand only
+go run ./cmd/shoeimport -stock -commit    # ALSO overwrite DB stock from the JSON (new delivery)
 
-# Generate ~500px "-card" WebP variants of primary product images (idempotent;
-# needs ImageMagick). Run after adding a brand's images.
+# Convert supplier photos (kept in gitignored data/sources/) into site images:
+# WebP, ORIGINAL proportions (never square-cropped), max 1000px wide. Driven by
+# a manifest of "src<TAB>dest" lines (first dest per colour = primary {slug}.webp).
+bash scripts/prep-images.sh data/sources/be-lenka-raw/manifest.tsv
+bash scripts/prep-images.sh data/sources/be-lenka-raw/swatches.tsv   # colour tiles
+
+# Generate "-card" variants (500px wide, listing cards) of each primary product
+# image (idempotent; needs ImageMagick). Run after adding a brand's images.
+# Colour-picker tiles are NOT generated: they're the brand's own tiles (portrait)
+# converted via prep-images.sh to {slug}-swatch.webp per colour folder;
+# shoeimport records them, models without one (Freet) keep the hex dot.
 go run ./cmd/imgvariants
 
 # Same, but overwrite existing variants — use only after replacing a product
 # photo in place (a plain run would skip the stale variant).
 go run ./cmd/imgvariants -force
+
+# LOCAL SANDBOX DB (tmp/pg, gitignored; TLS with its own CA so the normal
+# verify-ca connection works). Test migrations, imports and orders without
+# touching production. Prefix any command:
+bash scripts/localdb.sh start | stop
+bash scripts/localdb.sh go run ./cmd/dbimport
+bash scripts/localdb.sh go run main.go     # site on the sandbox (unset SMTP_* to avoid real emails)
 
 # Export reservations: writes reservations_to_order.csv (qty per product/size/
 # color, i.e. what to order from suppliers) + reservations_contacts.csv (who to
@@ -204,9 +228,11 @@ Both the server and `cmd/` utilities must be run from the project root — `.env
 - New SSR page: add handler method on `PageHandler`, embed `PageBase`, call `h.Renderer.Render(w, "template-name", data)`, register route in `internal/routes/routes.go` (wrap in `pc.Wrap` if the page is the same for every visitor), add to sitemap in `sitemap_handler.go`.
 - New Web Component: add `public/components/{name}.js` as a custom element (light DOM, no shadow), server-render its static chrome inside the element, add its `init*` to the array in `public/app.js`, and add matching styles in `public/css/`.
 - New JSON API endpoint: add method on `ProductHandler` (or new `XHandler`), register in `internal/routes/routes.go`. Queries go directly in handlers — no repository layer. Wrap state-changing endpoints in `middleware.WrapCSRF`.
-- Product data source (Freet): each product lives in `data/{brand}/products/{slug}.json` — **euro `price`** (the source), colours, per-colour stock, specs, activities, highlights, translations. `data/` is **outside `public/`** so it isn't web-served. Edit a price/field there → `go run ./cmd/shoeimport -commit` upserts it into the DB. **Per-product sale:** add `"originalPrice": <old €>` and lower `price` (e.g. Vibe 2 `price` 90 / `originalPrice` 100 → 5580 shown+charged, 6200 struck, Sale badge); remove the field + restore `price` to end it. Needs no code deploy — the live code already reads `original_price_eur`/`is_on_sale`; MKD is derived via `site.MKD`, and the gallery/primary image are scanned from `public/images/{brand}/{slug}/images/{colour}/` (first colour in the JSON = the card image). Brand row + `size_chart` still come from the SQL seed. (`db/freet.sql` is now legacy/seed; `shoeimport` is the live update path.)
+- Product data source: per brand, `data/{brand}/catalog.json` (price, sale, mode, published/featured/sort, brand visibility) + `data/{brand}/products/{slug}.json` (colours, sizes/stock, size chart, specs, activities, highlights, translations) — see the shoeimport command notes. `data/` is **outside `public/`** so it isn't web-served. Edit there → `go run ./cmd/shoeimport -commit` upserts it into the DB. **Per-product sale:** in catalog.json add `"originalPrice": <old €>` and lower `price` (e.g. Vibe 2 `price` 90 / `originalPrice` 100 → 5580 shown+charged, 6200 struck, Sale badge); remove the field + restore `price` to end it. **Fulfilment mode** (catalog `mode`, `products.fulfilment`) decides sizes NOT in stock: `stock` → "get notified"; `reservation` → orderable, ~1–2 weeks; `dropship` → orderable, ~7 days, and listed in every size in the filter. In-stock sizes always ship fast + decrement; each order line records its `order_items.fulfilment` (shown in `cmd/orders` + the owner email as DROPSHIP/RESERVATION) so you know what to order from the supplier; MKD is derived via `site.MKD`, and the gallery/primary image are scanned from `public/images/{brand}/{slug}/images/{colour}/` (first colour in the JSON = the card image). Brand rows come from SQL migrations; `size_chart` from SQL seeds unless the product JSON has a `sizeChart` (Be Lenka/Barebarics do). (`db/freet.sql` is now legacy/seed; `shoeimport` is the live update path.)
 - New brand image assets: add `public/images/{brand-slug}/{product}/images/{colour}/` webp files, then `go run ./cmd/imgvariants` to generate the `-card` variants.
 - New locale string: add it to the relevant `public/locales/pages/{page}.json` (or `common.json` if shared), with all three languages (`{"mk":…, "sq":…, "en":…}`).
 - `db/` SQL files are idempotent (`ON CONFLICT DO NOTHING`) — safe to re-run.
 - Reviews are guest-checkout friendly: verified by a per-order **review token** (emailed after fulfilment), not a login. `db/reviews.sql` migrates the legacy `reviews` stub (user_id-based) to the order-verified model (`order_id`, `fit`, `author_name`, `lang_code`, `status`) + creates `review_tokens`; it is in `cmd/dbimport`'s **always-run** list (idempotent `ALTER`/`IF NOT EXISTS`), because dbimport skips `schema.sql` once the DB is initialised. Star rating (1–5) is required, fit (runs small…true…large) optional; approved reviews feed the product page + a schema.org `AggregateRating`. Moderate with `cmd/reviews` (`-approve`/`-reject`; no admin UI) — reviews start `pending`, so a submitted review won't show until approved.
+  - `db/brand-about.sql` (always-run) holds Be Lenka/Barebarics logos, descriptions (DO UPDATE — edit there) and `brands.about_url` ("Read more ↗" on the brand card; source texts in `data/{brand}/about.txt`). Same migration-first rule: dbimport on prod before merging.
+  - **DEPLOY ORDER for `db/fulfilment.sql` (per-model mode, swatches, brand visibility, Barebarics):** (1) `go run ./cmd/dbimport` on prod; (2) `go run ./cmd/shoeimport -commit` (writes each model's mode — until then every product is `stock`); (3) merge the code. New code reads `p.fulfilment`/`swatch_url`/`is_visible` — merging before step 1 makes product pages 500. `db/price-eur.sql` only fills NULL prices, so dbimport never overwrites catalog prices.
   - **DEPLOY ORDER (migration-first — the REVERSE of the shoeimport rule):** run `go run ./cmd/dbimport` against **prod first**, *then* push/merge the code. The new `ProductDetail`/`/api/products/{id}` queries read the new `reviews` columns + `review_tokens`; if the code ships before `reviews.sql` runs, **every product page 500s**. `reviews.sql` only ADDs (backward-compatible with currently-deployed code), so running it early is safe. GitHub Actions auto-deploys on push to main, so apply the migration before the push lands.

@@ -1,13 +1,6 @@
 {
   "name": "Tanga 3",
-  "price": 100,
   "gender": "unisex",
-  "status": {
-    "active": true,
-    "published": true,
-    "featured": true
-  },
-  "sortOrder": 4,
   "activities": [
     "casual",
     "office",
@@ -110,7 +103,7 @@
       "description": "Ultra-light breathable everyday trainer built for gym, travel and urban wear with flexible all-day comfort.",
       "productInfo": "Upper\nCoffeYarn: durable, breathable, antimicrobial and quick drying performance, made from recycled coffee grounds.\nFlat lace — blue with green speckle or pink with grey speckle.\n\nLining\nUnlined for complete breathability.\n\nInsole\nFlexile: 3.0 mm some shock absorption with excellent ground connectivity to allow full natural movement.\n\nMidsole\nSoftFlex: fully flexible for maximum foot movement.\n\nOutsole\nUrbanGrip: 3.0 mm wide-area tread for optimum grip and durability on urban surfaces.\n\nWaterproofness\nNot waterproof, highly breathable. Use a waterproof sock for cold / wet conditions.\n\nWeight\n460 grams per pair size 42.\n\nStack Height\n9.5 mm with insole; 6.5 mm without insole.\n\nCare\nHand wash with luke warm water and mild detergent. Air dry.\nWe do not recommend putting your Freets in the washing machine or dryer.",
       "sizeAndFit": "Customers say it fits true to size — you may stay at your usual size.",
-      "sustainability": "Upper: 65% recycled (CoffeeYarn)\nLaces: 70% recycled (BottleYarn)\nMidsole: 70% recycled (BottleYarn)\nInsole: 60% recycled\nOutsole: 60% natural rubber\nPackaging: box/wrapping recycled and recyclable card \u0026 paper\nOuter packaging: recycled and recyclable plastic or card/paper packet"
+      "sustainability": "Upper: 65% recycled (CoffeeYarn)\nLaces: 70% recycled (BottleYarn)\nMidsole: 70% recycled (BottleYarn)\nInsole: 60% recycled\nOutsole: 60% natural rubber\nPackaging: box/wrapping recycled and recyclable card & paper\nOuter packaging: recycled and recyclable plastic or card/paper packet"
     },
     "mk": {
       "about": "Ултра-лесна дишлива патика за секојдневно носење, проектирана за теретана, патување и урбана средина со флексибилна целодневна удобност.\n\nЕднопарчесна горна страна со CoffeeYarn flyknit за целодневни перформанси, дишливост и удобност.\n\nДоволно елегантна за секојдневно, незгодно и канцелариско носење, но исто така функционална за спорт. Секој пар вклучува еластични врвки кои лесно можете да ги замените.",

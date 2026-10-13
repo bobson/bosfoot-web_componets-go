@@ -1,9 +1,9 @@
 root = "."
-tmp_dir = "tmp"
+tmp_dir = "tmp/air"  # NOT "tmp": clean_on_exit wipes tmp_dir, and tmp/pg is the sandbox DB
 
 [build]
-  cmd = "go build -o ./tmp/main ./main.go"
-  bin = "./tmp/main"
+  cmd = "go build -o ./tmp/air/main ./main.go"
+  bin = "./tmp/air/main"
   include_ext = ["go", "html", "json", "css", "js"]
   exclude_dir = ["tmp", "vendor", "node_modules"]
   delay = 1000  # ms

@@ -9,7 +9,10 @@
   data-gender="{{$p.GenderValue}}"
   data-activities="{{range $p.Activities}}{{.}}|{{end}}"
   data-variants="{{range $p.FilterVariants}}{{.}}|{{end}}">
-  {{if not $p.InStock}}<span class="product-card__badge product-card__badge--preorder">{{if preordersOpen}}{{t $locale "cart.preorder"}}{{else}}{{t $locale "product.outOfStock"}}{{end}}</span>
+  {{/* No stock: reservation → "Reserved", stock model → "Out of stock".
+       Dropship models are always orderable (~7 days), so they get the normal
+       new/sale badges like an in-stock product. */}}
+  {{if and (not $p.InStock) (ne $p.Fulfilment "dropship")}}<span class="product-card__badge product-card__badge--preorder">{{if eq $p.Fulfilment "reservation"}}{{t $locale "cart.preorder"}}{{else}}{{t $locale "product.outOfStock"}}{{end}}</span>
   {{else}}
   {{if $p.IsNew}}<span class="product-card__badge product-card__badge--new">{{t $locale "product.new"}}</span>{{end}}
   {{if $p.IsOnSale}}<span class="product-card__badge product-card__badge--sale">{{t $locale "product.sale"}}</span>{{end}}

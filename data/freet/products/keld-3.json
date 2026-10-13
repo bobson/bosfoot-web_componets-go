@@ -1,13 +1,6 @@
 {
   "name": "Keld 3",
-  "price": 90,
   "gender": "unisex",
-  "status": {
-    "active": true,
-    "published": true,
-    "featured": false
-  },
-  "sortOrder": 2,
   "activities": [
     "hiking",
     "running",
@@ -92,7 +85,7 @@
       "description": "The ultimate performance shoe for adventures in warm weather.",
       "productInfo": "Upper\nBottleYarn: breathable, durable, moisture moving mesh, made from recycled plastic bottles.\nConventional lace — light olive with blue fleck.\n\nLining\nUnlined for complete breathability.\n\nInsole\nReBound 4 mm: energy return with ground connectivity to allow full natural movement.\n\nMidsole\nSoftFlex: fully flexible for maximum foot movement.\n\nOutsole\nTrailGrip: 3.0 mm tread gives good grip and durability on a variety of trail surfaces.\n\nWaterproofness\nNot waterproof, highly breathable. Use a waterproof sock for cold / wet conditions.\n\nWeight\n435 grams per pair size 42.\n\nStack Height\n10.5 mm with insole; 7.5 mm without insole.",
       "sizeAndFit": "Customers say it fits true to size — you may stay at your usual size.",
-      "sustainability": "Upper: 60% recycled (BottleYarn)\nOutsole: 60% natural rubber\nLining: 65% recycled (BottleYarn)\nLace: 70% recycled (BottleYarn)\nInsole: 60% recycled\nPackaging: box/wrapping recycled and recyclable card \u0026 paper"
+      "sustainability": "Upper: 60% recycled (BottleYarn)\nOutsole: 60% natural rubber\nLining: 65% recycled (BottleYarn)\nLace: 70% recycled (BottleYarn)\nInsole: 60% recycled\nPackaging: box/wrapping recycled and recyclable card & paper"
     },
     "mk": {
       "about": "Ултра-минимална сестрана патика за патувања и авантури, погодна за патеки и надвор од нив, со подобрен дизајн.\n\nУживајте во свежината како кај сандала, а истовремено држете ги отпадоците од патеката надвор.\n\nЗаштита комбинирана со флексибилност, мала тежина и барефоот удобност.",

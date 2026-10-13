@@ -102,15 +102,16 @@ export function initProductDetail() {
   const labelPick = realBtn?.dataset.labelPick || 'Select size';
   const labelAdd = realBtn?.dataset.labelAdd || 'Add to cart';
   const labelNotify = realBtn?.dataset.labelNotify || 'Get notified about this size';
-  const labelPreorder = realBtn?.dataset.labelPreorder || 'Preorder now';
-  // A product with NO stock at all is a "preorder" product. Its sizes are still
-  // fully selectable (the batch ships later) — the customer picks a size + colour
-  // like normal, but the order never decrements inventory. Only the label/note
-  // and the missing stock/notify behaviour differ from a stocked product.
-  // With reservations closed (site.PreordersOpen = false) a no-stock product is
-  // NOT preorder: it falls through to the stocked-product path with every size at
-  // 0, so all sizes grey out and picking one shows "Get notified".
-  const preorderMode = realBtn?.dataset.inStock !== '1' && realBtn?.dataset.preordersOpen === '1';
+  const labelPreorder = realBtn?.dataset.labelPreorder || 'Reserve';
+  const labelOrder = realBtn?.dataset.labelOrder || 'Order';
+  // The model's mode (data/{brand}/catalog.json) decides what happens to a size
+  // that is NOT in stock — per size, so a model can mix both:
+  //   stock       → greyed, "Get notified" (not orderable)
+  //   reservation → orderable, "Reserve", ~1–2 weeks note
+  //   dropship    → orderable, "Order", ~7 days note
+  // In-stock sizes are always "Add to cart" and decrement on order.
+  const fulfilment = realBtn?.dataset.fulfilment || 'stock';
+  const backorderable = fulfilment === 'reservation' || fulfilment === 'dropship';
   const notifyNote = document.getElementById('notify-note');
   const preorderNote = document.getElementById('preorder-note');
 
@@ -119,25 +120,32 @@ export function initProductDetail() {
     return ((stockMap[selectedColor] || {})[size] || 0) > 0;
   }
 
+  // Any size of any colour on the shelf? (Decides the delivery note before a
+  // size is picked: an all-backorder model shows it straight away.)
+  function anyInStock() {
+    return Object.values(stockMap).some((bySize) => Object.values(bySize).some((q) => q > 0));
+  }
+
   // Drive both buttons' label + the helper notes from the current selection:
-  //  • no size yet              → "Select size" (both stocked and preorder).
-  //  • preorder, size picked    → "Preorder now" (any size orderable), preorder note.
-  //  • stocked, in-stock size   → "Add to cart".
-  //  • stocked, out-of-stock    → "Get notified about this size", notify note.
+  //  • no size yet                      → "Select size".
+  //  • size in stock                    → "Add to cart".
+  //  • not in stock, reservation model  → "Reserve" + ~1–2 weeks note.
+  //  • not in stock, dropship model     → "Order" + ~7 days note.
+  //  • not in stock, stock model        → "Get notified about this size".
   function refreshBuyState() {
     let label = labelPick;
     let pick = true; // muted "not ready to buy" styling
     let showNotify = false;
+    let showDelivery = backorderable && selectedSize == null && !anyInStock();
 
     if (selectedSize != null) {
-      if (preorderMode) {
-        // Preorder: every size is orderable (ships with the batch), no stock
-        // check — picking a size just flips the CTA to "Preorder now".
-        label = labelPreorder;
-        pick = false;
-      } else if (sizeInStock(selectedSize)) {
+      if (sizeInStock(selectedSize)) {
         label = labelAdd;
         pick = false;
+      } else if (backorderable) {
+        label = fulfilment === 'dropship' ? labelOrder : labelPreorder;
+        pick = false;
+        showDelivery = true;
       } else {
         label = labelNotify;
         showNotify = true;
@@ -149,7 +157,7 @@ export function initProductDetail() {
       b.classList.toggle('product__add-to-cart--pick', pick);
     });
     if (notifyNote) notifyNote.hidden = !showNotify;
-    if (preorderNote) preorderNote.hidden = !preorderMode;
+    if (preorderNote) preorderNote.hidden = !showDelivery;
   }
 
   // ── Gallery carousel + colour filtering ──────────────
@@ -245,7 +253,11 @@ export function initProductDetail() {
 
   function applyColorFilter(color) {
     if (!multiColor) return; // single-colour: nothing to filter
-    const key = color.toLowerCase().replace(/\s+/g, '-');
+    // Same slug rule as shoeimport's colorFolder(): "White & Green" → "white-green".
+    const key = color
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '');
 
     // Guard: if no slide's path matches this colour (e.g. a data gap where the
     // colour is declared but its gallery rows were never seeded), filtering
@@ -338,10 +350,10 @@ export function initProductDetail() {
   };
 
   // The fuzzy low-stock message for a size in the current colour, or null when
-  // the size isn't low (>3 left, out of stock, or a preorder product). Shared by
+  // the size isn't low (>3 left, or not on the shelf). Shared by
   // the on-select warning and the on-hover preview so both read identically.
   function lowStockMessageFor(size) {
-    if (preorderMode || size == null) return null;
+    if (size == null) return null;
     const qty = (stockMap[selectedColor] || {})[size] || 0;
     if (qty === 1) return lowStockMessages[locale]?.one || lowStockMessages.en.one;
     if (qty === 2 || qty === 3) return lowStockMessages[locale]?.few || lowStockMessages.en.few;
@@ -369,13 +381,13 @@ export function initProductDetail() {
 
     // Size availability styling. Idempotent — safe to call repeatedly from
     // syncLiveStock()/SSE without accumulating state.
-    //  • preorder product → every size is selectable and never greyed (the whole
-    //    batch is orderable ahead of arrival); no stock check applies.
-    //  • stocked product  → out-of-stock sizes are greyed but stay clickable, so
+    //  • reservation/dropship model → no size is greyed: sizes not in stock are
+    //    still orderable (ordered from the supplier).
+    //  • stock model → out-of-stock sizes are greyed but stay clickable, so
     //    selecting one flips the button to "Get notified about this size".
     const byColor = stockMap[selectedColor] || {};
     sizeBtns.forEach((btn) => {
-      const oos = !preorderMode && (byColor[parseFloat(btn.dataset.size)] || 0) <= 0;
+      const oos = !backorderable && (byColor[parseFloat(btn.dataset.size)] || 0) <= 0;
       btn.classList.toggle('product__size-btn--oos', oos);
       btn.disabled = false;
       btn.removeAttribute('aria-disabled');
@@ -415,8 +427,8 @@ export function initProductDetail() {
 
   // ── Add to cart (shared by both buttons) ──────────────
   function addToCart() {
-    // A size must be picked first — for stocked AND preorder products (preorder
-    // sizes are selectable; the batch just ships later without touching stock).
+    // A size must be picked first — we have to know exactly which pair to ship
+    // (or to order from the supplier).
     if (selectedSize == null) {
       const grid = document.getElementById('size-select');
       if (grid) {
@@ -426,10 +438,10 @@ export function initProductDetail() {
       return;
     }
 
-    // Out-of-stock size on a stocked product = "notify me", not orderable.
-    // Surface the note and bail (no cart mutation). Preorder skips this — every
-    // size is orderable ahead of arrival.
-    if (!preorderMode && !sizeInStock(selectedSize)) {
+    // Not in stock on a "stock" model = "notify me", not orderable. Surface the
+    // note and bail (no cart mutation). Reservation/dropship take the order.
+    const backorder = !sizeInStock(selectedSize);
+    if (backorder && !backorderable) {
       if (notifyNote) {
         notifyNote.hidden = false;
         notifyNote.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -440,9 +452,9 @@ export function initProductDetail() {
     const d = realBtn.dataset;
     const cart = JSON.parse(localStorage.getItem('bosfoot_cart') || '[]');
     const size = selectedSize;
-    // Preorder lines keep their own key namespace so they never merge with a
-    // future in-stock line for the same size/colour.
-    const key = preorderMode
+    // Backorder lines keep their own key namespace so they never merge with an
+    // in-stock line for the same size/colour.
+    const key = backorder
       ? `${d.productId}-preorder-${size}-${selectedColor}`
       : `${d.productId}-${size}-${selectedColor}`;
     const existing = cart.find((i) => i.key === key);
@@ -459,7 +471,10 @@ export function initProductDetail() {
         color: selectedColor,
         price: parseInt(d.price, 10),
         qty: 1,
-        preorder: preorderMode,
+        // preorder = not from our shelf (ordered from the supplier); fulfilment
+        // says which, for the cart label ("Reserved" vs "~7 days").
+        preorder: backorder,
+        fulfilment: backorder ? fulfilment : 'stock',
       });
     }
     localStorage.setItem('bosfoot_cart', JSON.stringify(cart));

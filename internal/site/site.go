@@ -65,15 +65,9 @@ func AssistantEnabled() bool {
 // const) so the guards aren't compiled out and it can be wired to env later.
 var PreorderAll = false
 
-// PreordersOpen controls whether a product with NO stock can be reserved
-// ("Резервирај" — ordered ahead, shipped when the next batch arrives). When
-// false such products stay listed but read "Out of stock": every size is greyed
-// and selecting one shows the get-notified note, exactly like a sold-out size on
-// a stocked product, and the order handler rejects them. Stocked products are
-// unaffected. 2026-09-27: false — no restocking planned; only the pairs on hand
-// can be bought. 2026-10-09: true again — reopened so the no-stock Freet models
-// (incl. boots) can be reserved and Be Lenka can be sold as dropship.
-var PreordersOpen = true
+// Whether a product WITHOUT stock in a size can still be ordered is now set per
+// model — "mode" in data/{brand}/catalog.json (products.fulfilment: stock |
+// reservation | dropship) — replacing the old site-wide PreordersOpen switch.
 
 // MKDtoEUR is the denar→euro conversion rate for the secondary EUR price shown
 // on the sq/en locales. Single source of truth: the client JS reads it from a

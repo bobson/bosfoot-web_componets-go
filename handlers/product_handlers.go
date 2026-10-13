@@ -39,6 +39,7 @@ func (h *ProductHandler) GetBrands(w http.ResponseWriter, r *http.Request) {
 		       sizing_guide_url, logo_url,
 		       is_featured, sort_order, created_at, updated_at
 		FROM brands
+		WHERE is_visible
 		ORDER BY sort_order ASC, name ASC
 	`)
 	if err != nil {
@@ -105,7 +106,7 @@ func (h *ProductHandler) GetProducts(w http.ResponseWriter, r *http.Request) {
 		       p.brand_id, p.category_id, p.gender_id,
 		       p.price_eur, p.original_price_eur, p.image_url,
 		       p.is_new, p.is_featured, p.is_on_sale, p.discount_pct,
-		       p.is_active, p.is_published, p.sort_order,
+		       p.is_active, p.is_published, p.sort_order, p.fulfilment,
 		       p.created_at, p.updated_at,
 		       b.name, b.slug
 		FROM products p
@@ -138,7 +139,7 @@ func (h *ProductHandler) GetProducts(w http.ResponseWriter, r *http.Request) {
 			&p.BrandID, &p.CategoryID, &p.GenderID,
 			&p.PriceMKD, &origPrice, &imageURL,
 			&p.IsNew, &p.IsFeatured, &p.IsOnSale, &discountPct,
-			&p.IsActive, &p.IsPublished, &p.SortOrder,
+			&p.IsActive, &p.IsPublished, &p.SortOrder, &p.Fulfilment,
 			&p.CreatedAt, &p.UpdatedAt,
 			&p.BrandName, &p.BrandSlug,
 		); err != nil {
@@ -171,10 +172,10 @@ func (h *ProductHandler) GetProducts(w http.ResponseWriter, r *http.Request) {
 
 	// Fetch colors for all products in a single query, then map them in Go.
 	colorRows, err := h.DB.QueryContext(ctx, `
-		SELECT product_id, color, hex
+		SELECT product_id, color, hex, swatch_url
 		FROM product_colors
 		WHERE product_id = ANY($1)
-		ORDER BY product_id, color
+		ORDER BY product_id, id
 	`, pq.Array(ids))
 	if err != nil {
 		h.Logger.Error("GetProducts: colors query failed", err)
@@ -187,8 +188,8 @@ func (h *ProductHandler) GetProducts(w http.ResponseWriter, r *http.Request) {
 	for colorRows.Next() {
 		var productID int
 		var color string
-		var hex sql.NullString
-		if err := colorRows.Scan(&productID, &color, &hex); err != nil {
+		var hex, swatch sql.NullString
+		if err := colorRows.Scan(&productID, &color, &hex, &swatch); err != nil {
 			h.Logger.Error("GetProducts: color scan failed", err)
 			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 			return
@@ -196,6 +197,9 @@ func (h *ProductHandler) GetProducts(w http.ResponseWriter, r *http.Request) {
 		c := models.ProductColor{Color: color}
 		if hex.Valid {
 			c.Hex = &hex.String
+		}
+		if swatch.Valid {
+			c.SwatchURL = &swatch.String
 		}
 		colorMap[productID] = append(colorMap[productID], c)
 	}
@@ -232,7 +236,7 @@ func (h *ProductHandler) GetProductByID(w http.ResponseWriter, r *http.Request) 
 		       p.brand_id, p.category_id, p.gender_id,
 		       p.price_eur, p.original_price_eur, p.image_url,
 		       p.is_new, p.is_featured, p.is_on_sale, p.discount_pct,
-		       p.is_active, p.is_published, p.sort_order,
+		       p.is_active, p.is_published, p.sort_order, p.fulfilment,
 		       p.created_at, p.updated_at,
 		       b.name, b.slug
 		FROM products p
@@ -243,7 +247,7 @@ func (h *ProductHandler) GetProductByID(w http.ResponseWriter, r *http.Request) 
 		&p.BrandID, &p.CategoryID, &p.GenderID,
 		&p.PriceMKD, &origPrice, &imageURL,
 		&p.IsNew, &p.IsFeatured, &p.IsOnSale, &discountPct,
-		&p.IsActive, &p.IsPublished, &p.SortOrder,
+		&p.IsActive, &p.IsPublished, &p.SortOrder, &p.Fulfilment,
 		&p.CreatedAt, &p.UpdatedAt,
 		&p.BrandName, &p.BrandSlug,
 	)
@@ -293,8 +297,8 @@ func (h *ProductHandler) GetProductByID(w http.ResponseWriter, r *http.Request) 
 
 	// --- colors ---
 	cRows, err := h.DB.QueryContext(ctx, `
-		SELECT color, hex FROM product_colors
-		WHERE product_id = $1 ORDER BY color
+		SELECT color, hex, swatch_url FROM product_colors
+		WHERE product_id = $1 ORDER BY id
 	`, id)
 	if err != nil {
 		h.Logger.Error("GetProductByID: colors query failed", err)
@@ -304,8 +308,8 @@ func (h *ProductHandler) GetProductByID(w http.ResponseWriter, r *http.Request) 
 	defer cRows.Close()
 	for cRows.Next() {
 		var color string
-		var hex sql.NullString
-		if err := cRows.Scan(&color, &hex); err != nil {
+		var hex, swatch sql.NullString
+		if err := cRows.Scan(&color, &hex, &swatch); err != nil {
 			h.Logger.Error("GetProductByID: color scan failed", err)
 			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 			return
@@ -313,6 +317,9 @@ func (h *ProductHandler) GetProductByID(w http.ResponseWriter, r *http.Request) 
 		c := models.ProductColor{Color: color}
 		if hex.Valid {
 			c.Hex = &hex.String
+		}
+		if swatch.Valid {
+			c.SwatchURL = &swatch.String
 		}
 		p.Colors = append(p.Colors, c)
 	}

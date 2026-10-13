@@ -98,6 +98,9 @@ func NewRenderer(dir string, ui *locale.UI) (*Renderer, error) {
 	funcMap := template.FuncMap{
 		// asset appends a content hash to a public asset path: /styles.css -> /styles.css?v=abcdef
 		"asset": r.asset,
+		// imgsize emits width/height attrs from an image's real pixel size, so
+		// photos keep their own proportions without layout shift (imgsize.go).
+		"imgsize": r.imgSize,
 
 		// importMap emits the <script type="importmap"> that versions every JS
 		// module by its own content hash (see Renderer.importMap).
@@ -123,8 +126,6 @@ func NewRenderer(dir string, ui *locale.UI) (*Renderer, error) {
 		// head partial only renders the pixel when it's non-empty.
 		"pixelID": site.MetaPixelID,
 
-		// preordersOpen reports whether no-stock products can be reserved (site.PreordersOpen).
-		"preordersOpen": func() bool { return site.PreordersOpen },
 
 		// faq / faqSchema power the FAQ page + assistant widget from one source
 		// (internal/faq); assistantEnabled gates the free-text box on the API key.

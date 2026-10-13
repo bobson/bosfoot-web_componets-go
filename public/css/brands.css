@@ -64,26 +64,35 @@
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
-/* Featured (Freet) card */
-.brand-card--featured {
-    background: var(--color-brand-freet);
-    border-color: var(--color-brand-freet);
+/* Brand-coloured cards (white text on the brand's own colour, like its logo
+   banner). Logos for these are white SVGs. Add a brand: a --color-brand-* token
+   in global.css, a line below, and its class in the :is() lists. */
+.brand-card--freet { --brand-bg: var(--color-brand-freet); }
+.brand-card--be-lenka { --brand-bg: var(--color-brand-be-lenka); }
+.brand-card--barebarics { --brand-bg: var(--color-brand-barebarics); }
+
+.brand-card:is(.brand-card--freet, .brand-card--be-lenka, .brand-card--barebarics) {
+    background: var(--brand-bg);
+    border-color: var(--brand-bg);
     color: var(--color-white);
 }
 
-.brand-card--featured:hover {
-    border-color: var(--color-brand-freet);
-    box-shadow: 0 4px 12px rgba(146, 190, 0, 0.2);
+.brand-card:is(.brand-card--freet, .brand-card--be-lenka, .brand-card--barebarics):hover {
+    border-color: var(--brand-bg);
+    box-shadow: 0 4px 12px color-mix(in oklch, var(--brand-bg), transparent 75%);
 }
 
-.brand-card--featured .brand-card__name,
-.brand-card--featured .brand-card__description,
-.brand-card--featured .brand-card__meta,
-.brand-card--featured .brand-card__badge--coming-soon {
+:is(.brand-card--freet, .brand-card--be-lenka, .brand-card--barebarics) :is(
+    .brand-card__name,
+    .brand-card__description,
+    .brand-card__meta,
+    .brand-card__badge--coming-soon,
+    .brand-card__more
+) {
     color: var(--color-white);
 }
 
-.brand-card--featured .brand-card__badge--coming-soon {
+:is(.brand-card--freet, .brand-card--be-lenka, .brand-card--barebarics) .brand-card__badge--coming-soon {
     background: rgba(255, 255, 255, 0.2);
 }
 
@@ -157,8 +166,25 @@
     white-space: nowrap;
 }
 
+.brand-card__footer {
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+/* "Read more ↗" — the brand's own about page */
+.brand-card__more {
+    font-size: var(--fs-sm);
+    font-weight: var(--fw-semibold);
+    color: var(--color-accent);
+    white-space: nowrap;
+}
+
+.brand-card__more:hover {
+    text-decoration: underline;
+}
+
 /* Featured card button */
-.brand-card--featured .btn--secondary {
+.brand-card:is(.brand-card--freet, .brand-card--be-lenka, .brand-card--barebarics) .btn--secondary {
     background: transparent;
     color: var(--color-white);
     border-color: transparent;
@@ -166,7 +192,7 @@
     padding: 0;
 }
 
-.brand-card--featured .btn--secondary:hover {
+.brand-card:is(.brand-card--freet, .brand-card--be-lenka, .brand-card--barebarics) .btn--secondary:hover {
     background: transparent;
     color: var(--color-white);
     border-color: transparent;
