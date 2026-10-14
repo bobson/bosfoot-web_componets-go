@@ -34,6 +34,10 @@ SINCE="${1:-24 hours ago}"
 #                            in-app browser is already caught by TEST_UA (A142P)
 #                            regardless of IP, so this exact entry is just a backstop
 #                            for the occasional mobile-Firefox check.
+#              109.69.44.214 = mobile (A1), exact address (Oct 2026). Same rule
+#                            as the other A1 entries: never a prefix (shared CGNAT).
+#              77.29.78.166 = home Wi-Fi + laptop wired (Telekom), exact address
+#                            (Oct 2026). Exact only — see the 77.29. note below.
 #              77.29.105.89 = mobile (Makedonski Telekom), exact address. NEVER a
 #                            77.29. prefix: real customers share that mobile range
 #                            (e.g. 77.29.114.53 browsed from the Oct 2026 ad).
@@ -46,7 +50,7 @@ BOT='bot|crawl|spider|facebookexternalhit|headless|scan|python-requests|go-http|
 TEST_UA='A142P'
 # Substring match, so 'bmarkoski@' covers both owner test inboxes (gmail + yahoo).
 TEST_EMAIL='bmarkoski@'
-TEST_IPS='146.255.75. 185.100.245.80 185.100.245.151 46.217.230.59 77.29.105.89'
+TEST_IPS='146.255.75. 185.100.245.80 185.100.245.151 46.217.230.59 77.29.105.89 109.69.44.214 77.29.78.166'
 RE="$BOT|$TEST_UA"
 # Countries we actually ship to, by Cloudflare's Cf-Ipcountry header (space-
 # separated ISO codes). Page-traffic steps (visitors, product views, checkout,
