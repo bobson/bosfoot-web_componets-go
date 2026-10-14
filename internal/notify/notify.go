@@ -673,7 +673,7 @@ func ownerFulfilNote(f string) string {
 	case "dropship":
 		return "  [DROPSHIP — order from the maker, ~7 days]"
 	case "reservation":
-		return "  [RESERVATION — order from the brand, ~1–2 weeks]"
+		return "  [RESERVATION — order from the brand, promised 2–3 weeks]"
 	}
 	return ""
 }
@@ -685,7 +685,7 @@ func customerFulfilNote(f, locale string) string {
 	case "dropship":
 		mk, sq, en = "стига за околу 7 дена", "arrin për rreth 7 ditë", "arrives in about 7 days"
 	case "reservation":
-		mk, sq, en = "стига за околу 1–2 недели", "arrin për rreth 1–2 javë", "arrives in about 1–2 weeks"
+		mk, sq, en = "стига за 2–3 недели", "arrin për 2–3 javë", "arrives in 2–3 weeks"
 	default:
 		return ""
 	}

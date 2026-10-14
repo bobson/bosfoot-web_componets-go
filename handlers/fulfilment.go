@@ -4,7 +4,7 @@ package handlers
 // order_items.fulfilment (how that ordered line will actually be filled).
 const (
 	FulfilStock       = "stock"       // shipped from our shelf, stock decremented
-	FulfilReservation = "reservation" // ordered from the brand, ~1–2 weeks
+	FulfilReservation = "reservation" // ordered from the brand, ~2–3 weeks
 	FulfilDropship    = "dropship"    // ordered from the maker, ~7 days
 )
 

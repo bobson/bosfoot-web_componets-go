@@ -180,7 +180,7 @@
           <p class="product__notify-note text-sm text-muted" id="notify-note" hidden>{{t .Locale "notify.body"}}</p>
           {{/* Shown by JS when the picked size isn't in stock but the model still
                takes orders: dropship → ~7 days from the maker; reservation →
-               ~1–2 weeks from the brand. */}}
+               ~2–3 weeks from the brand. */}}
           <p class="product__preorder-note text-sm" id="preorder-note" hidden>{{if eq .Product.Fulfilment "dropship"}}{{t .Locale "preorder.noteDropship"}}{{else}}{{t .Locale "preorder.note"}}{{end}}</p>
 
           {{/* Trust block: authentic → pay on delivery → free returns. Biggest

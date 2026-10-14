@@ -107,7 +107,7 @@ export function initProductDetail() {
   // The model's mode (data/{brand}/catalog.json) decides what happens to a size
   // that is NOT in stock — per size, so a model can mix both:
   //   stock       → greyed, "Get notified" (not orderable)
-  //   reservation → orderable, "Reserve", ~1–2 weeks note
+  //   reservation → orderable, "Reserve", ~2–3 weeks note
   //   dropship    → orderable, "Order", ~7 days note
   // In-stock sizes are always "Add to cart" and decrement on order.
   const fulfilment = realBtn?.dataset.fulfilment || 'stock';
@@ -129,7 +129,7 @@ export function initProductDetail() {
   // Drive both buttons' label + the helper notes from the current selection:
   //  • no size yet                      → "Select size".
   //  • size in stock                    → "Add to cart".
-  //  • not in stock, reservation model  → "Reserve" + ~1–2 weeks note.
+  //  • not in stock, reservation model  → "Reserve" + ~2–3 weeks note.
   //  • not in stock, dropship model     → "Order" + ~7 days note.
   //  • not in stock, stock model        → "Get notified about this size".
   function refreshBuyState() {
