@@ -151,6 +151,18 @@ pbreak="$(cq "select($PRODUCT and $REAL) | [ (.request.uri | split(\"?\")[0] | c
 [ -n "$pbreak" ] && printf '%s\n' "$pbreak" || echo "  (none)"
 
 echo
+# Product viewers by city (distinct IPs), from Cloudflare's Cf-Ipcity header
+# (Managed Transform "Add visitor location headers", on since 2026-10-15 — older
+# log lines have no city and show as "(unknown)"). IP-based, so approximate:
+# mobile users are often placed at the operator's hub (usually Skopje).
+echo "Product viewers by city (real, in region):"
+cbreak="$(cq "select($PRODUCT and $REAL) | [ ((.request.headers.\"Cf-Ipcity\"[0] // \"\") | if . == \"\" then \"(unknown)\" else . end), (.request.headers.\"Cf-Ipcountry\"[0] // \"\"), (.request.headers.\"Cf-Connecting-Ip\"[0] // \"\") ] | @tsv" \
+  | awk -F'\t' '{ k=$1 " (" $2 ")"; u=k SUBSEP $3; if (!(u in s)) { s[u]=1; p[k]++ } }
+      END { for (x in p) printf "  %4d people  %s\n", p[x], x }' \
+  | sort -rn)"
+[ -n "$cbreak" ] && printf '%s\n' "$cbreak" || echo "  (none)"
+
+echo
 # product_id → name map for the breakdown below. The beacon logs the id, not the
 # name, so we look names up in Postgres once (json_object_agg → a single JSON
 # object jq can index). Best-effort: if psql is missing or DATABASE_URL isn't
