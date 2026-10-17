@@ -13,7 +13,20 @@
     <span class="total">{{mkd .TotalMKD}} ден</span>
   </div>
   <div class="who"><b>{{.Name}}</b> · {{if .Phone}}{{.Phone}}{{else}}<span class="muted">no phone</span>{{end}} · {{.Email}}</div>
-  <div class="muted">{{.Address}}, {{.City}}{{if .Notes}} · <i>notes: {{.Notes}}</i>{{end}}</div>
+  <div class="muted">{{.Address}}, {{if .PostalCode}}{{.PostalCode}} {{end}}{{.City}}{{if .Notes}} · <i>notes: {{.Notes}}</i>{{end}}</div>
+  <details class="edit"><summary>✏️ Edit address</summary>
+    <form method="post" action="/orders/{{.ID}}/address" class="addr-form">
+      <input type="hidden" name="k" value="{{$.K}}"><input type="hidden" name="tab" value="{{$.Tab}}">
+      <label>First name<input type="text" name="first_name" value="{{.FirstName}}" required maxlength="60"></label>
+      <label>Last name<input type="text" name="last_name" value="{{.LastName}}" maxlength="60"></label>
+      <label class="wide">Address (street + number)<input type="text" name="address" value="{{.Address}}" required maxlength="200"></label>
+      <label>Postcode<input type="text" name="postal_code" value="{{.PostalCode}}" maxlength="12"></label>
+      <label>City<input type="text" name="city" value="{{.City}}" required maxlength="60"></label>
+      <label>Phone<input type="text" name="phone" value="{{.Phone}}" maxlength="30"></label>
+      <label>Email<input type="text" name="email" value="{{.Email}}" required maxlength="120"></label>
+      <div class="wide"><button class="b-deliv">Save address</button>{{if .InvoiceNo}} <span class="muted">Invoice {{.InvoiceNo}} won't change.</span>{{end}}</div>
+    </form>
+  </details>
   <ul class="items">{{range .Items}}<li>{{.Brand}} <b>{{.Product}}</b>{{if .Size}} · {{.Size}}{{end}}{{if .Color}} / {{.Color}}{{end}} · ×{{.Qty}} · {{mkd .PriceMKD}} ден{{if .Fulfilment}}<span class="tag {{.Fulfilment}}">{{.Fulfilment}}</span>{{end}}</li>{{end}}</ul>
   <div class="review">
     {{if .Reviewed}}⭐ Review received

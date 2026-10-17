@@ -24,17 +24,18 @@ type orderItem struct {
 }
 
 type order struct {
-	ID                                  int
-	Created                             time.Time
-	FirstName, Name, Email, Phone, City string
-	Address, Notes, Status, Locale      string
-	Payment                             string
-	TotalMKD                            int
-	IsTest                              bool
-	InvitedAt                           *time.Time
-	InvoiceNo                           string // "0006/2026" once issued
-	Reviewed                            bool
-	Items                               []orderItem
+	ID                             int
+	Created                        time.Time
+	FirstName, LastName, Name      string
+	Email, Phone, City, PostalCode string
+	Address, Notes, Status, Locale string
+	Payment                        string
+	TotalMKD                       int
+	IsTest                         bool
+	InvitedAt                      *time.Time
+	InvoiceNo                      string // "0006/2026" once issued
+	Reviewed                       bool
+	Items                          []orderItem
 }
 
 // Tab sorts an order into the admin's tabs. Finished = delivered AND the review
@@ -88,8 +89,8 @@ func (a *app) orders(w http.ResponseWriter, r *http.Request) {
 
 func (a *app) loadOrders() ([]order, error) {
 	rows, err := a.db.Query(`
-		SELECT o.id, o.created_at, o.first_name, o.first_name || ' ' || o.last_name,
-		       o.email, COALESCE(o.phone, ''), o.city, o.address, COALESCE(o.notes, ''),
+		SELECT o.id, o.created_at, o.first_name, o.last_name, o.first_name || ' ' || o.last_name,
+		       o.email, COALESCE(o.phone, ''), o.city, COALESCE(o.postal_code, ''), o.address, COALESCE(o.notes, ''),
 		       o.status::text, o.locale::text, o.payment_method::text, o.total_mkd, o.is_test,
 		       (SELECT min(rt.created_at) FROM review_tokens rt WHERE rt.order_id = o.id),
 		       EXISTS (SELECT 1 FROM review_tokens rt WHERE rt.order_id = o.id AND rt.used_at IS NOT NULL),
@@ -105,8 +106,8 @@ func (a *app) loadOrders() ([]order, error) {
 	var ids []int64
 	for rows.Next() {
 		var o order
-		if err := rows.Scan(&o.ID, &o.Created, &o.FirstName, &o.Name, &o.Email, &o.Phone, &o.City,
-			&o.Address, &o.Notes, &o.Status, &o.Locale, &o.Payment, &o.TotalMKD, &o.IsTest,
+		if err := rows.Scan(&o.ID, &o.Created, &o.FirstName, &o.LastName, &o.Name, &o.Email, &o.Phone, &o.City,
+			&o.PostalCode, &o.Address, &o.Notes, &o.Status, &o.Locale, &o.Payment, &o.TotalMKD, &o.IsTest,
 			&o.InvitedAt, &o.Reviewed, &o.InvoiceNo); err != nil {
 			return nil, err
 		}
@@ -398,3 +399,50 @@ func (a *app) render(w http.ResponseWriter, name string, data any) {
 
 // viberURL marks a viber:// link we built ourselves as safe for href.
 func viberURL(s string) template.URL { return template.URL(s) }
+
+// editAddress corrects the customer's name/address/contact on the order (typos,
+// messy addresses) before printing the label. An issued invoice keeps its own
+// snapshot and is NOT changed — that's the law for invoices.
+func (a *app) editAddress(w http.ResponseWriter, r *http.Request) {
+	id, _, _, err := a.orderID(r)
+	if err != nil {
+		a.back(w, r, "", err.Error())
+		return
+	}
+	f := func(k string, maxLen int) string {
+		v := strings.Join(strings.Fields(r.FormValue(k)), " ")
+		if len([]rune(v)) > maxLen {
+			v = string([]rune(v)[:maxLen])
+		}
+		return v
+	}
+	first, last, addr := f("first_name", 60), f("last_name", 60), f("address", 200)
+	postal, city, phone, email := f("postal_code", 12), f("city", 60), f("phone", 30), f("email", 120)
+	if first == "" || addr == "" || city == "" {
+		a.back(w, r, "", "first name, address and city are required")
+		return
+	}
+	if email == "" || !strings.Contains(email, "@") {
+		a.back(w, r, "", "enter a valid email")
+		return
+	}
+	nullable := func(s string) any {
+		if s == "" {
+			return nil
+		}
+		return s
+	}
+	if _, err := a.db.Exec(`UPDATE orders SET first_name = $1, last_name = $2, address = $3, postal_code = $4,
+		city = $5, phone = $6, email = $7, updated_at = now() WHERE id = $8`,
+		first, last, addr, nullable(postal), city, nullable(phone), email, id); err != nil {
+		a.back(w, r, "", err.Error())
+		return
+	}
+	msg := site.OrderNumber(id) + " address updated — print the shipping label again"
+	var invNo string
+	_ = a.db.QueryRow(`SELECT lpad(seq::text, 4, '0') || '/' || year FROM invoices WHERE order_id = $1`, id).Scan(&invNo)
+	if invNo != "" {
+		msg += " (invoice " + invNo + " keeps the original details — issued invoices can't change)"
+	}
+	a.back(w, r, msg, "")
+}

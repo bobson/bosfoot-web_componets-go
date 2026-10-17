@@ -1,32 +1,39 @@
 {{define "label.html"}}<!doctype html>
 <html lang="mk"><head><meta charset="utf-8"><title>Доставница {{.Order}}</title>
 <style>
-@page { size: 105mm 148mm; margin: 4mm; } /* A6 — Chromium has no "A6" keyword */
+/* Printed on A4 (any office printer); the label itself is A6 (105×148 mm) in the
+   top-left corner — cut along its border. It can never spill: fixed size,
+   overflow hidden, and the script below shrinks a long address until it fits. */
+@page { size: A4; margin: 10mm; }
 * { box-sizing: border-box; }
 body { font-family: "DejaVu Sans", "Liberation Sans", Arial, sans-serif; color: #000; margin: 0; font-size: 8.5pt; }
-.box { border: 2px solid #000; height: 138mm; display: flex; flex-direction: column; }
-.top { background: #000; color: #fff; display: flex; justify-content: space-between; align-items: center; padding: 3mm 4mm; }
-.top b { font-size: 17pt; letter-spacing: .5px; } .top .r { text-align: right; font-size: 8pt; line-height: 1.5; }
-.sec { padding: 2.2mm 4mm; border-bottom: 1px solid #000; }
-.h { font-weight: 700; color: #555; font-size: 7.5pt; letter-spacing: .3px; margin-bottom: 1mm; }
-.from b { font-size: 10pt; }
-.to .name { font-size: 15pt; font-weight: 700; line-height: 1.15; }
-.to .addr { font-size: 11pt; font-weight: 700; line-height: 1.3; margin: 1mm 0; }
-.row { display: flex; justify-content: space-between; align-items: baseline; }
-.items b { font-size: 9.5pt; }
-.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5mm 4mm; }
-.grid .k { color: #444; font-size: 7.5pt; } .grid .v { font-weight: 700; font-size: 9pt; } .blank { border-bottom: 1.2px solid #000; height: 4mm; width: 70%; }
-.cod { background: #eee; padding: 2mm 4mm; margin: 0 1mm; } .cod .amt { font-size: 17pt; font-weight: 700; }
-.foot { padding: 2mm 4mm; font-size: 7.5pt; color: #333; margin-top: auto; }
-.bar { border: 1px dashed #999; height: 14mm; margin: 1.5mm 4mm 3mm; display: flex; align-items: center; justify-content: center; color: #888; font-size: 7.5pt; }
+.label { width: 105mm; height: 148mm; border: 2px solid #000; display: flex; flex-direction: column; overflow: hidden; }
+.cut { width: 105mm; text-align: center; font-size: 7pt; color: #888; margin-top: 1.5mm; }
+.top { background: #000; color: #fff; display: flex; justify-content: space-between; align-items: center; padding: 2.5mm 4mm; flex: none; }
+.top b { font-size: 16pt; letter-spacing: .5px; } .top .r { text-align: right; font-size: 7.5pt; line-height: 1.45; }
+.sec { padding: 2mm 4mm; border-bottom: 1px solid #000; flex: none; }
+.h { font-weight: 700; color: #555; font-size: 7pt; letter-spacing: .3px; margin-bottom: .8mm; }
+.from b { font-size: 9pt; } .from div { font-size: 7.8pt; }
+.to { flex: 1 1 auto; min-height: 0; overflow: hidden; }
+.to .name { font-size: 14pt; font-weight: 700; line-height: 1.15; }
+.to .addr { font-size: 9.5pt; line-height: 1.3; margin: 1mm 0; overflow-wrap: anywhere; }
+.to .city { font-weight: 700; }
+.to .contact { font-size: 8.5pt; }
+.row { display: flex; justify-content: space-between; align-items: baseline; gap: 3mm; }
+.items b { font-size: 9pt; }
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2mm 4mm; }
+.grid .k { color: #444; font-size: 7pt; } .grid .v { font-weight: 700; font-size: 8.5pt; } .blank { border-bottom: 1.2px solid #000; height: 3.5mm; width: 75%; }
+.cod { background: #eee; padding: 1.8mm 4mm; flex: none; } .cod .amt { font-size: 16pt; font-weight: 700; }
+.foot { padding: 1.5mm 4mm 0; font-size: 7pt; color: #333; flex: none; }
+.bar { border: 1px dashed #999; height: 13mm; margin: 1.5mm 4mm 2.5mm; display: flex; align-items: center; justify-content: center; color: #888; font-size: 7pt; flex: none; }
 </style></head><body>
-<div class="box">
+<div class="label" id="label">
   <div class="top"><b>{{.C.Brand}}</b><div class="r">ДОСТАВНИЦА<br>{{.C.Web}}</div></div>
   <div class="sec from"><div class="h">ИСПРАЌАЧ</div><b>{{.C.Name}}</b><div>{{.C.Address}}</div><div>Тел: {{.C.Phone}} · {{.C.Email}}</div></div>
-  <div class="sec to"><div class="h">ПРИМАЧ</div>
+  <div class="sec to" id="to"><div class="h">ПРИМАЧ</div>
     <div class="name">{{.B.Name}}</div>
-    <div class="addr">{{.B.Address}}<br>{{if .B.PostalCode}}{{.B.PostalCode}} {{end}}{{.B.City}}, {{.B.Country}}</div>
-    {{if .B.Phone}}<div>Тел: <b>{{.B.Phone}}</b></div>{{end}}<div>Е-пошта: {{.B.Email}}</div>
+    <div class="addr">{{.B.Address}}<br><span class="city">{{if .B.PostalCode}}{{.B.PostalCode}} {{end}}{{.B.City}}, {{.B.Country}}</span></div>
+    <div class="contact">{{if .B.Phone}}Тел: <b>{{.B.Phone}}</b><br>{{end}}Е-пошта: {{.B.Email}}</div>
   </div>
   <div class="sec items"><div class="row"><div class="h">СОДРЖИНА НА ПРАТКА</div><b>{{if .InvNo}}Фактура бр. {{.InvNo}}{{else}}Нарачка {{.Order}}{{end}}</b></div>
     {{range .Lines}}<div><b>{{.Desc}} × {{.Qty}}</b></div>{{end}}
@@ -45,4 +52,17 @@ body { font-family: "DejaVu Sans", "Liberation Sans", Arial, sans-serif; color: 
   <div class="foot">Замена/враќање во рок од 14 дена — {{.C.Email}}</div>
   <div class="bar">(бар-код на курирската служба)</div>
 </div>
+<div class="cut">✂ исечи по рабовите на доставницата (A6)</div>
+<script>
+// Shrink the recipient block until it fits its space (long typed addresses).
+(function () {
+  const to = document.getElementById('to');
+  const name = to.querySelector('.name'), addr = to.querySelector('.addr'), contact = to.querySelector('.contact');
+  let n = 14, a = 9.5, c = 8.5;
+  while (to.scrollHeight > to.clientHeight + 1 && a > 6) {
+    a -= 0.5; c = Math.max(c - 0.3, 6.5); if (n > 11) n -= 0.5;
+    name.style.fontSize = n + 'pt'; addr.style.fontSize = a + 'pt'; contact.style.fontSize = c + 'pt';
+  }
+})();
+</script>
 </body></html>{{end}}

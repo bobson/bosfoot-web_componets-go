@@ -117,6 +117,7 @@ func main() {
 	mux.HandleFunc("POST /orders/{id}/delete", a.deleteTest)
 	mux.HandleFunc("POST /orders/{id}/review/email", a.reviewEmail)
 	mux.HandleFunc("POST /orders/{id}/review/viber", a.reviewViber)
+	mux.HandleFunc("POST /orders/{id}/address", a.editAddress)
 	mux.HandleFunc("POST /orders/{id}/invoice", a.makeInvoice)
 	mux.HandleFunc("GET /orders/{id}/invoice.pdf", a.invoicePDF)
 	mux.HandleFunc("GET /orders/{id}/label.pdf", a.labelPDF)

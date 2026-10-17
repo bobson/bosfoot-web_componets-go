@@ -49,3 +49,14 @@ func TestOJSONEdit(t *testing.T) {
 		t.Errorf("got\n%s\nwant\n%s", got, want)
 	}
 }
+
+func TestTitleName(t *testing.T) {
+	for in, want := range map[string]string{
+		"lendita taravari": "Lendita Taravari", "PANCE ZAFIROV": "Pance Zafirov",
+		"  ана-марија   петрова ": "Ана-Марија Петрова", "Taxhedin Qazimi": "Taxhedin Qazimi",
+	} {
+		if got := titleName(in); got != want {
+			t.Errorf("titleName(%q) = %q, want %q", in, got, want)
+		}
+	}
+}

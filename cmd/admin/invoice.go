@@ -24,6 +24,7 @@ import (
 	"strconv"
 	"strings"
 	"time"
+	"unicode"
 
 	"bosfoot/internal/site"
 )
@@ -119,7 +120,7 @@ func (a *app) orderSnapshot(q interface {
 	if err != nil {
 		return b, nil, 0, "", err
 	}
-	b.Name, b.PostalCode = strings.TrimSpace(first+" "+last), postal
+	b.Name, b.PostalCode = titleName(first+" "+last), postal
 	b.Country = countryMK[strings.TrimSpace(country)]
 	if b.Country == "" {
 		b.Country = country
@@ -250,6 +251,7 @@ func (a *app) renderPDF(tmpl string, data any, out string) error {
 }
 
 func (a *app) invoiceDoc(iv invoice) map[string]any {
+	iv.Buyer.Name = titleName(iv.Buyer.Name)
 	return map[string]any{"C": company, "I": iv, "PayText": paymentText(iv.Payment),
 		"Issued": iv.IssuedOn.Format("02.01.2006")}
 }
@@ -342,4 +344,22 @@ func den(n int, decimals bool) string {
 		return s + ",00 ден."
 	}
 	return s + " ден."
+}
+
+// titleName capitalises each part of a person's name however it was typed:
+// "lendita TARAVARI" → "Lendita Taravari", "ана-марија" → "Ана-Марија".
+func titleName(s string) string {
+	words := strings.Fields(s)
+	for i, w := range words {
+		parts := strings.Split(w, "-")
+		for j, p := range parts {
+			r := []rune(strings.ToLower(p))
+			if len(r) > 0 {
+				r[0] = unicode.ToUpper(r[0])
+			}
+			parts[j] = string(r)
+		}
+		words[i] = strings.Join(parts, "-")
+	}
+	return strings.Join(words, " ")
 }
