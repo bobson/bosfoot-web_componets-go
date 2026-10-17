@@ -5,7 +5,7 @@
   <a href="/stock?{{if .Brand}}brand={{.Brand}}&{{end}}hidden={{if .Hidden}}0{{else}}1{{end}}" style="margin-left:auto">{{if .Hidden}}Hide unpublished{{else}}Show unpublished{{end}}</a>
 </div>
 <div class="modes"><button type="button" id="m-view" class="on">👁 View</button><button type="button" id="m-edit">✏️ Edit</button></div>
-<p class="muted hint-edit">Live stock from the database (orders take pairs off it). <b>+ / −</b> saves straight away; click a number to type it. Sizes NOT in stock follow the model's mode: <b>stock</b> → "get notified", <b>reservation</b> → still orderable (2–3 weeks).
+<p class="muted hint-edit">Live stock from the database (orders take pairs off it). <b>+ / −</b> or click a number to type it — changes are only <b>staged</b> (blue) until you click <b>Publish</b>, which shows them for confirmation first. Sizes NOT in stock follow the model's mode: <b>stock</b> → "get notified", <b>reservation</b> → still orderable (2–3 weeks).
 Don't run <code>shoeimport -stock</code> after editing here — it would overwrite these counts with the JSON.</p>
 <p class="muted hint-view">Green = in stock · amber = last pair · – = none. Switch to <b>Edit</b> to change counts.</p>
 <div id="err" class="flash err" hidden></div>
@@ -23,7 +23,7 @@ Don't run <code>shoeimport -stock</code> after editing here — it would overwri
     {{range .Colors}}{{$c := .}}<tr>
       <th class="cname">{{if .Hex}}<span class="dot" style="background:{{.Hex}}"></span>{{end}}{{.Name}}</th>
       {{range $i, $s := $p.Sizes}}<td>
-        <div class="cell{{if eq (index $c.Qty $i) 0}} zero{{else if eq (index $c.Qty $i) 1}} low{{else}} has{{end}}" data-p="{{$p.ID}}" data-s="{{$s.ID}}" data-c="{{$c.ID}}">
+        <div class="cell{{if eq (index $c.Qty $i) 0}} zero{{else if eq (index $c.Qty $i) 1}} low{{else}} has{{end}}" data-p="{{$p.ID}}" data-s="{{$s.ID}}" data-c="{{$c.ID}}" data-q="{{index $c.Qty $i}}" data-label="{{$p.Brand}} {{$p.Name}} · {{$c.Name}} · {{$s.Label}}">
           <button type="button" class="m" aria-label="minus">−</button><span class="q" title="click to type a number">{{index $c.Qty $i}}</span><button type="button" class="p" aria-label="plus">+</button>
         </div></td>{{end}}
       <td class="sum" data-row="{{$p.ID}}-{{$c.ID}}">{{.Total}}</td>
@@ -32,7 +32,21 @@ Don't run <code>shoeimport -stock</code> after editing here — it would overwri
   {{else}}<p class="muted">No sizes or colours set for this model.</p>{{end}}
 </div>
 {{else}}<div class="empty">No products.</div>{{end}}
+<div class="pubbar" id="pubbar" hidden>
+  <b><span id="pubcount">0</span> unpublished change(s)</b>
+  <button type="button" class="b-deliv" id="pubbtn">⬆ Publish to live database</button>
+  <button type="button" id="discard">Discard</button>
+</div>
+<dialog id="confirm">
+  <h3 style="margin:0 0 6px">Publish these stock changes?</h3>
+  <p class="muted" style="margin:0 0 10px">Only these cells change in the <b>{{.DB}}</b> database. If an order changed a cell meanwhile, your +/− is applied on top of the current count.</p>
+  <table class="list" id="clist"></table>
+  <div class="btns" style="margin-top:14px"><button type="button" class="b-deliv" id="yes">Yes, publish</button><button type="button" id="no">Cancel</button></div>
+</dialog>
 <style>
+.pubbar{position:sticky;bottom:0;background:#fff;border:2px solid #1d4ed8;border-radius:12px;padding:10px 14px;margin-top:14px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;box-shadow:0 -4px 16px #0001}
+.cell.staged{background:#e6efff!important;color:#1d4ed8!important;outline:2px solid #1d4ed8;border-radius:4px} .cell.staged .q::before{content:attr(data-was) " → ";font-weight:400;color:#6b7fb8}
+dialog{border:0;border-radius:14px;padding:20px;max-width:560px;width:92%} dialog::backdrop{background:#0006} .up{color:#2f6b1f;font-weight:700} .down{color:var(--red);font-weight:700}
 .grid-wrap{overflow-x:auto} .grid{border-collapse:collapse;font-size:14px;margin-top:8px}
 .grid th,.grid td{border:1px solid var(--line);padding:4px 6px;text-align:center} .grid th{background:#faf8f4;font-weight:600}
 .cname{text-align:left!important;white-space:nowrap} .dot{display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:6px;vertical-align:-1px;border:1px solid #0002}
@@ -48,23 +62,81 @@ Don't run <code>shoeimport -stock</code> after editing here — it would overwri
 <script>
 const K = {{.K}};
 const errBox = document.getElementById('err');
-async function save(cell, body) {
-  cell.classList.add('busy');
-  const f = new URLSearchParams({k: K, product: cell.dataset.p, size: cell.dataset.s, color: cell.dataset.c, ...body});
+const staged = new Map(); // "p-s-c" → {cell, from, to}
+
+function key(c) { return c.dataset.p + '-' + c.dataset.s + '-' + c.dataset.c; }
+
+// Show a cell's value (staged or live) and keep row/model totals in step.
+function show(cell, val) {
+  const q = cell.querySelector('.q'), old = +q.textContent, d = val - old;
+  q.textContent = val;
+  cell.classList.toggle('zero', val === 0); cell.classList.toggle('low', val === 1); cell.classList.toggle('has', val > 1);
+  const row = document.querySelector(`[data-row="${cell.dataset.p}-${cell.dataset.c}"]`);
+  const tot = document.querySelector(`[data-total="${cell.dataset.p}"]`);
+  row.textContent = +row.textContent + d; tot.textContent = +tot.textContent + d;
+}
+
+function stage(cell, to) {
+  if (!Number.isInteger(to) || to < 0 || to > 999) { errBox.textContent = 'Enter a number 0–999'; errBox.hidden = false; return; }
+  errBox.hidden = true;
+  const from = +cell.dataset.q;
+  show(cell, to);
+  if (to === from) { staged.delete(key(cell)); cell.classList.remove('staged'); }
+  else { staged.set(key(cell), {cell, from, to}); cell.classList.add('staged'); cell.querySelector('.q').dataset.was = from; }
+  document.getElementById('pubcount').textContent = staged.size;
+  document.getElementById('pubbar').hidden = staged.size === 0;
+}
+
+document.querySelectorAll('.cell').forEach(cell => {
+  const cur = () => +cell.querySelector('.q').textContent;
+  cell.querySelector('.p').onclick = () => stage(cell, cur() + 1);
+  cell.querySelector('.m').onclick = () => stage(cell, Math.max(cur() - 1, 0));
+  cell.querySelector('.q').onclick = () => {
+    if (document.body.classList.contains('view')) return;
+    const v = prompt('Pairs in stock:', cur());
+    if (v !== null && v.trim() !== '') stage(cell, Number(v.trim()));
+  };
+});
+
+document.getElementById('discard').onclick = () => {
+  if (!confirm('Discard all unpublished changes?')) return;
+  staged.forEach(({cell, from}) => { show(cell, from); cell.classList.remove('staged'); });
+  staged.clear(); document.getElementById('pubbar').hidden = true;
+};
+
+const dlg = document.getElementById('confirm');
+document.getElementById('pubbtn').onclick = () => {
+  const t = document.getElementById('clist');
+  t.innerHTML = '<tr><th>Model · colour · size</th><th>Now</th><th>New</th></tr>';
+  staged.forEach(({cell, from, to}) => {
+    const tr = t.insertRow();
+    tr.insertCell().textContent = cell.dataset.label;
+    tr.insertCell().textContent = from;
+    const n = tr.insertCell(); n.textContent = to + ' (' + (to > from ? '+' : '') + (to - from) + ')';
+    n.className = to > from ? 'up' : 'down';
+  });
+  dlg.showModal();
+};
+document.getElementById('no').onclick = () => dlg.close();
+document.getElementById('yes').onclick = async () => {
+  const changes = [...staged.values()].map(({cell, from, to}) =>
+    ({p: +cell.dataset.p, s: +cell.dataset.s, c: +cell.dataset.c, from, to, label: cell.dataset.label}));
+  document.getElementById('yes').disabled = true;
   try {
-    const res = await fetch('/stock/set', {method: 'POST', body: f});
+    const res = await fetch('/stock/publish', {method: 'POST', body: new URLSearchParams({k: K, changes: JSON.stringify(changes)})});
     const j = await res.json();
     if (!res.ok) throw new Error(j.error || res.status);
-    const q = cell.querySelector('.q'), old = +q.textContent, d = j.qty - old;
-    q.textContent = j.qty; cell.classList.toggle('zero', j.qty === 0);
-    cell.classList.toggle('low', j.qty === 1); cell.classList.toggle('has', j.qty > 1);
-    const row = document.querySelector(`[data-row="${cell.dataset.p}-${cell.dataset.c}"]`);
-    const tot = document.querySelector(`[data-total="${cell.dataset.p}"]`);
-    row.textContent = +row.textContent + d; tot.textContent = +tot.textContent + d;
-    errBox.hidden = true;
-  } catch (e) { errBox.textContent = 'Not saved: ' + e.message; errBox.hidden = false; }
-  cell.classList.remove('busy');
-}
+    const lines = j.results.map(r => r.label + ': ' + r.Before + ' → ' + r.Qty + (r.Changed ? '  (an order changed it meanwhile — your change was applied on top)' : ''));
+    staged.clear(); window.onbeforeunload = null;
+    alert('Published ✓\n\n' + lines.join('\n'));
+    location.reload();
+  } catch (e) {
+    dlg.close(); errBox.textContent = 'Nothing was published: ' + e.message; errBox.hidden = false;
+  }
+  document.getElementById('yes').disabled = false;
+};
+window.onbeforeunload = e => { if (staged.size) { e.preventDefault(); return ''; } };
+
 // View/Edit toggle (remembered; storage can fail in private windows — ignore).
 function setMode(edit) {
   document.body.classList.toggle('view', !edit);
@@ -76,14 +148,5 @@ let saved = 'view'; try { saved = localStorage.getItem('admin-stock-mode') || 'v
 setMode(saved === 'edit');
 document.getElementById('m-view').onclick = () => setMode(false);
 document.getElementById('m-edit').onclick = () => setMode(true);
-document.querySelectorAll('.cell').forEach(cell => {
-  cell.querySelector('.p').onclick = () => save(cell, {delta: 1});
-  cell.querySelector('.m').onclick = () => save(cell, {delta: -1});
-  cell.querySelector('.q').onclick = () => {
-    if (document.body.classList.contains('view')) return;
-    const v = prompt('Pairs in stock:', cell.querySelector('.q').textContent);
-    if (v !== null && v.trim() !== '') save(cell, {set: v.trim()});
-  };
-});
 </script>
 {{template "foot"}}{{end}}

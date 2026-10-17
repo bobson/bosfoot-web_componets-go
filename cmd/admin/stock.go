@@ -1,9 +1,10 @@
 package main
 
 import (
+	"database/sql"
 	"encoding/json"
+	"errors"
 	"net/http"
-	"strconv"
 	"strings"
 
 	"github.com/lib/pq"
@@ -149,50 +150,75 @@ func (a *app) loadStock(brand string, showHidden bool) ([]stockProduct, []string
 	return prods, brands, qrows.Err()
 }
 
-// stockSet changes one cell: delta=+1/-1, or set=N. Creates the row if it was
-// missing; never goes below 0. Answers JSON {qty} for the page's fetch().
-func (a *app) stockSet(w http.ResponseWriter, r *http.Request) {
-	pid, e1 := strconv.Atoi(r.FormValue("product"))
-	sid, e2 := strconv.Atoi(r.FormValue("size"))
-	cid, e3 := strconv.Atoi(r.FormValue("color"))
-	if e1 != nil || e2 != nil || e3 != nil {
-		jsonErr(w, "bad cell")
+// stockChange is one staged cell edit from the page: what the owner saw (From)
+// and wants (To), plus labels for the confirmation + result.
+type stockChange struct {
+	Product int    `json:"p"`
+	Size    int    `json:"s"`
+	Color   int    `json:"c"`
+	From    int    `json:"from"`
+	To      int    `json:"to"`
+	Label   string `json:"label"`
+}
+
+type stockResult struct {
+	Label       string `json:"label"`
+	Before, Qty int
+	Changed     bool // someone (an order) changed this cell since the page loaded
+	Err         string
+}
+
+// stockPublish writes the staged edits — and only those cells — in one
+// transaction. Each edit is applied as a DELTA (To-From) on the current value,
+// so an order that came in meanwhile is kept, never overwritten; floored at 0.
+func (a *app) stockPublish(w http.ResponseWriter, r *http.Request) {
+	var changes []stockChange
+	if err := json.Unmarshal([]byte(r.FormValue("changes")), &changes); err != nil || len(changes) == 0 {
+		jsonErr(w, "no changes to publish")
 		return
 	}
-	var qty int
-	var err error
-	if set := r.FormValue("set"); set != "" {
-		n, convErr := strconv.Atoi(set)
-		if convErr != nil || n < 0 || n > 999 {
-			jsonErr(w, "enter a number 0–999")
+	if len(changes) > 500 {
+		jsonErr(w, "too many changes at once")
+		return
+	}
+	tx, err := a.db.Begin()
+	if err != nil {
+		jsonErr(w, err.Error())
+		return
+	}
+	defer tx.Rollback()
+	var results []stockResult
+	for _, c := range changes {
+		if c.To < 0 || c.To > 999 || c.From < 0 {
+			jsonErr(w, "invalid count for "+c.Label)
 			return
 		}
-		err = a.db.QueryRow(`
+		var cur int
+		err := tx.QueryRow(`SELECT qty FROM product_stock WHERE product_id = $1 AND size_id = $2 AND color_id = $3 FOR UPDATE`,
+			c.Product, c.Size, c.Color).Scan(&cur)
+		if err != nil && !errors.Is(err, sql.ErrNoRows) {
+			jsonErr(w, err.Error())
+			return
+		}
+		next := max(cur+(c.To-c.From), 0)
+		var qty int
+		if err := tx.QueryRow(`
 			INSERT INTO product_stock (product_id, size_id, color_id, qty)
 			SELECT $1, s.id, c.id, $4 FROM product_sizes s, product_colors c
 			WHERE s.id = $2 AND s.product_id = $1 AND c.id = $3 AND c.product_id = $1
 			ON CONFLICT (product_id, size_id, color_id) DO UPDATE SET qty = EXCLUDED.qty
-			RETURNING qty`, pid, sid, cid, n).Scan(&qty)
-	} else {
-		d, convErr := strconv.Atoi(r.FormValue("delta"))
-		if convErr != nil || (d != 1 && d != -1) {
-			jsonErr(w, "bad delta")
+			RETURNING qty`, c.Product, c.Size, c.Color, next).Scan(&qty); err != nil {
+			jsonErr(w, "not saved ("+c.Label+"): "+err.Error()+" — nothing was published")
 			return
 		}
-		err = a.db.QueryRow(`
-			INSERT INTO product_stock (product_id, size_id, color_id, qty)
-			SELECT $1, s.id, c.id, GREATEST($4, 0) FROM product_sizes s, product_colors c
-			WHERE s.id = $2 AND s.product_id = $1 AND c.id = $3 AND c.product_id = $1
-			ON CONFLICT (product_id, size_id, color_id)
-			DO UPDATE SET qty = GREATEST(product_stock.qty + $4, 0)
-			RETURNING qty`, pid, sid, cid, d).Scan(&qty)
+		results = append(results, stockResult{Label: c.Label, Before: cur, Qty: qty, Changed: cur != c.From})
 	}
-	if err != nil {
-		jsonErr(w, "not saved: "+err.Error())
+	if err := tx.Commit(); err != nil {
+		jsonErr(w, err.Error())
 		return
 	}
 	w.Header().Set("Content-Type", "application/json")
-	_ = json.NewEncoder(w).Encode(map[string]int{"qty": qty})
+	_ = json.NewEncoder(w).Encode(map[string]any{"results": results})
 }
 
 func jsonErr(w http.ResponseWriter, msg string) {

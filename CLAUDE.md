@@ -112,7 +112,9 @@ go run ./cmd/reviewinvites -order 42 -viber -commit  # Viber instead of email: p
 # shoeimport -brand X [-commit] (never -stock). Apply is blocked while a PUBLISHED
 # model has a colour whose main photo is missing locally or not yet on the live
 # site (commit + push images, wait for the deploy, then Apply). Commit data/ after.
-# Stock: live per model × colour × size (+/− or type a number) — writes the DB
+# Stock: live per model × colour × size. +/− or typing only STAGES changes (blue);
+# Publish shows them for confirmation, then writes just those cells as deltas on
+# the current count (an order placed meanwhile is kept). Writes the DB
 # (source of truth) only; don't run `shoeimport -stock` afterwards or the JSON
 # counts overwrite it.
 # Reviews: Pending / Approved / Rejected with Approve + Reject (thank-you email on

@@ -10,7 +10,8 @@
 // (never -stock). Apply is blocked while a published model has a colour with no
 // photos locally or on the live site.
 //
-// Stock: live per model × colour × size from the DB, +/− or type a number.
+// Stock: live per model × colour × size from the DB. +/− or typing only STAGES
+// changes; Publish shows them for confirmation and writes just those cells.
 //
 // Reviews: Pending / Approved / Rejected, with Approve and Reject. A review with
 // photos is moderated on the server over SSH (photos live in its UPLOADS_DIR).
@@ -125,7 +126,7 @@ func main() {
 	mux.HandleFunc("POST /catalog/{brand}/{slug}/size/add", a.addSize)
 	mux.HandleFunc("POST /catalog/{brand}/{slug}/size/remove", a.removeSize)
 	mux.HandleFunc("GET /stock", a.stock)
-	mux.HandleFunc("POST /stock/set", a.stockSet)
+	mux.HandleFunc("POST /stock/publish", a.stockPublish)
 	mux.HandleFunc("GET /reviews", a.reviews)
 	mux.HandleFunc("POST /reviews/{id}/approve", a.moderate("approve"))
 	mux.HandleFunc("POST /reviews/{id}/reject", a.moderate("reject"))
