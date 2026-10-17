@@ -49,10 +49,11 @@ func (h *TrackHandler) Track(w http.ResponseWriter, r *http.Request) {
 	if req.Locale != "mk" && req.Locale != "sq" && req.Locale != "en" {
 		req.Locale = ""
 	}
-	// Bound the size to the real EU range (37–48) so a junk beacon can't pollute
-	// the log; anything out of range is dropped to 0 ("unknown"). Cap the colour
-	// name length — it's an attacker-controlled free string in a public endpoint.
-	if req.Size < 37 || req.Size > 48 {
+	// Bound the size to the real EU range (36–48: Be Lenka/Barebarics start at
+	// 36, Freet ends at 48) so a junk beacon can't pollute the log; anything out
+	// of range is dropped to 0 ("unknown"). Cap the colour name length — it's an
+	// attacker-controlled free string in a public endpoint.
+	if req.Size < 36 || req.Size > 48 {
 		req.Size = 0
 	}
 	if len(req.Color) > 32 {
