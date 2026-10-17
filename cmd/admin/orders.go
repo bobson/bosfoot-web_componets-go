@@ -32,6 +32,7 @@ type order struct {
 	TotalMKD                            int
 	IsTest                              bool
 	InvitedAt                           *time.Time
+	InvoiceNo                           string // "0006/2026" once issued
 	Reviewed                            bool
 	Items                               []orderItem
 }
@@ -91,7 +92,8 @@ func (a *app) loadOrders() ([]order, error) {
 		       o.email, COALESCE(o.phone, ''), o.city, o.address, COALESCE(o.notes, ''),
 		       o.status::text, o.locale::text, o.payment_method::text, o.total_mkd, o.is_test,
 		       (SELECT min(rt.created_at) FROM review_tokens rt WHERE rt.order_id = o.id),
-		       EXISTS (SELECT 1 FROM review_tokens rt WHERE rt.order_id = o.id AND rt.used_at IS NOT NULL)
+		       EXISTS (SELECT 1 FROM review_tokens rt WHERE rt.order_id = o.id AND rt.used_at IS NOT NULL),
+		       COALESCE((SELECT lpad(i.seq::text, 4, '0') || '/' || i.year FROM invoices i WHERE i.order_id = o.id), '')
 		FROM orders o
 		ORDER BY o.created_at DESC`)
 	if err != nil {
@@ -105,7 +107,7 @@ func (a *app) loadOrders() ([]order, error) {
 		var o order
 		if err := rows.Scan(&o.ID, &o.Created, &o.FirstName, &o.Name, &o.Email, &o.Phone, &o.City,
 			&o.Address, &o.Notes, &o.Status, &o.Locale, &o.Payment, &o.TotalMKD, &o.IsTest,
-			&o.InvitedAt, &o.Reviewed); err != nil {
+			&o.InvitedAt, &o.Reviewed, &o.InvoiceNo); err != nil {
 			return nil, err
 		}
 		list = append(list, o)
@@ -202,6 +204,13 @@ func (a *app) setStatus(w http.ResponseWriter, r *http.Request) {
 	if to == "delivered" {
 		msg += " — now send the review request"
 	}
+	if to == "cancelled" {
+		var invNo string
+		_ = a.db.QueryRow(`SELECT lpad(seq::text, 4, '0') || '/' || year FROM invoices WHERE order_id = $1`, id).Scan(&invNo)
+		if invNo != "" {
+			msg += " — NOTE: invoice " + invNo + " exists; ask your accountant about a storno (credit note)"
+		}
+	}
 	a.back(w, r, msg, "")
 }
 
@@ -233,6 +242,12 @@ func (a *app) deleteTest(w http.ResponseWriter, r *http.Request) {
 	}
 	if !isTest {
 		a.back(w, r, "", "only TEST orders can be deleted — mark it Test first, or Cancel a real order")
+		return
+	}
+	var invNo string
+	_ = a.db.QueryRow(`SELECT lpad(seq::text, 4, '0') || '/' || year FROM invoices WHERE order_id = $1`, id).Scan(&invNo)
+	if invNo != "" {
+		a.back(w, r, "", "invoice "+invNo+" was issued for this order — it can't be deleted (invoices must be kept)")
 		return
 	}
 	tx, err := a.db.Begin()

@@ -64,6 +64,8 @@ func main() {
 		// Always run: orders.is_test for the local admin (cmd/admin). ADD-only;
 		// the site never reads it.
 		"db/admin.sql",
+		// Always run: invoices + invoice_series (local admin). ADD-only.
+		"db/invoices.sql",
 	)
 
 	for _, f := range files {

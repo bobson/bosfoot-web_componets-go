@@ -103,6 +103,8 @@ func main() {
 		"mkd":      fmtMKD,
 		"orderRef": orderLabel,
 		"dec":      func(n int) int { return n - 1 },
+		"inc":      func(n int) int { return n + 1 },
+		"den":      den,
 	}).ParseFS(uiFS, "ui/*.html"))
 
 	mux := http.NewServeMux()
@@ -115,6 +117,9 @@ func main() {
 	mux.HandleFunc("POST /orders/{id}/delete", a.deleteTest)
 	mux.HandleFunc("POST /orders/{id}/review/email", a.reviewEmail)
 	mux.HandleFunc("POST /orders/{id}/review/viber", a.reviewViber)
+	mux.HandleFunc("POST /orders/{id}/invoice", a.makeInvoice)
+	mux.HandleFunc("GET /orders/{id}/invoice.pdf", a.invoicePDF)
+	mux.HandleFunc("GET /orders/{id}/label.pdf", a.labelPDF)
 	mux.HandleFunc("GET /catalog", a.catalog)
 	mux.HandleFunc("GET /catalog/{brand}/{slug}", a.modelPage)
 	mux.HandleFunc("POST /catalog/{brand}/visible", a.toggleBrand)

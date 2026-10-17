@@ -120,7 +120,13 @@ go run ./cmd/reviewinvites -order 42 -viber -commit  # Viber instead of email: p
 # Reviews: Pending / Approved / Rejected with Approve + Reject (thank-you email on
 # approve). A review WITH photos is moderated on the droplet over SSH (photos live
 # in its UPLOADS_DIR) — only when the admin is on production, never the sandbox.
-# Needs orders.is_test → run `go run ./cmd/dbimport` once first (db/admin.sql).
+# Invoices: "Generate invoice" issues ONE per order, numbered NNNN/YYYY gap-free
+# (invoice_series; 2026 continues at 0006 after five hand-made ones), stored as a
+# snapshot (db/invoices.sql) — an invoiced order can't be deleted. No VAT lines
+# (company not VAT-registered). "Shipping label" = A6 PDF from the order. PDFs via
+# headless Chromium into invoices/ (gitignored, customer data — back it up;
+# sandbox → invoices/sandbox/).
+# Needs orders.is_test + invoices → run `go run ./cmd/dbimport` once first.
 go run ./cmd/admin                                   # opens http://localhost:8090
 bash scripts/localdb.sh go run ./cmd/admin           # same, on the sandbox DB
 

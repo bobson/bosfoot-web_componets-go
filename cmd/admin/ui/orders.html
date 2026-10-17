@@ -8,6 +8,7 @@
     <span class="num">{{orderNum .ID}}</span>
     <span class="pill {{.Status}}">{{.Status}}</span>
     {{if .IsTest}}<span class="pill test">test</span>{{end}}
+    {{if .InvoiceNo}}<span class="pill shipped">🧾 {{.InvoiceNo}}</span>{{end}}
     <span class="muted">{{.Created.Format "02.01.2006 15:04"}} · {{.Payment}} · /{{.Locale}}</span>
     <span class="total">{{mkd .TotalMKD}} ден</span>
   </div>
@@ -24,6 +25,9 @@
     {{if ne .Status "cancelled"}}
       {{if ne .Status "shipped"}}{{if ne .Status "delivered"}}<form method="post" action="/orders/{{.ID}}/status"><input type="hidden" name="k" value="{{$.K}}"><input type="hidden" name="tab" value="{{$.Tab}}"><input type="hidden" name="to" value="shipped"><button class="b-ship">🚚 Shipped</button></form>{{end}}{{end}}
       {{if ne .Status "delivered"}}<form method="post" action="/orders/{{.ID}}/status"><input type="hidden" name="k" value="{{$.K}}"><input type="hidden" name="tab" value="{{$.Tab}}"><input type="hidden" name="to" value="delivered"><button class="b-deliv">✅ Delivered</button></form>{{end}}
+      {{if .InvoiceNo}}<a class="btn" href="/orders/{{.ID}}/invoice.pdf" target="_blank">🧾 Invoice {{.InvoiceNo}}</a>
+      {{else}}<form method="post" action="/orders/{{.ID}}/invoice" target="_blank" onsubmit="setTimeout(()=>location.reload(),2500)"><input type="hidden" name="k" value="{{$.K}}"><input type="hidden" name="tab" value="{{$.Tab}}"><button>🧾 Generate invoice</button></form>{{end}}
+      <a class="btn" href="/orders/{{.ID}}/label.pdf" target="_blank">📦 Shipping label</a>
       <form method="post" action="/orders/{{.ID}}/review/email"><input type="hidden" name="k" value="{{$.K}}"><input type="hidden" name="tab" value="{{$.Tab}}"><button class="b-mail" {{if not $.MailOn}}disabled title="SMTP not configured"{{end}}>📧 {{if .InvitedAt}}Resend review email{{else}}Review request · email{{end}}</button></form>
       <form method="post" action="/orders/{{.ID}}/review/viber"><input type="hidden" name="k" value="{{$.K}}"><input type="hidden" name="tab" value="{{$.Tab}}"><button class="b-viber">💬 {{if .InvitedAt}}Resend via Viber{{else}}Review request · Viber{{end}}</button></form>
     {{end}}

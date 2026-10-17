@@ -35,3 +35,7 @@ ads/
 /data/sources/
 # Supplier import costs read by shoeimport for margin previews — never commit
 data/*/costs.json
+
+# Invoice + shipping-label PDFs made by cmd/admin — customer data, never in git.
+# Back this folder up (invoices must be kept for years).
+invoices/
