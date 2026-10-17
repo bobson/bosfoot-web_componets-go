@@ -4,8 +4,10 @@
   {{range .Brands}}<a href="/stock?brand={{.}}{{if $.Hidden}}&hidden=1{{end}}" class="{{if eq . $.Brand}}on{{end}}">{{.}}</a>{{end}}
   <a href="/stock?{{if .Brand}}brand={{.Brand}}&{{end}}hidden={{if .Hidden}}0{{else}}1{{end}}" style="margin-left:auto">{{if .Hidden}}Hide unpublished{{else}}Show unpublished{{end}}</a>
 </div>
-<p class="muted">Live stock from the database (orders take pairs off it). <b>+ / −</b> saves straight away; click a number to type it. Sizes NOT in stock follow the model's mode: <b>stock</b> → "get notified", <b>reservation</b> → still orderable (2–3 weeks).
+<div class="modes"><button type="button" id="m-view" class="on">👁 View</button><button type="button" id="m-edit">✏️ Edit</button></div>
+<p class="muted hint-edit">Live stock from the database (orders take pairs off it). <b>+ / −</b> saves straight away; click a number to type it. Sizes NOT in stock follow the model's mode: <b>stock</b> → "get notified", <b>reservation</b> → still orderable (2–3 weeks).
 Don't run <code>shoeimport -stock</code> after editing here — it would overwrite these counts with the JSON.</p>
+<p class="muted hint-view">Green = in stock · amber = last pair · – = none. Switch to <b>Edit</b> to change counts.</p>
 <div id="err" class="flash err" hidden></div>
 {{range .Products}}{{$p := .}}
 <div class="card">
@@ -21,7 +23,7 @@ Don't run <code>shoeimport -stock</code> after editing here — it would overwri
     {{range .Colors}}{{$c := .}}<tr>
       <th class="cname">{{if .Hex}}<span class="dot" style="background:{{.Hex}}"></span>{{end}}{{.Name}}</th>
       {{range $i, $s := $p.Sizes}}<td>
-        <div class="cell{{if eq (index $c.Qty $i) 0}} zero{{end}}" data-p="{{$p.ID}}" data-s="{{$s.ID}}" data-c="{{$c.ID}}">
+        <div class="cell{{if eq (index $c.Qty $i) 0}} zero{{else if eq (index $c.Qty $i) 1}} low{{else}} has{{end}}" data-p="{{$p.ID}}" data-s="{{$s.ID}}" data-c="{{$c.ID}}">
           <button type="button" class="m" aria-label="minus">−</button><span class="q" title="click to type a number">{{index $c.Qty $i}}</span><button type="button" class="p" aria-label="plus">+</button>
         </div></td>{{end}}
       <td class="sum" data-row="{{$p.ID}}-{{$c.ID}}">{{.Total}}</td>
@@ -36,6 +38,12 @@ Don't run <code>shoeimport -stock</code> after editing here — it would overwri
 .cname{text-align:left!important;white-space:nowrap} .dot{display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:6px;vertical-align:-1px;border:1px solid #0002}
 .cell{display:flex;align-items:center;gap:2px;justify-content:center} .cell button{padding:0 6px;font-size:15px;line-height:22px;border-radius:5px}
 .q{min-width:22px;font-weight:700;cursor:text} .cell.zero .q{color:#bbb;font-weight:400} .cell.busy{opacity:.4} .sum{font-weight:700}
+.modes{display:inline-flex;border:1px solid var(--line);border-radius:9px;overflow:hidden;margin:0 0 10px} .modes button{border:0;border-radius:0;background:#fff} .modes button.on{background:var(--ink);color:#fff}
+/* View mode: numbers only, coloured by level; buttons + edit hint hidden. */
+.view .cell button,.view .hint-edit{display:none} body:not(.view) .hint-view{display:none}
+.view .grid td{padding:0;min-width:40px} .view .cell{display:block;padding:7px 4px;font-size:15px}
+.view .q{cursor:default} .view .cell.zero .q{font-size:0} .view .cell.zero .q::after{content:"–";font-size:15px;color:#ccc}
+.view .cell.has{background:#e7f3e3;color:#2f6b1f} .view .cell.low{background:#fff3e6;color:var(--warn)}
 </style>
 <script>
 const K = {{.K}};
@@ -49,6 +57,7 @@ async function save(cell, body) {
     if (!res.ok) throw new Error(j.error || res.status);
     const q = cell.querySelector('.q'), old = +q.textContent, d = j.qty - old;
     q.textContent = j.qty; cell.classList.toggle('zero', j.qty === 0);
+    cell.classList.toggle('low', j.qty === 1); cell.classList.toggle('has', j.qty > 1);
     const row = document.querySelector(`[data-row="${cell.dataset.p}-${cell.dataset.c}"]`);
     const tot = document.querySelector(`[data-total="${cell.dataset.p}"]`);
     row.textContent = +row.textContent + d; tot.textContent = +tot.textContent + d;
@@ -56,10 +65,22 @@ async function save(cell, body) {
   } catch (e) { errBox.textContent = 'Not saved: ' + e.message; errBox.hidden = false; }
   cell.classList.remove('busy');
 }
+// View/Edit toggle (remembered; storage can fail in private windows — ignore).
+function setMode(edit) {
+  document.body.classList.toggle('view', !edit);
+  document.getElementById('m-view').classList.toggle('on', !edit);
+  document.getElementById('m-edit').classList.toggle('on', edit);
+  try { localStorage.setItem('admin-stock-mode', edit ? 'edit' : 'view'); } catch (e) {}
+}
+let saved = 'view'; try { saved = localStorage.getItem('admin-stock-mode') || 'view'; } catch (e) {}
+setMode(saved === 'edit');
+document.getElementById('m-view').onclick = () => setMode(false);
+document.getElementById('m-edit').onclick = () => setMode(true);
 document.querySelectorAll('.cell').forEach(cell => {
   cell.querySelector('.p').onclick = () => save(cell, {delta: 1});
   cell.querySelector('.m').onclick = () => save(cell, {delta: -1});
   cell.querySelector('.q').onclick = () => {
+    if (document.body.classList.contains('view')) return;
     const v = prompt('Pairs in stock:', cell.querySelector('.q').textContent);
     if (v !== null && v.trim() !== '') save(cell, {set: v.trim()});
   };
