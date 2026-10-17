@@ -77,12 +77,15 @@
               <div class="field">
                 <label class="field__label" for="co-address">{{t .Locale "checkout.street"}}</label>
                 <input class="field__input" id="co-address" name="address"
-                       autocomplete="address-line1" required>
+                       autocomplete="address-line1" placeholder="{{t .Locale "checkout.streetHint"}}" required>
               </div>
               <div class="field">
                 <label class="field__label" for="co-address-number">{{t .Locale "checkout.streetNumber"}}</label>
+                {{/* Just the house/flat number. No address-line2 autofill: phones filled
+                     it with the whole saved address, so orders arrived with the
+                     address twice (e.g. BF-1084). Short + capped. */}}
                 <input class="field__input" id="co-address-number" name="address_number"
-                       autocomplete="address-line2" required>
+                       autocomplete="off" maxlength="10" placeholder="{{t .Locale "checkout.streetNumberHint"}}" required>
               </div>
             </div>
             <div class="field-row">
