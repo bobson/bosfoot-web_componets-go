@@ -107,6 +107,9 @@ go run ./cmd/reviewinvites -order 42 -viber -commit  # Viber instead of email: p
 # Active / Finished / Cancelled / Test tabs; shipped / delivered / cancel (stock
 # lines go back on the shelf); flag Test orders and permanently delete only those;
 # review request by email or Viber (same as reviewinvites; marks delivered).
+# Stock: live per model × colour × size (+/− or type a number) — writes the DB
+# (source of truth) only; don't run `shoeimport -stock` afterwards or the JSON
+# counts overwrite it.
 # Reviews: Pending / Approved / Rejected with Approve + Reject (thank-you email on
 # approve). A review WITH photos is moderated on the droplet over SSH (photos live
 # in its UPLOADS_DIR) — only when the admin is on production, never the sandbox.

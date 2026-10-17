@@ -27,7 +27,7 @@ button:hover{border-color:#bbb} .b-ship{background:#e6efff} .b-deliv{background:
 .stars{color:#d99a00;font-size:18px;letter-spacing:1px} .body{margin:8px 0;white-space:pre-wrap} .photo{background:#e6efff;color:#1d4ed8;font-size:12px;font-weight:700;padding:2px 8px;border-radius:99px}
 pre{white-space:pre-wrap;font:15px/1.5 system-ui,sans-serif;background:#faf8f4;border-radius:8px;padding:12px;margin:12px 0}
 </style></head><body>
-<header><b>Bosfoot admin</b><nav><a class="{{if eq .Nav "orders"}}on{{end}}" href="/orders">Orders</a><a class="{{if eq .Nav "reviews"}}on{{end}}" href="/reviews">Reviews{{if .PendingReviews}} <span class="badge">{{.PendingReviews}}</span>{{end}}</a></nav>
+<header><b>Bosfoot admin</b><nav><a class="{{if eq .Nav "orders"}}on{{end}}" href="/orders">Orders</a><a class="{{if eq .Nav "stock"}}on{{end}}" href="/stock">Stock</a><a class="{{if eq .Nav "reviews"}}on{{end}}" href="/reviews">Reviews{{if .PendingReviews}} <span class="badge">{{.PendingReviews}}</span>{{end}}</a></nav>
 <span class="db {{if eq .DB "PRODUCTION"}}prod{{end}}">{{.DB}}</span></header>
 <main>{{end}}
 {{define "foot"}}</main></body></html>{{end}}

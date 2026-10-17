@@ -1,0 +1,68 @@
+{{define "stock.html"}}{{template "head" .}}
+<div class="tabs">
+  <a href="/stock{{if .Hidden}}?hidden=1{{end}}" class="{{if not .Brand}}on{{end}}">All brands</a>
+  {{range .Brands}}<a href="/stock?brand={{.}}{{if $.Hidden}}&hidden=1{{end}}" class="{{if eq . $.Brand}}on{{end}}">{{.}}</a>{{end}}
+  <a href="/stock?{{if .Brand}}brand={{.Brand}}&{{end}}hidden={{if .Hidden}}0{{else}}1{{end}}" style="margin-left:auto">{{if .Hidden}}Hide unpublished{{else}}Show unpublished{{end}}</a>
+</div>
+<p class="muted">Live stock from the database (orders take pairs off it). <b>+ / −</b> saves straight away; click a number to type it. Sizes NOT in stock follow the model's mode: <b>stock</b> → "get notified", <b>reservation</b> → still orderable (2–3 weeks).
+Don't run <code>shoeimport -stock</code> after editing here — it would overwrite these counts with the JSON.</p>
+<div id="err" class="flash err" hidden></div>
+{{range .Products}}{{$p := .}}
+<div class="card">
+  <div class="top">
+    <span class="num">{{.Brand}} {{.Name}}</span>
+    <span class="tag {{.Mode}}">{{.Mode}}</span>
+    {{if not .Published}}<span class="pill cancelled">hidden</span>{{end}}
+    <span class="total"><span data-total="{{.ID}}">{{.Total}}</span> in stock</span>
+  </div>
+  {{if and .Sizes .Colors}}
+  <div class="grid-wrap"><table class="grid">
+    <tr><th></th>{{range .Sizes}}<th>{{.Label}}</th>{{end}}<th>Σ</th></tr>
+    {{range .Colors}}{{$c := .}}<tr>
+      <th class="cname">{{if .Hex}}<span class="dot" style="background:{{.Hex}}"></span>{{end}}{{.Name}}</th>
+      {{range $i, $s := $p.Sizes}}<td>
+        <div class="cell{{if eq (index $c.Qty $i) 0}} zero{{end}}" data-p="{{$p.ID}}" data-s="{{$s.ID}}" data-c="{{$c.ID}}">
+          <button type="button" class="m" aria-label="minus">−</button><span class="q" title="click to type a number">{{index $c.Qty $i}}</span><button type="button" class="p" aria-label="plus">+</button>
+        </div></td>{{end}}
+      <td class="sum" data-row="{{$p.ID}}-{{$c.ID}}">{{.Total}}</td>
+    </tr>{{end}}
+  </table></div>
+  {{else}}<p class="muted">No sizes or colours set for this model.</p>{{end}}
+</div>
+{{else}}<div class="empty">No products.</div>{{end}}
+<style>
+.grid-wrap{overflow-x:auto} .grid{border-collapse:collapse;font-size:14px;margin-top:8px}
+.grid th,.grid td{border:1px solid var(--line);padding:4px 6px;text-align:center} .grid th{background:#faf8f4;font-weight:600}
+.cname{text-align:left!important;white-space:nowrap} .dot{display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:6px;vertical-align:-1px;border:1px solid #0002}
+.cell{display:flex;align-items:center;gap:2px;justify-content:center} .cell button{padding:0 6px;font-size:15px;line-height:22px;border-radius:5px}
+.q{min-width:22px;font-weight:700;cursor:text} .cell.zero .q{color:#bbb;font-weight:400} .cell.busy{opacity:.4} .sum{font-weight:700}
+</style>
+<script>
+const K = {{.K}};
+const errBox = document.getElementById('err');
+async function save(cell, body) {
+  cell.classList.add('busy');
+  const f = new URLSearchParams({k: K, product: cell.dataset.p, size: cell.dataset.s, color: cell.dataset.c, ...body});
+  try {
+    const res = await fetch('/stock/set', {method: 'POST', body: f});
+    const j = await res.json();
+    if (!res.ok) throw new Error(j.error || res.status);
+    const q = cell.querySelector('.q'), old = +q.textContent, d = j.qty - old;
+    q.textContent = j.qty; cell.classList.toggle('zero', j.qty === 0);
+    const row = document.querySelector(`[data-row="${cell.dataset.p}-${cell.dataset.c}"]`);
+    const tot = document.querySelector(`[data-total="${cell.dataset.p}"]`);
+    row.textContent = +row.textContent + d; tot.textContent = +tot.textContent + d;
+    errBox.hidden = true;
+  } catch (e) { errBox.textContent = 'Not saved: ' + e.message; errBox.hidden = false; }
+  cell.classList.remove('busy');
+}
+document.querySelectorAll('.cell').forEach(cell => {
+  cell.querySelector('.p').onclick = () => save(cell, {delta: 1});
+  cell.querySelector('.m').onclick = () => save(cell, {delta: -1});
+  cell.querySelector('.q').onclick = () => {
+    const v = prompt('Pairs in stock:', cell.querySelector('.q').textContent);
+    if (v !== null && v.trim() !== '') save(cell, {set: v.trim()});
+  };
+});
+</script>
+{{template "foot"}}{{end}}

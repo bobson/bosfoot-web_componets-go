@@ -5,6 +5,8 @@
 //	go run ./cmd/admin            # open http://localhost:8090
 //	bash scripts/localdb.sh go run ./cmd/admin   # against the sandbox DB
 //
+// Stock: live per model × colour × size from the DB, +/− or type a number.
+//
 // Reviews: Pending / Approved / Rejected, with Approve and Reject. A review with
 // photos is moderated on the server over SSH (photos live in its UPLOADS_DIR).
 //
@@ -106,6 +108,8 @@ func main() {
 	mux.HandleFunc("POST /orders/{id}/delete", a.deleteTest)
 	mux.HandleFunc("POST /orders/{id}/review/email", a.reviewEmail)
 	mux.HandleFunc("POST /orders/{id}/review/viber", a.reviewViber)
+	mux.HandleFunc("GET /stock", a.stock)
+	mux.HandleFunc("POST /stock/set", a.stockSet)
 	mux.HandleFunc("GET /reviews", a.reviews)
 	mux.HandleFunc("POST /reviews/{id}/approve", a.moderate("approve"))
 	mux.HandleFunc("POST /reviews/{id}/reject", a.moderate("reject"))
