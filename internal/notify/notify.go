@@ -330,8 +330,9 @@ func buildReviewInviteMessage(from, replyTo string, d ReviewInviteData) []byte {
 
 	firstName := strings.Split(d.Name, " ")[0]
 	var subject, hello, intro, cta, footer, regards, team string
-	switch d.Locale {
-	case "mk":
+	// Always Macedonian: Cyrillic for /mk orders, Latin script for the rest
+	// (/sq, /en). The review page itself still follows the order's locale.
+	if d.Locale == "mk" {
 		subject = "Како се чувствуваат вашите нови патики? — Bosfoot"
 		hello = "Здраво " + firstName + ","
 		intro = "Се надеваме дека уживате во вашите нови барефут патики! Вашето искуство — како ви одговара големината, колку се удобни и каков е квалитетот — им помага на другите полесно да одлучат и да го изберат вистинскиот број. А нам како мала локална продавница многу ни значи за да продолжиме да работиме и да носиме уште модели. Ќе ни значи многу ако одвоите минута за кратка оценка:"
@@ -339,22 +340,14 @@ func buildReviewInviteMessage(from, replyTo string, d ReviewInviteData) []byte {
 		footer = "Ви благодариме што сте дел од Bosfoot."
 		regards = "Со почит,"
 		team = "Тимот на Bosfoot"
-	case "sq":
-		subject = "Si ndihen këpucët tuaja të reja? — Bosfoot"
-		hello = "Përshëndetje " + firstName + ","
-		intro = "Shpresojmë që po i shijoni këpucët tuaja të reja barefoot! Përvoja juaj — si ju përshtatet madhësia, sa të rehatshme janë dhe si është cilësia — i ndihmon të tjerët të vendosin më lehtë dhe të zgjedhin madhësinë e duhur. Për ne, si një dyqan i vogël lokal, kjo do të thotë shumë që të vazhdojmë të punojmë dhe të sjellim më shumë modele. Do të na pëlqente shumë nëse lini një vlerësim të shkurtër:"
-		cta = "Vlerëso:"
-		footer = "Faleminderit që jeni pjesë e Bosfoot."
-		regards = "Gjithë të mirat,"
-		team = "Ekipi i Bosfoot"
-	default: // en
-		subject = "How are your new shoes feeling? — Bosfoot"
-		hello = "Hello " + firstName + ","
-		intro = "We hope you're enjoying your new barefoot shoes! Your experience — how the size fits, how comfortable they are and what you think of the quality — helps others decide and pick the right size. And for a small local shop like ours, it means a lot: it helps us keep going and bring in more models. We'd love it if you left a quick review:"
-		cta = "Review:"
-		footer = "Thank you for being part of Bosfoot."
-		regards = "Best regards,"
-		team = "The Bosfoot Team"
+	} else {
+		subject = "Kako se chuvstvuvaat vashite novi patiki? — Bosfoot"
+		hello = "Zdravo " + firstName + ","
+		intro = "Se nadevame deka uzhivate vo vashite novi barefoot patiki! Vasheto iskustvo — kako vi odgovara goleminata, kolku se udobni i kakov e kvalitetot — im pomaga na drugite polesno da odluchat i da go izberat vistinskiot broj. A nam kako mala lokalna prodavnica mnogu ni znachi za da prodolzhime da rabotime i da nosime ushte modeli. Ke ni znachi mnogu ako odvoite minuta za kratka ocenka:"
+		cta = "Oceni:"
+		footer = "Vi blagodarime shto ste del od Bosfoot."
+		regards = "So pochit,"
+		team = "Timot na Bosfoot"
 	}
 
 	header("From", from)
