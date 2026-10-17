@@ -1,0 +1,68 @@
+{{define "model.html"}}{{template "head" .}}{{$m := .M}}
+<p><a href="/catalog">← Catalog</a></p>
+{{if .Msg}}<div class="flash">{{.Msg}}</div>{{end}}
+{{if .Err}}<div class="flash err">{{.Err}}</div>{{end}}
+<div class="card">
+  <div class="top"><span class="num">{{$m.Brand}} · {{$m.Name}}</span><span class="muted">{{$m.Slug}}</span><span class="total">{{$m.TotalStock}} in stock</span></div>
+  {{if $m.Problems}}<div class="block"><b>Can't go live yet:</b><ul>{{range $m.Problems}}<li>{{.}}</li>{{end}}</ul></div>{{end}}
+  {{if $m.Warnings}}<div class="warn"><b>Heads-up:</b><ul>{{range $m.Warnings}}<li>{{.}}</li>{{end}}</ul></div>{{end}}
+</div>
+
+<div class="card">
+  <div class="num">Settings <span class="muted" style="font-weight:400;font-size:13px">(catalog.json)</span></div>
+  <form method="post" action="/catalog/{{$m.Brand}}/{{$m.Slug}}/settings">
+    <input type="hidden" name="k" value="{{$.K}}">
+    <div class="formrow" style="margin-top:10px">
+      <div><label class="f">Price €</label><input type="number" name="price" value="{{$m.Price}}" min="1" max="1000" style="width:100px" required></div>
+      <div><label class="f">Sale: “was” € <span class="muted">(empty = no sale)</span></label><input type="number" name="originalPrice" value="{{if $m.OrigPrice}}{{$m.OrigPrice}}{{end}}" min="0" style="width:120px"></div>
+      <div><label class="f">Mode <span class="muted">(sizes not in stock)</span></label><select name="mode">{{range $.Modes}}<option {{if eq . $m.Mode}}selected{{end}}>{{.}}</option>{{end}}</select></div>
+      <div><label class="f">Order</label><input type="number" name="sortOrder" value="{{$m.Sort}}" style="width:80px"></div>
+      <label class="chk"><input type="checkbox" name="published" {{if $m.Published}}checked{{end}}> Published</label>
+      <label class="chk"><input type="checkbox" name="featured" {{if $m.Featured}}checked{{end}}> Featured</label>
+      <button class="b-deliv">Save settings</button>
+    </div>
+    <p class="muted" style="margin:8px 0 0">stock → sizes not in stock show “get notified” · reservation → orderable, 2–3 weeks · dropship → orderable, ~7 days</p>
+  </form>
+</div>
+
+<div class="card">
+  <div class="num">Colours <span class="muted" style="font-weight:400;font-size:13px">(first = primary: card image + first photo)</span></div>
+  <table class="list" style="margin-top:6px">
+    <tr><th>Colour</th><th>Photo folder</th><th>Main photo</th><th>On live site</th><th>Stock</th><th></th></tr>
+    {{range $m.Colors}}<tr>
+      <td>{{if .Hex}}<span style="display:inline-block;width:14px;height:14px;border-radius:50%;background:{{.Hex}};border:1px solid #0002;vertical-align:-2px"></span>{{end}} <b>{{.Name}}</b>{{if .Primary}} <span class="tag stock">primary</span>{{end}}<div class="muted">{{.Hex}}</div></td>
+      <td><code style="font-size:12px">{{.MainPath}}</code></td>
+      <td>{{if .HasMain}}<span class="ok">✓</span>{{else}}<span class="no">✗ missing</span>{{end}}</td>
+      <td>{{if eq .Live "yes"}}<span class="ok">✓</span>{{else if eq .Live "no"}}<span class="no">✗ not deployed</span>{{else}}<span class="qm">? can't check</span>{{end}}</td>
+      <td>{{.Stock}}</td>
+      <td class="btns" style="margin:0">
+        {{if not .Primary}}<form method="post" action="/catalog/{{$m.Brand}}/{{$m.Slug}}/color/primary"><input type="hidden" name="k" value="{{$.K}}"><input type="hidden" name="name" value="{{.Name}}"><button>Make primary</button></form>{{end}}
+        <form method="post" action="/catalog/{{$m.Brand}}/{{$m.Slug}}/color/remove" onsubmit="return confirm('Remove colour “{{.Name}}”?{{if .Stock}} It still has {{.Stock}} pair(s) in stock — that stock will be dropped on Apply.{{end}}')"><input type="hidden" name="k" value="{{$.K}}"><input type="hidden" name="name" value="{{.Name}}"><button class="b-danger">Remove</button></form>
+      </td>
+    </tr>{{end}}
+  </table>
+  <form method="post" action="/catalog/{{$m.Brand}}/{{$m.Slug}}/color/add" class="formrow" style="margin-top:12px">
+    <input type="hidden" name="k" value="{{$.K}}">
+    <div><label class="f">New colour name (English)</label><input type="text" name="name" placeholder="e.g. Forest Green" required maxlength="40"></div>
+    <div><label class="f">Colour dot</label><input type="color" name="hex" value="#556b2f" style="height:38px;width:60px;border:1px solid var(--line);border-radius:8px"></div>
+    <button>+ Add colour</button>
+  </form>
+  <p class="muted" style="margin:6px 0 0">A new colour needs photos before it can go live: <code>{slug}.webp</code> (main) + <code>{slug}-1.webp</code>, <code>-2</code>… in its folder (use <code>scripts/prep-images.sh</code>), optional <code>{slug}-swatch.webp</code>, then commit + push and wait for the deploy.</p>
+</div>
+
+<div class="card">
+  <div class="num">Sizes <span class="muted" style="font-weight:400;font-size:13px">({{$m.SizesFormat}} list · number = pairs in stock)</span></div>
+  <div style="margin-top:10px">{{range $m.Sizes}}<span class="chip">{{.Label}}{{if .Stock}} <span class="muted">({{.Stock}})</span>{{end}}<form method="post" action="/catalog/{{$m.Brand}}/{{$m.Slug}}/size/remove" style="display:inline" onsubmit="return confirm('Remove size {{.Label}}?{{if .Stock}} It still has {{.Stock}} pair(s) in stock — dropped on Apply.{{end}}')"><input type="hidden" name="k" value="{{$.K}}"><input type="hidden" name="size" value="{{.Label}}"><button title="remove">×</button></form></span>{{end}}</div>
+  <form method="post" action="/catalog/{{$m.Brand}}/{{$m.Slug}}/size/add" class="formrow" style="margin-top:6px">
+    <input type="hidden" name="k" value="{{$.K}}">
+    <div><label class="f">Add EU size</label><input type="text" name="size" placeholder="e.g. 48" style="width:90px" required></div>
+    <button>+ Add size</button>
+  </form>
+</div>
+
+<div class="applybar">
+  <form method="post" action="/catalog/{{$m.Brand}}/apply"><input type="hidden" name="k" value="{{$.K}}"><input type="hidden" name="slug" value="{{$m.Slug}}"><input type="hidden" name="commit" value="0"><button>Preview {{$m.Brand}}</button></form>
+  <form method="post" action="/catalog/{{$m.Brand}}/apply" onsubmit="return confirm('Apply {{$m.Brand}} to the live site? (prices, modes, colours, sizes, images — stock stays)')"><input type="hidden" name="k" value="{{$.K}}"><input type="hidden" name="slug" value="{{$m.Slug}}"><input type="hidden" name="commit" value="1"><button class="b-deliv" {{if $m.Problems}}disabled title="fix the blockers first"{{end}}>Apply {{$m.Brand}} to site</button></form>
+  <span class="muted">Saved edits are in <code>data/</code> — commit them to git too.</span>
+</div>
+{{template "foot"}}{{end}}

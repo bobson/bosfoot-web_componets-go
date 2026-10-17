@@ -1,0 +1,14 @@
+{{define "apply.html"}}{{template "head" .}}
+<div class="card">
+  <div class="top"><span class="num">{{.Title}}</span><span class="muted">shoeimport -brand {{.Brand}}{{if .Commit}} -commit{{end}}</span></div>
+  {{if .Failed}}<div class="block">The import stopped with an error (see the output). The database was not changed.</div>
+  {{else if .Commit}}<div class="flash">Done. The site shows the changes within a minute (page cache). Remember to commit the <code>data/</code> changes (and any new images) to git.</div>
+  {{else}}<p class="muted">This is a dry run — nothing changed. Check the lines below, then Apply.</p>{{end}}
+  <pre>{{.Out}}</pre>
+  <div class="btns">
+    {{if .Slug}}<a class="btn" href="/catalog/{{.Brand}}/{{.Slug}}">← Back to {{.Slug}}</a>{{end}}
+    <a class="btn" href="/catalog">← Catalog</a>
+    {{if and (not .Commit) (not .Failed)}}<form method="post" action="/catalog/{{.Brand}}/apply" onsubmit="return confirm('Apply {{.Brand}} to the live site?')"><input type="hidden" name="k" value="{{.K}}"><input type="hidden" name="slug" value="{{.Slug}}"><input type="hidden" name="commit" value="1"><button class="b-deliv">Apply {{.Brand}} to site</button></form>{{end}}
+  </div>
+</div>
+{{template "foot"}}{{end}}

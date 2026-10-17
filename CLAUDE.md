@@ -107,6 +107,11 @@ go run ./cmd/reviewinvites -order 42 -viber -commit  # Viber instead of email: p
 # Active / Finished / Cancelled / Test tabs; shipped / delivered / cancel (stock
 # lines go back on the shelf); flag Test orders and permanently delete only those;
 # review request by email or Viber (same as reviewinvites; marks delivered).
+# Catalog: edits data/ in place (price, sale, mode, published, featured, order,
+# brand visibility, colours incl. primary, sizes) then Preview / Apply =
+# shoeimport -brand X [-commit] (never -stock). Apply is blocked while a PUBLISHED
+# model has a colour whose main photo is missing locally or not yet on the live
+# site (commit + push images, wait for the deploy, then Apply). Commit data/ after.
 # Stock: live per model × colour × size (+/− or type a number) — writes the DB
 # (source of truth) only; don't run `shoeimport -stock` afterwards or the JSON
 # counts overwrite it.

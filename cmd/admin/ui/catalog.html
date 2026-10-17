@@ -1,0 +1,32 @@
+{{define "catalog.html"}}{{template "head" .}}
+{{if .Msg}}<div class="flash">{{.Msg}}</div>{{end}}
+{{if .Err}}<div class="flash err">{{.Err}}</div>{{end}}
+<p class="muted">Edits go into <code>data/</code> (the source of truth). Nothing changes on the site until you click <b>Apply to site</b> for that brand. Live stock is never touched here — use <a href="/stock">Stock</a>.</p>
+{{range .Brands}}{{$b := .}}
+<div class="card">
+  <div class="top">
+    <span class="num">{{.Slug}}</span>
+    {{if .Visible}}<span class="pill delivered">shown on brands page</span>{{else}}<span class="pill cancelled">brand hidden</span>{{end}}
+    <form method="post" action="/catalog/{{.Slug}}/visible" style="margin-left:auto"><input type="hidden" name="k" value="{{$.K}}"><button>{{if .Visible}}Hide brand{{else}}Show brand{{end}}</button></form>
+  </div>
+  {{if .Problems}}<div class="block"><b>Apply is blocked until fixed:</b><ul>{{range .Problems}}<li>{{.}}</li>{{end}}</ul></div>{{end}}
+  <table class="list">
+    <tr><th>Model</th><th>Price</th><th>Mode</th><th>Status</th><th>Colours</th><th>Sizes</th><th>Stock</th><th></th></tr>
+    {{range .Models}}<tr>
+      <td><b>{{.Name}}</b><div class="muted">{{.Slug}} · order {{.Sort}}</div></td>
+      <td>€{{.Price}}{{if .OrigPrice}} <s class="muted">€{{.OrigPrice}}</s> <span class="tag reservation">sale</span>{{end}}</td>
+      <td><span class="tag {{.Mode}}">{{.Mode}}</span></td>
+      <td>{{if .Published}}<span class="ok">published</span>{{else}}<span class="muted">hidden</span>{{end}}{{if .Featured}}<div class="muted">featured</div>{{end}}</td>
+      <td>{{range .Colors}}<div>{{if .Hex}}<span class="dot" style="display:inline-block;width:10px;height:10px;border-radius:50%;background:{{.Hex}};border:1px solid #0002"></span>{{end}} {{.Name}}{{if not .Ready}} <span class="no" title="photos missing">⚠</span>{{end}}</div>{{end}}</td>
+      <td>{{with .Sizes}}{{(index . 0).Label}}–{{(index . (len . | dec)).Label}} <span class="muted">({{len .}})</span>{{end}}</td>
+      <td>{{.TotalStock}}</td>
+      <td><a class="btn" href="/catalog/{{$b.Slug}}/{{.Slug}}">Edit</a></td>
+    </tr>{{end}}
+  </table>
+  <div class="btns">
+    <form method="post" action="/catalog/{{.Slug}}/apply"><input type="hidden" name="k" value="{{$.K}}"><input type="hidden" name="commit" value="0"><button>Preview {{.Slug}}</button></form>
+    <form method="post" action="/catalog/{{.Slug}}/apply" onsubmit="return confirm('Apply {{.Slug}} to the live site? (prices, modes, colours, sizes, images — stock stays)')"><input type="hidden" name="k" value="{{$.K}}"><input type="hidden" name="commit" value="1"><button class="b-deliv" {{if .Problems}}disabled title="fix the blockers first"{{end}}>Apply {{.Slug}} to site</button></form>
+  </div>
+</div>
+{{end}}
+{{template "foot"}}{{end}}

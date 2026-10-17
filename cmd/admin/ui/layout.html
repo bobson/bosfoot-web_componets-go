@@ -25,9 +25,17 @@ button:hover{border-color:#bbb} .b-ship{background:#e6efff} .b-deliv{background:
 .b-danger{color:var(--red)} .b-del{background:var(--red);color:#fff;border-color:var(--red)} .sep{flex:1}
 .empty{color:var(--muted);padding:30px;text-align:center}
 .stars{color:#d99a00;font-size:18px;letter-spacing:1px} .body{margin:8px 0;white-space:pre-wrap} .photo{background:#e6efff;color:#1d4ed8;font-size:12px;font-weight:700;padding:2px 8px;border-radius:99px}
+.warn{background:var(--warnbg);border:1px solid #f3c99b;color:#7a3a06;border-radius:8px;padding:8px 12px;margin:8px 0;font-size:14px} .warn ul{margin:4px 0 0;padding-left:18px}
+.block{background:#fde8e6;border:1px solid #f3b8b1;color:#8a1c12;border-radius:8px;padding:8px 12px;margin:8px 0;font-size:14px} .block ul{margin:4px 0 0;padding-left:18px}
+table.list{width:100%;border-collapse:collapse;font-size:14px} table.list th,table.list td{padding:7px 8px;border-top:1px solid var(--line);text-align:left;vertical-align:top} table.list th{font-size:12px;text-transform:uppercase;color:var(--muted);border-top:0}
+.ok{color:#2f6b1f;font-weight:700} .no{color:var(--red);font-weight:700} .qm{color:var(--muted)}
+label.f{display:block;font-size:13px;color:var(--muted);margin:0 0 3px} input[type=text],input[type=number],select{font:15px system-ui,sans-serif;padding:7px 9px;border:1px solid var(--line);border-radius:8px;background:#fff}
+.formrow{display:flex;gap:14px;flex-wrap:wrap;align-items:flex-end} .chk{display:flex;gap:6px;align-items:center;font-size:15px}
+.chip{display:inline-flex;align-items:center;gap:6px;background:#f4f0e8;border:1px solid var(--line);border-radius:99px;padding:3px 4px 3px 10px;margin:0 6px 6px 0} .chip button{padding:0 7px;border-radius:99px;font-size:13px;line-height:20px}
+.applybar{position:sticky;bottom:0;background:var(--bg);border-top:1px solid var(--line);padding:10px 0;margin-top:16px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 pre{white-space:pre-wrap;font:15px/1.5 system-ui,sans-serif;background:#faf8f4;border-radius:8px;padding:12px;margin:12px 0}
 </style></head><body>
-<header><b>Bosfoot admin</b><nav><a class="{{if eq .Nav "orders"}}on{{end}}" href="/orders">Orders</a><a class="{{if eq .Nav "stock"}}on{{end}}" href="/stock">Stock</a><a class="{{if eq .Nav "reviews"}}on{{end}}" href="/reviews">Reviews{{if .PendingReviews}} <span class="badge">{{.PendingReviews}}</span>{{end}}</a></nav>
+<header><b>Bosfoot admin</b><nav><a class="{{if eq .Nav "orders"}}on{{end}}" href="/orders">Orders</a><a class="{{if eq .Nav "stock"}}on{{end}}" href="/stock">Stock</a><a class="{{if eq .Nav "catalog"}}on{{end}}" href="/catalog">Catalog</a><a class="{{if eq .Nav "reviews"}}on{{end}}" href="/reviews">Reviews{{if .PendingReviews}} <span class="badge">{{.PendingReviews}}</span>{{end}}</a></nav>
 <span class="db {{if eq .DB "PRODUCTION"}}prod{{end}}">{{.DB}}</span></header>
 <main>{{end}}
 {{define "foot"}}</main></body></html>{{end}}

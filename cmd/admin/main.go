@@ -5,6 +5,11 @@
 //	go run ./cmd/admin            # open http://localhost:8090
 //	bash scripts/localdb.sh go run ./cmd/admin   # against the sandbox DB
 //
+// Catalog: edit data/ (price, sale, mode, published, featured, order, brand
+// visibility, colours, sizes) then Preview/Apply = cmd/shoeimport for the brand
+// (never -stock). Apply is blocked while a published model has a colour with no
+// photos locally or on the live site.
+//
 // Stock: live per model × colour × size from the DB, +/− or type a number.
 //
 // Reviews: Pending / Approved / Rejected, with Approve and Reject. A review with
@@ -96,6 +101,7 @@ func main() {
 		"orderNum": site.OrderNumber,
 		"mkd":      fmtMKD,
 		"orderRef": orderLabel,
+		"dec":      func(n int) int { return n - 1 },
 	}).ParseFS(uiFS, "ui/*.html"))
 
 	mux := http.NewServeMux()
@@ -108,6 +114,16 @@ func main() {
 	mux.HandleFunc("POST /orders/{id}/delete", a.deleteTest)
 	mux.HandleFunc("POST /orders/{id}/review/email", a.reviewEmail)
 	mux.HandleFunc("POST /orders/{id}/review/viber", a.reviewViber)
+	mux.HandleFunc("GET /catalog", a.catalog)
+	mux.HandleFunc("GET /catalog/{brand}/{slug}", a.modelPage)
+	mux.HandleFunc("POST /catalog/{brand}/visible", a.toggleBrand)
+	mux.HandleFunc("POST /catalog/{brand}/apply", a.apply)
+	mux.HandleFunc("POST /catalog/{brand}/{slug}/settings", a.saveSettings)
+	mux.HandleFunc("POST /catalog/{brand}/{slug}/color/add", a.addColor)
+	mux.HandleFunc("POST /catalog/{brand}/{slug}/color/remove", a.removeColor)
+	mux.HandleFunc("POST /catalog/{brand}/{slug}/color/primary", a.primaryColor)
+	mux.HandleFunc("POST /catalog/{brand}/{slug}/size/add", a.addSize)
+	mux.HandleFunc("POST /catalog/{brand}/{slug}/size/remove", a.removeSize)
 	mux.HandleFunc("GET /stock", a.stock)
 	mux.HandleFunc("POST /stock/set", a.stockSet)
 	mux.HandleFunc("GET /reviews", a.reviews)
