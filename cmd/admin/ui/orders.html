@@ -1,0 +1,37 @@
+{{define "orders.html"}}{{template "head" .}}
+<div class="tabs">{{range .Tabs}}<a href="/orders?tab={{.Key}}" class="{{if eq .Key $.Tab}}on{{end}}">{{.Label}} <span>{{index $.Counts .Key}}</span></a>{{end}}</div>
+{{if .Msg}}<div class="flash">{{.Msg}}</div>{{end}}
+{{if .Err}}<div class="flash err">{{.Err}}</div>{{end}}
+{{range .Orders}}{{$o := .}}
+<div class="card" id="{{.ID}}">
+  <div class="top">
+    <span class="num">{{orderNum .ID}}</span>
+    <span class="pill {{.Status}}">{{.Status}}</span>
+    {{if .IsTest}}<span class="pill test">test</span>{{end}}
+    <span class="muted">{{.Created.Format "02.01.2006 15:04"}} · {{.Payment}} · /{{.Locale}}</span>
+    <span class="total">{{mkd .TotalMKD}} ден</span>
+  </div>
+  <div class="who"><b>{{.Name}}</b> · {{if .Phone}}{{.Phone}}{{else}}<span class="muted">no phone</span>{{end}} · {{.Email}}</div>
+  <div class="muted">{{.Address}}, {{.City}}{{if .Notes}} · <i>notes: {{.Notes}}</i>{{end}}</div>
+  <ul class="items">{{range .Items}}<li>{{.Brand}} <b>{{.Product}}</b>{{if .Size}} · {{.Size}}{{end}}{{if .Color}} / {{.Color}}{{end}} · ×{{.Qty}} · {{mkd .PriceMKD}} ден{{if .Fulfilment}}<span class="tag {{.Fulfilment}}">{{.Fulfilment}}</span>{{end}}</li>{{end}}</ul>
+  <div class="review">
+    {{if .Reviewed}}⭐ Review received
+    {{else if .InvitedAt}}Review request sent {{.InvitedAt.Format "02.01.2006"}} — no review yet
+    {{else if .NeedsReview}}<span class="remind">Delivered — send the review request to finish this order</span>
+    {{else}}<span class="muted">No review request yet</span>{{end}}
+  </div>
+  <div class="btns">
+    {{if ne .Status "cancelled"}}
+      {{if ne .Status "shipped"}}{{if ne .Status "delivered"}}<form method="post" action="/orders/{{.ID}}/status"><input type="hidden" name="k" value="{{$.K}}"><input type="hidden" name="tab" value="{{$.Tab}}"><input type="hidden" name="to" value="shipped"><button class="b-ship">🚚 Shipped</button></form>{{end}}{{end}}
+      {{if ne .Status "delivered"}}<form method="post" action="/orders/{{.ID}}/status"><input type="hidden" name="k" value="{{$.K}}"><input type="hidden" name="tab" value="{{$.Tab}}"><input type="hidden" name="to" value="delivered"><button class="b-deliv">✅ Delivered</button></form>{{end}}
+      <form method="post" action="/orders/{{.ID}}/review/email"><input type="hidden" name="k" value="{{$.K}}"><input type="hidden" name="tab" value="{{$.Tab}}"><button class="b-mail" {{if not $.MailOn}}disabled title="SMTP not configured"{{end}}>📧 {{if .InvitedAt}}Resend review email{{else}}Review request · email{{end}}</button></form>
+      <form method="post" action="/orders/{{.ID}}/review/viber"><input type="hidden" name="k" value="{{$.K}}"><input type="hidden" name="tab" value="{{$.Tab}}"><button class="b-viber">💬 {{if .InvitedAt}}Resend via Viber{{else}}Review request · Viber{{end}}</button></form>
+    {{end}}
+    <span class="sep"></span>
+    {{if ne .Status "cancelled"}}<form method="post" action="/orders/{{.ID}}/status" onsubmit="return confirm('Cancel {{orderNum .ID}}? In-stock pairs go back on the shelf.')"><input type="hidden" name="k" value="{{$.K}}"><input type="hidden" name="tab" value="{{$.Tab}}"><input type="hidden" name="to" value="cancelled"><button class="b-danger">Cancel</button></form>{{end}}
+    <form method="post" action="/orders/{{.ID}}/test"><input type="hidden" name="k" value="{{$.K}}"><input type="hidden" name="tab" value="{{$.Tab}}"><button>{{if .IsTest}}Not a test{{else}}🧪 Test{{end}}</button></form>
+    {{if .IsTest}}<form method="post" action="/orders/{{.ID}}/delete" onsubmit="return confirm('Permanently DELETE test order {{orderNum .ID}}? This cannot be undone.')"><input type="hidden" name="k" value="{{$.K}}"><input type="hidden" name="tab" value="{{$.Tab}}"><button class="b-del">🗑 Delete</button></form>{{end}}
+  </div>
+</div>
+{{else}}<div class="empty">No orders here.</div>{{end}}
+{{template "foot"}}{{end}}

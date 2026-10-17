@@ -103,6 +103,17 @@ go run ./cmd/reviewinvites -commit    # create tokens + send + mark delivered
 go run ./cmd/reviewinvites -order 42 -viber -commit  # Viber instead of email: prints the
                                                      # message, phone, viber:// links
 
+# LOCAL ADMIN (never deployed — listens on 127.0.0.1 only, no login): orders in
+# Active / Finished / Cancelled / Test tabs; shipped / delivered / cancel (stock
+# lines go back on the shelf); flag Test orders and permanently delete only those;
+# review request by email or Viber (same as reviewinvites; marks delivered).
+# Reviews: Pending / Approved / Rejected with Approve + Reject (thank-you email on
+# approve). A review WITH photos is moderated on the droplet over SSH (photos live
+# in its UPLOADS_DIR) — only when the admin is on production, never the sandbox.
+# Needs orders.is_test → run `go run ./cmd/dbimport` once first (db/admin.sql).
+go run ./cmd/admin                                   # opens http://localhost:8090
+bash scripts/localdb.sh go run ./cmd/admin           # same, on the sandbox DB
+
 # Moderate reviews. Reviews land 'pending' and show on the site only once
 # approved; this is the approval path (no admin UI, avoids raw SQL). Approved
 # reviews appear within the 60s page-cache TTL.

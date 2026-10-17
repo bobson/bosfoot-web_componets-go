@@ -1,0 +1,18 @@
+{{define "viber.html"}}{{template "head" .}}
+<div class="card">
+  <div class="top"><span class="num">{{orderNum .O.ID}}</span><span class="pill delivered">delivered</span></div>
+  <div class="who"><b>{{.O.Name}}</b> · {{if .O.IntlPhone}}{{.O.IntlPhone}}{{else}}<span class="muted">no phone on the order</span>{{end}}</div>
+  <pre id="msg">{{.Msg}}</pre>
+  <div class="btns">
+    {{if .Chat}}<a class="btn b-viber" href="{{.Chat}}">💬 Open chat</a>{{end}}
+    <button type="button" id="copy">📋 Copy message</button>
+    <a class="btn" href="{{.Forward}}">↗ Send via Viber (pick contact)</a>
+    <span class="sep"></span>
+    <a class="btn" href="/orders?tab={{if .Back}}{{.Back}}{{else}}active{{end}}&msg=Viber+request+prepared+for+{{orderNum .O.ID}}">← Back to orders</a>
+  </div>
+  <p class="muted">Open chat → if the message isn't already in the box, click Copy and paste. The order is marked delivered and moves to Finished.</p>
+</div>
+<script>
+document.getElementById('copy').onclick=e=>{navigator.clipboard.writeText(document.getElementById('msg').textContent);e.target.textContent='✓ Copied'};
+</script>
+{{template "foot"}}{{end}}

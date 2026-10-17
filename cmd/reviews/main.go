@@ -14,6 +14,7 @@ package main
 
 import (
 	"database/sql"
+	"errors"
 	"flag"
 	"fmt"
 	"log"
@@ -23,6 +24,7 @@ import (
 
 	"bosfoot/internal/database"
 	"bosfoot/internal/notify"
+	"bosfoot/internal/reviewmod"
 	"bosfoot/internal/site"
 	"bosfoot/internal/uploads"
 	"bosfoot/logger"
@@ -127,139 +129,72 @@ func main() {
 	fmt.Println()
 }
 
-// approveReview approves one review and, on a real pending→approved transition,
-// emails the reviewer a localized thank-you. The guarded UPDATE means re-running
-// -approve on an already-approved review is a no-op that sends no second email.
+// approveReview approves one review and, on a real transition, publishes its
+// photos and emails the reviewer a localized thank-you (see reviewmod.Approve).
 func approveReview(db *sql.DB, mailer *notify.Mailer, id int) {
-	var productID int
-	var orderID sql.NullInt64
-	var lang, author string
-	err := db.QueryRow(`
-		UPDATE reviews SET status = 'approved'
-		WHERE id = $1 AND status <> 'approved'
-		RETURNING product_id, order_id, lang_code::text, author_name
-	`, id).Scan(&productID, &orderID, &lang, &author)
-	if err == sql.ErrNoRows {
-		// No row updated: either the id doesn't exist or it was already approved.
-		var existing string
-		if e := db.QueryRow(`SELECT status FROM reviews WHERE id = $1`, id).Scan(&existing); e == sql.ErrNoRows {
-			fmt.Printf("No review with id %d.\n", id)
-		} else {
-			fmt.Printf("Review #%d is already approved (no thank-you re-sent).\n", id)
-		}
+	res, err := reviewmod.Approve(db, mailer, id)
+	switch {
+	case errors.Is(err, reviewmod.ErrNotFound):
+		fmt.Printf("No review with id %d.\n", id)
 		return
-	}
-	if err != nil {
+	case err != nil:
 		log.Fatal(err)
+	case res.AlreadyApproved:
+		fmt.Printf("Review #%d is already approved (no thank-you re-sent).\n", id)
+		return
 	}
 	fmt.Printf("Review #%d approved.\n", id)
-
-	// Publish its photos: move each from the unserved pending dir into the served
-	// public dir. Best-effort — a missing file doesn't un-approve the review.
-	if names := reviewPhotos(db, id); len(names) > 0 {
-		ok := 0
-		for _, fn := range names {
-			if err := uploads.Publish(fn); err != nil {
-				fmt.Printf("    ! photo publish failed (%s): %v\n", fn, err)
-			} else {
-				ok++
-			}
-		}
-		fmt.Printf("    published %d/%d photo(s)\n", ok, len(names))
+	if res.PhotosTotal > 0 {
+		fmt.Printf("    published %d/%d photo(s)\n", res.PhotosPublished, res.PhotosTotal)
 	}
-
-	// Look up the product name + reviewer email for the thank-you. Best-effort:
-	// a missing email or an SMTP outage never un-approves the review.
-	var productName, email string
-	_ = db.QueryRow(`
-		SELECT b.name || ' ' || p.name FROM products p
-		JOIN brands b ON b.id = p.brand_id WHERE p.id = $1
-	`, productID).Scan(&productName)
-	if orderID.Valid {
-		_ = db.QueryRow(`SELECT COALESCE(email, '') FROM orders WHERE id = $1`, orderID.Int64).Scan(&email)
-	}
-
-	if email == "" {
+	switch {
+	case res.Email == "":
 		fmt.Println("    (no reviewer email on file — thank-you not sent)")
-		return
+	case res.EmailErr != nil:
+		fmt.Printf("    ! thank-you send failed: %v\n", res.EmailErr)
+	case !res.Emailed:
+		fmt.Printf("    (SMTP not configured — thank-you to %s not sent)\n", res.Email)
+	default:
+		fmt.Printf("    ✓ thank-you emailed to %s\n", res.Email)
 	}
-	if !mailer.Enabled() {
-		fmt.Printf("    (SMTP not configured — thank-you to %s not sent)\n", email)
-		return
-	}
-	if err := mailer.ReviewApproved(notify.ReviewApprovedData{
-		Email: email, Name: author, Locale: lang, ProductName: productName,
-	}); err != nil {
-		fmt.Printf("    ! thank-you send failed: %v\n", err)
-		return
-	}
-	fmt.Printf("    ✓ thank-you emailed to %s\n", email)
 }
 
-// rejectReview hides a review and deletes its photo files + rows, so
-// moderated-out content never lingers on disk (the pending files were never
-// web-served). The review row is kept as 'rejected' for the record.
+// rejectReview hides a review and deletes its photos (see reviewmod.Reject).
 func rejectReview(db *sql.DB, id int) {
-	names := reviewPhotos(db, id)
-	res, err := db.Exec(`UPDATE reviews SET status = 'rejected' WHERE id = $1`, id)
-	if err != nil {
-		log.Fatal(err)
-	}
-	if n, _ := res.RowsAffected(); n == 0 {
+	n, err := reviewmod.Reject(db, id)
+	if errors.Is(err, reviewmod.ErrNotFound) {
 		fmt.Printf("No review with id %d.\n", id)
 		return
 	}
-	for _, fn := range names {
-		_ = uploads.Remove(fn)
-	}
-	if len(names) > 0 {
-		_, _ = db.Exec(`DELETE FROM review_photos WHERE review_id = $1`, id)
+	if err != nil {
+		log.Fatal(err)
 	}
 	fmt.Printf("Review #%d rejected", id)
-	if len(names) > 0 {
-		fmt.Printf(" (removed %d photo file(s))", len(names))
+	if n > 0 {
+		fmt.Printf(" (removed %d photo file(s))", n)
 	}
 	fmt.Println(".")
 }
 
-// deleteReview permanently removes one review row (cascade drops its photo rows)
-// and deletes the photo files too. Use -reject to just hide it.
+// deleteReview permanently removes one review and its photos.
 func deleteReview(db *sql.DB, id int) {
-	names := reviewPhotos(db, id)
-	res, err := db.Exec(`DELETE FROM reviews WHERE id = $1`, id)
-	if err != nil {
-		log.Fatal(err)
-	}
-	if n, _ := res.RowsAffected(); n == 0 {
+	n, err := reviewmod.Delete(db, id)
+	if errors.Is(err, reviewmod.ErrNotFound) {
 		fmt.Printf("No review with id %d.\n", id)
 		return
 	}
-	for _, fn := range names {
-		_ = uploads.Remove(fn)
+	if err != nil {
+		log.Fatal(err)
 	}
 	fmt.Printf("Review #%d deleted", id)
-	if len(names) > 0 {
-		fmt.Printf(" (removed %d photo file(s))", len(names))
+	if n > 0 {
+		fmt.Printf(" (removed %d photo file(s))", n)
 	}
 	fmt.Println(".")
 }
 
 // reviewPhotos returns a review's photo filenames in display order.
-func reviewPhotos(db *sql.DB, id int) []string {
-	rows, err := db.Query(`SELECT filename FROM review_photos WHERE review_id = $1 ORDER BY sort_order, id`, id)
-	if err != nil {
-		return nil
-	}
-	defer rows.Close()
-	var out []string
-	for rows.Next() {
-		var f string
-		if err := rows.Scan(&f); err == nil {
-			out = append(out, f)
-		}
-	}
-	return out
-}
+func reviewPhotos(db *sql.DB, id int) []string { return reviewmod.Photos(db, id) }
 
 // showPhotos prints where to view a review's photos before approving: a live URL
 // once approved, or the on-disk pending path (open it on the droplet) otherwise.

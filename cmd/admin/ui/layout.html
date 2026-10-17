@@ -1,0 +1,33 @@
+{{define "head"}}<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bosfoot admin</title>
+<style>
+:root{--bg:#f5f1e9;--card:#fff;--ink:#1a1a1a;--muted:#5c5c5c;--line:#e3ddd2;--brand:#4f5c23;--warn:#a14a08;--warnbg:#fff3e6;--red:#b42318;--viber:#7360f2}
+*{box-sizing:border-box}body{margin:0;font:15px/1.45 system-ui,sans-serif;background:var(--bg);color:var(--ink)}
+header{background:var(--brand);color:#fff;padding:12px 24px;display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+header b{font-size:18px} header nav a{color:#fff;opacity:.8;text-decoration:none;margin-right:14px} header nav a.on{opacity:1;font-weight:700;text-decoration:underline}
+.badge{background:#f0a35e;color:#1a1a1a;border-radius:99px;padding:0 7px;font-size:12px;font-weight:700}
+.db{margin-left:auto;font-size:13px;padding:3px 10px;border-radius:99px;background:rgba(255,255,255,.18)} .db.prod{background:#b42318}
+main{max-width:980px;margin:0 auto;padding:20px 16px 60px}
+.tabs{display:flex;gap:6px;margin:0 0 16px;flex-wrap:wrap} .tabs a{padding:8px 14px;border-radius:8px;text-decoration:none;color:var(--ink);background:#e8e2d6;font-weight:600}
+.tabs a.on{background:var(--ink);color:#fff} .tabs span{opacity:.7;font-weight:500}
+.flash{padding:10px 14px;border-radius:8px;margin:0 0 14px;background:#e7f3e3;border:1px solid #b8dcae} .flash.err{background:#fde8e6;border-color:#f3b8b1}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin:0 0 12px;scroll-margin-top:16px}
+.top{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap} .num{font-weight:700;font-size:16px} .muted{color:var(--muted)} .total{margin-left:auto;font-weight:700}
+.pill{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;padding:2px 8px;border-radius:99px;background:#eee}
+.pill.pending{background:#fff3e6;color:var(--warn)} .pill.shipped{background:#e6efff;color:#1d4ed8} .pill.delivered{background:#e7f3e3;color:#2f6b1f} .pill.cancelled{background:#eee;color:#666} .pill.test{background:#fde8e6;color:var(--red)}
+.who{margin:6px 0 2px} .items{margin:8px 0;padding:0;list-style:none} .items li{padding:3px 0;border-top:1px dashed var(--line)}
+.tag{font-size:11px;font-weight:700;padding:1px 6px;border-radius:4px;margin-left:6px} .tag.reservation,.tag.dropship{background:var(--warnbg);color:var(--warn)} .tag.stock{background:#e7f3e3;color:#2f6b1f}
+.review{font-size:14px;margin:6px 0} .remind{color:var(--warn);font-weight:700}
+.btns{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px} .btns form{margin:0}
+button,.btn{font:600 14px system-ui,sans-serif;padding:7px 12px;border-radius:8px;border:1px solid var(--line);background:#f4f0e8;color:var(--ink);cursor:pointer;text-decoration:none;display:inline-block}
+button:hover{border-color:#bbb} .b-ship{background:#e6efff} .b-deliv{background:#e7f3e3} .b-mail{background:#fff} .b-viber{background:var(--viber);color:#fff;border-color:var(--viber)}
+.b-danger{color:var(--red)} .b-del{background:var(--red);color:#fff;border-color:var(--red)} .sep{flex:1}
+.empty{color:var(--muted);padding:30px;text-align:center}
+.stars{color:#d99a00;font-size:18px;letter-spacing:1px} .body{margin:8px 0;white-space:pre-wrap} .photo{background:#e6efff;color:#1d4ed8;font-size:12px;font-weight:700;padding:2px 8px;border-radius:99px}
+pre{white-space:pre-wrap;font:15px/1.5 system-ui,sans-serif;background:#faf8f4;border-radius:8px;padding:12px;margin:12px 0}
+</style></head><body>
+<header><b>Bosfoot admin</b><nav><a class="{{if eq .Nav "orders"}}on{{end}}" href="/orders">Orders</a><a class="{{if eq .Nav "reviews"}}on{{end}}" href="/reviews">Reviews{{if .PendingReviews}} <span class="badge">{{.PendingReviews}}</span>{{end}}</a></nav>
+<span class="db {{if eq .DB "PRODUCTION"}}prod{{end}}">{{.DB}}</span></header>
+<main>{{end}}
+{{define "foot"}}</main></body></html>{{end}}

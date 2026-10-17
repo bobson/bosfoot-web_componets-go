@@ -1,0 +1,22 @@
+{{define "reviews.html"}}{{template "head" .}}
+<div class="tabs">{{range .Tabs}}<a href="/reviews?tab={{.Key}}" class="{{if eq .Key $.Tab}}on{{end}}">{{.Label}} <span>{{index $.Counts .Key}}</span></a>{{end}}</div>
+{{if .Msg}}<div class="flash">{{.Msg}}</div>{{end}}
+{{if .Err}}<div class="flash err">{{.Err}}</div>{{end}}
+{{range .Reviews}}
+<div class="card" id="r{{.ID}}">
+  <div class="top">
+    <span class="stars">{{.Stars}}</span>
+    <span class="num">{{.Product}}</span>
+    {{if .Photos}}<span class="photo">📷 {{.Photos}} photo{{if gt .Photos 1}}s{{end}}</span>{{end}}
+    <span class="muted">#{{.ID}} · {{.Created.Format "02.01.2006 15:04"}} · /{{.Lang}} · {{orderRef .OrderID}}</span>
+  </div>
+  <div class="who"><b>{{if .Author}}{{.Author}}{{else}}(no name){{end}}</b>{{if .City}} · {{.City}}{{end}}{{if .Size}} · size {{.Size}}{{end}}{{if .Color}} / {{.Color}}{{end}}{{if .FitLabel}} · fit: <b>{{.FitLabel}}</b>{{end}}</div>
+  {{if .Body}}<div class="body">{{.Body}}</div>{{else}}<div class="muted">(rating only, no text)</div>{{end}}
+  {{if and .Photos (not .PhotosLocal)}}<div class="muted">Photos are on the server — Approve/Reject runs there over SSH (takes a few seconds). Photos can be viewed once approved.</div>{{end}}
+  <div class="btns">
+    {{if ne .Status "approved"}}<form method="post" action="/reviews/{{.ID}}/approve"><input type="hidden" name="k" value="{{$.K}}"><input type="hidden" name="tab" value="{{$.Tab}}"><button class="b-deliv">✓ Approve</button></form>{{end}}
+    {{if ne .Status "rejected"}}<form method="post" action="/reviews/{{.ID}}/reject" onsubmit="return confirm('Reject review #{{.ID}}? It will be hidden{{if .Photos}} and its photos deleted{{end}}.')"><input type="hidden" name="k" value="{{$.K}}"><input type="hidden" name="tab" value="{{$.Tab}}"><button class="b-danger">✕ Reject</button></form>{{end}}
+  </div>
+</div>
+{{else}}<div class="empty">No {{.Tab}} reviews.</div>{{end}}
+{{template "foot"}}{{end}}

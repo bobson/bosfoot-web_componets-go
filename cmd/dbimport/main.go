@@ -61,6 +61,9 @@ func main() {
 		// Always run (after fulfilment.sql creates Barebarics): brands.about_url +
 		// Be Lenka / Barebarics logos, descriptions and read-more links. Idempotent.
 		"db/brand-about.sql",
+		// Always run: orders.is_test for the local admin (cmd/admin). ADD-only;
+		// the site never reads it.
+		"db/admin.sql",
 	)
 
 	for _, f := range files {
