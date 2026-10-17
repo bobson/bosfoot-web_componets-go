@@ -15,6 +15,13 @@
 //	go run ./cmd/reviewinvites -order 42           # just order #42
 //	go run ./cmd/reviewinvites -commit             # create tokens + send
 //	go run ./cmd/reviewinvites -order 42 -resend -commit  # re-email order #42's existing link
+//	go run ./cmd/reviewinvites -order 42 -viber -commit   # Viber instead of email (see below)
+//
+// -viber prepares the invite for Viber instead of emailing it: it prints a
+// ready-to-paste message (customer's first name + link), their phone number in
+// international form, and two viber:// links — one opens the chat with that
+// number, the other opens Viber with the message pre-filled to pick a contact.
+// Tokens are still created and the order still marked delivered on -commit.
 package main
 
 import (
@@ -24,6 +31,7 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"net/url"
 	"os"
 	"strings"
 
@@ -38,6 +46,7 @@ func main() {
 	orderID := flag.Int("order", 0, "target a single order id (ignores -days)")
 	resend := flag.Bool("resend", false, "re-email an already-invited order's EXISTING link (requires -order)")
 	commit := flag.Bool("commit", false, "actually create tokens and send (default: dry-run)")
+	viber := flag.Bool("viber", false, "print a Viber message + viber:// links instead of emailing")
 	flag.Parse()
 
 	if *resend && *orderID == 0 {
@@ -74,7 +83,7 @@ func main() {
 		invitedFilter = ""
 	}
 	rows, err := db.Query(`
-		SELECT o.id, o.email, o.first_name || ' ' || o.last_name, o.locale::text
+		SELECT o.id, o.email, o.first_name || ' ' || o.last_name, o.locale::text, COALESCE(o.phone, '')
 		FROM orders o
 		WHERE COALESCE(o.email, '') <> ''
 		  -- A cancelled order is dead: never invite it (no email, no token, no
@@ -94,11 +103,12 @@ func main() {
 		id          int
 		email, name string
 		locale      string
+		phone       string
 	}
 	var orders []order
 	for rows.Next() {
 		var o order
-		if err := rows.Scan(&o.id, &o.email, &o.name, &o.locale); err != nil {
+		if err := rows.Scan(&o.id, &o.email, &o.name, &o.locale, &o.phone); err != nil {
 			log.Fatal(err)
 		}
 		orders = append(orders, o)
@@ -135,12 +145,19 @@ func main() {
 			fmt.Printf("    %s\n    %s\n", l.ProductName, l.URL)
 		}
 
+		if *viber {
+			printViber(o.name, o.phone, o.locale, links, *commit)
+		}
+
 		if !*commit {
 			fmt.Println()
 			continue
 		}
 
-		if mailer.Enabled() {
+		if *viber {
+			fmt.Println("    ✓ Viber message prepared (not emailed) — send it from Viber")
+			sent++
+		} else if mailer.Enabled() {
 			if err := mailer.ReviewInvite(notify.ReviewInviteData{
 				OrderID: o.id, Email: o.email, Name: o.name, Locale: o.locale, Links: links,
 			}); err != nil {
@@ -249,4 +266,84 @@ func newToken() string {
 		log.Fatal(err)
 	}
 	return base64.RawURLEncoding.EncodeToString(b)
+}
+
+// printViber prints a ready-to-send Viber message for one order: the text, the
+// customer's phone in international form, and viber:// links to open the chat
+// or open Viber with the message pre-filled.
+func printViber(name, phone, locale string, links []notify.ReviewLink, commit bool) {
+	msg := viberMessage(strings.Split(name, " ")[0], locale, links)
+	fmt.Println()
+	fmt.Println("    ── Viber message ─────────────────────────────")
+	for _, l := range strings.Split(msg, "\n") {
+		fmt.Println("    " + l)
+	}
+	fmt.Println("    ──────────────────────────────────────────────")
+	if !commit {
+		fmt.Println("    (dry-run: the link is a placeholder — re-run with -commit before sending)")
+		return
+	}
+	if p := intlPhone(phone); p != "" {
+		fmt.Printf("    Phone:        %s\n", p)
+		fmt.Printf("    Open chat:    viber://chat?number=%s\n", url.QueryEscape(p))
+	} else {
+		fmt.Println("    Phone:        (none on the order)")
+	}
+	// Query-escape (so & + = are encoded), then spaces as %20 — Viber can show a
+	// "+" literally.
+	fmt.Printf("    Send message: viber://forward?text=%s\n", strings.ReplaceAll(url.QueryEscape(msg), "+", "%20"))
+}
+
+// viberMessage is the short, personal review request (mk/sq/en by order locale).
+func viberMessage(firstName, locale string, links []notify.ReviewLink) string {
+	var hello, body, thanks string
+	switch locale {
+	case "sq":
+		hello = "Përshëndetje " + firstName + "! Si ju duken këpucët e reja? 🙂"
+		body = "Do të na pëlqente shumë nëse lini një vlerësim të shkurtër — si ju përshtatet madhësia, sa të rehatshme janë dhe si është cilësia. U ndihmon të tjerëve të vendosin më lehtë, dhe për ne si një dyqan i vogël lokal do të thotë shumë që të vazhdojmë më tej."
+		thanks = "Faleminderit!"
+	case "en":
+		hello = "Hi " + firstName + "! How are you finding your new shoes? 🙂"
+		body = "It would mean a lot if you left a short review — how the size fits, how comfortable they are and what you think of the quality. It helps others decide, and for a small local shop like ours it means a lot to keep going."
+		thanks = "Thank you!"
+	default: // mk
+		hello = "Здраво " + firstName + "! Како ви се новите патики? 🙂"
+		body = "Ќе ни значи многу ако оставите кратка оценка — како ви одговара големината, колку се удобни и каков е квалитетот. Им помага на другите полесно да одлучат, а нам како мала локална продавница ни значи многу за да продолжиме понатаму."
+		thanks = "Благодарам!"
+	}
+	var b strings.Builder
+	b.WriteString(hello + " " + body + " " + thanks)
+	for _, l := range links {
+		if len(links) > 1 {
+			b.WriteString("\n" + l.ProductName + ":")
+		}
+		b.WriteString("\n" + l.URL)
+	}
+	return b.String()
+}
+
+// intlPhone turns the phone as typed at checkout into +389… form for Viber:
+// "070 377 075" → "+38970377075", "+389 70326290" → "+38970326290",
+// "0038970…" → "+38970…". Returns "" when there's nothing usable.
+func intlPhone(raw string) string {
+	var d strings.Builder
+	for i, r := range raw {
+		if r >= '0' && r <= '9' || (r == '+' && i == strings.IndexAny(raw, "+0123456789")) {
+			d.WriteRune(r)
+		}
+	}
+	p := d.String()
+	switch {
+	case p == "" || p == "+":
+		return ""
+	case strings.HasPrefix(p, "+"):
+		return p
+	case strings.HasPrefix(p, "00"):
+		return "+" + p[2:]
+	case strings.HasPrefix(p, "389"):
+		return "+" + p
+	case strings.HasPrefix(p, "0"):
+		return "+389" + p[1:] // Macedonian national format
+	}
+	return "+" + p
 }

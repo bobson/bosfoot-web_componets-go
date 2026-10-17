@@ -100,6 +100,8 @@ go run ./cmd/orders
 go run ./cmd/reviewinvites            # preview eligible orders (dry-run)
 go run ./cmd/reviewinvites -order 42  # just order #42, any age
 go run ./cmd/reviewinvites -commit    # create tokens + send + mark delivered
+go run ./cmd/reviewinvites -order 42 -viber -commit  # Viber instead of email: prints the
+                                                     # message, phone, viber:// links
 
 # Moderate reviews. Reviews land 'pending' and show on the site only once
 # approved; this is the approval path (no admin UI, avoids raw SQL). Approved
