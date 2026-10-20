@@ -96,7 +96,7 @@ func (a *app) reviews(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-		// Show the name as the site will (first name + last-name initial).
+		// Show the name as the site will (first name + last name).
 		rv.Author = models.ReviewDisplayName(rv.Author, lastName)
 		if fit.Valid {
 			f := int(fit.Int64)

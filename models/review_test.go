@@ -4,9 +4,9 @@ import "testing"
 
 func TestReviewDisplayName(t *testing.T) {
 	cases := []struct{ author, last, want string }{
-		{"Александар", "Илиоски", "Александар И."},
-		{"Aleksandar", "bozinovski", "Aleksandar B."},
-		{"  Pance ", "Zafirov", "Pance Z."},
+		{"Александар", "Илиоски", "Александар Илиоски"},
+		{"Aleksandar", "bozinovski", "Aleksandar Bozinovski"},
+		{"  Pance ", "Zafirov", "Pance Zafirov"},
 		{"Ана Петрова", "Петрова", "Ана Петрова"}, // already gave a surname
 		{"Lendita", "", "Lendita"},                // order deleted / unknown
 	}

@@ -51,17 +51,18 @@ func (r *Review) Validate() error {
 }
 
 // ReviewDisplayName is the public reviewer name: the name the buyer typed plus
-// the initial of the order's last name ("Александар И."), so two buyers with
-// the same first name don't read as one person. Kept as typed when it already
-// has more than one word or the order's last name is unknown (order deleted).
+// the order's last name ("Александар Илиоски"), so two buyers with the same
+// first name don't read as one person. (Full surname for now, while there are
+// few reviews; could become just the initial later.) Kept as typed when it
+// already has more than one word or the order's last name is unknown.
 func ReviewDisplayName(author, lastName string) string {
 	author = strings.TrimSpace(author)
-	lastName = strings.TrimSpace(lastName)
-	if lastName == "" || strings.ContainsAny(author, " \t") {
+	last := []rune(strings.TrimSpace(lastName))
+	if len(last) == 0 || strings.ContainsAny(author, " \t") {
 		return author
 	}
-	initial := []rune(lastName)[0]
-	return author + " " + string(unicode.ToUpper(initial)) + "."
+	last[0] = unicode.ToUpper(last[0])
+	return author + " " + string(last)
 }
 
 // ReviewToken maps to the review_tokens table. The token is a random string
