@@ -385,12 +385,16 @@ export function initProductDetail() {
     //    still orderable (ordered from the supplier).
     //  • stock model → out-of-stock sizes are greyed but stay clickable, so
     //    selecting one flips the button to "Get notified about this size".
+    //  • a size the selected colour isn't made in (no stock row, e.g. a Be
+    //    Lenka colour sold only in 36–41) → disabled in every mode.
     const byColor = stockMap[selectedColor] || {};
+    const knownColor = selectedColor != null && stockMap[selectedColor] != null;
     sizeBtns.forEach((btn) => {
-      const oos = !backorderable && (byColor[parseFloat(btn.dataset.size)] || 0) <= 0;
+      const size = parseFloat(btn.dataset.size);
+      const offered = !knownColor || size in byColor;
+      const oos = !offered || (!backorderable && (byColor[size] || 0) <= 0);
       btn.classList.toggle('product__size-btn--oos', oos);
-      btn.disabled = false;
-      btn.removeAttribute('aria-disabled');
+      btn.disabled = !offered;
     });
 
     refreshBuyState();

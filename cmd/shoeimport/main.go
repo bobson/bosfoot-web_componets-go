@@ -88,8 +88,9 @@ type product struct {
 	Activities   []string                      `json:"activities"`
 	Highlights   []map[string]string           `json:"highlights"`
 	Colors       []struct{ Name, Hex string }  `json:"colors"`
-	Stock        map[string]map[string]int     `json:"stock"` // color -> size -> qty
-	Sizes        []string                      `json:"sizes"` // alternative to stock: every colour × size at qty 0
+	Stock        map[string]map[string]int     `json:"stock"`      // color -> size -> qty
+	Sizes        []string                      `json:"sizes"`      // alternative to stock: every colour × size at qty 0
+	ColorSizes   map[string][]string           `json:"colorSizes"` // with "sizes": colour -> the subset it is made in
 	SizeChart    map[string]sizeChartRow       `json:"sizeChart"`
 	Specs        []struct{ Key, Value string } `json:"specs"`
 	Translations map[string]struct {
@@ -305,14 +306,41 @@ func importProduct(db *sql.DB, brandSlug string, brandID, catID int, slug, path 
 		return fmt.Errorf("no colors")
 	}
 	// Dropship models list sizes once; expand to every colour × size at qty 0.
+	// "colorSizes" narrows a colour to the sizes the brand still makes it in
+	// (e.g. Zing White & Beige only 36–41): no row = that size is not offered
+	// in that colour, so the page disables it and the order API rejects it.
 	if p.Stock == nil && len(p.Sizes) > 0 {
-		p.Stock = map[string]map[string]int{}
+		known := map[string]bool{}
+		for _, sz := range p.Sizes {
+			known[sz] = true
+		}
+		colors := map[string]bool{}
 		for _, c := range p.Colors {
-			p.Stock[c.Name] = map[string]int{}
-			for _, s := range p.Sizes {
-				p.Stock[c.Name][s] = 0
+			colors[c.Name] = true
+		}
+		for name, list := range p.ColorSizes {
+			if !colors[name] {
+				return fmt.Errorf("colorSizes: unknown colour %q", name)
+			}
+			for _, sz := range list {
+				if !known[sz] {
+					return fmt.Errorf("colorSizes %q: size %s is not in \"sizes\"", name, sz)
+				}
 			}
 		}
+		p.Stock = map[string]map[string]int{}
+		for _, c := range p.Colors {
+			sizes, ok := p.ColorSizes[c.Name]
+			if !ok {
+				sizes = p.Sizes
+			}
+			p.Stock[c.Name] = map[string]int{}
+			for _, sz := range sizes {
+				p.Stock[c.Name][sz] = 0
+			}
+		}
+	} else if len(p.ColorSizes) > 0 {
+		return fmt.Errorf(`"colorSizes" only works with "sizes" (with "stock", just leave the size out of that colour)`)
 	}
 	if len(p.Stock) == 0 {
 		return fmt.Errorf(`no sizes: give "stock" (colour → size → qty) or "sizes"`)

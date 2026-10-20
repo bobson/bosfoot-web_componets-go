@@ -243,15 +243,20 @@ func (h *OrderHandler) CreateOrder(w http.ResponseWriter, r *http.Request) {
 			writeJSONError(w, http.StatusConflict, "out_of_stock")
 			return
 		}
-		// An ordered-from-supplier line must name a real size + colour of this
-		// model — we have to know exactly what to order. Catches stale carts
-		// (e.g. old preorder lines saved without a size) with the same clean 409.
+		// An ordered-from-supplier line must name a size this colour is actually
+		// offered in (a product_stock row for the pair — a colour can come in
+		// fewer sizes than the model) — we have to know exactly what to order.
+		// Catches stale carts (e.g. old preorder lines saved without a size) with
+		// the same clean 409.
 		if !decremented && !site.PreorderAll {
 			var exists bool
 			if sizeErr == nil {
 				if err := tx.QueryRowContext(r.Context(), `
-					SELECT EXISTS (SELECT 1 FROM product_sizes  WHERE product_id = $1 AND eu_size = $2::numeric)
-					   AND EXISTS (SELECT 1 FROM product_colors WHERE product_id = $1 AND color   = $3)
+					SELECT EXISTS (
+						SELECT 1 FROM product_stock st
+						JOIN product_sizes  s ON s.id = st.size_id
+						JOIN product_colors c ON c.id = st.color_id
+						WHERE st.product_id = $1 AND s.eu_size = $2::numeric AND c.color = $3)
 				`, it.ProductID, it.Size, it.Color).Scan(&exists); err != nil {
 					h.Logger.Error("CreateOrder: variant check failed", err)
 					writeJSONError(w, http.StatusInternalServerError, "internal error")

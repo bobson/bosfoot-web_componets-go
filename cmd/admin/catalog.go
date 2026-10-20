@@ -593,6 +593,12 @@ func (a *app) removeColor(w http.ResponseWriter, r *http.Request) {
 		if st := p.Obj("stock"); st != nil {
 			st.Delete(name)
 		}
+		if cs := p.Obj("colorSizes"); cs != nil {
+			cs.Delete(name)
+			if len(cs.keys) == 0 {
+				p.Delete("colorSizes")
+			}
+		}
 		return fmt.Sprintf("Colour “%s” removed (its photos stay in the folder)", name), nil
 	})
 }
@@ -676,6 +682,23 @@ func (a *app) removeSize(w http.ResponseWriter, r *http.Request) {
 				return "", errors.New("a model needs at least one size")
 			}
 			p.Set("sizes", out)
+			// Also drop it from any per-colour subset ("colorSizes").
+			if cs := p.Obj("colorSizes"); cs != nil {
+				for _, ck := range cs.keys {
+					if list, ok := cs.vals[ck].([]any); ok {
+						kept := list[:0:0]
+						for _, x := range list {
+							if jsonStr(x) != s {
+								kept = append(kept, x)
+							}
+						}
+						if len(kept) == 0 {
+							return "", fmt.Errorf("“%s” is only made in size %s — remove the colour instead", ck, s)
+						}
+						cs.Set(ck, kept)
+					}
+				}
+			}
 			return "Size " + s + " removed", nil
 		}
 		st := p.Obj("stock")

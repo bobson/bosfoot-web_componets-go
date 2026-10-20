@@ -420,8 +420,8 @@ body.page-product {
   opacity: 0.4;
   text-decoration: line-through;
 }
-/* Defensive: a disabled size renders inert. No path sets this today — preorder
-   sizes are fully selectable — but kept so a future disabled state degrades well. */
+/* A size the selected colour isn't offered in (no stock row for that colour):
+   inert, in every fulfilment mode. */
 .product__size-btn:disabled {
   opacity: 0.4;
   cursor: not-allowed;

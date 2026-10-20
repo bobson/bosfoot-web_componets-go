@@ -37,7 +37,10 @@ go run ./cmd/articleimport
 #     "mode" (stock | reservation | dropship), "published", "featured",
 #     "sortOrder"; brand-level "visible" (brands page). Edit here, then import.
 #   data/{brand}/products/{slug}.json — content: name, gender, colours, sizes
-#     ("stock" counts or a plain "sizes" list), "sizeChart" (mm), specs,
+#     ("stock" counts or a plain "sizes" list; with "sizes", optional
+#     "colorSizes" {colour: [sizes]} limits a colour to the sizes the brand
+#     still makes — other sizes are disabled for that colour and rejected by
+#     the order API), "sizeChart" (mm), specs,
 #     highlights, MK/SQ/EN translations. Must NOT contain catalog fields.
 #   data/{brand}/costs.json — GITIGNORED import prices (+customs %, shipping/pair):
 #     only prints "landed ~€X → profit ~€Y/pair" in the summary; never in the DB.

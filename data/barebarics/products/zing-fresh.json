@@ -29,12 +29,16 @@
   ],
   "colors": [
     {
-      "name": "White & Beige",
-      "hex": "#e6dfd2"
-    },
-    {
       "name": "Midnight Blue",
       "hex": "#2a3350"
+    },
+    {
+      "name": "Dark Grey",
+      "hex": "#6b6865"
+    },
+    {
+      "name": "White & Beige",
+      "hex": "#e6dfd2"
     }
   ],
   "sizes": [
@@ -51,6 +55,29 @@
     "46",
     "47"
   ],
+  "colorSizes": {
+    "Dark Grey": [
+      "36",
+      "37",
+      "38",
+      "39",
+      "40",
+      "41",
+      "42",
+      "43",
+      "44",
+      "45",
+      "46"
+    ],
+    "White & Beige": [
+      "36",
+      "37",
+      "38",
+      "39",
+      "40",
+      "41"
+    ]
+  },
   "sizeChart": {
     "36": {
       "length": 232,

@@ -53,7 +53,7 @@ func (o *ojson) MarshalJSON() ([]byte, error) {
 		if i > 0 {
 			b.WriteByte(',')
 		}
-		kb, _ := json.Marshal(k)
+		kb, _ := marshalRaw(k) // keys too: a colour key like "White & Beige"
 		b.Write(kb)
 		b.WriteByte(':')
 		vb, err := marshalRaw(o.vals[k])
