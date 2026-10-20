@@ -463,10 +463,11 @@ func (h *PageHandler) Home(w http.ResponseWriter, r *http.Request) {
 	// (template guards on len) until the first review is approved.
 	var reviews []HomeReview
 	revRows, err := h.DB.QueryContext(ctx, `
-		SELECT r.rating, r.author_name, r.body, b.name || ' ' || p.name
+		SELECT r.rating, r.author_name, COALESCE(o.last_name, ''), r.body, b.name || ' ' || p.name
 		FROM reviews r
 		JOIN products p ON p.id = r.product_id
 		JOIN brands   b ON b.id = p.brand_id
+		LEFT JOIN orders o ON o.id = r.order_id
 		WHERE r.status = 'approved' AND COALESCE(r.body, '') <> ''
 		ORDER BY r.created_at DESC
 		LIMIT 6
@@ -479,11 +480,13 @@ func (h *PageHandler) Home(w http.ResponseWriter, r *http.Request) {
 	defer revRows.Close()
 	for revRows.Next() {
 		var hr HomeReview
-		if err := revRows.Scan(&hr.Rating, &hr.Author, &hr.Body, &hr.ProductName); err != nil {
+		var lastName string
+		if err := revRows.Scan(&hr.Rating, &hr.Author, &lastName, &hr.Body, &hr.ProductName); err != nil {
 			h.Logger.Error("Home: review scan failed", err)
 			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 			return
 		}
+		hr.Author = models.ReviewDisplayName(hr.Author, lastName)
 		reviews = append(reviews, hr)
 	}
 
@@ -1443,11 +1446,13 @@ func (h *PageHandler) ProductDetail(w http.ResponseWriter, r *http.Request) {
 	// aggregate is computed after g.Wait() from this slice.
 	g.Go(func() error {
 		rows, err := h.DB.QueryContext(gctx, `
-			SELECT id, rating, fit, author_name, COALESCE(body,''), lang_code::text, created_at,
-			       COALESCE(buyer_city,''), COALESCE(size,''), COALESCE(color,'')
-			FROM reviews
-			WHERE product_id = $1 AND status = 'approved'
-			ORDER BY created_at DESC
+			SELECT r.id, r.rating, r.fit, r.author_name, COALESCE(o.last_name,''), COALESCE(r.body,''),
+			       r.lang_code::text, r.created_at,
+			       COALESCE(r.buyer_city,''), COALESCE(r.size,''), COALESCE(r.color,'')
+			FROM reviews r
+			LEFT JOIN orders o ON o.id = r.order_id
+			WHERE r.product_id = $1 AND r.status = 'approved'
+			ORDER BY r.created_at DESC
 			LIMIT 50
 		`, p.ID)
 		if err != nil {
@@ -1457,11 +1462,12 @@ func (h *PageHandler) ProductDetail(w http.ResponseWriter, r *http.Request) {
 		for rows.Next() {
 			var rv models.Review
 			var fit sql.NullInt64
-			var body string
-			if err := rows.Scan(&rv.ID, &rv.Rating, &fit, &rv.AuthorName, &body, &rv.Lang, &rv.CreatedAt,
+			var body, lastName string
+			if err := rows.Scan(&rv.ID, &rv.Rating, &fit, &rv.AuthorName, &lastName, &body, &rv.Lang, &rv.CreatedAt,
 				&rv.City, &rv.Size, &rv.Color); err != nil {
 				return err
 			}
+			rv.AuthorName = models.ReviewDisplayName(rv.AuthorName, lastName)
 			if fit.Valid {
 				v := int(fit.Int64)
 				rv.Fit = &v

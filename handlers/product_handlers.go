@@ -464,10 +464,11 @@ func (h *ProductHandler) GetProductByID(w http.ResponseWriter, r *http.Request) 
 
 	// --- reviews (approved only) ---
 	rRows, err := h.DB.QueryContext(ctx, `
-		SELECT id, rating, fit, author_name, body, lang_code::text, created_at,
-		       COALESCE(buyer_city,''), COALESCE(size,''), COALESCE(color,'')
-		FROM reviews
-		WHERE product_id = $1 AND status = 'approved' ORDER BY created_at DESC
+		SELECT r.id, r.rating, r.fit, r.author_name, COALESCE(o.last_name,''), r.body, r.lang_code::text, r.created_at,
+		       COALESCE(r.buyer_city,''), COALESCE(r.size,''), COALESCE(r.color,'')
+		FROM reviews r
+		LEFT JOIN orders o ON o.id = r.order_id
+		WHERE r.product_id = $1 AND r.status = 'approved' ORDER BY r.created_at DESC
 	`, id)
 	if err != nil {
 		h.Logger.Error("GetProductByID: reviews query failed", err)
@@ -479,12 +480,14 @@ func (h *ProductHandler) GetProductByID(w http.ResponseWriter, r *http.Request) 
 		var rev models.Review
 		var fit sql.NullInt64
 		var body sql.NullString
-		if err := rRows.Scan(&rev.ID, &rev.Rating, &fit, &rev.AuthorName, &body, &rev.Lang, &rev.CreatedAt,
+		var lastName string
+		if err := rRows.Scan(&rev.ID, &rev.Rating, &fit, &rev.AuthorName, &lastName, &body, &rev.Lang, &rev.CreatedAt,
 			&rev.City, &rev.Size, &rev.Color); err != nil {
 			h.Logger.Error("GetProductByID: review scan failed", err)
 			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 			return
 		}
+		rev.AuthorName = models.ReviewDisplayName(rev.AuthorName, lastName)
 		rev.ProductID = id
 		rev.Status = "approved"
 		if fit.Valid {

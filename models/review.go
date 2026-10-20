@@ -4,6 +4,7 @@ import (
 	"errors"
 	"strings"
 	"time"
+	"unicode"
 )
 
 // Review maps to the reviews table. Reviews are guest-checkout friendly: they
@@ -47,6 +48,20 @@ func (r *Review) Validate() error {
 		return errors.New("review is too long")
 	}
 	return nil
+}
+
+// ReviewDisplayName is the public reviewer name: the name the buyer typed plus
+// the initial of the order's last name ("Александар И."), so two buyers with
+// the same first name don't read as one person. Kept as typed when it already
+// has more than one word or the order's last name is unknown (order deleted).
+func ReviewDisplayName(author, lastName string) string {
+	author = strings.TrimSpace(author)
+	lastName = strings.TrimSpace(lastName)
+	if lastName == "" || strings.ContainsAny(author, " \t") {
+		return author
+	}
+	initial := []rune(lastName)[0]
+	return author + " " + string(unicode.ToUpper(initial)) + "."
 }
 
 // ReviewToken maps to the review_tokens table. The token is a random string

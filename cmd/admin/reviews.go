@@ -14,6 +14,7 @@ import (
 
 	"bosfoot/internal/reviewmod"
 	"bosfoot/internal/site"
+	"bosfoot/models"
 )
 
 type review struct {
@@ -71,10 +72,12 @@ func (a *app) reviews(w http.ResponseWriter, r *http.Request) {
 		SELECT r.id, r.rating, r.fit, b.name || ' ' || p.name, COALESCE(r.author_name, ''),
 		       COALESCE(r.body, ''), r.lang_code::text, COALESCE(r.size, ''), COALESCE(r.color, ''),
 		       COALESCE(r.buyer_city, ''), r.status, r.order_id, r.created_at,
-		       (SELECT count(*) FROM review_photos rp WHERE rp.review_id = r.id)
+		       (SELECT count(*) FROM review_photos rp WHERE rp.review_id = r.id),
+		       COALESCE(o.last_name, '')
 		FROM reviews r
 		JOIN products p ON p.id = r.product_id
 		JOIN brands   b ON b.id = p.brand_id
+		LEFT JOIN orders o ON o.id = r.order_id
 		WHERE r.status = $1
 		ORDER BY r.created_at DESC`, tab)
 	if err != nil {
@@ -87,11 +90,14 @@ func (a *app) reviews(w http.ResponseWriter, r *http.Request) {
 		var rv review
 		var fit sql.NullInt64
 		var oid sql.NullInt64
+		var lastName string
 		if err := rows.Scan(&rv.ID, &rv.Rating, &fit, &rv.Product, &rv.Author, &rv.Body, &rv.Lang,
-			&rv.Size, &rv.Color, &rv.City, &rv.Status, &oid, &rv.Created, &rv.Photos); err != nil {
+			&rv.Size, &rv.Color, &rv.City, &rv.Status, &oid, &rv.Created, &rv.Photos, &lastName); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
+		// Show the name as the site will (first name + last-name initial).
+		rv.Author = models.ReviewDisplayName(rv.Author, lastName)
 		if fit.Valid {
 			f := int(fit.Int64)
 			rv.Fit = &f
