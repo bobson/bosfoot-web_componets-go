@@ -114,6 +114,7 @@ export function initProductDetail() {
   const backorderable = fulfilment === 'reservation' || fulfilment === 'dropship';
   const notifyNote = document.getElementById('notify-note');
   const preorderNote = document.getElementById('preorder-note');
+  const reserveHint = document.getElementById('reserve-hint');
 
   // qty>0 for the given size in the currently selected colour.
   function sizeInStock(size) {
@@ -387,15 +388,27 @@ export function initProductDetail() {
     //    selecting one flips the button to "Get notified about this size".
     //  • a size the selected colour isn't made in (no stock row, e.g. a Be
     //    Lenka colour sold only in 36–41) → disabled in every mode.
+    //  • reservation model → every size not on the shelf gets a "Reserve" tag
+    //    (own colour) so it reads as orderable but slower. The hint line only
+    //    shows when the colour mixes stock + reserve; an all-reservation colour
+    //    already gets the delivery note under the buy button.
     const byColor = stockMap[selectedColor] || {};
     const knownColor = selectedColor != null && stockMap[selectedColor] != null;
+    const isReservation = fulfilment === 'reservation';
+    const mixed = isReservation && Object.values(byColor).some((q) => q > 0);
+    let anyReserve = false;
     sizeBtns.forEach((btn) => {
       const size = parseFloat(btn.dataset.size);
       const offered = !knownColor || size in byColor;
-      const oos = !offered || (!backorderable && (byColor[size] || 0) <= 0);
+      const empty = (byColor[size] || 0) <= 0;
+      const oos = !offered || (!backorderable && empty);
+      const reserve = isReservation && offered && empty;
+      if (reserve && mixed) anyReserve = true;
       btn.classList.toggle('product__size-btn--oos', oos);
+      btn.classList.toggle('product__size-btn--reserve', reserve);
       btn.disabled = !offered;
     });
+    if (reserveHint) reserveHint.hidden = !anyReserve;
 
     refreshBuyState();
     refreshLowStockWarning();

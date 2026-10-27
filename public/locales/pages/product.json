@@ -15,6 +15,8 @@
   "detail.prevImage": { "mk": "Претходна слика", "sq": "Imazhi i mëparshëm", "en": "Previous image" },
   "detail.productInfo": { "mk": "Информации за производот", "sq": "Informacion produkti", "en": "Product information" },
   "detail.relatedTitle": { "mk": "Повеќе од", "sq": "Më shumë nga", "en": "More from" },
+  "detail.sizeReserveTag": { "mk": "Резервирај", "sq": "Rezervo", "en": "Reserve" },
+  "detail.sizeReserveHint": { "mk": "Големините со „Резервирај“ ги нема на залиха — резервирај ја својата и стига за 2–3 недели. Плаќаш при испорака.", "sq": "Masat me „Rezervo“ nuk janë në stok — rezervo tënden dhe arrin për 2–3 javë. Paguan me dorëzim.", "en": "Sizes marked “Reserve” aren't in stock — reserve yours and it arrives in 2–3 weeks. Pay on delivery." },
   "detail.notifySize": { "mk": "Извести ме за оваа големина", "sq": "Më njofto për këtë masë", "en": "Get notified about this size" },
   "detail.selectSize": { "mk": "Избери големина", "sq": "Zgjedh madhësinë", "en": "Select size" },
   "detail.size": { "mk": "Големина", "sq": "Madhësia", "en": "Size" },

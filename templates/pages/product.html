@@ -142,9 +142,12 @@
           </div>
           <div class="product__sizes" id="size-select">
             {{range .Product.Sizes}}
-            <button class="product__size-btn" data-size="{{.}}" aria-pressed="false">{{.}}</button>
+            <button class="product__size-btn" data-size="{{.}}" data-reserve="{{t $.Locale "detail.sizeReserveTag"}}" aria-pressed="false">{{.}}</button>
             {{end}}
           </div>
+          {{/* Shown by JS when the selected colour mixes in-stock sizes with
+               reservable ones (reservation model): explains the "Reserve" tag. */}}
+          <p class="product__reserve-hint text-sm text-muted" id="reserve-hint" hidden>{{t .Locale "detail.sizeReserveHint"}}</p>
           <p class="product__low-stock text-sm font-semibold" id="low-stock-warning" aria-live="polite"></p>
         </div>
         {{end}}

@@ -420,6 +420,36 @@ body.page-product {
   opacity: 0.4;
   text-decoration: line-through;
 }
+/* Not on the shelf but reservable (any reservation model): accent-tinted,
+   dashed, with a small "Reserve" caption under the number so it reads at a
+   glance on narrow phones. */
+.product__size-btn--reserve {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  padding-block: var(--space-1);
+  border-style: dashed;
+  border-color: var(--color-accent);
+  background: var(--color-accent-light);
+  color: var(--color-accent);
+}
+.product__size-btn--reserve::after {
+  content: attr(data-reserve);
+  font-size: var(--fs-2xs);
+  font-weight: var(--fw-semibold);
+  line-height: 1.2;
+  white-space: nowrap;
+}
+.product__size-btn--reserve.product__size-btn--active {
+  border-style: solid;
+  background: var(--color-accent);
+  color: var(--color-white);
+}
+
+.product__reserve-hint {
+  margin-top: var(--space-2);
+}
+
 /* A size the selected colour isn't offered in (no stock row for that colour):
    inert, in every fulfilment mode. */
 .product__size-btn:disabled {

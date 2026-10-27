@@ -12,14 +12,14 @@
     },
     "feldom-3": {
       "price": 100,
-      "mode": "stock",
+      "mode": "reservation",
       "published": true,
       "featured": true,
       "sortOrder": 3
     },
     "keld-3": {
       "price": 90,
-      "mode": "stock",
+      "mode": "reservation",
       "published": true,
       "featured": false,
       "sortOrder": 2
@@ -48,7 +48,7 @@
     "vibe-2": {
       "price": 90,
       "originalPrice": 100,
-      "mode": "stock",
+      "mode": "reservation",
       "published": true,
       "featured": true,
       "sortOrder": 1
