@@ -339,23 +339,35 @@ export function initProductDetail() {
     en: {
       one: 'Only 1 item left in stock!',
       few: 'Only a few items left in stock!',
+      none: 'Not in stock — reserve this size, it arrives in 2–3 weeks.',
     },
     mk: {
       one: 'Останато е само уште 1 парче!',
       few: 'Останати се само уште неколку парчиња!',
+      none: 'Нема на залиха — резервирај ја оваа големина, стига за 2–3 недели.',
     },
     sq: {
       one: 'Ka mbetur vetëm 1 copë!',
       few: 'Kanë mbetur vetëm edhe pak copë!',
+      none: 'Nuk ka në stok — rezervo këtë masë, arrin për 2–3 javë.',
     },
   };
 
   // The fuzzy low-stock message for a size in the current colour, or null when
-  // the size isn't low (>3 left, or not on the shelf). Shared by
+  // the size isn't low (>3 left). A reservation size that isn't on the shelf
+  // gets the "not in stock — reserve" line instead. Shared by
   // the on-select warning and the on-hover preview so both read identically.
   function lowStockMessageFor(size) {
     if (size == null) return null;
-    const qty = (stockMap[selectedColor] || {})[size] || 0;
+    const byColor = stockMap[selectedColor] || {};
+    const qty = byColor[size] || 0;
+    if (
+      qty <= 0 &&
+      fulfilment === 'reservation' &&
+      (stockMap[selectedColor] == null || size in byColor)
+    ) {
+      return lowStockMessages[locale]?.none || lowStockMessages.en.none;
+    }
     if (qty === 1) return lowStockMessages[locale]?.one || lowStockMessages.en.one;
     if (qty === 2 || qty === 3) return lowStockMessages[locale]?.few || lowStockMessages.en.few;
     return null;
