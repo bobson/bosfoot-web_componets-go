@@ -138,15 +138,18 @@
         <div class="product__option">
           <div class="product__option-header">
             <p class="product__option-label text-xs font-semibold">{{t .Locale "detail.size"}}</p>
-            <button class="product__size-guide-link text-xs text-muted" type="button" id="open-size-guide">{{t .Locale "detail.sizeGuide"}}</button>
+            <button class="product__size-guide-link text-sm font-semibold" type="button" id="open-size-guide">
+              <svg class="product__size-guide-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21.3 15.3a2.4 2.4 0 0 1 0 3.4l-2.6 2.6a2.4 2.4 0 0 1-3.4 0L2.7 8.7a2.41 2.41 0 0 1 0-3.4l2.6-2.6a2.41 2.41 0 0 1 3.4 0Z"/><path d="m14.5 12.5 2-2"/><path d="m11.5 9.5 2-2"/><path d="m8.5 6.5 2-2"/><path d="m17.5 15.5 2-2"/></svg>
+              {{t .Locale "detail.sizeGuide"}}
+            </button>
           </div>
           <div class="product__sizes" id="size-select">
             {{range .Product.Sizes}}
-            <button class="product__size-btn" data-size="{{.}}" data-reserve="{{t $.Locale "detail.sizeReserveTag"}}" aria-pressed="false">{{.}}</button>
+            <button class="product__size-btn" data-size="{{.}}" aria-pressed="false">{{.}}</button>
             {{end}}
           </div>
           {{/* Shown by JS when the selected colour mixes in-stock sizes with
-               reservable ones (reservation model): explains the "Reserve" tag. */}}
+               reservable ones (reservation model): explains the dashed sizes. */}}
           <p class="product__reserve-hint text-sm text-muted" id="reserve-hint" hidden>{{t .Locale "detail.sizeReserveHint"}}</p>
           <p class="product__low-stock text-sm font-semibold" id="low-stock-warning" aria-live="polite"></p>
         </div>

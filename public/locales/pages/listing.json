@@ -29,6 +29,7 @@
   "product.inStock": { "mk": "На залиха", "sq": "Në stok", "en": "In stock" },
   "product.new": { "mk": "Ново", "sq": "E re", "en": "New" },
   "product.outOfStock": { "mk": "Нема на залиха", "sq": "Pa stok", "en": "Out of stock" },
+  "product.preorder": { "mk": "Преднарачка", "sq": "Porosi paraprake", "en": "Pre-order" },
   "product.sale": { "mk": "Акција", "sq": "Ulje", "en": "Sale" },
   "product.sizesAvailable": { "mk": "Достапни големини", "sq": "Madhësi të disponueshme", "en": "Sizes available" },
   "seo.listing": { "mk": "Разгледајте барефут и минималистички патики — широк простор за прсти, нула дропа и флексибилен ѓон. Филтрирај по бренд, големина и боја.", "sq": "Shfletoni këpucë barefoot dhe minimaliste — hapësirë e gjerë për gishtat, zero drop dhe shollë fleksibël. Filtroni sipas markës, madhësisë dhe ngjyrës.", "en": "Browse barefoot and minimalist shoes — wide toe box, zero drop and thin flexible soles. Filter by brand, size and colour at Bosfoot." },

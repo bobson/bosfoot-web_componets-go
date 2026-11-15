@@ -292,7 +292,7 @@ body.page-product {
 
 .product__option-header {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   justify-content: space-between;
   margin-bottom: var(--space-3);
 }
@@ -303,11 +303,32 @@ body.page-product {
 }
 
 .product__size-guide-link {
-  transition: color 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  color: var(--color-accent);
+  background: var(--color-accent-light);
+  border: 1px solid var(--color-accent);
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition:
+    color 0.15s var(--ease-out),
+    background 0.15s var(--ease-out);
 }
 
 .product__size-guide-link:hover {
-  color: var(--color-accent);
+  color: var(--color-text-on-dark);
+  background: var(--color-accent);
+}
+
+.product__size-guide-link:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.product__size-guide-icon {
+  flex-shrink: 0;
 }
 
 /* Color swatches */
@@ -396,6 +417,7 @@ body.page-product {
   min-width: 3rem;
   padding: var(--space-2) var(--space-3);
   border: 1px solid var(--color-border);
+  background: var(--color-white);
   border-radius: var(--radius-sm);
   font-size: var(--fs-sm);
   font-weight: var(--fw-medium);
@@ -420,25 +442,15 @@ body.page-product {
   opacity: 0.4;
   text-decoration: line-through;
 }
-/* Not on the shelf but reservable (any reservation model): accent-tinted,
-   dashed, with a small "Reserve" caption under the number so it reads at a
-   glance on narrow phones. */
+/* Not on the shelf but reservable (reservation model): fully clickable, set
+   apart from in-stock sizes (solid white tiles) by a dashed border, no fill
+   and muted text — but NOT faded/struck like a disabled size. */
 .product__size-btn--reserve {
-  display: inline-flex;
-  flex-direction: column;
-  align-items: center;
-  padding-block: var(--space-1);
   border-style: dashed;
-  border-color: var(--color-accent);
-  background: var(--color-accent-light);
-  color: var(--color-accent);
-}
-.product__size-btn--reserve::after {
-  content: attr(data-reserve);
-  font-size: var(--fs-2xs);
-  font-weight: var(--fw-semibold);
-  line-height: 1.2;
-  white-space: nowrap;
+  border-color: var(--color-text-muted);
+  background: transparent;
+  color: var(--color-text-muted);
+  font-weight: var(--fw-regular);
 }
 .product__size-btn--reserve.product__size-btn--active {
   border-style: solid;
