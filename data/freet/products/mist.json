@@ -44,18 +44,54 @@
     "48"
   ],
   "sizeChart": {
-    "37": { "length": 236, "width": 88 },
-    "38": { "length": 243, "width": 90 },
-    "39": { "length": 249, "width": 92 },
-    "40": { "length": 255, "width": 94 },
-    "41": { "length": 262, "width": 96 },
-    "42": { "length": 269, "width": 99 },
-    "43": { "length": 276, "width": 102 },
-    "44": { "length": 283, "width": 104 },
-    "45": { "length": 289, "width": 107 },
-    "46": { "length": 295, "width": 109 },
-    "47": { "length": 302, "width": 110 },
-    "48": { "length": 310, "width": 113 }
+    "37": {
+      "length": 236,
+      "width": 88
+    },
+    "38": {
+      "length": 243,
+      "width": 90
+    },
+    "39": {
+      "length": 249,
+      "width": 92
+    },
+    "40": {
+      "length": 255,
+      "width": 94
+    },
+    "41": {
+      "length": 262,
+      "width": 96
+    },
+    "42": {
+      "length": 269,
+      "width": 99
+    },
+    "43": {
+      "length": 276,
+      "width": 102
+    },
+    "44": {
+      "length": 283,
+      "width": 104
+    },
+    "45": {
+      "length": 289,
+      "width": 107
+    },
+    "46": {
+      "length": 295,
+      "width": 109
+    },
+    "47": {
+      "length": 302,
+      "width": 110
+    },
+    "48": {
+      "length": 310,
+      "width": 113
+    }
   },
   "specs": [
     {

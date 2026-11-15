@@ -42,13 +42,34 @@
     "33"
   ],
   "sizeChart": {
-    "27": { "length": 176, "width": 77 },
-    "28": { "length": 183, "width": 79 },
-    "29": { "length": 189, "width": 80 },
-    "30": { "length": 195, "width": 82 },
-    "31": { "length": 206, "width": 83 },
-    "32": { "length": 212, "width": 84 },
-    "33": { "length": 218, "width": 85 }
+    "27": {
+      "length": 176,
+      "width": 77
+    },
+    "28": {
+      "length": 183,
+      "width": 79
+    },
+    "29": {
+      "length": 189,
+      "width": 80
+    },
+    "30": {
+      "length": 195,
+      "width": 82
+    },
+    "31": {
+      "length": 206,
+      "width": 83
+    },
+    "32": {
+      "length": 212,
+      "width": 84
+    },
+    "33": {
+      "length": 218,
+      "width": 85
+    }
   },
   "specs": [
     {
