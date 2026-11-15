@@ -1,0 +1,117 @@
+{
+  "name": "Mist",
+  "gender": "unisex",
+  "activities": [
+    "hiking",
+    "winter",
+    "casual"
+  ],
+  "highlights": [
+    {
+      "en": "WATERPROOF",
+      "mk": "Водоотпорно",
+      "sq": "I papërshkueshëm nga uji"
+    },
+    {
+      "en": "LIGHTWEIGHT",
+      "mk": "Лесно",
+      "sq": "I lehtë"
+    },
+    {
+      "en": "GRIPPY",
+      "mk": "Одличен зафат",
+      "sq": "Kapje e fortë"
+    }
+  ],
+  "colors": [
+    {
+      "name": "Black",
+      "hex": "#1a1a1a"
+    }
+  ],
+  "sizes": [
+    "37",
+    "38",
+    "39",
+    "40",
+    "41",
+    "42",
+    "43",
+    "44",
+    "45",
+    "46",
+    "47",
+    "48"
+  ],
+  "sizeChart": {
+    "37": { "length": 236, "width": 88 },
+    "38": { "length": 243, "width": 90 },
+    "39": { "length": 249, "width": 92 },
+    "40": { "length": 255, "width": 94 },
+    "41": { "length": 262, "width": 96 },
+    "42": { "length": 269, "width": 99 },
+    "43": { "length": 276, "width": 102 },
+    "44": { "length": 283, "width": 104 },
+    "45": { "length": 289, "width": 107 },
+    "46": { "length": 295, "width": 109 },
+    "47": { "length": 302, "width": 110 },
+    "48": { "length": 310, "width": 113 }
+  },
+  "specs": [
+    {
+      "key": "Upper",
+      "value": "BottleYarn mesh (recycled plastic), water resistant"
+    },
+    {
+      "key": "Lining",
+      "value": "Full waterproof, breathable bootee"
+    },
+    {
+      "key": "Insole",
+      "value": "Flexile 3.0mm"
+    },
+    {
+      "key": "Midsole",
+      "value": "SoftFlex"
+    },
+    {
+      "key": "Outsole",
+      "value": "HillGrip 4.0mm"
+    },
+    {
+      "key": "Weight",
+      "value": "760g per pair (size 42)"
+    },
+    {
+      "key": "Stack Height",
+      "value": "10mm with insole / 7.5mm without"
+    },
+    {
+      "key": "Drop",
+      "value": "Zero drop"
+    }
+  ],
+  "translations": {
+    "en": {
+      "about": "Featherlight construction makes it Freet's lightest waterproof boot yet.\n\nA fully waterproof bootee lining keeps feet dry and warm in wet conditions.\n\nThe flexible HillGrip outsole gives confident traction on trails and city streets alike.",
+      "description": "Freet's lightest waterproof boot — agile, grippy and ready for any weather.",
+      "productInfo": "Upper\nBottleYarn: breathable, durable, moisture moving mesh, made from recycled plastic bottles.\n\nLining\nFull waterproof, breathable bootee lining.\n\nInsole\nFlexile: 3.0 mm some shock absorption with excellent ground connectivity.\n\nMidsole\nSoftFlex: fully flexible for maximum foot movement.\n\nOutsole\nHillGrip: 4.0 mm tread gives good traction on hard and muddy trail surfaces.\n\nWaterproofness\nThe full bootee lining and water resistant upper give a high level of waterproofness when the upper is treated regularly (e.g. Nikwax fabric & leather spray).\n\nWeight\n760 grams per pair size 42.\n\nStack Height\n10 mm with insole; 7.5 mm without insole, zero drop.",
+      "sizeAndFit": "Customers say it fits true to size — you may stay at your usual size.",
+      "sustainability": "Upper: 60% recycled (BottleYarn)\nOutsole: 60% natural rubber\nLining: 65% recycled (BottleYarn)\nLace: 70% recycled (BottleYarn)\nInsole: 60% recycled\nPackaging: box/wrapping recycled and recyclable card & paper"
+    },
+    "mk": {
+      "about": "Многу лесната конструкција ја прави најлесната водоотпорна чизма на Freet досега.\n\nЦелосно водоотпорната внатрешна постава ги чува стапалата суви и топли во влажни услови.\n\nФлексибилниот HillGrip ѓон дава сигурен зафат и на патеки и на градски улици.",
+      "description": "Најлесната водоотпорна чизма на Freet — подвижна, со одличен зафат и подготвена за секакво време.",
+      "productInfo": "Горен дел\nBottleYarn: дишлива, издржлива мрежа што ја носи влагата, направена од рециклирани пластични шишиња.\n\nОбвивка\nЦелосна водоотпорна, дишлива внатрешна постава.\n\nВлошка\nFlexile: 3,0 мм со одредена амортизација и одличен осет за подлогата.\n\nСредна потпетица\nSoftFlex: целосно флексибилна.\n\nЃон\nHillGrip: 4,0 мм газен профил за добар зафат на тврди и кални патеки.\n\nВодоотпорност\nЦелосната внатрешна постава и горниот дел отпорен на вода даваат висока водоотпорност кога горниот дел редовно се третира (на пр. Nikwax спреј).\n\nТежина\n760 грама на пар во големина 42.\n\nВисина на ѓонот\n10 мм со влошка; 7,5 мм без влошка. Нула надолен пад.",
+      "sizeAndFit": "Купувачите велат дека одговара точно по големината — можете да ја носите вашата вообичаена големина.",
+      "sustainability": "Горен дел: 60% рециклиран (BottleYarn)\nЃон: 60% природен каучук\nОбвивка: 65% рециклирано (BottleYarn)\nВрвки: 70% рециклирано (BottleYarn)\nВлошка: 60% рециклирано\nПакување: кутија/обвивка од рециклирани и рециклабилни картон и хартија"
+    },
+    "sq": {
+      "about": "Konstruksioni shumë i lehtë e bën çizmen më të lehtë të papërshkueshme nga uji të Freet deri tani.\n\nVeshja e brendshme plotësisht e papërshkueshme nga uji i mban këmbët të thata dhe të ngrohta në kushte të lagështa.\n\nSolla fleksibël HillGrip jep kapje të sigurt si në shtigje ashtu edhe në rrugët e qytetit.",
+      "description": "Çizmja më e lehtë e papërshkueshme nga uji e Freet — e shkathët, me kapje të fortë dhe gati për çdo mot.",
+      "productInfo": "Pjesa e sipërme\nBottleYarn: rrjetë e ajrosur, e qëndrueshme, që largon lagështinë, prej shisheve plastike të ricikluara.\n\nVeshja\nVeshje e brendshme e plotë, e papërshkueshme nga uji dhe e ajrosur.\n\nSole e brendshme\nFlexile: 3,0 mm me njëfarë amortizimi dhe ndjesi të shkëlqyer të tokës.\n\nMidsole\nSoftFlex: plotësisht fleksibël.\n\nSolla e jashtme\nHillGrip: 4,0 mm gjurmë për kapje të mirë në shtigje të forta dhe me baltë.\n\nPapërshkueshmëria nga uji\nVeshja e brendshme e plotë dhe pjesa e sipërme rezistente ndaj ujit japin papërshkueshmëri të lartë kur pjesa e sipërme trajtohet rregullisht (p.sh. sprej Nikwax).\n\nPesha\n760 gramë çift në madhësinë 42.\n\nLartësia e solës\n10 mm me sole; 7,5 mm pa sole. Zero drop.",
+      "sizeAndFit": "Klientët thonë se përshtatet sipas madhësisë — mund të mbani madhësinë tuaj të zakonshme.",
+      "sustainability": "Pjesa e sipërme: 60% e ricikluar (BottleYarn)\nSolla e jashtme: 60% gomë natyrale\nVeshja: 65% e ricikluar (BottleYarn)\nLidhëset: 70% të ricikluara (BottleYarn)\nSolla e brendshme: 60% e ricikluar\nPaketimi: kuti/mbështjellje nga karton dhe letër të ricikluara dhe të riciklueshme"
+    }
+  }
+}

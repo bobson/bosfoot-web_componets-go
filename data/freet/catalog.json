@@ -12,17 +12,31 @@
     },
     "feldom-3": {
       "price": 100,
-      "mode": "reservation",
+      "mode": "stock",
       "published": true,
       "featured": true,
       "sortOrder": 3
     },
-    "keld-3": {
-      "price": 90,
+    "hoppee-junior": {
+      "price": 65,
       "mode": "reservation",
       "published": true,
       "featured": false,
+      "sortOrder": 10
+    },
+    "keld-3": {
+      "price": 90,
+      "mode": "stock",
+      "published": true,
+      "featured": false,
       "sortOrder": 2
+    },
+    "mist": {
+      "price": 125,
+      "mode": "reservation",
+      "published": true,
+      "featured": false,
+      "sortOrder": 12
     },
     "pace": {
       "price": 105,
@@ -33,10 +47,17 @@
     },
     "richmond-2": {
       "price": 140,
+      "mode": "stock",
+      "published": false,
+      "featured": false,
+      "sortOrder": 6
+    },
+    "richmond-3": {
+      "price": 145,
       "mode": "reservation",
       "published": true,
       "featured": false,
-      "sortOrder": 6
+      "sortOrder": 13
     },
     "tanga-3": {
       "price": 100,
@@ -45,20 +66,34 @@
       "featured": true,
       "sortOrder": 4
     },
+    "tufee-junior": {
+      "price": 90,
+      "mode": "reservation",
+      "published": true,
+      "featured": false,
+      "sortOrder": 9
+    },
     "vibe-2": {
       "price": 90,
       "originalPrice": 100,
-      "mode": "reservation",
+      "mode": "stock",
       "published": true,
       "featured": true,
       "sortOrder": 1
     },
     "york-2": {
       "price": 135,
+      "mode": "stock",
+      "published": false,
+      "featured": false,
+      "sortOrder": 5
+    },
+    "york-3": {
+      "price": 135,
       "mode": "reservation",
       "published": true,
-      "featured": true,
-      "sortOrder": 5
+      "featured": false,
+      "sortOrder": 11
     }
   }
 }

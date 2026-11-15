@@ -1,0 +1,113 @@
+{
+  "name": "Tufee Junior",
+  "gender": "kids",
+  "activities": [
+    "kids",
+    "hiking",
+    "casual"
+  ],
+  "highlights": [
+    {
+      "en": "WATER-RESISTANT",
+      "mk": "Отпорно на вода",
+      "sq": "Rezistente ndaj ujit"
+    },
+    {
+      "en": "EASY ON-OFF",
+      "mk": "Лесно обување",
+      "sq": "Vishet lehtë"
+    },
+    {
+      "en": "ALL-YEAR",
+      "mk": "За цела година",
+      "sq": "Për gjithë vitin"
+    }
+  ],
+  "colors": [
+    {
+      "name": "Blue",
+      "hex": "#2b4f86"
+    },
+    {
+      "name": "Brown / Khaki",
+      "hex": "#6b4a3a"
+    }
+  ],
+  "sizes": [
+    "27",
+    "28",
+    "29",
+    "30",
+    "31",
+    "32",
+    "33",
+    "34",
+    "35",
+    "36",
+    "37",
+    "38"
+  ],
+  "sizeChart": {
+    "27": { "length": 176, "width": 77 },
+    "28": { "length": 183, "width": 79 },
+    "29": { "length": 189, "width": 80 },
+    "30": { "length": 195, "width": 82 },
+    "31": { "length": 206, "width": 83 },
+    "32": { "length": 212, "width": 84 },
+    "33": { "length": 218, "width": 85 },
+    "34": { "length": 223, "width": 87 },
+    "35": { "length": 228, "width": 88 },
+    "36": { "length": 234, "width": 90 },
+    "37": { "length": 240, "width": 92 },
+    "38": { "length": 246, "width": 94 }
+  },
+  "specs": [
+    {
+      "key": "Closure",
+      "value": "Velcro strap + elastic quick-lace"
+    },
+    {
+      "key": "Upper",
+      "value": "BottleYarn mesh with DWR water-repellent finish (PFC-free)"
+    },
+    {
+      "key": "Waterproof",
+      "value": "Water-resistant, not waterproof"
+    },
+    {
+      "key": "Weight",
+      "value": "470g per pair (size 42)"
+    },
+    {
+      "key": "Stack Height",
+      "value": "9mm with insole / 6mm without"
+    },
+    {
+      "key": "Drop",
+      "value": "Zero drop"
+    }
+  ],
+  "translations": {
+    "en": {
+      "about": "A barefoot mid boot for kids, made for all-year weather — especially those damper, cooler days.\n\nSoft and flexible with all-day comfort, and a wide toe box so growing feet can spread and move naturally.\n\nA velcro strap plus an elastic quick-lace make it easy to get on and off — kids can do it themselves.",
+      "description": "Barefoot kids' boot for every season — soft, flexible, water-resistant and easy to put on.",
+      "productInfo": "Closure\nVelcro strap + elastic quick-lace for easy on and off.\n\nUpper\nBottleYarn: durable mesh made from recycled plastic bottles, with a DWR (durable water repellency) treatment. No PFCs.\n\nWaterproofness\nWater-resistant, not waterproof — handles damp grass and drizzle; not for wading.\n\nWeight\n470 grams per pair (size 42).\n\nStack Height\n9 mm with insole; 6 mm without insole.",
+      "sizeAndFit": "Customers say it fits true to size — order your child's usual size. Check the insole length in the size chart: the insole should be about 10–15 mm longer than the foot, so there's room to grow.",
+      "sustainability": "Upper: 60% recycled (BottleYarn)\nOutsole: 60% natural rubber\nLining: 65% recycled (BottleYarn)\nLace: 70% recycled (BottleYarn)\nInsole: 60% recycled\nDWR treatment: no PFCs\nPackaging: box/wrapping recycled and recyclable card & paper"
+    },
+    "mk": {
+      "about": "Барефут чизмичка за деца, за секое време во годината — особено за влажните и постудени денови.\n\nМека и флексибилна, удобна цел ден, со широк простор за прсти за стапалата што растат да се шират и движат природно.\n\nЛепенка и еластична врвка со брзо затегнување — лесно се обува и соблекува, децата можат и сами.",
+      "description": "Барефут детска чизмичка за секоја сезона — мека, флексибилна, отпорна на вода и лесна за обување.",
+      "productInfo": "Затворање\nЛепенка + еластична врвка со брзо затегнување за лесно обување.\n\nГорен дел\nBottleYarn: издржлива мрежа од рециклирани пластични шишиња, со DWR водоодбивен третман. Без PFC.\n\nВодоотпорност\nОтпорна на вода, но не е водонепропустлива — за влажна трева и ситен дожд, не за газење низ вода.\n\nТежина\n470 грама на пар (големина 42).\n\nВисина на ѓонот\n9 мм со влошка; 6 мм без влошка.",
+      "sizeAndFit": "Купувачите велат дека одговара точно по големината — нарачајте ја вообичаената големина на детето. Проверете ја должината на влошката во табелата: влошката треба да е околу 10–15 мм подолга од стапалото, за да има простор за растење.",
+      "sustainability": "Горен дел: 60% рециклиран (BottleYarn)\nЃон: 60% природен каучук\nОбвивка: 65% рециклирано (BottleYarn)\nВрвка: 70% рециклирано (BottleYarn)\nВлошка: 60% рециклирано\nDWR третман: без PFC\nПакување: кутија/обвивка од рециклирани и рециклабилни картон и хартија"
+    },
+    "sq": {
+      "about": "Çizme barefoot për fëmijë, për çdo mot të vitit — veçanërisht për ditët më të lagështa dhe më të ftohta.\n\nE butë dhe fleksibël, e rehatshme gjithë ditën, me hapësirë të gjerë për gishtat që këmbët në rritje të shtrihen dhe lëvizin natyrshëm.\n\nRrip me ngjitës dhe lidhëse elastike me shtrëngim të shpejtë — vishet dhe hiqet lehtë, fëmijët mund ta bëjnë vetë.",
+      "description": "Çizme barefoot për fëmijë për çdo stinë — e butë, fleksibël, rezistente ndaj ujit dhe e lehtë për t'u veshur.",
+      "productInfo": "Mbyllja\nRrip me ngjitës + lidhëse elastike me shtrëngim të shpejtë.\n\nPjesa e sipërme\nBottleYarn: rrjetë e qëndrueshme prej shisheve plastike të ricikluara, me trajtim DWR që largon ujin. Pa PFC.\n\nPapërshkueshmëria nga uji\nRezistente ndaj ujit, por jo e papërshkueshme — për bar të lagur dhe shi të imët, jo për të ecur nëpër ujë.\n\nPesha\n470 gramë çifti (madhësia 42).\n\nLartësia e solës\n9 mm me sole; 6 mm pa sole.",
+      "sizeAndFit": "Klientët thonë se përshtatet sipas madhësisë — porositni madhësinë e zakonshme të fëmijës. Kontrolloni gjatësinë e solës në tabelë: sola duhet të jetë rreth 10–15 mm më e gjatë se këmba, që të ketë vend për rritje.",
+      "sustainability": "Pjesa e sipërme: 60% e ricikluar (BottleYarn)\nSolla e jashtme: 60% gomë natyrale\nVeshja: 65% e ricikluar (BottleYarn)\nLidhëset: 70% të ricikluara (BottleYarn)\nSolla e brendshme: 60% e ricikluar\nTrajtimi DWR: pa PFC\nPaketimi: kuti/mbështjellje nga karton dhe letër të ricikluara dhe të riciklueshme"
+    }
+  }
+}

@@ -385,19 +385,12 @@ export function initProductDetail() {
   }
 
   function updateSizes() {
-    // Keep user's active size selected, or clear it if it is null (like when color changes).
-    sizeBtns.forEach((b) => {
-      const active = selectedSize != null && parseFloat(b.dataset.size) === selectedSize;
-      b.classList.toggle('product__size-btn--active', active);
-      b.setAttribute('aria-pressed', String(active));
-    });
-
     // Size availability styling. Idempotent — safe to call repeatedly from
     // syncLiveStock()/SSE without accumulating state.
     //  • reservation/dropship model → no size is greyed: sizes not in stock are
     //    still orderable (ordered from the supplier).
-    //  • stock model → out-of-stock sizes are greyed but stay clickable, so
-    //    selecting one flips the button to "Get notified about this size".
+    //  • stock model → out-of-stock sizes are greyed AND disabled (not
+    //    clickable); a selected size that sells out live is deselected.
     //  • a size the selected colour isn't made in (no stock row, e.g. a Be
     //    Lenka colour sold only in 36–41) → disabled in every mode.
     //  • reservation model → every size not on the shelf gets a "Reserve" tag
@@ -418,9 +411,18 @@ export function initProductDetail() {
       if (reserve && mixed) anyReserve = true;
       btn.classList.toggle('product__size-btn--oos', oos);
       btn.classList.toggle('product__size-btn--reserve', reserve);
-      btn.disabled = !offered;
+      btn.disabled = oos;
+      if (oos && size === selectedSize) selectedSize = null;
     });
     if (reserveHint) reserveHint.hidden = !anyReserve;
+
+    // Keep the user's size selected, or clear the highlight when it was reset
+    // (colour change, or the size just became unavailable above).
+    sizeBtns.forEach((b) => {
+      const active = selectedSize != null && parseFloat(b.dataset.size) === selectedSize;
+      b.classList.toggle('product__size-btn--active', active);
+      b.setAttribute('aria-pressed', String(active));
+    });
 
     refreshBuyState();
     refreshLowStockWarning();
