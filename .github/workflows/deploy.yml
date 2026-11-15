@@ -22,7 +22,7 @@ jobs:
       - run: go test ./...
       - uses: actions/setup-node@v5
         with:
-          node-version: 24
+          node-version: 26
       - run: npm ci
       - name: JS lint + format (Biome)
         run: npm run check
