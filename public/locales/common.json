@@ -320,14 +320,14 @@
     "en": "Only genuine barefoot brands, sourced directly."
   },
   "trust.cod.title": {
-    "mk": "Плаќање при испорака",
-    "sq": "Pagesë me dorëzim",
-    "en": "Pay on delivery"
+    "mk": "Пробај, па плати",
+    "sq": "Provoji, pastaj paguaj",
+    "en": "Try on, then pay"
   },
   "trust.cod.body": {
-    "mk": "Плаќаш дури кога курирот ќе ти ја врачи пратката.",
-    "sq": "Paguan vetëm kur korrieri të dorëzon pakon.",
-    "en": "Pay only when the courier hands you the box."
+    "mk": "Курирот почекува додека ги пробаш. Плаќаш само ако ти одговараат.",
+    "sq": "Korrieri pret sa t'i provosh. Paguan vetëm nëse të përshtaten.",
+    "en": "The courier waits while you try them on. You pay only if they fit."
   },
   "trust.returns.title": {
     "mk": "14 дена враќање · замена на број",

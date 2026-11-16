@@ -30,15 +30,12 @@
   <div class="nav__right">
     <div class="nav__lang" role="navigation" aria-label="Language switcher">
       <a href="{{if .Alternates}}{{index .Alternates "mk"}}{{else}}/mk{{.CurrentPath}}{{end}}" {{if eq .Locale "mk"}}class="nav__lang--active" aria-current="true"{{end}} lang="mk" aria-label="Македонски">
-        <span class="nav__lang-flag" aria-hidden="true">🇲🇰</span>
         <span class="nav__lang-code">МК</span>
       </a>
       <a href="{{if .Alternates}}{{index .Alternates "sq"}}{{else}}/sq{{.CurrentPath}}{{end}}" {{if eq .Locale "sq"}}class="nav__lang--active" aria-current="true"{{end}} lang="sq" aria-label="Shqip">
-        <span class="nav__lang-flag" aria-hidden="true">🇦🇱</span>
         <span class="nav__lang-code">SQ</span>
       </a>
       <a href="{{if .Alternates}}{{index .Alternates "en"}}{{else}}/en{{.CurrentPath}}{{end}}" {{if eq .Locale "en"}}class="nav__lang--active" aria-current="true"{{end}} lang="en" aria-label="English">
-        <span class="nav__lang-flag" aria-hidden="true">🇬🇧</span>
         <span class="nav__lang-code">EN</span>
       </a>
     </div>
@@ -141,15 +138,12 @@
   {{/* Language inline in drawer */}}
   <div class="nav__drawer-lang" role="navigation" aria-label="Language switcher">
     <a href="{{if .Alternates}}{{index .Alternates "mk"}}{{else}}/mk{{.CurrentPath}}{{end}}" {{if eq .Locale "mk"}}class="nav__lang--active" aria-current="true"{{end}} lang="mk" aria-label="Македонски">
-      <span class="nav__lang-flag" aria-hidden="true">🇲🇰</span>
       <span class="nav__lang-code">МК</span>
     </a>
     <a href="{{if .Alternates}}{{index .Alternates "sq"}}{{else}}/sq{{.CurrentPath}}{{end}}" {{if eq .Locale "sq"}}class="nav__lang--active" aria-current="true"{{end}} lang="sq" aria-label="Shqip">
-      <span class="nav__lang-flag" aria-hidden="true">🇦🇱</span>
       <span class="nav__lang-code">SQ</span>
     </a>
     <a href="{{if .Alternates}}{{index .Alternates "en"}}{{else}}/en{{.CurrentPath}}{{end}}" {{if eq .Locale "en"}}class="nav__lang--active" aria-current="true"{{end}} lang="en" aria-label="English">
-      <span class="nav__lang-flag" aria-hidden="true">🇬🇧</span>
       <span class="nav__lang-code">EN</span>
     </a>
   </div>

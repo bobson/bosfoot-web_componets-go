@@ -199,9 +199,7 @@ body.nav-open .nav__overlay {
 .nav__lang a,
 .nav__drawer-lang a {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 3px;
   color: var(--color-text-muted);
   padding: var(--space-1) var(--space-2);
   border-radius: var(--radius-sm);
@@ -215,13 +213,16 @@ body.nav-open .nav__overlay {
   color: var(--color-accent);
 }
 
-.nav__lang-flag {
-  font-size: 1rem;
-  line-height: 1;
+/* Not by colour alone: the active language is also underlined. */
+.nav__lang a.nav__lang--active .nav__lang-code,
+.nav__drawer-lang a.nav__lang--active .nav__lang-code {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-thickness: 2px;
 }
 
 .nav__lang-code {
-  font-size: var(--fs-xs);
+  font-size: var(--fs-sm);
   font-weight: var(--fw-bold);
   letter-spacing: 0.06em;
 }
